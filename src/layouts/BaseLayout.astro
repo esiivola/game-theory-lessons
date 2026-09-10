@@ -25,6 +25,8 @@ const {
   totalLessons = 0,
 } = Astro.props;
 const fullTitle = title ? `${title} · ${siteConfig.title}` : siteConfig.title;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const ogType = variant === 'lesson' ? 'article' : 'website';
 ---
 <!doctype html>
 <html lang="en">
@@ -34,6 +36,15 @@ const fullTitle = title ? `${title} · ${siteConfig.title}` : siteConfig.title;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={siteConfig.title} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230A6F6A'/><text x='50' y='72' font-size='64' text-anchor='middle' fill='%23F4F1E8' font-family='Georgia,serif'>G</text></svg>" />
     <script is:inline>
       try {

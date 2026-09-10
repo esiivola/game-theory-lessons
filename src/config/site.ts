@@ -7,7 +7,7 @@ export const siteConfig = {
 
 /**
  * Build an internal URL that respects the GitHub Pages base path.
- * BASE_URL is '/game-theory/' in production and '/' in dev.
+ * BASE_URL is '/game-theory-lessons/' in production and '/' in dev.
  */
 export const withBase = (p = ''): string =>
   import.meta.env.BASE_URL.replace(/\/$/, '') + '/' + String(p).replace(/^\//, '');

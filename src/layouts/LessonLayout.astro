@@ -5,13 +5,14 @@ import { withBase } from '@/config/site';
 interface Props {
   slug: string;
   title: string;
+  description?: string;
   totalLessons: number;
   nextHref?: string;
   nextTitle?: string;
 }
-const { slug, title, totalLessons, nextHref, nextTitle } = Astro.props;
+const { slug, title, description, totalLessons, nextHref, nextTitle } = Astro.props;
 ---
-<BaseLayout title={title} variant="lesson" lessonTitle={title} active="learn" totalLessons={totalLessons}>
+<BaseLayout title={title} description={description} variant="lesson" lessonTitle={title} active="learn" totalLessons={totalLessons}>
   <article class="lesson" data-lesson={slug}>
     <slot />
 

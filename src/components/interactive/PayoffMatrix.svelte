@@ -125,8 +125,8 @@
           <button
             class={cellClasses(r.key, c.key)}
             onclick={() => readCell(r, c)}
-            aria-label={`You ${r.label}, they ${c.label}: you ${fmt(payoffs[r.key][c.key][0])}, them ${fmt(payoffs[r.key][c.key][1])}`}
           >
+            <span class="sr-only">{r.label}, {c.label}:</span>
             <div class="pay">
               <span class="you">{fmt(payoffs[r.key][c.key][0])}</span>
               <span class="them">{fmt(payoffs[r.key][c.key][1])}</span>

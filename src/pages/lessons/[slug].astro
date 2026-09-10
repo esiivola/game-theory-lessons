@@ -24,6 +24,7 @@ const nextHref = next ? withBase('lessons/' + next.id) : undefined;
 <LessonLayout
   slug={entry.id}
   title={entry.data.title}
+  description={entry.data.summary}
   totalLessons={total}
   nextHref={nextHref}
   nextTitle={next?.data.title}
