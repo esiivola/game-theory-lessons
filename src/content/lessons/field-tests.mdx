@@ -5,13 +5,13 @@ unit: 17
 unitName: "Behavioral and experimental"
 order: 63
 kind: lesson
-summary: "Minimax holds among elite athletes, but backward induction fails in the centipede game."
+summary: "Minimax nearly passes among elite athletes, and backward induction fails outright in the centipede."
 tags: ["behavioral", "field-evidence", "centipede"]
 estMinutes: 6
 mvp: true
 prereqs: ["zero-sum-minimax", "backward-induction", "level-k"]
 concepts: ["field-evidence", "centipede", "minimax"]
-refs: ["palaciosHuerta2003", "mckelveyPalfrey1992"]
+refs: ["palaciosHuerta2003", "walkerWooders2001", "mckelveyPalfrey1992"]
 anchorEmoji: "🧪"
 ---
 
@@ -24,11 +24,11 @@ import WarmUp from '@/components/interactive/WarmUp.svelte';
 import QuizCard from '@/components/interactive/QuizCard.svelte';
 import GameTree from '@/components/interactive/GameTree.svelte';
 
-<div class="anchor"><span class="em">🧪</span><p>Two verdicts from the field. Professional footballers mix their penalty kicks almost exactly as minimax says, with no readable pattern. Yet in the centipede game, where the theory says grab the money at once, almost everyone passes. Theory wins some tests and loses others.</p></div>
+<div class="anchor"><span class="em">🧪</span><p>Three verdicts from the field. Professional footballers mix their penalty kicks almost exactly as minimax says. Wimbledon servers hit the right frequencies but switch sides a shade too often to be truly random. And in the centipede game, where the theory says grab the money at once, almost everyone passes. Theory wins some tests, half-wins others, and loses one outright.</p></div>
 
 # Field tests and boundaries
 
-<p class="lead">Behavioral game theory is not "people are irrational." It is a map of where the sharp theory holds and where it breaks. Zero-sum minimax survives its hardest test among elite athletes under pressure. Backward induction in the centipede fails outright. Knowing which is which is the point.</p>
+<p class="lead">Behavioral game theory is not "people are irrational." It is a map of where the sharp theory holds and where it breaks. Zero-sum minimax survives its hardest test among elite athletes under pressure, missing only slightly on true randomness. Backward induction in the centipede fails outright. Knowing which is which is the point.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -87,16 +87,20 @@ Here is a centipede game. At each step a player can take the pot (ending it) or 
 ## Why did that happen?
 
 <Callout kind="ask">
-The two field results pull in opposite directions. Penalty kicks are a clean zero-sum game played by experts with huge stakes and endless practice, and there minimax holds: kickers and keepers mix at the right frequencies with no pattern. The centipede is different: mutual passing makes both far better off, and players, trusting a little or valuing the larger pie, pass rather than grab. Backward induction's relentless unraveling assumes a level of mutual distrust that real, repeated human interaction does not have.
+The field results do not line up neatly. Penalty kicks are a clean zero-sum game played by experts with huge stakes and endless practice, and there minimax holds: kickers and keepers mix at the right frequencies with no pattern anyone has found. Tennis serves pass the same frequency test but show a faint trace of the human habit of switching too often. The centipede is different: mutual passing makes both far better off, and players, trusting a little or valuing the larger pie, pass rather than grab. Backward induction's relentless unraveling assumes a level of mutual distrust that real, repeated human interaction does not have.
 </Callout>
 </Section>
 
 <Section id="math">
 ## The math
 
-<DefinitionAside label="two field verdicts">
-Palacios-Huerta (2003) analysed 1,417 professional penalty kicks: scoring rates make the kicker's equilibrium mix about 36 percent to one side, and observed play matches the minimax frequencies with no serial correlation. Minimax passes its field test. McKelvey and Palfrey (1992) ran the centipede in the lab: subgame-perfect play says take at the first node, yet almost no one does, and most pairs pass several times. Backward induction fails its field test.
+<DefinitionAside label="what a field test of minimax checks">
+Equilibrium implies two separate restrictions, and a good field test checks both. **Equal success rates:** a player who mixes must be indifferent, so every option in the mix has to pay the same. **Serial independence:** each choice must carry no information about the next. Passing the first and failing the second still leaves money on the table, so both matter.
 </DefinitionAside>
+
+Three verdicts, not two. Palacios-Huerta (2003) analysed 1,417 professional penalty kicks: scoring rates make the kicker's equilibrium mix about 36 percent to one side, and observed play matches the minimax frequencies with no serial correlation he could detect. Walker and Wooders (2001) ran the same two tests on serve direction at Wimbledon: winning rates by direction came out equal, exactly as the theory demands, but servers alternated sides slightly more often than chance, a small negative correlation and the familiar human failure to produce a random sequence. And McKelvey and Palfrey (1992) ran the centipede in the lab: subgame-perfect play says take at the first node, yet almost no one does, and most pairs pass several times.
+
+So the boundary is not a clean line between "holds" and "fails". Minimax passes on frequencies across both sports and very nearly passes on randomness; backward induction fails outright.
 
 Fold the centipede backward: at the last node the mover takes ($5 > 4$ for Them), so the previous mover takes ($4 > 3$ for You), and so on to the first node, where You take for $(2,0)$. That is the subgame-perfect prediction. But mutual passing reaches $(6,4)$, which both prefer to $(2,0)$. Real players capture much of that surplus by passing, contradicting the fold. The penalty-kick result, by contrast, confirms the theory exactly where it should be hardest: strategic, high-pressure, expert play.
 </Section>
@@ -114,7 +118,7 @@ Now the field. In the centipede, real pairs pass repeatedly, often reaching the 
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">The sharp theory has boundaries. Zero-sum minimax holds among elite athletes under pressure; backward induction fails in the centipede, where real players pass to reach outcomes both prefer.</Callout>
+<Callout kind="key-idea">The sharp theory has boundaries, and they are not tidy. Zero-sum minimax survives among elite athletes, missing only slightly on true randomness; backward induction fails outright in the centipede, where real players pass to reach outcomes both prefer.</Callout>
 </Section>
 
 <Section id="quiz">
@@ -138,11 +142,11 @@ Now the field. In the centipede, real pairs pass repeatedly, often reaching the 
   slug="field-tests"
   id="q2"
   badge="analyse"
-  question="Penalty-kick data confirm minimax, while centipede data reject backward induction. What is the lesson?"
+  question="Sport data largely confirm minimax, while centipede data reject backward induction. What is the lesson?"
   options={[
-    { text: "Game theory has boundaries: it can hold precisely where it is hardest, yet fail elsewhere, and the job is to map which is which", correct: true, feedback: "Behavioral game theory is not a blanket verdict of irrationality. Minimax survives its toughest field test; backward induction does not survive the centipede. Knowing the boundary is the contribution." },
-    { text: "That all game theory is wrong", feedback: "Not so: minimax is confirmed among professionals. The point is selective, mapping where theory holds and where it breaks." },
-    { text: "That all game theory is right", feedback: "Also not so: backward induction fails the centipede. The boundary runs between the two results." },
+    { text: "Game theory has boundaries: it can hold precisely where it is hardest, yet fail elsewhere, and the job is to map which is which", correct: true, feedback: "Behavioral game theory is not a blanket verdict of irrationality. Minimax survives its toughest field test, missing only slightly on serial independence; backward induction does not survive the centipede at all. Knowing the boundary is the contribution." },
+    { text: "That all game theory is wrong", feedback: "Not so: minimax is broadly confirmed among professionals. The point is selective, mapping where theory holds and where it breaks." },
+    { text: "That all game theory is right", feedback: "Also not so: backward induction fails the centipede, and even the sport data show a small departure from true randomness." },
   ]}
 />
 
@@ -153,11 +157,11 @@ Now the field. In the centipede, real pairs pass repeatedly, often reaching the 
   badge="brings back: minimax"
   question="Why is the penalty-kick result considered a strong confirmation of minimax?"
   options={[
-    { text: "It is a real zero-sum game played by experts with high stakes, and they mix at the predicted frequencies with no readable pattern", correct: true, feedback: "Minimax demands precise, patternless mixing, the hardest thing to do under pressure. That professionals achieve it in the field, on thousands of kicks, is about as strong a test as the theory could face." },
+    { text: "It is a real zero-sum game played by experts with high stakes, and they mix at the predicted frequencies with no readable pattern", correct: true, feedback: "Minimax demands precise, patternless mixing, the hardest thing to do under pressure. That professionals come this close in the field, on thousands of kicks, is about as strong a test as the theory could face, and the one gap (Wimbledon servers switching a little too often) is small enough to be hard to exploit." },
     { text: "Because penalty kicks are easy to win", feedback: "Difficulty is not the point; unpredictable mixing is. The result is strong because experts hit the minimax frequencies with no serial pattern." },
     { text: "Because the theory allows any behaviour", feedback: "Minimax makes a sharp, falsifiable prediction about frequencies and independence. The data matching it is what makes the confirmation strong." },
   ]}
 />
 </Section>
 
-<SourcesList refs={["palaciosHuerta2003", "mckelveyPalfrey1992"]} />
+<SourcesList refs={["palaciosHuerta2003", "walkerWooders2001", "mckelveyPalfrey1992"]} />
