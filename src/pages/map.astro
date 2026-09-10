@@ -129,6 +129,7 @@ const keyGroups = TIERS.map((t) => ({ name: t.name, items: lessons.filter((l) =>
           data-href={withBase('lessons/' + n.id)}
           data-slug={n.id}
           data-order={n.order}
+          data-seq={globalIndex.get(n.id)}
           data-prereqs={n.prereqs.join(',')}
         >
           <title>{n.title}</title>
@@ -198,7 +199,10 @@ const keyGroups = TIERS.map((t) => ({ name: t.name, items: lessons.filter((l) =>
     const done = (slug: string) => p.lessons[slug]?.status === 'complete';
 
     const nodes = Array.from(document.querySelectorAll<SVGGElement>('.cnode[data-slug]'));
-    let nextAssigned = false;
+    // "Start next" is the earliest lesson in curriculum order (data-seq) that is
+    // unlocked and not yet done, independent of where it sits in the graph.
+    let next: SVGGElement | null = null;
+    let nextSeq = Infinity;
     for (const n of nodes) {
       const slug = n.dataset.slug as string;
       const prereqs = (n.dataset.prereqs || '').split(',').filter(Boolean);
@@ -207,14 +211,17 @@ const keyGroups = TIERS.map((t) => ({ name: t.name, items: lessons.filter((l) =>
         n.classList.add('complete');
         continue;
       }
-      const unlocked = prereqs.every((pr) => done(pr));
-      if (!unlocked) {
+      if (!prereqs.every((pr) => done(pr))) {
         n.classList.add('locked');
-      } else if (!nextAssigned) {
-        nextAssigned = true;
-        n.classList.add('next');
+        continue;
+      }
+      const seq = Number(n.dataset.seq);
+      if (seq < nextSeq) {
+        nextSeq = seq;
+        next = n;
       }
     }
+    if (next) next.classList.add('next');
 
     // Key list: strike through completed lessons.
     document.querySelectorAll<HTMLElement>('.ki[data-slug]').forEach((k) => {
@@ -240,6 +247,15 @@ const keyGroups = TIERS.map((t) => ({ name: t.name, items: lessons.filter((l) =>
     n.addEventListener('mouseenter', lit);
     n.addEventListener('mouseleave', dim);
   });
+
+  // The graph is centered in its own canvas, so when it is wider than the
+  // viewport open it scrolled to the middle rather than the empty left edge.
+  const wrap = document.querySelector<HTMLElement>('.cmap-wrap');
+  function centerGraph() {
+    if (wrap) wrap.scrollLeft = Math.max(0, (wrap.scrollWidth - wrap.clientWidth) / 2);
+  }
+  centerGraph();
+  window.addEventListener('resize', centerGraph);
 
   render();
   window.addEventListener('gt:progress', render);
