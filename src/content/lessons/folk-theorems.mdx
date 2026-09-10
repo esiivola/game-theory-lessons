@@ -3,7 +3,7 @@ title: "Folk theorems"
 tier: intermediate
 unit: 7
 unitName: "Repeated games"
-order: 21
+order: 22
 kind: lesson
 summary: "With enough patience, almost any reasonable payoff can be an equilibrium."
 tags: ["repeated-games", "folk-theorem", "equilibrium"]
@@ -52,7 +52,7 @@ The plot is the space of average payoffs in the repeated Prisoner's Dilemma. The
   predict={{
     question: 'Which target payoffs can be sustained as an equilibrium when players are patient?',
     options: [{ key: 'coop', label: 'Only mutual cooperation (3,3)' }, { key: 'many', label: 'Any feasible point above the minmax' }],
-    reveal: 'Almost any of them. (3,3), (4,1), even lopsided splits: if a point is feasible and gives both players at least their minmax of 1, it is an equilibrium payoff for a patient enough pair. (0.5,0.5) fails, because it is below what a player can guarantee alone.',
+    reveal: 'Almost any of them. (3,3), (3.5,2), even lopsided splits: if a point is feasible and gives both players strictly more than their minmax of 1, it is an equilibrium payoff for a patient enough pair. (0.5,0.5) fails, because it is below what a player can guarantee alone.',
   }}
 />
 </Section>
@@ -61,7 +61,7 @@ The plot is the space of average payoffs in the repeated Prisoner's Dilemma. The
 ## Why did that happen?
 
 <Callout kind="ask">
-The engine is the threat. Any deviation can be met with punishment that drives the deviator down to their minmax, the most they can guarantee themselves while everyone else ganks them. As long as the target leaves both players above that floor, the loss from being punished outweighs the one-time gain from cheating, so nobody deviates. Patience makes the future punishment loom large enough to hold almost any arrangement in place.
+The engine is the threat. Any deviation can be met with punishment that drives the deviator down to their minmax, the most they can guarantee themselves while everyone else pushes them as low as they can. As long as the target leaves both players above that floor, the loss from being punished outweighs the one-time gain from cheating, so nobody deviates. Patience makes the future punishment loom large enough to hold almost any arrangement in place.
 </Callout>
 </Section>
 
@@ -74,7 +74,7 @@ The feasible payoffs are the convex hull of the stage-game outcomes: for the PD 
 For an infinitely repeated game, take any feasible payoff profile in which every player earns strictly more than their minmax value. Then for discount factors close enough to 1, there is a subgame-perfect equilibrium of the repeated game whose average payoff is exactly that profile. The set of equilibrium payoffs fills the entire feasible, individually rational region.
 </DefinitionAside>
 
-So $(3,3)$ is an equilibrium, but so is $(4,1)$, and so are countless asymmetric splits. Two flavors: the Nash-threat version (Friedman) punishes with a stage-game Nash equilibrium; the stronger minmax version (Fudenberg-Maskin) punishes down to the minmax, which enlarges the supportable set.
+So $(3,3)$ is an equilibrium, but so is $(3.5,2)$, and so are countless asymmetric splits. Two flavors: the Nash-threat version (Friedman) punishes with a stage-game Nash equilibrium; the stronger minmax version (Fudenberg-Maskin) punishes down to the minmax, which enlarges the supportable set.
 
 The lesson is sobering. Repetition does not pick out cooperation; it makes prediction hard, because so many outcomes are consistent with equilibrium.
 </Section>
@@ -135,7 +135,7 @@ The lesson is sobering. Repetition does not pick out cooperation; it makes predi
   options={[
     { text: "It makes future punishment loom large enough to deter any one-time deviation, so the target profile holds", correct: true, feedback: "As in the discounting lesson, a high delta means the stream of future losses from punishment outweighs the immediate gain from cheating. That is what sustains the wide set of equilibria." },
     { text: "It shrinks the set of equilibria to just cooperation", feedback: "Higher patience enlarges the supportable set toward the whole IR region, it does not shrink it to cooperation." },
-    { text: "It removes the need for any punishment threat", feedback: "The threat is exactly what patience empowers. Without a credible punishment, deviations would pay." },
+    { text: "It removes the need for any punishment threat", feedback: "The threat is exactly what patience makes bite. Without a credible punishment, deviations would pay." },
   ]}
 />
 </Section>

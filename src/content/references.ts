@@ -13,6 +13,8 @@ export const REFERENCES: Record<string, string> = {
     'von Neumann, J., and Morgenstern, O. (1944). <i>Theory of Games and Economic Behavior</i>. Princeton University Press.',
   nash1950:
     'Nash, J. F. (1950). Equilibrium points in n-person games. <i>PNAS</i>, 36(1), 48-49.',
+  nash1950bargaining:
+    'Nash, J. F. (1950). The bargaining problem. <i>Econometrica</i>, 18(2), 155-162.',
   vonNeumann1928:
     'von Neumann, J. (1928). Zur Theorie der Gesellschaftsspiele. <i>Mathematische Annalen</i>, 100, 295-320.',
   rapoportGuyer1966:
@@ -29,6 +31,8 @@ export const REFERENCES: Record<string, string> = {
     'Hardin, G. (1968). The tragedy of the commons. <i>Science</i>, 162, 1243-1248.',
   schelling1960:
     'Schelling, T. C. (1960). <i>The Strategy of Conflict</i>. Harvard University Press.',
+  walkerWooders2001:
+    'Walker, M., and Wooders, J. (2001). Minimax play at Wimbledon. <i>American Economic Review</i>, 91(5), 1521-1538.',
   palaciosHuerta2003:
     'Palacios-Huerta, I. (2003). Professionals play minimax. <i>Review of Economic Studies</i>, 70(2), 395-415.',
   nagel1995:

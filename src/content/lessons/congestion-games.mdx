@@ -3,7 +3,7 @@ title: "Congestion and potential games"
 tier: expert
 unit: 16
 unitName: "Algorithmic game theory"
-order: 53
+order: 54
 kind: lesson
 summary: "When players share congestible resources, best-response dynamics always settle down."
 tags: ["algorithmic", "congestion", "potential"]
@@ -50,9 +50,9 @@ Four drivers choose road A, whose cost equals its number of users, or road B, a 
   exhibit="Exhibit 1"
   caption="Four drivers, two roads, one potential function"
   predict={{
-    question: 'Where do best-response dynamics settle?',
-    options: [{ key: 'cycle', label: 'They cycle forever' }, { key: 'nash', label: 'At a pure equilibrium, 3 on A' }],
-    reveal: 'At a pure equilibrium: 3 on road A (each paying 3) and 1 on road B (paying 3). Every improving switch lowers the same potential, so the dynamics cannot cycle and must stop at a Nash equilibrium.',
+    question: 'Starting with everyone on road B, where do best-response dynamics settle?',
+    options: [{ key: 'cycle', label: 'They cycle forever' }, { key: 'nash', label: 'At a pure equilibrium, 2 on A' }],
+    reveal: 'At a pure equilibrium: 2 on road A (each paying 2) and 2 on road B (paying 3). A third driver joining A would pay 3, no better than B, so no improving move remains. Every improving switch lowers the same potential, so the dynamics cannot cycle and must stop at a Nash equilibrium.',
   }}
 />
 </Section>
@@ -72,7 +72,7 @@ Each time a driver switches to a cheaper road, they lower their own cost, and it
 In a congestion game, each resource has a cost that depends only on how many players use it, and a player's cost is the sum over the resources it picks. Rosenthal showed every such game admits an exact potential $\Phi$: whenever one player switches, the change in $\Phi$ equals the change in that player's cost. Because $\Phi$ strictly decreases at every improving move and takes finitely many values, best-response dynamics converge to a pure Nash equilibrium. Monderer and Shapley showed congestion games and finite potential games are essentially the same class.
 </DefinitionAside>
 
-Here $\Phi(x) = \sum_{k=1}^{x} k + 3(4 - x) = \tfrac{x(x+1)}{2} + 3(4-x)$ when $x$ drivers use road A. Evaluating: $\Phi(0) = 12$, $\Phi(1) = 10$, $\Phi(2) = 9$, $\Phi(3) = 9$, $\Phi(4) = 10$. The minimum is at $x = 3$ (and $x = 2$), and $x = 3$ is a Nash equilibrium: each road costs $3$, so no driver gains by switching. Best-response dynamics walk $\Phi$ downhill to that rest point.
+Here $\Phi(x) = \sum_{k=1}^{x} k + 3(4 - x) = \tfrac{x(x+1)}{2} + 3(4-x)$ when $x$ drivers use road A. Evaluating: $\Phi(0) = 12$, $\Phi(1) = 10$, $\Phi(2) = 9$, $\Phi(3) = 9$, $\Phi(4) = 10$. The potential bottoms out at $x = 2$ and $x = 3$, and both are pure Nash equilibria. Starting from everyone on B, best-response dynamics walk $\Phi$ downhill and stop at $x = 2$: the move to $x = 3$ takes the switcher from $3$ on B to $3$ on A, no gain, and leaves $\Phi$ unchanged at $9$. A tie is where improving moves run out.
 </Section>
 
 <Section id="worked">
@@ -81,7 +81,7 @@ Here $\Phi(x) = \sum_{k=1}^{x} k + 3(4 - x) = \tfrac{x(x+1)}{2} + 3(4-x)$ when $
 <WorkedExample title="Follow the potential downhill">
 Start with everyone on road B: $x = 0$, and $\Phi(0) = 0 + 3\cdot 4 = 12$. Road A costs $1$ to the first mover versus $3$ on B, so a driver switches; now $x = 1$, $\Phi(1) = 1 + 9 = 10$, down by $2$, exactly that driver's saving ($3 \to 1$).
 
-Another driver finds A now costs $2$ if they join (two users), strictly better than B's $3$, and switches; $x = 2$, $\Phi = 3 + 6 = 9$, down by $1$, again that driver's saving ($3 \to 2$). A third does the same to reach $x = 3$, where A costs $3$, equal to B: no one gains by moving. $\Phi(3) = 6 + 3 = 9$, the minimum. The dynamics halt at the pure Nash equilibrium, guaranteed by the ever-decreasing potential.
+Another driver finds A now costs $2$ if they join (two users), strictly better than B's $3$, and switches; $x = 2$, $\Phi = 3 + 6 = 9$, down by $1$, again that driver's saving ($3 \to 2$). Now stop. A third driver moving to A would make it three users at a cost of $3$, exactly what they already pay on B, so no improving move is left and $x = 2$ is a pure Nash equilibrium. The potential says the same thing: $\Phi(3) = 6 + 3 = 9 = \Phi(2)$, no drop, no move. The dynamics halt, guaranteed by the ever-decreasing potential.
 </WorkedExample>
 </Section>
 
@@ -99,7 +99,7 @@ Another driver finds A now costs $2$ if they join (two users), strictly better t
   slug="congestion-games"
   id="q1"
   badge="apply"
-  question="At the equilibrium 3 drivers on A and 1 on B, why does no one switch?"
+  question="The split 3 drivers on A and 1 on B is the game's other equilibrium. Why does no one switch there?"
   options={[
     { text: "Road A costs 3 (its three users) and road B costs 3, so switching cannot lower anyone's cost", correct: true, feedback: "Both roads cost 3 at this split. An A-user moving to B still pays 3; a B-user moving to A makes it 4 users, paying 4. No improving move exists, so it is a pure Nash equilibrium." },
     { text: "Because the roads are equally long", feedback: "It is about congestion costs, not length. At 3-on-A both roads happen to cost 3, so no switch helps." },

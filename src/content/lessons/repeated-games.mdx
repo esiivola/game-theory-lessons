@@ -3,7 +3,7 @@ title: "Repeated games and discounting"
 tier: intermediate
 unit: 7
 unitName: "Repeated games"
-order: 20
+order: 21
 kind: lesson
 summary: "Play the dilemma again and again, and cooperation can hold, if you value tomorrow enough."
 tags: ["repeated-games", "cooperation", "discounting"]
@@ -107,7 +107,7 @@ Rearranging, $R - T \ge -\delta(T - P)$, so $\delta \ge (T-R)/(T-P)$. For $T=5, 
 
 **Faded.** Suppose mutual defection were less bad, $P=2$. The threshold becomes $(5-3)/(5-2) = \tfrac23$: a softer punishment means you need more patience to deter cheating.
 
-**Solo.** At $\delta = 0.6$, does tit-for-tat sustain cooperation? Since $0.6 \ge \tfrac12$, yes. The same threshold works, because a single defection against tit-for-tat also costs you the cooperative stream.
+**Solo.** At $\delta = 0.6$, does tit-for-tat sustain cooperation? No, and the reason is worth seeing. Tit-for-tat punishes for one round, not forever, so a defector suffers $S$ once and then returns to $R$. Comparing $R/(1-\delta)$ against $T + \delta S + \delta^2 R/(1-\delta)$ reduces to $R(1+\delta) \ge T + \delta S$, giving $\delta \ge (T-R)/(R-S) = \tfrac23$ here. A milder punishment needs more patience, so $0.6$ is not enough.
 </WorkedExample>
 </Section>
 

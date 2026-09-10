@@ -3,7 +3,7 @@ title: "Field tests and boundaries"
 tier: expert
 unit: 17
 unitName: "Behavioral and experimental"
-order: 62
+order: 63
 kind: lesson
 summary: "Minimax holds among elite athletes, but backward induction fails in the centipede game."
 tags: ["behavioral", "field-evidence", "centipede"]
@@ -95,7 +95,7 @@ The two field results pull in opposite directions. Penalty kicks are a clean zer
 ## The math
 
 <DefinitionAside label="two field verdicts">
-Palacios-Huerta (2003) analysed 1,417 professional penalty kicks: scoring rates make the kicker's equilibrium mix about 36 percent to one side, and observed play matches the minimax frequencies with no serial correlation. Minimax passes its field test. McKelvey and Palfrey (1992) ran the centipede in the lab: subgame-perfect play says take at the first node, yet only about 1 percent do, and most pass several times. Backward induction fails its field test.
+Palacios-Huerta (2003) analysed 1,417 professional penalty kicks: scoring rates make the kicker's equilibrium mix about 36 percent to one side, and observed play matches the minimax frequencies with no serial correlation. Minimax passes its field test. McKelvey and Palfrey (1992) ran the centipede in the lab: subgame-perfect play says take at the first node, yet almost no one does, and most pairs pass several times. Backward induction fails its field test.
 </DefinitionAside>
 
 Fold the centipede backward: at the last node the mover takes ($5 > 4$ for Them), so the previous mover takes ($4 > 3$ for You), and so on to the first node, where You take for $(2,0)$. That is the subgame-perfect prediction. But mutual passing reaches $(6,4)$, which both prefer to $(2,0)$. Real players capture much of that surplus by passing, contradicting the fold. The penalty-kick result, by contrast, confirms the theory exactly where it should be hardest: strategic, high-pressure, expert play.

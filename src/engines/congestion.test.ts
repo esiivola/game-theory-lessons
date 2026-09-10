@@ -10,9 +10,8 @@ describe('congestion potential game', () => {
     expect(potential(3)).toBeLessThanOrEqual(potential(0));
     expect(potential(3)).toBeLessThanOrEqual(potential(4));
   });
-  it('best-response dynamics reach an equilibrium and stop', () => {
-    const path = bestResponsePath(0);
-    const end = path[path.length - 1];
-    expect(isEquilibrium(end)).toBe(true);
+  it('best-response dynamics from all-on-B stop at 2 on A, matching the lesson', () => {
+    expect(bestResponsePath(0)).toEqual([0, 1, 2]);
+    expect(isEquilibrium(2)).toBe(true); // a third mover would pay 3 on A, no better than B
   });
 });

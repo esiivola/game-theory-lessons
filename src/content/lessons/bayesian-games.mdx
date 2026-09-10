@@ -3,7 +3,7 @@ title: "Bayesian games and Bayes-Nash"
 tier: intermediate
 unit: 8
 unitName: "Incomplete information"
-order: 24
+order: 25
 kind: lesson
 summary: "When you don't know a rival's type, best-respond to the whole distribution of types."
 tags: ["incomplete-information", "bayesian-games", "oligopoly"]
@@ -78,10 +78,10 @@ $$
 q_2(c) = \frac{12 - q_1 - c}{2}.
 $$
 
-Firm 1 does not see $c$, so it uses the expected rival output. With the rival low-cost ($c=0$) with probability $\mu$ and high-cost ($c=6$) otherwise, $\mathbb{E}[q_2] = 3 + 3\mu - q_1/2$. Firm 1 maximizes $(12 - q_1 - \mathbb{E}[q_2])q_1$, giving
+Firm 1 does not see $c$, so it best-responds to the expected rival output, taking that number as fixed: $q_1 = (12 - \mathbb{E}[q_2])/2$. The two conditions have to hold at once. With the rival low-cost ($c=0$) with probability $\mu$ and high-cost ($c=6$) otherwise, the type-by-type reactions give $\mathbb{E}[q_2] = 3 + 3\mu - q_1/2$, and substituting that into firm 1's best response solves the system:
 
 $$
-q_1 = 6 - 2\mu.
+q_1 = \frac{12 - (3 + 3\mu - q_1/2)}{2} \quad\Longrightarrow\quad q_1 = 6 - 2\mu.
 $$
 
 At $\mu = \tfrac12$, $q_1 = 5$, with $q_2(\text{low}) = 3.5$ and $q_2(\text{high}) = 0.5$. As $\mu \to 1$, $q_1 \to 4$: a rival more likely to be low-cost crowds the market, so firm 1 pulls back.

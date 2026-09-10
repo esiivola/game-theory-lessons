@@ -51,7 +51,7 @@ import QuizCard from '@/components/interactive/QuizCard.svelte';
   payoffs={{ A: { A: [3, 3], N: [6, 1] }, N: { A: [1, 6], N: [4, 4] } }}
 />
 
-Sweep across the top row of your two options. If they advertise, you get 3 from advertising versus 1 from not. If they do not, you get 6 versus 4. Advertising wins in both columns.
+Read down your two rows. If they advertise, you get 3 from advertising versus 1 from not. If they do not, you get 6 versus 4. Advertising wins in both columns.
 
 <WorkedExample title="Eliminate the dominated move">
 For you, advertising beats not-advertising in every column ($3>1$ and $6>4$), so "do not advertise" is strictly dominated and can be crossed out. By symmetry the same holds for them. What remains is a single cell, $(\text{advertise}, \text{advertise})$, paying $(3,3)$, even though both would prefer the $(4,4)$ they reach by staying quiet. Sound familiar? That tension returns in the next unit.

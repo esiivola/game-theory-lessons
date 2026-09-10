@@ -3,7 +3,7 @@ title: "Learning in games"
 tier: expert
 unit: 15
 unitName: "Evolution and learning"
-order: 51
+order: 52
 kind: lesson
 summary: "Players who just best-respond to the past can converge on equilibrium without ever computing it."
 tags: ["learning", "fictitious-play", "no-regret"]
@@ -69,12 +69,12 @@ The bot is not clever, just observant: it counts your moves and flees the one yo
 ## The math
 
 <DefinitionAside label="fictitious play and no-regret">
-In fictitious play, each player forms a belief equal to the empirical frequency of the opponent's past moves and best-responds to it. In zero-sum games and in potential games, the empirical frequencies of play converge to a Nash equilibrium. No-regret (or regret-matching) learning is more general: if each player's average regret for not having played any fixed action goes to zero, the empirical joint distribution converges to the set of coarse correlated equilibria.
+In fictitious play, each player forms a belief equal to the empirical frequency of the opponent's past moves and best-responds to it. In zero-sum games and in potential games, the empirical frequencies of play converge to a Nash equilibrium. No-regret learning is more general: if each player's average regret for not having played any fixed action goes to zero, the empirical joint distribution converges to the set of coarse correlated equilibria. Hart and Mas-Colell's regret matching meets the stronger no-swap-regret condition, and its empirical distribution converges to the set of correlated equilibria.
 </DefinitionAside>
 
 In Matching Pennies the matcher wants to match, the mismatcher to differ. Each best-responds to the other's running Heads frequency. The per-round beliefs cycle, but the time-average of each player's own play converges to $(\tfrac12, \tfrac12)$, the mixed equilibrium. So a player who never heard of mixed strategies nonetheless plays one on average.
 
-Fictitious play does not converge in every game (it can cycle in some), but it does in the two big classes above. No-regret dynamics guarantee, in any game, average play within $O(\sqrt{\ln n / T})$ of the best fixed action, which pins the long-run behaviour to equilibrium sets even when full convergence fails.
+Fictitious play does not converge in every game (it can cycle in some), but it does in the two big classes above. No-regret dynamics guarantee, in any game, average play within $O(\sqrt{\ln n / T})$ of the best fixed action over $T$ rounds with $n$ actions, which pins the long-run behaviour to equilibrium sets even when full convergence fails.
 </Section>
 
 <Section id="worked">
@@ -90,7 +90,7 @@ The only frequency it cannot exploit is $0.5$: at an even, patternless mix, its 
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">Simple learners who best-respond to the past can converge on equilibrium without computing it: fictitious play reaches Nash in zero-sum and potential games, and no-regret learning reaches correlated equilibria in general.</Callout>
+<Callout kind="key-idea">Simple learners who best-respond to the past can converge on equilibrium without computing it: fictitious play reaches Nash in zero-sum and potential games, and regret matching reaches correlated equilibrium in any game.</Callout>
 </Section>
 
 <Section id="quiz">

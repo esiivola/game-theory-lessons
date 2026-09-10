@@ -79,7 +79,7 @@ $$
 Every pure move earns $0$ against the uniform mix, so you are indifferent among all of them, and mixing $\tfrac13, \tfrac13, \tfrac13$ is a best response to itself. That is the equilibrium.
 
 <DefinitionAside label="Nash's existence theorem">
-Every finite game (finitely many players, each with finitely many pure strategies) has at least one Nash equilibrium in mixed strategies. The proof puts a continuous best-response map on the space of mixed profiles and applies a fixed-point theorem (Brouwer, via Kakutani): a fixed point of that map is a profile where everyone is already best-responding, which is exactly an equilibrium.
+Every finite game (finitely many players, each with finitely many pure strategies) has at least one Nash equilibrium in mixed strategies. The proof looks for a fixed point of best response on the compact convex space of mixed profiles, because a profile that best-responds to itself is exactly an equilibrium. Best response is a correspondence, not a function (ties leave several best replies), so Nash's 1950 proof applies Kakutani's fixed-point theorem for correspondences; his 1951 proof instead builds a continuous map with the same fixed points and applies Brouwer's.
 </DefinitionAside>
 
 The theorem guarantees existence. It says nothing about how many equilibria there are, or which one gets played.

@@ -3,7 +3,7 @@ title: "Nash bargaining"
 tier: intermediate
 unit: 6
 unitName: "Bargaining"
-order: 18
+order: 19
 kind: lesson
 summary: "The fair split maximizes the product of what each side gains over walking away."
 tags: ["bargaining", "cooperation", "axiomatic"]
@@ -11,7 +11,7 @@ estMinutes: 6
 mvp: true
 prereqs: ["expected-utility"]
 concepts: ["nash-bargaining", "disagreement-point"]
-refs: ["nash1950"]
+refs: ["nash1950bargaining"]
 anchorEmoji: "🤝"
 ---
 
@@ -35,7 +35,7 @@ import Bargaining from '@/components/interactive/Bargaining.svelte';
   client:visible
   questions={[
     { q: "A Nash equilibrium is a profile where no player gains by...", options: ["Cooperating", "Deviating alone", "Waiting"], answer: 1 },
-    { q: "A shared signal that beats every Nash equilibrium of Chicken is a...", options: ["Focal point", "Correlated equilibrium", "Dominant strategy"], answer: 1 },
+    { q: "A shared signal that beats the mixed Nash equilibrium of Chicken for both players is a...", options: ["Focal point", "Correlated equilibrium", "Dominant strategy"], answer: 1 },
   ]}
 />
 </Section>
@@ -148,4 +148,4 @@ Now let your outside option be $d_1 = 0.2$ (theirs still 0). Maximize $(x - 0.2)
 />
 </Section>
 
-<SourcesList refs={["nash1950"]} />
+<SourcesList refs={["nash1950bargaining"]} />

@@ -3,7 +3,7 @@ title: "Correlated equilibrium"
 tier: intermediate
 unit: 5
 unitName: "Correlation and complementarities"
-order: 16
+order: 17
 kind: lesson
 summary: "A shared signal can steer players to an outcome that beats every Nash equilibrium."
 tags: ["correlation", "equilibrium", "coordination"]
@@ -29,7 +29,7 @@ import CorrelatedEq from '@/components/interactive/CorrelatedEq.svelte';
 
 # Correlated equilibrium
 
-<p class="lead">Nash equilibrium lets players randomize on their own, independently. But a shared signal, a light, a mediator, a public event, can correlate their choices, and that opens outcomes no independent play can reach. In Chicken, a coin the players cannot control does better for both than any Nash equilibrium.</p>
+<p class="lead">Nash equilibrium lets players randomize on their own, independently. But a shared signal, a light, a mediator, a public event, can correlate their choices, and that opens outcomes no independent play can reach. In Chicken, a coin the players cannot control beats the symmetric mixed equilibrium for both, and beats every equilibrium of the game on total payoff.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -110,7 +110,7 @@ Told **Swerve**: this happens in $(\text{Sw},\text{Sw})$ and $(\text{Sw},\text{S
 
 Told **Straight**: this happens only in $(\text{St},\text{Sw})$, so the opponent surely swerves. Obeying (Straight) pays $7$; deviating (Swerve) pays $6$. Obey.
 
-Both recommendations are self-enforcing, so the device is a correlated equilibrium, and it averages $(5,5)$, beating every Nash equilibrium of Chicken.
+Both recommendations are self-enforcing, so the device is a correlated equilibrium, and it averages $(5,5)$. That beats the mixed Nash $4.67$ for both players, and beats the pure equilibria on total payoff ($10$ against $9$), though the driver who would have held firm at $(7,2)$ does worse.
 </WorkedExample>
 </Section>
 

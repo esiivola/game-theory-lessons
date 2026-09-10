@@ -3,7 +3,7 @@ title: "Global games"
 tier: expert
 unit: 11
 unitName: "Refinements and epistemics"
-order: 35
+order: 36
 kind: lesson
 summary: "A little private noise turns a game with many self-fulfilling outcomes into one with a single threshold."
 tags: ["global-games", "coordination", "crises"]
@@ -74,7 +74,7 @@ The regime collapses if the mass of attackers reaches the fundamental $\theta$; 
 A global game is a coordination game where each player observes the payoff-relevant state with a small idiosyncratic error. As the noise shrinks, the game has a unique equilibrium in threshold strategies: attack iff your signal is below a cutoff. The uniqueness comes from the noise, which prevents beliefs about others from being common knowledge and forces iterated reasoning to a single outcome.
 </DefinitionAside>
 
-At the switching signal, the marginal speculator's belief about the fraction of others attacking is uniform on $[0,1]$ (the Laplacian property). Indifference between attacking and not then gives the fundamental threshold
+At the switching signal, the marginal speculator's belief about the fraction of others attacking is uniform on $[0,1]$ (the Laplacian property), so it puts probability $1 - \theta^*$ on the regime falling. Setting that equal to the cost $c$ gives the fundamental threshold
 
 $$
 \theta^* = 1 - c.
@@ -87,9 +87,9 @@ The regime falls exactly when $\theta < \theta^*$. With $c = \tfrac12$, $\theta^
 ## Work it out
 
 <WorkedExample title="Find the crisis threshold">
-Consider the marginal speculator, the one whose signal sits exactly at the switching cutoff. A key property of the global-games limit is that this agent's posterior over the fraction of others who attack is uniform on $[0,1]$. So conditional on being marginal, the regime falls with probability equal to that fraction, and the expected benefit of attacking is the probability the regime falls, which averages to $\tfrac12$ of a unit payoff scaled by where the threshold sits.
+Consider the marginal speculator, the one whose signal sits exactly at the switching cutoff. A key property of the global-games limit is that this agent's posterior over the fraction $\ell$ of others who attack is uniform on $[0,1]$. Its best estimate of the fundamental is its own signal, $\theta^*$, and the regime falls when $\ell \ge \theta^*$, an event of probability $1 - \theta^*$.
 
-Setting the marginal agent indifferent, attack cost $c$ equals the expected gain, and working through the uniform belief gives the fundamental threshold $\theta^* = 1 - c$. At $c = \tfrac12$ this is $\tfrac12$: economies with $\theta < \tfrac12$ collapse, those above survive. Halve the cost to $c = \tfrac14$ and $\theta^* = \tfrac34$: now three-quarters of economies are vulnerable. Cheaper attacking makes crises more likely.
+Attacking pays $1$ if the regime falls and costs $c$ either way, so the marginal agent is indifferent when $1 - \theta^* = c$, giving the fundamental threshold $\theta^* = 1 - c$. At $c = \tfrac12$ this is $\tfrac12$: economies with $\theta < \tfrac12$ collapse, those above survive. Halve the cost to $c = \tfrac14$ and $\theta^* = \tfrac34$: now three-quarters of economies are vulnerable. Cheaper attacking makes crises more likely.
 </WorkedExample>
 </Section>
 

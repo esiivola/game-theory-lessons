@@ -3,7 +3,7 @@ title: "Replicator dynamics"
 tier: expert
 unit: 15
 unitName: "Evolution and learning"
-order: 49
+order: 50
 kind: lesson
 summary: "Successful strategies reproduce, and in Rock-Paper-Scissors the population can cycle forever."
 tags: ["evolution", "replicator", "dynamics"]
@@ -69,7 +69,7 @@ Whatever is common gets beaten: lots of Rock invites Paper, which invites Scisso
 ## The math
 
 <DefinitionAside label="replicator dynamics">
-Let $x_i$ be the share of strategy $i$ and $f_i$ its expected fitness against the current population. The replicator equation is $\dot{x}_i = x_i\,(f_i - \bar{f})$, where $\bar{f} = \sum_j x_j f_j$ is average fitness: strategies above average grow, those below shrink. Its rest points include every Nash equilibrium, and stable rest points correspond to evolutionarily stable strategies.
+Let $x_i$ be the share of strategy $i$ and $f_i$ its expected fitness against the current population. The replicator equation is $\dot{x}_i = x_i\,(f_i - \bar{f})$, where $\bar{f} = \sum_j x_j f_j$ is average fitness: strategies above average grow, those below shrink. Its rest points include every Nash equilibrium, and every evolutionarily stable strategy is an asymptotically stable rest point.
 </DefinitionAside>
 
 For fair Rock-Paper-Scissors (win $+1$, lose $-1$, tie $0$) the game is zero-sum, so average fitness is zero and the dynamics conserve a quantity: the trajectories are closed orbits circling the interior equilibrium $(\tfrac13, \tfrac13, \tfrac13)$, which is neutrally stable, neither attracting nor repelling.

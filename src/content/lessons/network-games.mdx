@@ -3,7 +3,7 @@ title: "Network and graphical games"
 tier: expert
 unit: 16
 unitName: "Algorithmic game theory"
-order: 55
+order: 56
 kind: lesson
 summary: "On a network, who provides a shared good depends on position, not just payoffs."
 tags: ["algorithmic", "graphical-games", "networks"]
@@ -52,7 +52,7 @@ A best-shot public good: each node can pay 1 to provide something worth 2 to its
   predict={{
     question: 'On a star (one hub, five leaves), how many nodes end up providing the good?',
     options: [{ key: 'all', label: 'All six' }, { key: 'one', label: 'Just the hub' }],
-    reveal: 'Just the hub. The centre provides, and all five leaves free-ride off it, so society pays only 1. On a six-cycle the same rule forces three providers. Position, not payoffs, drives the difference.',
+    reveal: 'Just the hub. The centre provides, and all five leaves free-ride off it, so society pays only 1. On a six-cycle no node reaches everyone, so at least two must provide, and best responses from an empty start land on three. Position, not payoffs, drives the difference.',
   }}
 />
 </Section>
@@ -61,7 +61,7 @@ A best-shot public good: each node can pay 1 to provide something worth 2 to its
 ## Why did that happen?
 
 <Callout kind="ask">
-The good only needs to be provided once within each neighbourhood. On a star, the hub touches everyone, so if the hub provides, the whole network is covered and every leaf can free-ride. On a cycle, no single node reaches everyone, so providers must be spaced out, one, skip, one, skip, taking three of six. Same incentives, same rule, but the graph's shape sets how many providers are needed and who they are.
+The good only needs to be provided once within each neighbourhood. On a star, the hub touches everyone, so if the hub provides, the whole network is covered and every leaf can free-ride. On a cycle, no single node reaches everyone, so providers must be spaced out: two opposite nodes are enough to cover all six, and running best responses from an empty network lands on the alternating three. Same incentives, same rule, but the graph's shape sets how many providers are needed and who they are.
 </Callout>
 </Section>
 
@@ -72,7 +72,7 @@ The good only needs to be provided once within each neighbourhood. On a star, th
 A graphical game places players on a graph so that each player's payoff depends only on its own action and its neighbours'. This makes the game compact to describe and often tractable to solve, since local structure can be exploited. In the best-shot public-goods game, a pure Nash equilibrium is exactly a maximal independent set of providers: no two providers are adjacent (that would waste a contribution), and every non-provider has a provider neighbour (or it would rather provide itself).
 </DefinitionAside>
 
-Each node's best response: provide if and only if no neighbour provides. In equilibrium the providers form an independent set (none adjacent) that is maximal (every other node is adjacent to a provider). On a star, the hub alone is a maximal independent set, so one node provides and society's cost is $1$. On a six-cycle, a maximal independent set has size $3$ (alternate nodes), so three provide, cost $3$.
+Each node's best response: provide if and only if no neighbour provides. In equilibrium the providers form an independent set (none adjacent) that is maximal (every other node is adjacent to a provider). On a star, the hub alone is a maximal independent set, so one node provides and society's cost is $1$. On a six-cycle no node covers all the others, so every maximal independent set has at least two members: two opposite nodes suffice (cost $2$), while the alternating set of three is also maximal (cost $3$). Which one you land on depends on where the dynamics start, and from an empty network they reach the three.
 
 Because best responses depend only on neighbours, local update dynamics converge to such an equilibrium without a global computation, one reason graphical games are attractive for large networks.
 </Section>
@@ -83,14 +83,14 @@ Because best responses depend only on neighbours, local update dynamics converge
 <WorkedExample title="Star versus cycle">
 On the star, suppose the hub provides. Every leaf has the hub as a neighbour, so each leaf is content to free-ride (a provider neighbour exists), and the hub, whose only neighbours are non-providing leaves, is content to provide. That is a maximal independent set of size $1$: the whole street served for a cost of $1$.
 
-On the six-cycle, try one provider: some node two steps away has no providing neighbour, so it would rather provide, breaking the profile. Space providers every other node and you get three, an independent set (no two adjacent) that is maximal (every gap node touches a provider). Cost $3$. The identical best-shot rule triples the social cost purely because the cycle has no hub to cover everyone at once.
+On the six-cycle, try one provider: the node opposite it has no providing neighbour, so it would rather provide, breaking the profile. Add it and you have two opposite providers, an independent set (they are not adjacent) that is maximal (each of the four remaining nodes touches one). Cost $2$, and that is the cheapest equilibrium. Run best responses from an empty network instead and every node wants to provide at once, which settles on the alternating three, cost $3$. Either way the cycle costs more than the star, purely because it has no hub to cover everyone at once.
 </WorkedExample>
 </Section>
 
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">In a graphical game, payoffs depend only on neighbours, so network structure drives the outcome. In best-shot public goods, equilibria are maximal independent sets, and a hub can serve everyone while a cycle forces many providers.</Callout>
+<Callout kind="key-idea">In a graphical game, payoffs depend only on neighbours, so network structure drives the outcome. In best-shot public goods, equilibria are maximal independent sets, and a hub can serve everyone while a cycle needs several providers.</Callout>
 </Section>
 
 <Section id="quiz">
@@ -101,11 +101,11 @@ On the six-cycle, try one provider: some node two steps away has no providing ne
   slug="network-games"
   id="q1"
   badge="apply"
-  question="Why does the star need only one provider while the six-cycle needs three?"
+  question="Why does the star need only one provider while the six-cycle needs at least two?"
   options={[
-    { text: "The hub is adjacent to everyone, so its single contribution covers the whole network; a cycle has no such node, so providers must be spaced out", correct: true, feedback: "Coverage depends on adjacency. One hub reaches all leaves, so one provider suffices. On a cycle, reaching everyone requires an alternating independent set of three." },
+    { text: "The hub is adjacent to everyone, so its single contribution covers the whole network; a cycle has no such node, so providers must be spaced out", correct: true, feedback: "Coverage depends on adjacency. One hub reaches all leaves, so one provider suffices. On a cycle every node touches only two others, so no single provider can cover all six." },
     { text: "Because leaves value the good less", feedback: "Values are the same everywhere. The difference is purely structural: the hub's high degree lets one contribution serve all." },
-    { text: "Because the cycle has more nodes", feedback: "Both have six nodes. The star needs one provider and the cycle three because of connectivity, not node count." },
+    { text: "Because the cycle has more nodes", feedback: "Both have six nodes. The star needs one provider and the cycle at least two because of connectivity, not node count." },
   ]}
 />
 
