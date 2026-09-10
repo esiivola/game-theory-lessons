@@ -72,13 +72,13 @@ Your signal is unbiased before you bid: on average it equals the true value. But
 All bidders share the same unknown value; each sees a private signal correlated with it. A naive bidder who bids their unbiased signal overpays, because winning is correlated with having the highest, most optimistic signal. Correcting for this, bidders shade below their signal, and shade more as the number of rivals grows.
 </DefinitionAside>
 
-Take the wallet game: the prize is worth $t_1 + t_2$, where each $t_i$ is private and uniform on $[0,1]$. Suppose you have signal $t$. Conditional on winning, your signal is the higher of the two, so the other is uniform on $[0,t]$ with mean $t/2$. Then
+Take a common value $V$ with $n$ bidders, each seeing a signal $s_i = V + e_i$ whose noise $e_i$ is symmetric around zero. Your signal is unbiased, so before you bid $\mathbb{E}[V \mid s_i] = s_i$. Now condition on winning. You win when your signal is the highest of the $n$, so your noise is the largest of $n$ draws, which is positive on average. With noise spread evenly over $[-a, a]$, the expected largest of $n$ draws is $a\,\tfrac{n-1}{n+1}$, so
 
 $$
-\mathbb{E}[\text{value} \mid \text{win}] = t + \tfrac{t}{2} = \tfrac{3t}{2},
+\mathbb{E}[V \mid \text{win}] = s_i - a\,\frac{n-1}{n+1},
 $$
 
-which is below the naive estimate that treats the rival's signal as an average draw. The symmetric second-price equilibrium bid is $b(t) = 2t$: it is set so that the bidder whose signal exactly ties yours is indifferent, not so that you break even on your own estimate. Bidding your raw signal, or worse the naive $t + \tfrac12$, is the curse.
+below your signal. So bid your signal minus that correction: shade below the signal, and shade more as $n$ grows, since $\tfrac{n-1}{n+1}$ climbs toward $1$.
 </Section>
 
 <Section id="reality">
@@ -93,9 +93,9 @@ The curse is not just a theorem; people fall for it. In classroom jar-of-coins a
 ## Work it out
 
 <WorkedExample title="Condition on winning">
-You hold signal $t$ in the wallet game, value $t_1 + t_2$. Before bidding, your expectation of the rival's signal is $\tfrac12$, so the naive estimate of the value is $t + \tfrac12$. But you only win when your signal beats the rival's, which means the rival's signal is below $t$, uniform on $[0,t]$ with mean $t/2$. So conditional on winning, the value is $\tfrac{3t}{2}$, generally below $t + \tfrac12$ for the signals where you tend to win.
+You see signal $s$, with noise spread $\pm a$ around the true value. Naively bidding $s$ treats your signal as the value. But you win only when $s$ is the highest of the $n$ signals, and the highest signal carries the largest noise, positive on average. The expected largest of $n$ symmetric draws on $[-a, a]$ is $a\,\tfrac{n-1}{n+1}$, so conditional on winning the value is about $s - a\,\tfrac{n-1}{n+1}$.
 
-The equilibrium bid $b(t) = 2t$ is pinned by indifference of the tying type, not by your own estimate: at a tie the two signals are equal, the value is $2t$, and the second price you would pay equals the rival's bid $2t$, leaving zero surplus exactly at the margin. Shade for the curse or you will pay above what winning reveals the item to be worth.
+Put in $a = 10$. Against one rival ($n = 2$) you shade by $10 \cdot \tfrac13 \approx 3.3$ and bid about $s - 3.3$. Against seven rivals ($n = 8$) you shade by $10 \cdot \tfrac79 \approx 7.8$ and bid about $s - 7.8$: the same signal, a lower bid, the larger the field. Bidding your raw signal wins exactly the items you overvalued, which is the curse.
 </WorkedExample>
 </Section>
 
@@ -143,7 +143,7 @@ The equilibrium bid $b(t) = 2t$ is pinned by indifference of the tying type, not
   options={[
     { text: "With private values, bidding your value is dominant; with a common value, you must shade below your signal to correct for the curse", correct: true, feedback: "The private-value logic (bid your value, since it does not affect the price you pay) breaks when winning itself carries information about the value. Common values require conditioning on winning and shading." },
     { text: "Both cases call for bidding your signal or value truthfully", feedback: "Only the private-value second-price auction rewards truthful bidding. A common value makes winning informative, so you shade." },
-    { text: "Common-value auctions have no equilibrium", feedback: "They do have one (for the wallet game, b(t) = 2t). It just involves shading for the curse rather than bidding your signal." },
+    { text: "Common-value auctions have no equilibrium", feedback: "They do have one; it just involves shading below your signal to correct for the curse, rather than bidding the signal itself." },
   ]}
 />
 </Section>
