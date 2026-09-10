@@ -41,7 +41,7 @@ const layerKeys = [...layered.keys()].sort((a, b) => a - b);
 const widest = Math.max(...layerKeys.map((ly) => (layered.get(ly) as string[]).length));
 // Keep the canvas narrow enough to read: cap the columns and wrap wide layers
 // onto extra rows instead of stretching them into one long line.
-const maxCols = 11;
+const maxCols = 8;
 const usedCols = Math.min(maxCols, widest);
 const VBW = Math.max(360, usedCols * xGap + xGap);
 const cx = VBW / 2;
