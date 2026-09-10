@@ -35,33 +35,61 @@ for (const l of lessons) {
   if (!layered.has(ly)) layered.set(ly, []);
   (layered.get(ly) as string[]).push(l.id);
 }
-const maxLayer = Math.max(...[...layered.keys()]);
 
-const VBW = 360, yTop = 36, yStep = 84, R = 14;
+const yTop = 34, R = 15, xGap = 48, rowGap = 44, layerGap = 40;
+const layerKeys = [...layered.keys()].sort((a, b) => a - b);
+const widest = Math.max(...layerKeys.map((ly) => (layered.get(ly) as string[]).length));
+// Keep the canvas narrow enough to read: cap the columns and wrap wide layers
+// onto extra rows instead of stretching them into one long line.
+const maxCols = 11;
+const usedCols = Math.min(maxCols, widest);
+const VBW = Math.max(360, usedCols * xGap + xGap);
+const cx = VBW / 2;
+
+// Place layers top-down. Within each layer, order nodes by the average x of
+// their prerequisites (barycenter) so children sit under their parents, which
+// cuts down edge crossings. Layers wider than maxCols wrap onto stacked rows.
 const nodes: Node[] = [];
-for (const [ly, groupUnsorted] of layered) {
-  const group = groupUnsorted.sort((a, b) => (globalIndex.get(a) as number) - (globalIndex.get(b) as number));
+const pos = new Map<string, Node>();
+let yCursor = yTop;
+for (const ly of layerKeys) {
+  const group = (layered.get(ly) as string[]).slice();
+  if (ly === layerKeys[0]) {
+    group.sort((a, b) => (globalIndex.get(a) as number) - (globalIndex.get(b) as number));
+  } else {
+    const bary = (id: string) => {
+      const xs = prereqsOf(id).map((p) => pos.get(p)?.x).filter((v): v is number => v != null);
+      return xs.length ? xs.reduce((s, v) => s + v, 0) / xs.length : cx;
+    };
+    group.sort((a, b) => bary(a) - bary(b) || (globalIndex.get(a) as number) - (globalIndex.get(b) as number));
+  }
   const k = group.length;
+  const cols = Math.min(k, maxCols);
+  const rows = Math.ceil(k / cols);
   group.forEach((id, i) => {
     const l = byId.get(id)!;
-    nodes.push({
+    const r = Math.floor(i / cols);
+    const rowStart = r * cols;
+    const rowCount = Math.min(cols, k - rowStart);
+    const c = i - rowStart;
+    const node: Node = {
       id,
       title: l.data.title,
       order: l.data.order,
       label: l.data.label ?? String(l.data.order),
       layer: ly,
-      x: Math.round((VBW * (i + 1)) / (k + 1)),
-      y: yTop + ly * yStep,
+      x: Math.round(cx + (c - (rowCount - 1) / 2) * xGap),
+      y: yCursor + r * rowGap,
       tier: l.data.tier,
       prereqs: prereqsOf(id),
-    });
+    };
+    nodes.push(node);
+    pos.set(id, node);
   });
+  yCursor += rows * rowGap + layerGap;
 }
-const pos = new Map(nodes.map((n) => [n.id, n]));
 const edges = nodes.flatMap((n) => n.prereqs.map((p) => ({ from: pos.get(p)!, to: n })));
-const VBH = yTop + maxLayer * yStep + 36;
-
-const short = (t: string) => (t.length > 15 ? t.slice(0, 14) + '…' : t);
+const VBH = yCursor - layerGap + 34;
 
 // The key, grouped by tier, so numbers on the graph map back to titles.
 const TIERS = [
@@ -86,12 +114,13 @@ const keyGroups = TIERS.map((t) => ({ name: t.name, items: lessons.filter((l) =>
     <span class="lg locked"><i></i>Locked</span>
   </div>
 
+  <p class="cmap-hint">Each circle is a lesson, numbered as in the list below. Arrows point from a prerequisite to the lesson that builds on it. Tap a circle to open it, or scroll the graph sideways to follow a track.</p>
   <div class="cmap-wrap">
-    <svg viewBox={`0 0 ${VBW} ${VBH}`} class="cmap" role="img" aria-label="Prerequisite graph of the lessons">
+    <svg viewBox={`0 0 ${VBW} ${VBH}`} width={VBW} height={VBH} class="cmap" role="img" aria-label="Prerequisite graph of the lessons">
       <g class="edges">
         {edges.map((e) => {
           const y1 = e.from.y + R, y2 = e.to.y - R, my = (y1 + y2) / 2;
-          return <path d={`M ${e.from.x} ${y1} C ${e.from.x} ${my} ${e.to.x} ${my} ${e.to.x} ${y2}`} class="edge" data-to={e.to.id} />;
+          return <path d={`M ${e.from.x} ${y1} C ${e.from.x} ${my} ${e.to.x} ${my} ${e.to.x} ${y2}`} class="edge" data-to={e.to.id} data-from={e.from.id} />;
         })}
       </g>
       {nodes.map((n) => (
@@ -104,8 +133,7 @@ const keyGroups = TIERS.map((t) => ({ name: t.name, items: lessons.filter((l) =>
         >
           <title>{n.title}</title>
           <circle cx={n.x} cy={n.y} r={R} class="disc" />
-          <text x={n.x} y={n.y + 3.5} text-anchor="middle" class="num">{n.label}</text>
-          <text x={n.x} y={n.y + R + 13} text-anchor="middle" class="cl">{short(n.title)}</text>
+          <text x={n.x} y={n.y + 3.6} text-anchor="middle" class="num">{n.label}</text>
         </g>
       ))}
     </svg>
@@ -134,21 +162,22 @@ const keyGroups = TIERS.map((t) => ({ name: t.name, items: lessons.filter((l) =>
   .lg.next i { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
   .lg.locked i { opacity: .4; }
 
-  .cmap-wrap { border: 1px solid var(--border); border-radius: 12px; padding: 8px; background: var(--surface); margin: 10px 0 4px; }
-  .cmap { width: 100%; height: auto; display: block; }
-  .edge { fill: none; stroke: var(--path); stroke-width: 1.4; }
+  .cmap-hint { font-size: 12.5px; line-height: 1.5; color: var(--ink-muted); margin: 6px 0 0; }
+  .cmap-wrap { border: 1px solid var(--border); border-radius: 12px; padding: 10px; background: var(--surface); margin: 10px 0 4px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .cmap { height: auto; max-width: none; display: block; margin-inline: auto; }
+  .edge { fill: none; stroke: var(--path); stroke-width: 1; opacity: .45; transition: opacity .2s, stroke .2s; }
   .cnode { cursor: pointer; }
-  .cnode .disc { fill: var(--surface); stroke: var(--border-strong); stroke-width: 1.5; transition: fill .2s, stroke .2s; }
-  .cnode .num { font-family: var(--font-mono); font-weight: 700; font-size: 10.5px; fill: var(--ink-muted); }
-  .cnode .cl { font-size: 8px; fill: var(--ink-muted); font-weight: 600; }
-  .cnode:hover .disc { stroke: var(--accent); }
-  .cnode:hover .cl { fill: var(--ink); }
+  .cnode .disc { fill: var(--surface); stroke: var(--border-strong); stroke-width: 1.5; transition: fill .2s, stroke .2s, stroke-width .2s; }
+  .cnode .num { font-family: var(--font-mono); font-weight: 700; font-size: 12px; fill: var(--ink-muted); }
+  .cnode:hover .disc { stroke: var(--accent); stroke-width: 2.5; }
   .cnode.complete .disc { fill: var(--accent); stroke: var(--accent); }
   .cnode.complete .num { fill: var(--bg); }
   .cnode.next .disc { stroke: var(--accent); stroke-width: 2.5; }
   .cnode.next .num { fill: var(--accent); }
   .cnode.locked { opacity: .42; }
   .cnode.locked .disc { stroke-dasharray: 3 2.5; }
+  /* Highlight the edges into and out of the hovered lesson. */
+  .edge.lit { opacity: .9; stroke: var(--accent); stroke-width: 1.6; }
 
   .cmap-key { margin: 20px 0 8px; }
   .kg { margin-bottom: 16px; }
@@ -196,11 +225,20 @@ const keyGroups = TIERS.map((t) => ({ name: t.name, items: lessons.filter((l) =>
   // The graph is a visual aid (the SVG is exposed to assistive tech as a
   // single labelled image); the accessible, keyboard-navigable path to every
   // lesson is the tier list below. Nodes navigate on click for mouse users.
+  const edgePaths = Array.from(document.querySelectorAll<SVGPathElement>('.edge'));
   document.querySelectorAll<SVGGElement>('.cnode[data-href]').forEach((n) => {
+    const href = n.dataset.href;
+    const slug = n.dataset.slug;
     n.addEventListener('click', () => {
-      const href = n.dataset.href;
       if (href) window.location.href = href;
     });
+    // Light up the lesson's own prerequisite edges (in and out) on hover.
+    const lit = () => edgePaths.forEach((e) => {
+      if (e.dataset.to === slug || e.dataset.from === slug) e.classList.add('lit');
+    });
+    const dim = () => edgePaths.forEach((e) => e.classList.remove('lit'));
+    n.addEventListener('mouseenter', lit);
+    n.addEventListener('mouseleave', dim);
   });
 
   render();
