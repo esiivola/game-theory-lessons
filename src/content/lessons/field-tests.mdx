@@ -1,0 +1,163 @@
+---
+title: "Field tests and boundaries"
+tier: expert
+unit: 17
+unitName: "Behavioral and experimental"
+order: 62
+kind: lesson
+summary: "Minimax holds among elite athletes, but backward induction fails in the centipede game."
+tags: ["behavioral", "field-evidence", "centipede"]
+estMinutes: 6
+mvp: true
+prereqs: ["backward-induction", "zero-sum-minimax"]
+concepts: ["field-evidence", "centipede", "minimax"]
+refs: ["palaciosHuerta2003", "mckelveyPalfrey1992"]
+anchorEmoji: "🧪"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import GameTree from '@/components/interactive/GameTree.svelte';
+
+<div class="anchor"><span class="em">🧪</span><p>Two verdicts from the field. Professional footballers mix their penalty kicks almost exactly as minimax says, with no readable pattern. Yet in the centipede game, where the theory says grab the money at once, almost everyone passes. Theory wins some tests and loses others.</p></div>
+
+# Field tests and boundaries
+
+<p class="lead">Behavioral game theory is not "people are irrational." It is a map of where the sharp theory holds and where it breaks. Zero-sum minimax survives its hardest test among elite athletes under pressure. Backward induction in the centipede fails outright. Knowing which is which is the point.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In a zero-sum game, optimal play means mixing to your...", options: ["Best single move", "Minimax mix", "Opponent's choice"], answer: 1 },
+    { q: "Backward induction solves a game tree starting from the...", options: ["First move", "Last move", "Middle"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Here is a centipede game. At each step a player can take the pot (ending it) or pass, growing it for the other. Walk it, then solve it backward.
+
+<GameTree
+  client:visible
+  exhibit="Exhibit 1"
+  caption="A four-move centipede game, payoffs (you, them)"
+  players={["You", "Them"]}
+  tree={{
+    kind: 'node', player: 0, label: 'You',
+    branches: [
+      { label: 'Take', child: { kind: 'leaf', payoff: [2, 0] } },
+      { label: 'Pass', child: {
+        kind: 'node', player: 1, label: 'Them',
+        branches: [
+          { label: 'Take', child: { kind: 'leaf', payoff: [1, 3] } },
+          { label: 'Pass', child: {
+            kind: 'node', player: 0, label: 'You',
+            branches: [
+              { label: 'Take', child: { kind: 'leaf', payoff: [4, 2] } },
+              { label: 'Pass', child: {
+                kind: 'node', player: 1, label: 'Them',
+                branches: [
+                  { label: 'Take', child: { kind: 'leaf', payoff: [3, 5] } },
+                  { label: 'Pass', child: { kind: 'leaf', payoff: [6, 4] } },
+                ],
+              } },
+            ],
+          } },
+        ],
+      } },
+    ],
+  }}
+  predict={{
+    question: 'Backward induction says take at the first node. How far do real pairs usually go?',
+    options: [{ key: 'first', label: 'They take at node 1' }, { key: 'pass', label: 'They pass for several rounds' }],
+    reveal: 'They pass. Backward induction predicts taking immediately for (2,0), yet real players pass repeatedly, reaching far better payoffs like (6,4). The theory\'s prediction is both wrong and, for the players, a good thing to ignore.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The two field results pull in opposite directions. Penalty kicks are a clean zero-sum game played by experts with huge stakes and endless practice, and there minimax holds: kickers and keepers mix at the right frequencies with no pattern. The centipede is different: mutual passing makes both far better off, and players, trusting a little or valuing the larger pie, pass rather than grab. Backward induction's relentless unraveling assumes a level of mutual distrust that real, repeated human interaction does not have.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="two field verdicts">
+Palacios-Huerta (2003) analysed 1,417 professional penalty kicks: scoring rates make the kicker's equilibrium mix about 36 percent to one side, and observed play matches the minimax frequencies with no serial correlation. Minimax passes its field test. McKelvey and Palfrey (1992) ran the centipede in the lab: subgame-perfect play says take at the first node, yet only about 1 percent do, and most pass several times. Backward induction fails its field test.
+</DefinitionAside>
+
+Fold the centipede backward: at the last node the mover takes ($5 > 4$ for Them), so the previous mover takes ($4 > 3$ for You), and so on to the first node, where You take for $(2,0)$. That is the subgame-perfect prediction. But mutual passing reaches $(6,4)$, which both prefer to $(2,0)$. Real players capture much of that surplus by passing, contradicting the fold. The penalty-kick result, by contrast, confirms the theory exactly where it should be hardest: strategic, high-pressure, expert play.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Fold the centipede, then compare to the field">
+Solve backward. Last node (Them): Take gives Them $5$, Pass gives $4$, so Take, outcome $(3,5)$. Prior node (You): Take gives You $4$, passing leads to $(3,5)$ where You get $3$, so Take, outcome $(4,2)$. Next (Them): Take gives $3$, passing leads to $(4,2)$ giving Them $2$, so Take. First node (You): Take gives $2$, passing leads to Them taking for You's $1$, so Take. Backward induction: take immediately, $(2,0)$.
+
+Now the field. In the centipede, real pairs pass repeatedly, often reaching the cooperative end near $(6,4)$, far better for both than $(2,0)$. The theory mispredicts. But run the other field test, penalty kicks, and professionals mix at the minimax frequencies with no readable pattern, confirming the theory. Same discipline, opposite verdicts, which is exactly the boundary this lesson maps.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">The sharp theory has boundaries. Zero-sum minimax holds among elite athletes under pressure; backward induction fails in the centipede, where real players pass to reach outcomes both prefer.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="field-tests"
+  id="q1"
+  badge="apply"
+  question="What does backward induction predict in this centipede, and what do real players do?"
+  options={[
+    { text: "It predicts taking at the first node for (2,0); real players pass for several rounds", correct: true, feedback: "Folding the tree gives take-immediately at (2,0). Yet experiments show most players pass, reaching far better payoffs. The prediction is both wrong and worth ignoring for the players." },
+    { text: "It predicts passing to the end; real players take immediately", feedback: "The reverse: backward induction says take at once, while real players pass. That mismatch is the finding." },
+    { text: "It predicts the same as real play", feedback: "They diverge sharply: the theory says take at node 1, real pairs pass. The centipede is where backward induction fails." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="field-tests"
+  id="q2"
+  badge="analyse"
+  question="Penalty-kick data confirm minimax, while centipede data reject backward induction. What is the lesson?"
+  options={[
+    { text: "Game theory has boundaries: it can hold precisely where it is hardest, yet fail elsewhere, and the job is to map which is which", correct: true, feedback: "Behavioral game theory is not a blanket verdict of irrationality. Minimax survives its toughest field test; backward induction does not survive the centipede. Knowing the boundary is the contribution." },
+    { text: "That all game theory is wrong", feedback: "Not so: minimax is confirmed among professionals. The point is selective, mapping where theory holds and where it breaks." },
+    { text: "That all game theory is right", feedback: "Also not so: backward induction fails the centipede. The boundary runs between the two results." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="field-tests"
+  id="q3"
+  badge="brings back: minimax"
+  question="Why is the penalty-kick result considered a strong confirmation of minimax?"
+  options={[
+    { text: "It is a real zero-sum game played by experts with high stakes, and they mix at the predicted frequencies with no readable pattern", correct: true, feedback: "Minimax demands precise, patternless mixing, the hardest thing to do under pressure. That professionals achieve it in the field, on thousands of kicks, is about as strong a test as the theory could face." },
+    { text: "Because penalty kicks are easy to win", feedback: "Difficulty is not the point; unpredictable mixing is. The result is strong because experts hit the minimax frequencies with no serial pattern." },
+    { text: "Because the theory allows any behaviour", feedback: "Minimax makes a sharp, falsifiable prediction about frequencies and independence. The data matching it is what makes the confirmation strong." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["palaciosHuerta2003", "mckelveyPalfrey1992"]} />

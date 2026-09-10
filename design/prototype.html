@@ -1,0 +1,663 @@
+<title>Game Theory, Played</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap">
+<script>
+  window.MathJax={ tex:{inlineMath:[['\\(','\\)']], displayMath:[['$$','$$']]}, svg:{fontCache:'global'}, startup:{typeset:false} };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js" async></script>
+<style>
+  :root{
+    --bg:#F4F1E8; --surface:#FFFDF7; --surface-2:#E8E4DA;
+    --ink:#0B1721; --ink-muted:#59636A; --border:#E1DBCE; --border-strong:#CFC7B6;
+    --accent:#0A6F6A; --accent-hover:#085A56; --accent-soft:#DDECEA;
+    --cooperate:#0A6F6A; --cooperate-soft:#DDECEA;
+    --defect:#B24A2E; --defect-soft:#F1E2DA;
+    --gold:#9C7A1E;
+    --focus:#0A6F6A;
+    --shadow-lg:0 22px 55px rgba(11,23,33,.16);
+    --bezel:#0B1721; --bezel-edge:#2b3b45; --stage:#EAE5D9; --path:#DED8C9;
+  }
+  :root:not([data-theme="light"]){ @media (prefers-color-scheme: dark){
+    --bg:#0B1721; --surface:#12212B; --surface-2:#1A2B36;
+    --ink:#F4F1E8; --ink-muted:#9AA6AD; --border:#233139; --border-strong:#33454F;
+    --accent:#5FB3AB; --accent-hover:#78C8BD; --accent-soft:#0F2E2C;
+    --cooperate:#5FB3AB; --cooperate-soft:#0F2E2C; --defect:#DB7A56; --defect-soft:#33201A;
+    --gold:#D7B15A; --focus:#5FB3AB;
+    --shadow-lg:0 22px 55px rgba(0,0,0,.6); --bezel:#05070a; --bezel-edge:#233139; --stage:#060b0f; --path:#233139;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0B1721; --surface:#12212B; --surface-2:#1A2B36;
+    --ink:#F4F1E8; --ink-muted:#9AA6AD; --border:#233139; --border-strong:#33454F;
+    --accent:#5FB3AB; --accent-hover:#78C8BD; --accent-soft:#0F2E2C;
+    --cooperate:#5FB3AB; --cooperate-soft:#0F2E2C; --defect:#DB7A56; --defect-soft:#33201A;
+    --gold:#D7B15A; --focus:#5FB3AB;
+    --shadow-lg:0 22px 55px rgba(0,0,0,.6); --bezel:#05070a; --bezel-edge:#233139; --stage:#060b0f; --path:#233139;
+  }
+
+  *{box-sizing:border-box}
+  body{background:var(--stage); color:var(--ink); font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; font-size:16px; line-height:1.62; -webkit-font-smoothing:antialiased; margin:0}
+  h1,h2,h3,h4{font-family:"GFS Didot","Iowan Old Style",Baskerville,"Times New Roman",serif; font-weight:400; line-height:1.12; text-wrap:balance; margin:0}
+  button{font-family:inherit}
+  :focus-visible{outline:2px solid var(--focus); outline-offset:2px; border-radius:4px}
+  .mono{font-family:"JetBrains Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums}
+  mjx-container{color:var(--ink)}
+  mjx-container[display="true"]{overflow-x:auto; overflow-y:hidden; padding:2px 0}
+
+  .stage{min-height:100dvh; display:flex; flex-direction:column; align-items:center; gap:20px; padding:30px 18px 44px}
+  .stage-head{width:100%; max-width:430px; display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap}
+  .stage-title b{font-family:"GFS Didot",Georgia,serif; font-weight:400; font-size:22px; letter-spacing:-.5px; display:block}
+  .stage-title span{font-size:12px; color:var(--ink-muted)}
+  .stage-controls{display:flex; align-items:center; gap:8px}
+  .seg{display:inline-flex; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:3px}
+  .seg button{border:0; background:transparent; color:var(--ink-muted); font-size:11.5px; font-weight:600; padding:5px 10px; border-radius:6px; cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--ink); color:var(--bg)}
+  .linkbtn{border:1px solid var(--border); background:var(--surface); color:var(--ink-muted); font-size:11.5px; font-weight:600; padding:6px 11px; border-radius:8px; cursor:pointer}
+
+  .device{width:min(428px,100%); height:min(820px, calc(100dvh - 156px)); background:var(--bezel); border-radius:44px; padding:10px; box-shadow:var(--shadow-lg), inset 0 0 0 1px var(--bezel-edge); position:relative}
+  .screen{position:relative; height:100%; width:100%; background:var(--bg); border-radius:35px; overflow:hidden; display:flex; flex-direction:column}
+  .notch{position:absolute; top:0; left:50%; transform:translateX(-50%); width:120px; height:24px; background:var(--bezel); border-radius:0 0 14px 14px; z-index:40}
+
+  .topbar{flex:0 0 auto; display:flex; align-items:center; gap:10px; padding:34px 18px 12px; background:var(--bg); border-bottom:1px solid var(--border); position:relative; z-index:20}
+  .brandmark{display:flex; align-items:center; gap:9px; min-width:0}
+  .brandmark .dot{width:9px; height:9px; background:var(--accent); border-radius:2px; flex:0 0 auto}
+  .brandmark b{font-family:"GFS Didot",Georgia,serif; font-weight:400; font-size:18px; letter-spacing:-.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .topbar .spacer{flex:1}
+  .prog-pill{display:inline-flex; align-items:center; gap:7px; font-size:12px; color:var(--ink-muted); font-weight:600; border:1px solid var(--border); padding:5px 11px 5px 7px; border-radius:999px}
+  .backbtn{border:1px solid var(--border); background:var(--surface); width:34px; height:34px; border-radius:9px; display:grid; place-items:center; cursor:pointer; color:var(--ink); flex:0 0 auto}
+  .topbar h2{font-family:"Inter",sans-serif; font-size:15px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+
+  .scroll{flex:1 1 auto; overflow-y:auto; -webkit-overflow-scrolling:touch; scroll-behavior:smooth}
+  .view{padding:22px 18px 30px; display:none; animation:fade .3s ease both}
+  .view.active{display:block}
+  @keyframes fade{from{opacity:0; transform:translateY(5px)} to{opacity:1; transform:none}}
+
+  .bottomnav{flex:0 0 auto; display:flex; background:var(--surface); border-top:1px solid var(--border); padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+  .bottomnav button{flex:1; border:0; background:transparent; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; padding:6px 4px; color:var(--ink-muted); font-size:11px; font-weight:600; border-radius:8px}
+  .bottomnav button svg{width:21px; height:21px}
+  .bottomnav button[aria-current="page"]{color:var(--accent)}
+
+  /* MAP */
+  .eyebrow{font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--accent); margin-bottom:9px}
+  .map-hero h1{font-size:37px; letter-spacing:-1.2px}
+  .map-hero p{color:var(--ink-muted); font-size:14.5px; margin:12px 0 0; max-width:46ch}
+  .overall{margin:22px 0 8px; padding:14px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border)}
+  .overall .row{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:9px}
+  .overall .row b{font-size:12px; font-weight:700; letter-spacing:.4px; text-transform:uppercase}
+  .overall .row span{font-size:12px; color:var(--ink-muted)}
+  .bar{height:6px; border-radius:999px; background:var(--surface-2); overflow:hidden}
+  .bar>i{display:block; height:100%; border-radius:999px; background:var(--accent); transition:width .6s cubic-bezier(.2,.8,.2,1)}
+
+  .tier-head{display:flex; align-items:baseline; justify-content:space-between; margin:30px 0 4px}
+  .tier-head h2{font-size:23px; letter-spacing:-.5px}
+  .tier-head .meta{font-size:11px; font-weight:700; color:var(--ink-muted); text-transform:uppercase; letter-spacing:.5px; display:flex; align-items:center; gap:6px}
+  .tier-head .meta svg{width:13px; height:13px}
+  .tier-note{font-size:12px; color:var(--ink-muted); margin:2px 0 6px}
+  .unit-label{display:flex; align-items:center; gap:12px; margin:20px 0 12px; color:var(--ink-muted)}
+  .unit-label .k{font-size:12px; font-weight:700; letter-spacing:.3px; text-transform:uppercase}
+  .unit-label .ln{flex:1; height:1px; background:var(--border)}
+
+  .node-row{position:relative; display:grid; grid-template-columns:34px 1fr; gap:13px; padding:4px 0; align-items:center}
+  .node-row::before{content:""; position:absolute; left:16px; top:-4px; bottom:-4px; width:1.5px; background:var(--path)}
+  .node-row.first::before{top:50%}
+  .node-row.last::before{bottom:50%}
+  .node{position:relative; z-index:2; width:34px; height:34px; border-radius:50%; display:grid; place-items:center; background:var(--bg); border:1.5px solid var(--border-strong); font-family:"JetBrains Mono",monospace; font-weight:700; font-size:11px; color:var(--ink-muted)}
+  .node.complete{background:var(--accent); border-color:var(--accent); color:var(--bg)}
+  .node.next{border-color:var(--accent); color:var(--accent); box-shadow:0 0 0 4px var(--accent-soft)}
+  .node.locked{opacity:.5}
+  .lrow{width:100%; text-align:left; background:transparent; border:0; padding:9px 2px; cursor:pointer; display:flex; align-items:center; gap:8px; color:var(--ink); border-radius:8px}
+  .lrow:hover{color:var(--accent)}
+  .lrow.locked{color:var(--ink-muted); cursor:default}
+  .lrow .t{font-size:14.5px; font-weight:500; flex:1}
+  .lrow.done .t{color:var(--ink-muted)}
+  .pill{font-size:9.5px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; padding:3px 7px; border-radius:4px; white-space:nowrap}
+  .pill.start{background:var(--accent); color:var(--bg)}
+
+  /* LESSON */
+  .lesson h1.lesson-h1{font-size:30px; letter-spacing:-.8px; margin:6px 0 12px}
+  .lesson p{font-size:15.5px; margin:0 0 14px; max-width:60ch}
+  .lesson p.lead{color:var(--ink-muted)}
+  .lesson .in-coop{color:var(--cooperate); font-weight:600}
+  .lesson .in-def{color:var(--defect); font-weight:600}
+  .sec{margin:32px 0}
+  .sec h3{font-size:11px; font-weight:700; letter-spacing:.9px; text-transform:uppercase; color:var(--ink-muted); margin-bottom:14px}
+  .skiplink{float:right; font-size:11px; font-weight:600; color:var(--accent); text-transform:none; letter-spacing:0; cursor:pointer}
+
+  .warmup{border:1px solid var(--border); border-radius:12px; padding:14px 15px; background:var(--surface)}
+  .warmup .lab{font-size:10.5px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--ink-muted); margin-bottom:4px}
+  .warmup .sub{font-size:12px; color:var(--ink-muted); margin-bottom:12px}
+  .wq{margin-bottom:14px} .wq:last-child{margin-bottom:0}
+  .wq p{font-size:14px; margin:0 0 8px; font-weight:500}
+  .wopts{display:flex; gap:7px; flex-wrap:wrap}
+  .wopts button{border:1px solid var(--border-strong); background:var(--bg); border-radius:8px; padding:8px 12px; font-size:13px; font-weight:600; cursor:pointer; color:var(--ink)}
+  .wopts button:hover{border-color:var(--accent)}
+  .wopts button.ok{border-color:var(--cooperate); background:var(--cooperate-soft); color:var(--cooperate)}
+  .wopts button.no{border-color:var(--defect); background:var(--defect-soft); color:var(--defect)}
+
+  .keyidea{border-left:2px solid var(--accent); padding:2px 0 2px 15px; margin:6px 0}
+  .keyidea .lab{font-size:10.5px; font-weight:700; letter-spacing:.7px; text-transform:uppercase; color:var(--accent); margin-bottom:5px}
+  .keyidea p{margin:0; font-size:15.5px; line-height:1.55}
+  .def-aside{border:1px solid var(--border); border-radius:10px; padding:14px 16px; margin:14px 0; background:var(--surface)}
+  .def-aside .lab{font-size:10.5px; font-weight:700; letter-spacing:.7px; text-transform:uppercase; color:var(--ink-muted); margin-bottom:7px}
+  .def-aside p{margin:0; font-size:14.5px}
+
+  .exhibit-cap{font-size:10.5px; letter-spacing:.6px; text-transform:uppercase; color:var(--ink-muted); font-weight:700; margin-bottom:10px}
+  .exhibit-cap span{color:var(--accent)}
+  .matrix{display:grid; grid-template-columns:24px 1fr 1fr; gap:6px; align-items:stretch}
+  .mh{display:flex; align-items:center; justify-content:center; font-size:10.5px; font-weight:700; text-align:center; padding:3px; text-transform:uppercase}
+  .mh.corner{font-size:9px; color:var(--ink-muted); font-weight:600; line-height:1.25; text-transform:none}
+  .mh.coop{color:var(--cooperate)} .mh.def{color:var(--defect)}
+  .mh.rowlab{writing-mode:vertical-rl; transform:rotate(180deg); align-self:stretch; font-size:9.5px}
+  .cell{position:relative; background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:14px 6px; cursor:pointer; text-align:center; min-height:60px; display:flex; flex-direction:column; justify-content:center; gap:4px; transition:border-color .15s, background .15s}
+  .cell.sel{border-color:var(--accent); background:var(--accent-soft)}
+  .cell.hit{animation:pop .5s ease}
+  @keyframes pop{0%{transform:scale(1)}35%{transform:scale(1.05)}100%{transform:scale(1)}}
+  .cell .pay{font-family:"JetBrains Mono",monospace; font-weight:700; font-size:15px; letter-spacing:-.5px}
+  .cell .you{color:var(--accent)} .cell .them{color:var(--ink-muted)}
+  .cell .sub{font-size:9px; color:var(--ink-muted); font-weight:600; text-transform:uppercase}
+
+  .readout{font-size:12.5px; color:var(--ink-muted); margin-top:12px; min-height:2.4em; line-height:1.5}
+  .readout b{color:var(--ink)}
+  .play{display:flex; gap:9px; margin-top:13px}
+  .choice{flex:1; border:1.5px solid var(--border-strong); background:var(--surface); border-radius:9px; padding:11px; font-weight:700; font-size:14px; cursor:pointer; color:var(--ink)}
+  .choice.coop{border-color:var(--cooperate); color:var(--cooperate)}
+  .choice.def{border-color:var(--defect); color:var(--defect)}
+  .scoreline{display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:13px; border-top:1px solid var(--border)}
+  .score{display:flex; flex-direction:column; align-items:center; gap:2px}
+  .score .v{font-family:"JetBrains Mono",monospace; font-weight:700; font-size:20px}
+  .score .l{font-size:9.5px; color:var(--ink-muted); font-weight:700; text-transform:uppercase; letter-spacing:.5px}
+  .score.you .v{color:var(--accent)}
+  .tinybtn{border:1px solid var(--border); background:var(--surface); color:var(--ink-muted); font-size:11px; font-weight:600; padding:6px 11px; border-radius:999px; cursor:pointer}
+
+  .predict .q{font-weight:600; font-size:15.5px; margin-bottom:13px}
+  .predict .opts{display:flex; gap:9px}
+  .predict .opts button{flex:1; border:1.5px solid var(--border-strong); background:var(--surface); border-radius:9px; padding:12px 8px; font-weight:600; font-size:13.5px; cursor:pointer; color:var(--ink)}
+  .predict .opts button:hover{border-color:var(--accent)}
+  .hidden{display:none}
+  .reveal{margin-top:6px; font-size:14.5px; line-height:1.55; color:var(--ink-muted)}
+
+  .selfx{cursor:pointer; user-select:none; font-size:14px; font-weight:600; color:var(--accent); display:inline-flex; align-items:center; gap:6px}
+  .selfx svg{width:15px; height:15px; transition:transform .2s}
+  .selfx[aria-expanded="true"] svg{transform:rotate(90deg)}
+  .selfx-body{font-size:15px; margin-top:10px; display:none}
+  .selfx-body.show{display:block; animation:fade .3s ease both}
+
+  .quiz .meta{display:flex; justify-content:space-between; align-items:center; margin-bottom:13px}
+  .quiz .meta .step{font-size:10.5px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:var(--ink-muted)}
+  .quiz .badge{font-size:9.5px; font-weight:700; letter-spacing:.4px; text-transform:uppercase; color:var(--ink-muted); border:1px solid var(--border); border-radius:4px; padding:2px 6px}
+  .quiz .dots{display:flex; gap:5px}
+  .quiz .dots i{width:6px; height:6px; border-radius:999px; background:var(--border-strong)}
+  .quiz .dots i.ok{background:var(--accent)}
+  .quiz .q{font-weight:600; font-size:16px; margin-bottom:15px; line-height:1.45}
+  .quiz .opt{width:100%; text-align:left; border:1px solid var(--border); background:var(--surface); border-radius:9px; padding:13px 14px; font-size:14px; font-weight:500; cursor:pointer; margin-bottom:9px; color:var(--ink); display:flex; align-items:center; gap:11px}
+  .quiz .opt:hover{border-color:var(--accent)}
+  .quiz .opt .mk{width:19px; height:19px; border-radius:50%; border:1.5px solid var(--border-strong); flex:0 0 auto; display:grid; place-items:center; color:var(--bg)}
+  .quiz .opt.correct{border-color:var(--cooperate); background:var(--cooperate-soft)}
+  .quiz .opt.correct .mk{background:var(--cooperate); border-color:var(--cooperate)}
+  .quiz .opt.wrong{border-color:var(--defect); background:var(--defect-soft)}
+  .quiz .opt.wrong .mk{background:var(--defect); border-color:var(--defect)}
+  .quiz .opt[disabled]{cursor:default; opacity:.9}
+  .fb{font-size:13.5px; line-height:1.5; border-radius:9px; padding:12px 14px; margin-top:4px; display:none}
+  .fb.show{display:block; animation:fade .3s ease both}
+  .fb.good{background:var(--cooperate-soft)} .fb.bad{background:var(--defect-soft)}
+  .fb b{font-weight:700}
+  .quiz-actions{display:flex; justify-content:flex-end; margin-top:13px}
+  .btn{border:0; border-radius:9px; padding:11px 20px; font-weight:650; font-size:14px; cursor:pointer; background:var(--ink); color:var(--bg)}
+  .btn.ghost{background:var(--surface); color:var(--ink); border:1px solid var(--border-strong)}
+  .btn[disabled]{opacity:.35; cursor:default}
+
+  .done-panel{text-align:center; padding:20px 6px; display:none}
+  .done-panel.show{display:block; animation:fade .45s ease both}
+  .done-badge{width:60px; height:60px; border-radius:50%; background:var(--accent); display:grid; place-items:center; margin:0 auto 14px; color:var(--bg)}
+  .done-panel h2{font-size:25px; letter-spacing:-.5px; margin-bottom:8px}
+  .done-panel p{color:var(--ink-muted); font-size:14px; margin:0 auto 16px; max-width:36ch}
+  .xp-chip{display:inline-flex; gap:6px; border:1px solid var(--gold); color:var(--gold); font-weight:700; font-size:12.5px; padding:6px 13px; border-radius:999px; margin-bottom:18px}
+
+  .refs{list-style:none; counter-reset:r; padding:0; margin:0}
+  .refs li{counter-increment:r; position:relative; padding-left:26px; font-size:12.5px; color:var(--ink-muted); line-height:1.5; margin-bottom:9px}
+  .refs li::before{content:"["counter(r)"]"; position:absolute; left:0; top:0; font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--accent); font-weight:700}
+  .refs li i{font-style:italic; color:var(--ink)}
+
+  .stat-grid{display:grid; grid-template-columns:1fr 1fr; margin:18px 0; border:1px solid var(--border); border-radius:10px; overflow:hidden}
+  .stat{padding:15px; border-right:1px solid var(--border)}
+  .stat:last-child{border-right:0}
+  .stat .v{font-family:"JetBrains Mono",monospace; font-weight:700; font-size:27px; letter-spacing:-1px}
+  .stat .l{font-size:11px; color:var(--ink-muted); font-weight:600; margin-top:3px; text-transform:uppercase; letter-spacing:.4px}
+  .ringwrap{display:flex; gap:16px; align-items:center; padding:18px 0; border-bottom:1px solid var(--border)}
+  .ringwrap .cap b{font-family:"GFS Didot",Georgia,serif; font-size:19px; display:block} .ringwrap .cap span{font-size:13px; color:var(--ink-muted)}
+  .tier-prog{display:flex; flex-direction:column; gap:12px; margin-top:14px}
+  .tp{display:flex; align-items:center; gap:12px}
+  .tp .name{width:96px; font-size:13px; font-weight:600}
+  .tp .bar{flex:1}
+  .tp .n{font-size:11px; color:var(--ink-muted); font-family:"JetBrains Mono",monospace; width:38px; text-align:right}
+
+  .about h1{font-size:29px; letter-spacing:-.8px; margin-bottom:12px}
+  .about p{font-size:14.5px; margin:0 0 14px; max-width:58ch}
+  .about .princ{display:flex; gap:13px; align-items:baseline; margin:14px 0}
+  .about .princ .n{font-family:"GFS Didot",Georgia,serif; color:var(--accent); font-size:20px; flex:0 0 auto; width:22px}
+  .note{font-size:12.5px; color:var(--ink-muted); border:1px solid var(--border); border-radius:10px; padding:13px 15px; margin-top:20px; line-height:1.55}
+
+  #confetti{position:fixed; inset:0; pointer-events:none; z-index:9999}
+  .toast{position:absolute; left:50%; bottom:78px; transform:translate(-50%,20px); background:var(--ink); color:var(--bg); font-weight:600; font-size:13px; padding:10px 16px; border-radius:8px; opacity:0; transition:.35s; z-index:60; max-width:80%; text-align:center}
+  .toast.show{opacity:1; transform:translate(-50%,0)}
+
+  @media (max-width:640px){
+    body{background:var(--bg)}
+    .stage{padding:0; gap:0} .stage-head{display:none}
+    .device{width:100%; height:100dvh; border-radius:0; padding:0; box-shadow:none}
+    .screen{border-radius:0} .notch{display:none} .topbar{padding-top:18px}
+  }
+  @media (prefers-reduced-motion:reduce){ *{animation-duration:.001ms !important; transition-duration:.001ms !important; scroll-behavior:auto !important} }
+</style>
+
+<div class="stage">
+  <div class="stage-head">
+    <div class="stage-title"><b>Game Theory, Played</b><span>Design prototype, consulting-minimal direction</span></div>
+    <div class="stage-controls">
+      <div class="seg" role="group" aria-label="Theme">
+        <button data-theme-set="auto" aria-pressed="true">Auto</button>
+        <button data-theme-set="light" aria-pressed="false">Light</button>
+        <button data-theme-set="dark" aria-pressed="false">Dark</button>
+      </div>
+      <button class="linkbtn" id="resetBtn" title="Clear demo progress">Reset demo</button>
+    </div>
+  </div>
+
+  <div class="device">
+    <div class="notch" aria-hidden="true"></div>
+    <div class="screen">
+      <header class="topbar" id="topbar"></header>
+      <div class="scroll" id="scroll">
+        <section class="view active" id="view-map" aria-label="Lessons">
+          <div class="map-hero">
+            <div class="eyebrow">63 lessons and 12 real-world cases</div>
+            <h1>Game theory, played</h1>
+            <p>Start with two people in separate rooms. Build through auctions, matching markets, and mechanism design, then finish with how real people actually play. You play first, then the idea and the proof follow.</p>
+          </div>
+          <div class="overall">
+            <div class="row"><b>Progress</b><span id="ovText">&nbsp;</span></div>
+            <div class="bar"><i id="ovBar" style="width:0%"></i></div>
+          </div>
+          <div id="mapPath"></div>
+        </section>
+
+        <section class="view lesson" id="view-lesson" aria-label="Lesson"></section>
+        <section class="view" id="view-progress" aria-label="Progress"></section>
+
+        <section class="view about" id="view-about" aria-label="About and references">
+          <div class="eyebrow">About</div>
+          <h1>Play first, then formalise</h1>
+          <p>Game theory has a habit of being counterintuitive. Betrayal can be the rational move. Being predictable gets you beaten. A small preference can segregate a whole city. You believe these once you have felt them, so every lesson lets you act before it explains, then hands you the definition and the argument.</p>
+          <div class="princ"><span class="n">1</span><div>You commit a guess or a move first. The gap between your guess and what happens is where the learning is.</div></div>
+          <div class="princ"><span class="n">2</span><div>The concrete game comes before the notation. Symbols arrive once the idea is already in your hands.</div></div>
+          <div class="princ"><span class="n">3</span><div>Earlier ideas keep coming back in later quizzes, so they stick instead of fading.</div></div>
+          <div class="sec" style="margin-top:26px"><h3>Selected references</h3><ol class="refs" id="globalRefs"></ol></div>
+          <div class="note">This is a design prototype, not the finished site. The <b>Prisoner's Dilemma</b> lesson is fully playable and shows the intended teaching order, math, and citations. Progress is stored only in this browser. Nothing is sent anywhere.</div>
+        </section>
+      </div>
+
+      <nav class="bottomnav" aria-label="Sections">
+        <button data-nav="map" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></svg>Learn</button>
+        <button data-nav="progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6" rx="1"/><rect x="13" y="7" width="3" height="10" rx="1"/></svg>Progress</button>
+        <button data-nav="about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>About</button>
+      </nav>
+      <div class="toast" id="toast"></div>
+    </div>
+  </div>
+</div>
+<canvas id="confetti" hidden></canvas>
+
+<script>
+(function(){
+  "use strict";
+  const $=(s,r=document)=>r.querySelector(s);
+  const RM=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const KEY="gt.proto.v3";
+
+  const TIERS=[
+    {id:"basic", name:"Basic", note:"The shared spine. Static games, equilibrium, sequential play."},
+    {id:"intermediate", name:"Intermediate", note:"Correlation, bargaining, repeated games, incomplete information, auctions, information design, contracts."},
+    {id:"expert", name:"Expert", note:"Refinements, mechanism design, cooperative theory, matching, dynamics, computation, and behavioral game theory.", lockedInDemo:true},
+    {id:"applied", name:"Applied", note:"Game theory in the wild: real cases from markets, auctions, deterrence, cooperation, sport, and AI."}
+  ];
+  const L=(id,tier,unit,order,title,playable)=>({id,tier,unit,order,title,playable:!!playable});
+  const LESSONS=[
+    L("what-is-a-game","basic","Foundations",1,"What is a game?"),
+    L("rationality","basic","Foundations",2,"Rationality and common knowledge"),
+    L("expected-utility","basic","Foundations",3,"Preferences and expected utility"),
+    L("dominance","basic","Static solution concepts",4,"Dominant and dominated strategies"),
+    L("rationalizability","basic","Static solution concepts",5,"Rationalizability and best response"),
+    L("pure-nash","basic","Static solution concepts",6,"Pure-strategy Nash equilibrium"),
+    L("prisoners-dilemma","basic","Static solution concepts",7,"The Prisoner's Dilemma",true),
+    L("mixed","basic","Static solution concepts",8,"Mixed strategies"),
+    L("existence","basic","Static solution concepts",9,"Existence of Nash equilibrium"),
+    L("zero-sum","basic","Static solution concepts",10,"Zero-sum games and minimax"),
+    L("schelling","basic","Applications and equilibrium selection",11,"Schelling and focal points"),
+    L("cournot","basic","Applications and equilibrium selection",12,"Cournot and Bertrand"),
+    L("commons","basic","Applications and equilibrium selection",13,"Public goods and the commons"),
+    L("backward-induction","basic","Sequential games",14,"Backward induction"),
+    L("spe","basic","Sequential games",15,"Subgame perfection and commitment"),
+    L("correlated","intermediate","Correlation and complementarities",16,"Correlated equilibrium"),
+    L("supermodular","intermediate","Correlation and complementarities",17,"Supermodular games"),
+    L("nash-bargaining","intermediate","Bargaining",18,"Nash bargaining"),
+    L("rubinstein","intermediate","Bargaining",19,"Strategic bargaining"),
+    L("repeated","intermediate","Repeated games",20,"Repeated games and discounting"),
+    L("folk","intermediate","Repeated games",21,"Folk theorems"),
+    L("imperfect-monitoring","intermediate","Repeated games",22,"Imperfect monitoring"),
+    L("reputation","intermediate","Repeated games",23,"Reputation"),
+    L("bayesian","intermediate","Incomplete information",24,"Bayesian games"),
+    L("auctions-1","intermediate","Incomplete information",25,"Auctions and revenue equivalence"),
+    L("auctions-2","intermediate","Incomplete information",26,"Common values and the winner's curse"),
+    L("pbe","intermediate","Dynamic information and communication",27,"Perfect Bayesian equilibrium"),
+    L("signaling","intermediate","Dynamic information and communication",28,"Signaling games"),
+    L("adverse-selection","intermediate","Dynamic information and communication",29,"Adverse selection and screening"),
+    L("cheap-talk","intermediate","Dynamic information and communication",30,"Cheap talk"),
+    L("information-design","intermediate","Information design and contracts",31,"Information design and persuasion"),
+    L("contract-theory","intermediate","Information design and contracts",32,"Contract theory and moral hazard"),
+    L("sequential-eq","expert","Refinements and epistemics",33,"Sequential equilibrium"),
+    L("epistemic","expert","Refinements and epistemics",34,"Epistemic foundations"),
+    L("global-games","expert","Refinements and epistemics",35,"Global games"),
+    L("social-choice","expert","Mechanism design",36,"Social choice and Arrow"),
+    L("revelation","expert","Mechanism design",37,"The revelation principle"),
+    L("vcg","expert","Mechanism design",38,"VCG mechanisms"),
+    L("optimal-auctions","expert","Mechanism design",39,"Optimal auctions"),
+    L("implementation","expert","Mechanism design",40,"Implementation theory"),
+    L("auctions-3","expert","Mechanism design",41,"Multi-unit and position auctions"),
+    L("core","expert","Cooperative theory",42,"The core"),
+    L("shapley","expert","Cooperative theory",43,"The Shapley value"),
+    L("nucleolus","expert","Cooperative theory",44,"Nucleolus and bargaining set"),
+    L("gale-shapley","expert","Matching and market design",45,"Stable matching"),
+    L("ttc","expert","Matching and market design",46,"Top trading cycles"),
+    L("matching-contracts","expert","Matching and market design",47,"Matching with contracts"),
+    L("ess","expert","Evolution and learning",48,"Evolutionarily stable strategies"),
+    L("replicator","expert","Evolution and learning",49,"Replicator dynamics"),
+    L("stochastic-stability","expert","Evolution and learning",50,"Stochastic stability"),
+    L("learning","expert","Evolution and learning",51,"Learning in games"),
+    L("complexity","expert","Algorithmic",52,"Complexity of equilibria"),
+    L("congestion","expert","Algorithmic",53,"Congestion games"),
+    L("price-of-anarchy","expert","Algorithmic",54,"Price of anarchy"),
+    L("network-games","expert","Algorithmic",55,"Network and graphical games"),
+    L("level-k","expert","Behavioral and experimental",56,"Limited reasoning: level-k"),
+    L("qre","expert","Behavioral and experimental",57,"Quantal response equilibrium"),
+    L("fairness","expert","Behavioral and experimental",58,"Social preferences: fairness"),
+    L("reciprocity","expert","Behavioral and experimental",59,"Reciprocity and intentions"),
+    L("public-goods-punishment","expert","Behavioral and experimental",60,"Cooperation and punishment"),
+    L("ewa-learning","expert","Behavioral and experimental",61,"Learning and adaptation"),
+    L("field-tests","expert","Behavioral and experimental",62,"Field tests and boundaries"),
+    L("culture-design","expert","Behavioral and experimental",63,"Culture, context, and design"),
+    L("matching-markets","applied","Game theory in the wild","A1","Matching markets"),
+    L("auctions-wild","applied","Game theory in the wild","A2","Auctions in the wild"),
+    L("deterrence","applied","Game theory in the wild","A3","Deterrence and brinkmanship"),
+    L("entry-deterrence","applied","Game theory in the wild","A4","Entry deterrence in business"),
+    L("coopetition","applied","Game theory in the wild","A5","Co-opetition and platforms"),
+    L("cooperation-roots","applied","Game theory in the wild","A6","The roots of cooperation"),
+    L("negotiation","applied","Game theory in the wild","A7","Bargaining and negotiation"),
+    L("minimax-sport","applied","Game theory in the wild","A8","Mixed strategies in sport"),
+    L("the-commons","applied","Game theory in the wild","A9","The commons"),
+    L("political-economy","applied","Game theory in the wild","A10","Political economy"),
+    L("contracts-law","applied","Game theory in the wild","A11","Contracts and the law"),
+    L("security-ai","applied","Game theory in the wild","A12","Security games and AI")
+  ];
+  const BASELINE=["what-is-a-game","rationality","expected-utility","dominance","rationalizability","pure-nash"];
+  const XP_PER=30;
+
+  function load(){ try{const r=JSON.parse(localStorage.getItem(KEY)); if(r&&r.version===3) return r;}catch(e){} return {version:3,completed:{},xp:0,days:[]}; }
+  function save(s){ try{localStorage.setItem(KEY,JSON.stringify(s));}catch(e){} }
+  let state=load();
+  const isDone=id=>BASELINE.includes(id)||!!state.completed[id];
+  const tierLocked=t=>{ const T=TIERS.find(x=>x.id===t); return !!(T&&T.lockedInDemo); };
+  const done=()=>LESSONS.filter(l=>isDone(l.id)).length;
+  const totalXp=()=>BASELINE.length*XP_PER+state.xp;
+  const daysLearned=()=>Array.from(new Set(["2026-09-03","2026-09-05"].concat(state.days)));
+  function nextId(){ const n=LESSONS.find(l=>!isDone(l.id)&&!tierLocked(l.tier)); return n?n.id:null; }
+
+  function applyTheme(t){ const r=document.documentElement; if(t==="auto")r.removeAttribute("data-theme"); else r.setAttribute("data-theme",t); try{localStorage.setItem("gt.proto.theme",t);}catch(e){} document.querySelectorAll("[data-theme-set]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.themeSet===t)); }
+  document.querySelectorAll("[data-theme-set]").forEach(b=>b.addEventListener("click",()=>applyTheme(b.dataset.themeSet)));
+  (function(){let t="auto";try{t=localStorage.getItem("gt.proto.theme")||"auto";}catch(e){}applyTheme(t);})();
+
+  let current="map";
+  function show(view,lessonId){
+    current=view;
+    document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+    $("#scroll").scrollTop=0;
+    if(view==="lesson"){ renderLesson(lessonId); $("#view-lesson").classList.add("active"); }
+    else $("#view-"+view).classList.add("active");
+    if(view==="progress") renderProgress();
+    if(view==="map") renderMap();
+    if(view==="about") $("#globalRefs").innerHTML=GLOBAL_REFS.map(r=>`<li>${r}</li>`).join("");
+    renderTopbar(view,lessonId);
+    const nv=view==="lesson"?"map":view;
+    document.querySelectorAll("[data-nav]").forEach(b=>{ if(b.dataset.nav===nv)b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
+  }
+  document.querySelectorAll("[data-nav]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.nav)));
+
+  function renderTopbar(view,lessonId){
+    const tb=$("#topbar");
+    if(view==="lesson"){ const l=LESSONS.find(x=>x.id===lessonId);
+      tb.innerHTML=`<button class="backbtn" id="backBtn" aria-label="Back"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button><h2>${l.title}</h2>`;
+      $("#backBtn").addEventListener("click",()=>show("map"));
+    } else {
+      tb.innerHTML=`<div class="brandmark"><span class="dot"></span><b>Game Theory, Played</b></div><div class="spacer"></div><span class="prog-pill">${ring(done()/LESSONS.length,18)} <span class="mono">${done()}/${LESSONS.length}</span></span>`;
+    }
+  }
+  function ring(frac,size){ const r=(size-3)/2,c=2*Math.PI*r,off=c*(1-Math.max(0,Math.min(1,frac)));
+    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--border-strong)" stroke-width="2.5"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}" transform="rotate(-90 ${size/2} ${size/2})"/></svg>`; }
+
+  function renderMap(){
+    const total=LESSONS.length,d=done(),pct=Math.round(d/total*100);
+    $("#ovText").textContent=`${d} of ${total} lessons, ${pct}%`;
+    $("#ovBar").style.width=pct+"%";
+    const nxt=nextId(); let html="",lastTier=null,lastUnit=null;
+    LESSONS.forEach((l,idx)=>{
+      if(l.tier!==lastTier){ lastTier=l.tier; lastUnit=null;
+        const T=TIERS.find(x=>x.id===l.tier);
+        const inT=LESSONS.filter(x=>x.tier===l.tier), dT=inT.filter(x=>isDone(x.id)).length;
+        const lock=tierLocked(l.tier)?`<span class="meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Locked</span>`:`<span class="meta">${dT}/${inT.length}</span>`;
+        html+=`<div class="tier-head"><h2>${T.name}</h2>${lock}</div><div class="tier-note">${T.note}</div>`;
+      }
+      if(l.unit!==lastUnit){ lastUnit=l.unit; html+=`<div class="unit-label"><span class="k">${l.unit}</span><span class="ln"></span></div>`; }
+      const dn=isDone(l.id), isNext=l.id===nxt, lk=tierLocked(l.tier)&&!dn;
+      const ncls=dn?"complete":(isNext?"next":(lk?"locked":""));
+      const inner=dn?`<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`:(lk?`<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`:l.order);
+      const pill=isNext?`<span class="pill start">Start here</span>`:"";
+      html+=`<div class="node-row"><div class="node ${ncls}">${inner}</div><button class="lrow ${dn?'done':''} ${lk?'locked':''}" data-open="${l.id}" data-locked="${lk?1:0}"><span class="t">${l.title}</span>${pill}</button></div>`;
+    });
+    $("#mapPath").innerHTML=html;
+    $("#mapPath").querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",()=>{
+      if(b.dataset.locked==="1"){ toast("Reach 80% on the Intermediate tier to unlock Expert."); return; }
+      show("lesson",b.dataset.open);
+    }));
+  }
+
+  /* ---------- lesson ---------- */
+  const PD={ C:{C:[2,2],D:[-1,3]}, D:{C:[3,-1],D:[0,0]} };
+  const fmt=n=>n>0?("+"+n):(""+n);
+  let quiz=null,sY=0,sT=0;
+  const PD_REFS=[
+    `Axelrod, R. (1984). <i>The Evolution of Cooperation</i>. Basic Books.`,
+    `Flood, M. M. (1958). Some experimental games. <i>Management Science</i>, 5(1), 5-26.`,
+    `Nash, J. F. (1950). Equilibrium points in n-person games. <i>PNAS</i>, 36(1), 48-49.`,
+    `Osborne, M. J., and Rubinstein, A. (1994). <i>A Course in Game Theory</i>. MIT Press.`
+  ];
+  const GLOBAL_REFS=[
+    `von Neumann, J., and Morgenstern, O. (1944). <i>Theory of Games and Economic Behavior</i>. Princeton University Press.`,
+    `Nash, J. F. (1950). Equilibrium points in n-person games. <i>PNAS</i>, 36(1), 48-49.`,
+    `Schelling, T. C. (1960). <i>The Strategy of Conflict</i>. Harvard University Press.`,
+    `Myerson, R. B. (1981). Optimal auction design. <i>Mathematics of Operations Research</i>, 6(1), 58-73.`,
+    `Osborne, M. J., and Rubinstein, A. (1994). <i>A Course in Game Theory</i>. MIT Press.`,
+    `Nisan, N., Roughgarden, T., Tardos, E., and Vazirani, V. (2007). <i>Algorithmic Game Theory</i>. Cambridge University Press.`
+  ];
+  function typeset(el){ if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([el]).catch(()=>{}); else setTimeout(()=>typeset(el),150); }
+
+  function renderLesson(id){
+    const el=$("#view-lesson");
+    if(id!=="prisoners-dilemma"){
+      el.innerHTML=`<p class="lead" style="margin-top:8px">This lesson is not built in the prototype. In the finished course it follows the same order as the Prisoner's Dilemma: recall, predict, play, then the math, then a short quiz that brings back an earlier idea, then sources.</p><button class="btn ghost" id="toPD">Open the playable lesson</button>`;
+      $("#toPD").addEventListener("click",()=>show("lesson","prisoners-dilemma"));
+      return;
+    }
+    quiz=makeQuiz(); sY=0; sT=0; predicted=false;
+    el.innerHTML=`
+      <div class="sec"><h3>Quick recall <span class="skiplink" id="skip">Skip to the problems</span></h3>
+        <div class="warmup">
+          <div class="lab">From earlier lessons</div>
+          <div class="sub">Two quick ones before we start.</div>
+          <div class="wq"><p>A strategy that beats your other options no matter what the other player does is called what?</p>
+            <div class="wopts" data-a="0"><button>Dominant</button><button>Dominated</button><button>Mixed</button></div></div>
+          <div class="wq"><p>At a Nash equilibrium, a player who changes strategy alone will...</p>
+            <div class="wopts" data-a="1"><button>Gain</button><button>Not gain</button><button>Always lose</button></div></div>
+        </div>
+      </div>
+
+      <h1 class="lesson-h1">The Prisoner's Dilemma</h1>
+      <p class="lead">Two gas stations sit across the street from each other. Each morning each owner makes one choice: hold prices, or cut them to pull in the other's customers. If both hold, both do well. If one cuts while the other holds, the cutter takes the street.</p>
+
+      <div class="sec"><h3>First, a prediction</h3>
+        <div class="predict">
+          <div class="q">Both owners are sensible and self-interested. It is an ordinary morning. What happens?</div>
+          <div class="opts">
+            <button data-pred="hold">Both hold prices</button>
+            <button data-pred="cut">Both cut</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="afterPredict" class="hidden">
+        <div class="sec"><h3>Now play it out</h3>
+          <div class="exhibit-cap"><span>Exhibit 1</span> &nbsp;Payoffs per round (you, them), in profit</div>
+          <div class="matrix" id="matrix"></div>
+          <div class="readout" id="readout" aria-live="polite">Pick a move. The other station's owner picks at the same time.</div>
+          <div class="play"><button class="choice coop" data-move="C">Hold prices</button><button class="choice def" data-move="D">Cut prices</button></div>
+          <div class="scoreline"><div class="score you"><span class="v mono" id="scoreYou">0</span><span class="l">You</span></div><button class="tinybtn" id="pdReset">Reset</button><div class="score"><span class="v mono" id="scoreThem">0</span><span class="l">Them</span></div></div>
+        </div>
+
+        <div class="sec"><h3>Why did that happen?</h3>
+          <div class="selfx" id="selfxToggle" role="button" tabindex="0" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>Take a guess, then reveal the reason</div>
+          <div class="selfx-body" id="selfxBody"><p style="margin:0">Cutting pays more for you whatever the other owner does. If they hold, cutting wins the street. If they cut, you cannot afford to be the only one holding. So both cut, and both earn less than if they had left prices alone. Neither owner is careless. They are stuck in the logic of the situation.</p></div>
+        </div>
+
+        <div class="sec"><h3>The math</h3>
+          <p>Write the game in normal form as \\(G=(N,(S_i),(u_i))\\): players \\(N=\\{1,2\\}\\), a strategy set \\(S_i=\\{C,D\\}\\) for each (hold or cut), and a payoff \\(u_i\\) for every pair of choices.</p>
+          <p>Label the four payoffs with the usual names: \\(R\\) for both holding (reward), \\(T\\) for cutting against a holder (temptation), \\(P\\) for both cutting (punishment), \\(S\\) for holding against a cutter (sucker). Here \\(R=2,\\ T=3,\\ P=0,\\ S=-1\\), which meet the two conditions that make it a Prisoner's Dilemma:</p>
+          <p style="text-align:center">\\(T>R>P>S\\quad\\text{and}\\quad 2R>T+S.\\)</p>
+          <p>Cutting strictly dominates holding, since the cutter does better against either move (\\(3>2\\) and \\(0>-1\\)):</p>
+          <p style="text-align:center">$$u_i(D,a) > u_i(C,a)\\quad \\forall\\,a.$$</p>
+          <div class="def-aside"><div class="lab">Definition, Nash equilibrium</div><p>A profile \\(s^*\\) is a Nash equilibrium if \\(u_i(s_i^*,s_{-i}^*)\\ge u_i(s_i,s_{-i}^*)\\) for every \\(s_i\\) and every \\(i\\).</p></div>
+          <p>A strictly dominant strategy is played in every equilibrium, so \\((D,D)\\) is the only one, paying \\((0,0)\\). But \\((C,C)\\) pays \\((2,2)\\) and beats it for both players. The equilibrium is the outcome nobody wanted.</p>
+        </div>
+
+        <div class="sec"><h3>Key idea</h3>
+          <div class="keyidea"><div class="lab">Key idea</div><p>Each player, acting sensibly alone, drives both to the outcome they were trying to avoid.</p></div>
+        </div>
+
+        <div class="sec"><h3>Check yourself</h3><div id="quizHost"></div></div>
+        <div class="sec"><h3>Sources</h3><ol class="refs">${PD_REFS.map(r=>`<li>${r}</li>`).join("")}</ol></div>
+      </div>`;
+
+    bindWarmup(); bindPredict(); typeset(el);
+    $("#skip").addEventListener("click",e=>{ e.stopPropagation(); revealAfterPredict(); $("#afterPredict").scrollIntoView({block:"start"}); });
+  }
+
+  function bindWarmup(){
+    $("#view-lesson").querySelectorAll(".wopts").forEach(g=>{
+      const ans=+g.dataset.a;
+      g.querySelectorAll("button").forEach((b,i)=>b.addEventListener("click",()=>{
+        if(i===ans){ b.classList.add("ok"); g.querySelectorAll("button").forEach(x=>x.disabled=true); }
+        else { b.classList.add("no"); b.disabled=true; }
+      }));
+    });
+  }
+
+  let predicted=false;
+  function revealAfterPredict(){ if(predicted) return; predicted=true; const a=$("#afterPredict"); a.classList.remove("hidden"); buildMatrix(); bindPlay(); bindSelfx(); renderQuiz(); typeset(a); }
+  function bindPredict(){
+    $("#view-lesson").querySelectorAll("[data-pred]").forEach(b=>b.addEventListener("click",()=>{
+      $("#view-lesson").querySelectorAll("[data-pred]").forEach(x=>{ x.disabled=true; x.style.opacity=.55; });
+      b.style.opacity=1; b.style.borderColor="var(--accent)";
+      revealAfterPredict();
+      $("#afterPredict").scrollIntoView({block:"start"});
+    }));
+  }
+  function bindSelfx(){
+    const t=$("#selfxToggle"),body=$("#selfxBody");
+    const go=()=>{ const open=body.classList.toggle("show"); t.setAttribute("aria-expanded",open); };
+    t.addEventListener("click",go);
+    t.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); }});
+  }
+
+  function buildMatrix(){
+    const m=$("#matrix");
+    const cell=(you,them)=>{ const p=PD[you][them];
+      return `<div class="cell" data-you="${you}" data-them="${them}" role="button" tabindex="0" aria-label="You ${you==='C'?'hold':'cut'}, they ${them==='C'?'hold':'cut'}: you ${fmt(p[0])}, them ${fmt(p[1])}"><div class="pay"><span class="you">${fmt(p[0])}</span> <span class="them">${fmt(p[1])}</span></div><div class="sub">you / them</div></div>`; };
+    m.innerHTML=`<div class="mh corner">You&nbsp;&darr;<br>Them&nbsp;&rarr;</div><div class="mh coop">They hold</div><div class="mh def">They cut</div><div class="mh rowlab coop">You hold</div>`+cell("C","C")+cell("C","D")+`<div class="mh rowlab def">You cut</div>`+cell("D","C")+cell("D","D");
+    m.querySelectorAll(".cell").forEach(c=>{ const act=()=>{ m.querySelectorAll(".cell").forEach(x=>x.classList.remove("sel")); c.classList.add("sel"); const y=c.dataset.you,t=c.dataset.them,p=PD[y][t]; $("#readout").innerHTML=`If <b>you ${y==='C'?'hold':'cut'}</b> and <b>they ${t==='C'?'hold':'cut'}</b>: you <b class="mono">${fmt(p[0])}</b>, them <b class="mono">${fmt(p[1])}</b>.`; };
+      c.addEventListener("click",act); c.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); act(); }}); });
+  }
+  function bindPlay(){
+    $("#afterPredict").querySelectorAll("[data-move]").forEach(btn=>btn.addEventListener("click",()=>{
+      const you=btn.dataset.move,them=Math.random()<0.5?"C":"D",p=PD[you][them];
+      sY+=p[0]; sT+=p[1]; $("#scoreYou").textContent=sY; $("#scoreThem").textContent=sT;
+      const m=$("#matrix"); m.querySelectorAll(".cell").forEach(x=>x.classList.remove("sel","hit"));
+      const tg=m.querySelector(`.cell[data-you="${you}"][data-them="${them}"]`); tg.classList.add("sel"); if(!RM()){ void tg.offsetWidth; tg.classList.add("hit"); }
+      $("#readout").innerHTML=`You <b>${you==='C'?'held':'cut'}</b>, they <b>${them==='C'?'held':'cut'}</b>. You <b class="mono">${fmt(p[0])}</b>, them <b class="mono">${fmt(p[1])}</b>.`;
+    }));
+    $("#pdReset").addEventListener("click",()=>{ sY=0;sT=0; $("#scoreYou").textContent=0; $("#scoreThem").textContent=0; $("#matrix").querySelectorAll(".cell").forEach(x=>x.classList.remove("sel","hit")); $("#readout").textContent="Reset. Pick a move."; });
+  }
+
+  function makeQuiz(){ return {i:0,solved:[false,false],qs:[
+    {level:"apply", q:"Which outcome is the Nash equilibrium, the one neither owner regrets given the other's choice?",
+      opts:[{t:"Both hold (+2, +2)",ok:false,fb:"It pays the most for the pair, but it is not stable: either owner can grab +3 by cutting, so it breaks."},
+            {t:"Both cut (0, 0)",ok:true,fb:"Right. Switching to hold alone drops you to -1, so nobody moves. Stable, even though both-hold pays more."},
+            {t:"You cut, they hold (+3, -1)",ok:false,fb:"Your best case, but they would not stay at -1. They cut too, and you both fall to 0."}]},
+    {level:"analyse", tag:"brings back: dominance", q:"Two airlines keep undercutting fares until both barely profit, though both would earn more holding prices. In game terms, cutting fares is each airline's what?",
+      opts:[{t:"Dominant strategy",ok:true,fb:"Right. Cutting beats holding whatever the rival does, so it is dominant. The price war is a Prisoner's Dilemma. That is the idea from the dominance lesson, back again."},
+            {t:"Dominated strategy",ok:false,fb:"The reverse. A dominated strategy is one you would never pick. Cutting is the one each airline is drawn to, so it is dominant, not dominated."},
+            {t:"Focal point",ok:false,fb:"A focal point is a way to coordinate on one of several equilibria. This game has a single equilibrium, reached through dominance."}]}
+  ]}; }
+  function renderQuiz(){
+    const host=$("#quizHost"); if(!quiz) return;
+    if(quiz.i>=quiz.qs.length){ renderDone(host); return; }
+    const q=quiz.qs[quiz.i],n=quiz.qs.length;
+    const dots=quiz.qs.map((_,k)=>`<i class="${quiz.solved[k]?'ok':''}"></i>`).join("");
+    const badge=q.tag?`<span class="badge">${q.tag}</span>`:`<span class="badge">${q.level}</span>`;
+    host.innerHTML=`<div class="quiz"><div class="meta"><span class="step">Question ${quiz.i+1} of ${n} ${badge}</span><span class="dots">${dots}</span></div><div class="q">${q.q}</div><div id="opts"></div><div class="fb" id="fb"></div><div class="quiz-actions"><button class="btn" id="nextBtn" disabled>Continue</button></div></div>`;
+    const optsEl=$("#opts");
+    q.opts.forEach((o,idx)=>{ const b=document.createElement("button"); b.className="opt"; b.innerHTML=`<span class="mk"></span><span>${o.t}</span>`; b.addEventListener("click",()=>answer(idx,b)); optsEl.appendChild(b); });
+    $("#nextBtn").addEventListener("click",()=>{ quiz.i++; renderQuiz(); });
+    function answer(idx,btn){ const o=q.opts[idx],fb=$("#fb");
+      if(o.ok){ quiz.solved[quiz.i]=true; btn.classList.add("correct"); mk(btn,"check"); optsEl.querySelectorAll(".opt").forEach(x=>x.disabled=true); fb.className="fb good show"; fb.innerHTML=`<b>Right.</b> ${o.fb}`; $("#nextBtn").disabled=false; $("#nextBtn").textContent=quiz.i===n-1?"Finish lesson":"Continue"; host.querySelectorAll(".dots i")[quiz.i].className="ok"; }
+      else { btn.classList.add("wrong"); mk(btn,"x"); btn.disabled=true; fb.className="fb bad show"; fb.innerHTML=`<b>Not that one.</b> ${o.fb}`; }
+    }
+    function mk(btn,kind){ btn.querySelector(".mk").innerHTML=kind==="check"?`<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`:`<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>`; }
+  }
+  function renderDone(host){
+    const first=!isDone("prisoners-dilemma");
+    if(first){ state.completed["prisoners-dilemma"]=true; state.xp+=XP_PER; const t="2026-09-05"; if(!state.days.includes(t))state.days.push(t); save(state); }
+    host.innerHTML=`<div class="done-panel show"><div class="done-badge"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div><h2>Lesson complete</h2><p>Mixed strategies come next. They are what you reach for when no single move is safe.</p><div class="xp-chip">+${XP_PER} XP</div><div style="display:flex; gap:9px; justify-content:center"><button class="btn" id="doneNext">Next lesson</button><button class="btn ghost" id="doneMap">Back to map</button></div></div>`;
+    $("#doneNext").addEventListener("click",()=>show("lesson","mixed"));
+    $("#doneMap").addEventListener("click",()=>show("map"));
+    if(first){ celebrate(); toast("Lesson complete"); renderTopbar(current,"prisoners-dilemma"); }
+  }
+
+  function renderProgress(){
+    const el=$("#view-progress"),d=done(),total=LESSONS.length,frac=d/total,days=daysLearned();
+    const size=88,r=(size-11)/2,c=2*Math.PI*r,off=c*(1-frac);
+    const tierRow=t=>{ const inT=LESSONS.filter(x=>x.tier===t.id),dT=inT.filter(x=>isDone(x.id)).length,p=Math.round(dT/inT.length*100);
+      return `<div class="tp"><span class="name">${t.name}</span><span class="bar"><i style="width:${p}%"></i></span><span class="n">${dT}/${inT.length}</span></div>`; };
+    el.innerHTML=`<div class="eyebrow">Your journey</div><h1 style="font-size:29px;letter-spacing:-.8px;margin-bottom:2px">Progress</h1>
+      <div class="ringwrap"><svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--surface-2)" stroke-width="8"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--accent)" stroke-width="8" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}" transform="rotate(-90 ${size/2} ${size/2})"/><text x="50%" y="52%" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono, monospace" font-weight="700" font-size="18" fill="var(--ink)">${Math.round(frac*100)}%</text></svg><div class="cap"><b>${d} of ${total} lessons</b><span>From two suspects to market design.</span></div></div>
+      <div class="stat-grid"><div class="stat"><div class="v" style="color:var(--gold)">${totalXp()}</div><div class="l">Total XP</div></div><div class="stat"><div class="v" style="color:var(--accent)">${days.length}</div><div class="l">Days learned</div></div></div>
+      <div class="eyebrow" style="margin-top:6px">By tier</div><div class="tier-prog">${TIERS.map(tierRow).join("")}</div>`;
+  }
+
+  function celebrate(){ if(RM())return; const cv=$("#confetti"); cv.hidden=false; const ctx=cv.getContext("2d"),dpr=Math.min(2,devicePixelRatio||1); cv.width=innerWidth*dpr; cv.height=innerHeight*dpr;
+    const cols=["#0A6F6A","#B24A2E","#9C7A1E","#0B1721","#78C8BD"],P=[];
+    for(let i=0;i<90;i++)P.push({x:innerWidth*(.32+Math.random()*.36)*dpr,y:innerHeight*.34*dpr,vx:(Math.random()-.5)*8*dpr,vy:(Math.random()*-8-4)*dpr,g:.3*dpr,s:(4+Math.random()*4)*dpr,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:cols[i%cols.length]});
+    let t0=null;(function f(t){ if(!t0)t0=t; const e=t-t0; ctx.clearRect(0,0,cv.width,cv.height); P.forEach(p=>{ p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.r+=p.vr; const life=Math.max(0,1-e/2400); ctx.save(); ctx.globalAlpha=life; ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*1.5); ctx.restore(); }); if(e<2400)requestAnimationFrame(f); else { ctx.clearRect(0,0,cv.width,cv.height); cv.hidden=true; } })(0); }
+  let toastT; function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),2600); }
+
+  $("#resetBtn").addEventListener("click",()=>{ state={version:3,completed:{},xp:0,days:[]}; save(state); predicted=false; show("map"); toast("Demo progress reset"); });
+
+  renderMap(); renderTopbar("map"); show("map");
+})();
+</script>

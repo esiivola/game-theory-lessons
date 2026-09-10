@@ -1,0 +1,143 @@
+---
+title: "Quantal response equilibrium"
+tier: expert
+unit: 17
+unitName: "Behavioral and experimental"
+order: 57
+kind: lesson
+summary: "Players choose better actions more often, but not with certainty, and that fits the data."
+tags: ["behavioral", "qre", "noisy-choice"]
+estMinutes: 6
+mvp: true
+prereqs: ["mixed-strategies"]
+concepts: ["quantal-response", "logit", "bounded-rationality"]
+refs: ["mckelveyPalfrey1995"]
+anchorEmoji: "🎚️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import QRE from '@/components/interactive/QRE.svelte';
+
+<div class="anchor"><span class="em">🎚️</span><p>Nash equilibrium assumes flawless best response: the slightly better option is chosen every time. Real players lean toward better options but slip. One dial, from pure noise to pure best response, spans the range, and the data usually sit in the middle.</p></div>
+
+# Quantal response equilibrium
+
+<p class="lead">Level-k relaxed how deeply players reason. Quantal response relaxes how sharply they act. Instead of always best-responding, players pick better actions with higher probability, and equilibrium is where these noisy choices are mutually consistent. A single rationality parameter tunes it from random to Nash.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "At a Nash equilibrium, each player chooses a...", options: ["Random action", "Best response", "Dominated action"], answer: 1 },
+    { q: "Level-k models relax the assumption about players' depth of...", options: ["Payoffs", "Reasoning", "Memory"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+One action carries a small expected-payoff advantage. Slide the rationality dial from fully noisy to sharp and watch how often the better action is chosen.
+
+<QRE
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Logit choice from random to best response"
+  predict={{
+    question: 'At an intermediate rationality level, how does a player treat a slightly better action?',
+    options: [{ key: 'always', label: 'Always picks it' }, { key: 'more', label: 'Picks it more often, not always' }],
+    reveal: 'More often, not always. At low rationality choice is near 50/50; as the dial rises the better action is favoured, reaching certainty only in the limit. Experimental data usually fit a moderate setting, not the sharp Nash extreme.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+People are payoff-sensitive but noisy: a better option is more attractive, so it is chosen more, but small mistakes remain. The rationality parameter measures how sensitive: at zero, payoffs are ignored and choice is a coin flip; as it grows, the better action dominates, and in the limit you recover exact best response. Crucially, beliefs stay consistent, each player's noisy choices are a best noisy-response to the others', so this is still an equilibrium, just a smoothed one.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="quantal response equilibrium">
+In a logit QRE, a player chooses action $a$ with probability proportional to $\exp(\lambda \cdot EU(a))$, where $EU(a)$ is its expected payoff and $\lambda$ is the rationality (precision) parameter. Equilibrium requires these choice probabilities to be mutually consistent. At $\lambda = 0$ all actions are equally likely; as $\lambda \to \infty$ the distribution concentrates on best responses, recovering Nash.
+</DefinitionAside>
+
+For two actions with expected-payoff difference $d = EU(A) - EU(B)$, the probability of $A$ is
+
+$$
+P(A) = \frac{1}{1 + e^{-\lambda d}}.
+$$
+
+With $d = 1$: $\lambda = 0$ gives $0.50$, $\lambda = 1$ gives about $0.73$, $\lambda = 3$ gives about $0.95$, and $\lambda \to \infty$ gives $1$. Fitting $\lambda$ to experimental data typically lands at a moderate value, which lets QRE explain systematic deviations from Nash, like overbidding in auctions or turnout in voting, that sharp best response cannot.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Turn the dial from noise to Nash">
+Take a one-util advantage, $d = 1$, and read off $P(A) = 1/(1 + e^{-\lambda})$. At $\lambda = 0$, $P(A) = 1/2$: payoffs are ignored entirely. At $\lambda = 1$, $P(A) = 1/(1 + e^{-1}) \approx 0.73$: the better action is favoured but far from certain. At $\lambda = 3$, $P(A) \approx 0.95$, and as $\lambda$ grows without bound, $P(A) \to 1$, the pure best response.
+
+So QRE is a one-parameter family spanning uniform randomization to Nash. Experimental play typically sits at an intermediate $\lambda$, which is why QRE can match graded, mistake-prone data while still being an equilibrium concept with consistent beliefs.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Quantal response equilibrium replaces perfect best response with noisy, payoff-sensitive choice governed by one rationality dial. It spans random play to Nash and fits real, mistake-prone behaviour in between.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="quantal-response"
+  id="q1"
+  badge="apply"
+  question="In a logit QRE, what does the rationality parameter lambda control?"
+  options={[
+    { text: "How sharply choice favours the better action: 0 is uniform, large lambda approaches best response", correct: true, feedback: "Lambda is the precision of choice. At 0 payoffs are ignored (50/50); as it grows, better actions are chosen more, converging on Nash best response in the limit." },
+    { text: "The number of players", feedback: "It is a per-player precision parameter, not a count of players. It governs how payoff-sensitive choices are." },
+    { text: "The payoffs of the game", feedback: "Payoffs are given by the game; lambda controls how sensitively players respond to those payoffs." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="quantal-response"
+  id="q2"
+  badge="analyse"
+  question="Why is QRE still an equilibrium concept and not just random play?"
+  options={[
+    { text: "Choice probabilities are noisy but must be mutually consistent: each player's distribution is a best noisy-response to the others'", correct: true, feedback: "QRE keeps the equilibrium fixed-point requirement. The noise is structured by payoffs, and beliefs about others' probabilities are correct, so it is an equilibrium, just a smoothed one." },
+    { text: "Because players ignore payoffs", feedback: "They do not: better actions are chosen more often. Payoff-sensitivity plus consistent beliefs is what makes it an equilibrium." },
+    { text: "Because it always coincides with Nash", feedback: "It coincides with Nash only in the high-lambda limit. At moderate lambda it differs, which is its whole value." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="quantal-response"
+  id="q3"
+  badge="brings back: mixed strategies"
+  question="How does a QRE mix differ from a mixed Nash equilibrium?"
+  options={[
+    { text: "A mixed Nash puts weight only on best responses (indifference); QRE puts more weight on better actions but positive weight on worse ones too", correct: true, feedback: "Mixed Nash requires indifference among the actions played. QRE smooths this: the better action gets more probability but the worse action is not excluded, and only as lambda grows does it approach the Nash mix." },
+    { text: "They are identical for all lambda", feedback: "They match only as lambda approaches infinity. At finite lambda, QRE assigns positive probability to worse actions, unlike a mixed Nash." },
+    { text: "QRE never randomizes", feedback: "QRE is inherently probabilistic: it assigns a probability to every action, concentrating on the best only in the limit." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["mckelveyPalfrey1995"]} />

@@ -1,0 +1,141 @@
+---
+title: "Supermodular games"
+tier: intermediate
+unit: 5
+unitName: "Correlation and complementarities"
+order: 17
+kind: lesson
+summary: "When your best move rises with everyone else's, coordination can lock in high or low."
+tags: ["complementarities", "coordination", "equilibrium-selection"]
+estMinutes: 6
+mvp: true
+prereqs: ["pure-nash", "focal-points"]
+concepts: ["supermodular", "strategic-complements", "coordination"]
+refs: ["vanHuyck1990", "milgromRoberts1990"]
+anchorEmoji: "🪜"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import MinEffort from '@/components/interactive/MinEffort.svelte';
+
+<div class="anchor"><span class="em">🪜</span><p>A team ships only as fast as its slowest part. Push hard while a teammate coasts and your effort is wasted; the project still moves at the laggard's pace. So how hard should you push, when it depends on everyone else pushing too?</p></div>
+
+# Supermodular games
+
+<p class="lead">In some games your incentive to do more grows the more everyone else does. These strategic complements have a striking feature: many coordinated outcomes are all equilibria, ranked from best to worst, and fear of the low one can trap everyone there even though all would prefer the high one.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A game can have several Nash equilibria that are...", options: ["Always equally good", "Ranked differently for the players", "Impossible to reach"], answer: 1 },
+    { q: "A focal point helps players pick an equilibrium using...", options: ["Higher payoffs", "Something salient outside the payoffs", "Randomization"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+You and three teammates each pick an effort from 1 to 7. Your payoff is $0.6 + 0.2\times(\text{group minimum}) - 0.1\times(\text{your own effort})$. The reward tracks the weakest link, so your effort helps only if it does not exceed everyone else's.
+
+<MinEffort
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Minimum-effort coordination, payoff tracks the weakest link"
+  predict={{
+    question: 'How much effort should you put in?',
+    options: [{ key: 'max', label: 'Always the maximum, 7' }, { key: 'match', label: 'Match the minimum you expect' }],
+    reveal: 'Match the minimum. Effort above the group minimum is pure cost with no gain. And once one teammate plays low, the safe reply is to come down too, so coordination tends to slide toward the floor.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Every unit of effort costs you, but the reward depends only on the smallest effort in the group. So raising yours above the minimum spends the cost and buys nothing. That makes your best move: match the lowest effort you expect. When you fear a teammate will play low, you play low too, and so does everyone, which is exactly how a group of people who would all prefer to work hard end up stuck working little.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+With payoff $u_i = 0.6 + 0.2\,\min_j e_j - 0.1\,e_i$, consider everyone choosing the same effort $x$. Then $\min_j e_j = x$ and each earns $0.6 + 0.1x$, rising in $x$. Every common effort from 1 to 7 is a Nash equilibrium, and they are Pareto-ranked: all-7 pays $1.3$, all-1 pays $0.7$.
+
+Why are they all equilibria? Given the others at $x$, raising your effort leaves the minimum at $x$ (so no gain) but costs more; lowering it drops the minimum and your reward. So matching is a best response.
+
+<DefinitionAside label="supermodular game (strategic complements)">
+A game has strategic complements when each player's best response is nondecreasing in the others' actions: the more they do, the more you want to do. Such games always have a largest and a smallest equilibrium, and every equilibrium is bracketed between them. Coordination is self-reinforcing in both directions, which is why both the good and the bad outcome are stable.
+</DefinitionAside>
+
+The danger is selection. All-7 is best for everyone, but it is risky: one cautious teammate and your high effort is wasted. All-1 is safe. Strategic uncertainty, not payoffs, is what pulls groups toward the low equilibrium.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Why matching is the best response">
+Suppose you expect the others' minimum to be $m$. If you play $e > m$, the group minimum is still $m$, so your payoff is $0.6 + 0.2m - 0.1e$, which falls as $e$ rises. If you play $e < m$, the minimum drops to $e$, giving $0.6 + 0.2e - 0.1e = 0.6 + 0.1e$, which is lower than matching at $m$. So the best response is $e = m$: match the minimum you expect.
+
+Because that best response increases with what others do, the equilibria line up from all-1 to all-7. All-7 gives everyone $1.3$; all-1 gives $0.7$. Everyone prefers all-7, yet all-1 is perfectly stable, held in place by the fear that someone will slack.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">When efforts are complements, best responses move together, so coordinated outcomes stack up as equilibria. The best one is fragile: fear of a weak link can lock everyone into the worst.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="supermodular-games"
+  id="q1"
+  badge="apply"
+  question="You expect your teammates' lowest effort to be 4. What is your best response?"
+  options={[
+    { text: "Play 4, matching the expected minimum", correct: true, feedback: "Effort above 4 leaves the minimum at 4 but costs you more; effort below 4 lowers the minimum and your reward. Matching is optimal." },
+    { text: "Play 7, to raise the group's output", correct: false, feedback: "Your 7 cannot lift the minimum above 4, so it only adds cost. The weakest link caps the reward." },
+    { text: "Play 1, to minimise your cost", feedback: "Playing 1 drops the group minimum to 1 and cuts everyone's reward, including yours. Matching at 4 pays more." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="supermodular-games"
+  id="q2"
+  badge="analyse"
+  question="All-7 pays everyone 1.3 and all-1 pays 0.7. Both are equilibria. Why might a group end up at all-1?"
+  options={[
+    { text: "Fear that someone will play low makes low the safe choice, and that fear is self-fulfilling", correct: true, feedback: "With complements, if you expect a low minimum you should play low, which produces the low minimum. Strategic uncertainty, not the payoffs, selects the bad equilibrium." },
+    { text: "Because all-1 pays more", feedback: "It pays less (0.7 versus 1.3). The group can still land there because it is the safe response to doubt about others." },
+    { text: "Because all-7 is not actually an equilibrium", feedback: "All-7 is an equilibrium: if everyone plays 7, no one gains by deviating. The problem is reaching it, not its stability." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="supermodular-games"
+  id="q3"
+  badge="brings back: focal points"
+  question="Both all-7 and all-1 are equilibria with identical structure. What could tip a group toward the good one?"
+  options={[
+    { text: "A shared focal cue, like a leader announcing everyone will play 7, that aligns expectations", correct: true, feedback: "As with focal points, the payoffs alone do not select the equilibrium. A salient signal that coordinates beliefs, so each trusts the others to play high, can move the group to all-7." },
+    { text: "Nothing, the outcome is purely random", feedback: "It is not random. Which equilibrium prevails depends on beliefs about others, which a focal cue or leadership can shape." },
+    { text: "Lowering the payoff to all-7", feedback: "That would make the good equilibrium less attractive, not help reach it. Coordination on beliefs is what tips the group up." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["vanHuyck1990", "milgromRoberts1990"]} />

@@ -1,0 +1,137 @@
+---
+title: "Reciprocity and intentions"
+tier: expert
+unit: 17
+unitName: "Behavioral and experimental"
+order: 59
+kind: lesson
+summary: "The same outcome is judged differently depending on whether someone chose it on purpose."
+tags: ["behavioral", "reciprocity", "intentions"]
+estMinutes: 6
+mvp: true
+prereqs: ["social-preferences"]
+concepts: ["reciprocity", "intentions", "fairness"]
+refs: ["rabin1993", "charnessRabin2002", "blount1995"]
+anchorEmoji: "🔁"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Reciprocity from '@/components/interactive/Reciprocity.svelte';
+
+<div class="anchor"><span class="em">🔁</span><p>Being shortchanged by a person feels different from getting the same bad deal from a broken vending machine. The money lost is identical; the urge to retaliate is not. People respond to intentions, not just outcomes.</p></div>
+
+# Reciprocity and intentions
+
+<p class="lead">Inequity aversion judged outcomes: how unequal the final split is. But people also care why an outcome happened. A stingy offer chosen deliberately provokes far more rejection than the same offer produced by chance. Reciprocity, kindness for kindness and spite for spite, needs intentions in the model.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "Inequity aversion judges an outcome by how...", options: ["Intended it was", "Unequal it is", "Large it is"], answer: 1 },
+    { q: "People reject unfair ultimatum offers because they value...", options: ["Only money", "Fairness too", "The referee"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+The same lopsided $2-for-you, $8-for-them offer arrives two ways: chosen by the other player, or drawn by a random wheel. Compare how often people reject each.
+
+<Reciprocity
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Same outcome, different cause"
+  predict={{
+    question: 'Is the identical unfair offer rejected more when a person chose it, or when a wheel produced it?',
+    options: [{ key: 'same', label: 'Equally, the outcome is the same' }, { key: 'person', label: 'Much more when a person chose it' }],
+    reveal: 'Much more when a person chose it. The outcome is identical, but a deliberate slight invites punishment while a random one does not. People reciprocate intentions, not just outcomes, which pure inequity aversion cannot capture.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+If all that mattered were the final split, both versions would be rejected equally, since the money is the same. But a person who chose to lowball you acted unkindly, and reciprocity says unkindness deserves punishment even at a cost to yourself. A wheel has no intentions, so there is nothing to punish; you just accept the bad luck. The gap between the two rejection rates is direct evidence that people evaluate the actor's intent, not only the outcome.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="reciprocity (Rabin, Charness-Rabin)">
+Reciprocity models make utility depend on beliefs about the other player's kindness, not just on the payoff distribution. In Rabin's fairness equilibrium, being treated kindly raises your willingness to help, and being treated unkindly raises your willingness to hurt, even at a personal cost, a psychological game where payoffs depend on intentions. The Charness-Rabin model blends a distributional concern with a reciprocity term that flips sign with the other player's behaviour.
+</DefinitionAside>
+
+Write player B's utility as $U_B = (1 - \theta q)\,x_B + \theta q\,x_A$, where $x_A, x_B$ are payoffs and $q$ captures how kindly A behaved. When A acted unkindly, $q < 0$, so B puts negative weight on A's payoff and is willing to pay to lower it (punishment). When the outcome was accidental, $q \approx 0$, and B is nearly self-interested, so the same stingy split is accepted. Identical $x$'s, opposite responses, driven entirely by the intention term $q$.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Why intent flips the response">
+Consider the $2-for-B, $8-for-A split. Under pure inequity aversion, B's decision depends only on the numbers, so it would reject (or accept) the same way regardless of source. That predicts equal rejection rates, which is not what happens.
+
+Add reciprocity. If A deliberately chose the split, B judges A unkind, so $q < 0$: B's utility puts negative weight on A's $\$8$, and rejecting (giving both $0$) removes A's payoff, which B now values doing. If a wheel produced the split, $q \approx 0$: B has no one to punish, weights only its own $\$2$, and accepts. Same $x_A, x_B$, but the intention term $q$ reverses the choice, exactly the pattern in the data.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">People reciprocate intentions, rewarding kindness and punishing unkindness, so identical outcomes get different responses depending on how they came about. Outcome-based fairness alone cannot explain this; intentions must enter the payoff.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="reciprocity"
+  id="q1"
+  badge="apply"
+  question="An unfair split is rejected far more when a person chose it than when a wheel produced it. What does this show?"
+  options={[
+    { text: "People respond to intentions, not just outcomes: a deliberate slight invites punishment a random one does not", correct: true, feedback: "The outcome is identical, so any difference in response must come from the actor's intent. Deliberate unkindness is punished; blind chance is accepted." },
+    { text: "People dislike randomness", feedback: "It is not randomness they dislike; it is the intent behind a chosen slight. The random version is actually accepted more often." },
+    { text: "People cannot tell the two apart", feedback: "They clearly distinguish them, which is why the rejection rates differ so much." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="reciprocity"
+  id="q2"
+  badge="analyse"
+  question="Why can outcome-based inequity aversion not explain this pattern?"
+  options={[
+    { text: "It judges only the final split, which is identical in both cases, so it predicts the same response", correct: true, feedback: "Inequity aversion depends solely on the payoff distribution. Since the $2/$8 split is the same whether chosen or drawn, it must predict identical behaviour, contradicting the higher rejection of the deliberate version." },
+    { text: "It ignores money entirely", feedback: "It very much includes money and inequality; what it omits is intentions, which is exactly the missing ingredient here." },
+    { text: "It predicts the wheel version is rejected more", feedback: "It predicts no difference at all, since the outcomes are identical. Reciprocity is needed to explain the gap." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="reciprocity"
+  id="q3"
+  badge="brings back: fairness"
+  question="How does reciprocity extend the fairness models from the previous lesson?"
+  options={[
+    { text: "It makes utility depend on the other player's intentions, not just the distribution of payoffs", correct: true, feedback: "Inequity aversion was outcome-based; reciprocity adds a belief-dependent term that rewards kindness and punishes unkindness. Both are social preferences, but reciprocity captures intent, which inequity aversion misses." },
+    { text: "It replaces fairness with pure self-interest", feedback: "It does the opposite: it enriches social preferences with intentions, going beyond both self-interest and outcome-based fairness." },
+    { text: "It says only outcomes matter after all", feedback: "The lesson is that outcomes are not enough; intentions matter, which is precisely what reciprocity adds." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["rabin1993", "charnessRabin2002", "blount1995"]} />

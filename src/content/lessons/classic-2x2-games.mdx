@@ -1,0 +1,143 @@
+---
+title: "Classic 2x2 games"
+tier: basic
+unit: 2
+unitName: "Static solution concepts"
+order: 8
+kind: lesson
+summary: "A small zoo of two-by-two games, and how their equilibrium structure differs."
+tags: ["solution-concepts", "coordination", "zoo"]
+estMinutes: 6
+mvp: true
+prereqs: ["pure-nash", "prisoners-dilemma"]
+concepts: ["coordination", "stag-hunt", "chicken", "matching-pennies"]
+refs: ["rapoportGuyer1966", "osborne2004"]
+anchorEmoji: "🐾"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import GameZoo from '@/components/interactive/GameZoo.svelte';
+
+<div class="anchor"><span class="em">🐾</span><p>An arms race, a team project, a couple picking a night out, two cars in a game of nerve, a goalkeeper facing a penalty. The same two-by-two shape, with the payoffs nudged, describes all of them, and each has a different kind of answer.</p></div>
+
+# Classic 2x2 games
+
+<p class="lead">The Prisoner's Dilemma is one animal in a small zoo. Change the four payoffs and you get coordination games, games of nerve, and games with no stable move at all. Learning the family is worth more than memorizing any one game, because the structure tells you what to look for.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In the Prisoner's Dilemma, both players defect because defecting is...", options: ["A focal point", "A dominant strategy", "Random"], answer: 1 },
+    { q: "A pure Nash equilibrium is a cell where...", options: ["Both get their maximum", "Neither gains by moving alone", "Payoffs are equal"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Here is one 2x2 you can retune. Load each classic game, then nudge the payoffs and watch the family label and the equilibria (gold cells) shift as incentives cross their thresholds.
+
+<GameZoo
+  client:visible
+  exhibit="Exhibit 1"
+  caption="One 2x2, five families; gold cells are pure Nash"
+  predict={{
+    question: 'How many pure Nash equilibria do these games have: the Prisoner\'s Dilemma, Stag Hunt, and Matching Pennies?',
+    options: [{ key: 'same', label: 'All the same number' }, { key: 'vary', label: 'They differ: one, two, and none' }],
+    reveal: 'They differ. The Prisoner\'s Dilemma has one, Stag Hunt has two, and Matching Pennies has none in pure strategies. The number and location of the equilibria are what separate the families.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The four numbers are the whole story. Where the temptation to deviate sits, and whether players want to match or to differ, decides everything: whether there is a dominant move, how many stable cells there are, and whether the stable cells make players agree or fight over which one to reach. Nudge one payoff past a threshold and a coordination game can turn into a dilemma. The families are regions in payoff space, not separate universes.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Five games map the territory.
+
+<DefinitionAside label="the five families">
+**Prisoner's Dilemma** (R3, S0, T5, P1): defecting dominates, so the unique Nash is mutual defection, worse for both than cooperating.
+**Stag Hunt** ((4,4)/(0,3)/(3,0)/(3,3)): two Nash on the diagonal. All-Stag pays more (payoff-dominant), but Hare is safer against an uncertain partner (risk-dominant).
+**Battle of the Sexes** ((2,1)/(0,0)/(0,0)/(1,2)): two Nash, but each player prefers a different one. Coordination with conflict.
+**Chicken** ((6,6)/(2,7)/(7,2)/(0,0)): two Nash off the diagonal. Each wants to do the opposite of the other, and the crash is worst for both.
+**Matching Pennies** ((1,-1)/(-1,1)/(-1,1)/(1,-1)): one wants to match, the other to differ. No pure Nash exists.
+</DefinitionAside>
+
+Three lessons hide in this list. Not every dilemma is a Prisoner's Dilemma: Stag Hunt and Chicken have cooperative equilibria the PD lacks. Two equilibria does not mean the players are indifferent: in Battle of the Sexes they actively disagree about which to pick. And no pure Nash does not mean unsolvable: Matching Pennies has a mixed equilibrium, which is where the next lesson goes.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Classify Stag Hunt, then Matching Pennies">
+**Stag Hunt.** Mark best responses. If your partner hunts Stag, your best reply is Stag (4 > 3); if they take the Hare, your best reply is Hare (3 > 0). So both (Stag, Stag) and (Hare, Hare) are Nash. Both players prefer (Stag, Stag) at $(4,4)$, yet Hare guarantees $3$ no matter what the partner does, while Stag risks $0$. That safety is why groups can get stuck at the worse equilibrium.
+
+**Matching Pennies.** Mark best responses again. Whatever cell you point at, one player always wants to switch: the matcher chases, the mismatcher flees. The best-response marks never coincide, so there is no pure Nash. The only stable way to play is to randomize, which is the mixed strategy of the next lesson.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">The same 2x2 shape holds a family of games. Read the payoffs for where the temptation sits and whether players want to match, and the equilibrium structure, one, two, or none, follows.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="classic-2x2-games"
+  id="q1"
+  badge="apply"
+  question="Stag Hunt has two pure Nash equilibria, all-Stag and all-Hare. Why might a group land on all-Hare, the worse one?"
+  options={[
+    { text: "Hare is safe: it pays 3 whatever the partner does, while Stag risks 0 if the partner defects", correct: true, feedback: "All-Stag pays more but requires trust. Hare is risk-dominant, so fear that the partner will not hunt can pull a group to the worse equilibrium." },
+    { text: "All-Hare pays more than all-Stag", feedback: "It pays less (3 versus 4). The group can still land there because Hare is the safer choice under doubt." },
+    { text: "All-Stag is not actually an equilibrium", feedback: "It is: if both hunt Stag, neither gains by switching. The difficulty is coordinating on it, not its stability." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="classic-2x2-games"
+  id="q2"
+  badge="analyse"
+  question="Both Battle of the Sexes and Chicken have two pure Nash equilibria. How do they differ?"
+  options={[
+    { text: "In Battle of the Sexes the equilibria are matching cells the players rank oppositely; in Chicken they are mismatched cells where each wants to do the opposite", correct: true, feedback: "Battle of the Sexes is coordination with conflict (both want to be together, but disagree where). Chicken is anti-coordination: the equilibria are off-diagonal, and mutual aggression is the disaster both avoid." },
+    { text: "They are the same game with different names", feedback: "They differ structurally: Battle of the Sexes has diagonal equilibria, Chicken off-diagonal ones, which changes how players approach them." },
+    { text: "Chicken has a dominant strategy and Battle of the Sexes does not", feedback: "Neither has a dominant strategy; both have two pure equilibria. The difference is where those equilibria sit." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="classic-2x2-games"
+  id="q3"
+  badge="brings back: dominance"
+  question="Which of these five games is solved by dominance alone, with a single equilibrium neither player likes?"
+  options={[
+    { text: "The Prisoner's Dilemma", correct: true, feedback: "Defecting strictly dominates, so iterated dominance pins the unique Nash at mutual defection, which both players would gladly trade for mutual cooperation. The others need equilibrium or mixing arguments instead." },
+    { text: "Stag Hunt", feedback: "Stag Hunt has no dominant strategy: your best move depends on what the partner does. It has two equilibria, not one." },
+    { text: "Matching Pennies", feedback: "Matching Pennies has no dominant strategy and no pure equilibrium at all, so dominance cannot solve it." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["rapoportGuyer1966", "osborne2004"]} />

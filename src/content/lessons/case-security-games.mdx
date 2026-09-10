@@ -1,0 +1,139 @@
+---
+title: "Security games and multi-agent AI"
+tier: applied
+unit: 18
+unitName: "Game theory in the wild"
+order: 12
+label: "A12"
+kind: case
+placement: "capstone"
+summary: "Randomized patrols beat guarding the top target, from airport security to superhuman poker."
+tags: ["applied", "security-games", "stackelberg"]
+estMinutes: 6
+mvp: true
+prereqs: ["mixed-strategies", "zero-sum-minimax", "quantal-response"]
+concepts: ["stackelberg-security", "randomized-patrol", "cfr"]
+refs: ["tambe2011"]
+anchorEmoji: "🛡️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import SecurityGame from '@/components/interactive/SecurityGame.svelte';
+
+<div class="anchor"><span class="em">🛡️</span><p>Airport police cannot cover every terminal at once. Guard the obvious target every day and an attacker who watches simply hits the one you left open. The fix is a randomized patrol, and the schedules at LAX and for federal air marshals are computed by solving a game.</p></div>
+
+# Security games and multi-agent AI
+
+<p class="lead">A defender with too few resources must commit first to a patrol; an attacker surveils, then strikes the weak point. This is a Stackelberg security game, and its lesson is sharp: the right randomization minimizes worst-case loss, while defending only the most valuable target is exploitable. The same equilibrium reasoning powers superhuman poker AI.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In a Stackelberg security game, the defender commits to a patrol...", options: ["After the attacker moves", "First, then the attacker best-responds", "Never"], answer: 1 },
+    { q: "A perfectly predictable patrol is something a surveilling attacker can...", options: ["Ignore", "Exploit", "Reward"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Allocate one patrol unit as coverage probabilities across targets. An attacker best-responds to your announced mix. Watch the expected loss, and toggle a QRE (noisy) attacker.
+
+<SecurityGame
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Randomized patrol vs a best-responding attacker"
+  predict={{
+    question: 'With one patrol unit and targets worth 10 and 5, how should you defend?',
+    options: [{ key: 'top', label: 'Always guard the target worth 10' }, { key: 'mix', label: 'Randomize, covering the valuable target more but not always' }],
+    reveal: 'Randomize. Always guarding the 10 invites an attack on the unguarded 5, a certain loss of 5. Covering the 10 with probability 2/3 and the 5 with 1/3 equalizes the attacker payoff and cuts expected loss to about 3.33, better than 5.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Because the attacker moves second, after watching, any deterministic patrol is a gift: the attacker simply strikes wherever you are not. Committing to a random schedule denies that. The optimal coverage makes the attacker indifferent across targets, so there is no soft spot to aim at, and this minimizes the worst-case loss. Guarding only the top target seems prudent but is the most exploitable choice, since it leaves a lesser but undefended target for a guaranteed hit. The defender commits first precisely to shape the attacker's best response. Real deployments add a twist: attackers are not perfectly rational, so a quantal-response (QRE) model of a noisy attacker often fits better and changes the optimal mix.
+</Callout>
+</Section>
+
+<Section id="math">
+## The real deployments
+
+<DefinitionAside label="Stackelberg security games (Tambe)">
+Milind Tambe's group turned this into deployed systems: ARMOR schedules checkpoints and canine patrols at LAX, IRIS assigns federal air marshals to flights, and PROTECT sets US Coast Guard patrols using a quantal-response model of the attacker. All solve a Stackelberg game where the defender commits to a randomized coverage and the attacker best-responds after surveillance. The same equilibrium computation underlies superhuman poker: counterfactual regret minimization (CFR) approximates a Nash equilibrium of a huge imperfect-information game, which is why the bots are unexploitable rather than merely clever.
+</DefinitionAside>
+
+Two targets worth $10$ and $5$, one patrol unit split as coverage $c_1 + c_2 = 1$. Equalize the attacker's payoff across targets: an attack on target $i$ succeeds only when uncovered, so set $(1 - c_1)\cdot 10 = (1 - c_2)\cdot 5$. With $c_2 = 1 - c_1$ this gives $c_1 = 2/3$ and $c_2 = 1/3$, and the expected loss is $(1 - 2/3)\cdot 10 = 10/3 \approx 3.33$. Compare "always guard the $10$": the attacker hits the undefended $5$ for a certain loss of $5 > 3.33$. Randomizing to equalize the attacker's options is strictly better. If the attacker is noisy rather than perfectly rational, a QRE model spreads attack probability across targets and shifts the optimal coverage accordingly, which is what the fielded systems use.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Why randomize, and by how much">
+Targets worth $10$ and $5$, one unit of patrol to allocate as probabilities. Try the intuitive rule first: always cover the $10$. Then the $5$ is never guarded, and a surveilling attacker takes it for a sure loss of $5$. That is worse than it looks, because the whole point of the $10$-guard was to protect value, yet you have handed over the $5$ with certainty.
+
+Now equalize. Cover the $10$ with probability $c_1$ and the $5$ with $c_2 = 1 - c_1$, and choose $c_1$ so the attacker gains equally either way: $(1 - c_1)\cdot 10 = (1 - c_2)\cdot 5$. Solving gives $c_1 = 2/3$, $c_2 = 1/3$, and either attack now yields the attacker an expected $10/3 \approx 3.33$, which is the defender's expected loss. Since $3.33 < 5$, randomization beats the deterministic guard, and because the attacker is indifferent, there is no weak point to exploit. This is the logic behind LAX checkpoints and air-marshal scheduling, and with a QRE attacker the coverage is retuned to the attacker's actual, noisy responses.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">When a defender commits first and an attacker surveils, the right randomized patrol equalizes the attacker's options and minimizes worst-case loss; always guarding the top target is exploitable. Deployed systems (LAX, air marshals) and superhuman poker both solve for these equilibria, using QRE and CFR for realistic, unexploitable play.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="case-security-games"
+  id="q1"
+  badge="apply"
+  question="With one patrol unit and targets worth 10 and 5, why not just always guard the target worth 10?"
+  options={[
+    { text: "The attacker then hits the unguarded 5 for a certain loss of 5, worse than the 3.33 expected loss from randomizing", correct: true, feedback: "A deterministic guard leaves a known soft spot. Covering the 10 with probability 2/3 and the 5 with 1/3 equalizes the attacker's options and cuts expected loss to about 3.33 < 5." },
+    { text: "Because the target worth 10 is never really attacked", feedback: "It can be attacked; the issue is that always guarding it hands the attacker the 5 for free. Randomizing removes any guaranteed soft spot." },
+    { text: "Because guarding is free, so guard everything", feedback: "Resources are limited (one unit here), which is exactly why you must randomize coverage rather than cover everything." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-security-games"
+  id="q2"
+  badge="analyse"
+  question="What coverage minimizes the defender's worst-case loss with targets 10 and 5?"
+  options={[
+    { text: "Cover the 10 with probability 2/3 and the 5 with 1/3, equalizing the attacker's payoff at about 3.33", correct: true, feedback: "Set (1 - c1)*10 = (1 - c2)*5 with c1 + c2 = 1, giving c1 = 2/3, c2 = 1/3. The attacker is indifferent, so there is no weak point, and expected loss is 10/3 ≈ 3.33." },
+    { text: "Cover both equally at 1/2 each", feedback: "Equal coverage leaves the valuable target too exposed. Equalizing the attacker's payoff requires 2/3 on the 10 and 1/3 on the 5." },
+    { text: "Cover the 5 more, since it is easier to defend", feedback: "The valuable target needs more coverage, not less. The equalizing mix is 2/3 on the 10 and 1/3 on the 5." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-security-games"
+  id="q3"
+  badge="brings back: quantal response"
+  question="Why do fielded systems like PROTECT model the attacker with quantal response (QRE) rather than perfect rationality?"
+  options={[
+    { text: "Real attackers are noisy, not perfectly optimal, so a QRE model fits their behaviour better and retunes the optimal coverage", correct: true, feedback: "Assuming a perfectly rational attacker can misfit real adversaries. QRE spreads attack probability by payoff and better matches observed behaviour, so the deployed coverage is computed against a noisy attacker." },
+    { text: "Because QRE assumes the attacker is perfectly rational", feedback: "QRE is precisely a model of a noisy, boundedly rational attacker, which is why it fits real adversaries better than perfect rationality." },
+    { text: "Because randomization is unnecessary against real attackers", feedback: "Randomization is still essential; QRE only changes how the coverage is tuned to a noisy attacker, not whether to randomize." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["tambe2011"]} />

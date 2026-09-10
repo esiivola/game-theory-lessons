@@ -1,0 +1,139 @@
+---
+title: "Replicator dynamics"
+tier: expert
+unit: 15
+unitName: "Evolution and learning"
+order: 49
+kind: lesson
+summary: "Successful strategies reproduce, and in Rock-Paper-Scissors the population can cycle forever."
+tags: ["evolution", "replicator", "dynamics"]
+estMinutes: 6
+mvp: true
+prereqs: ["existence-of-nash", "evolutionarily-stable-strategies"]
+concepts: ["replicator-dynamics", "cycling", "stability"]
+refs: ["taylorJonker1978"]
+anchorEmoji: "🌀"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Replicator from '@/components/interactive/Replicator.svelte';
+
+<div class="anchor"><span class="em">🌀</span><p>In some lizard populations, orange males beat blue, blue beat yellow, and yellow beat orange, and the three morphs rise and fall in endless cycles. It is Rock-Paper-Scissors written in biology, and the replicator equation traces the loop.</p></div>
+
+# Replicator dynamics
+
+<p class="lead">The ESS asks where a population rests. Replicator dynamics asks how it moves: the share of a strategy grows in proportion to how much its fitness beats the average. Sometimes it converges, and sometimes, as in Rock-Paper-Scissors, it circles forever without settling.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "Rock-Paper-Scissors has a unique Nash equilibrium at...", options: ["All Rock", "1/3 on each move", "No equilibrium"], answer: 1 },
+    { q: "An evolutionarily stable strategy resists invasion by...", options: ["The referee", "Rare mutants", "The majority"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Watch a population of Rock, Paper, and Scissors players evolve on the simplex. Each strategy grows when it beats the field. A tie payoff bends the path.
+
+<Replicator
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Replicator dynamics on the RPS simplex"
+  predict={{
+    question: 'With fair ties (payoff 0), where does the Rock-Paper-Scissors population end up?',
+    options: [{ key: 'center', label: 'Settles at the even mix' }, { key: 'cycle', label: 'Circles forever without settling' }],
+    reveal: 'It circles forever. Fair RPS is zero-sum, and the replicator dynamics trace closed orbits around the even mix, never converging. Penalize ties and it spirals inward to the center; reward them and it spirals outward.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Whatever is common gets beaten: lots of Rock invites Paper, which invites Scissors, which invites Rock again. So no strategy can hold a lead, and the population chases its own tail around the even mix. With fair ties the chase is a perfect closed loop. Change the tie payoff and you tilt the balance: penalizing ties makes matching the crowd costly, nudging the population inward to the stable center; rewarding ties does the reverse and flings it toward the boundary.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="replicator dynamics">
+Let $x_i$ be the share of strategy $i$ and $f_i$ its expected fitness against the current population. The replicator equation is $\dot{x}_i = x_i\,(f_i - \bar{f})$, where $\bar{f} = \sum_j x_j f_j$ is average fitness: strategies above average grow, those below shrink. Its rest points include every Nash equilibrium, and stable rest points correspond to evolutionarily stable strategies.
+</DefinitionAside>
+
+For fair Rock-Paper-Scissors (win $+1$, lose $-1$, tie $0$) the game is zero-sum, so average fitness is zero and the dynamics conserve a quantity: the trajectories are closed orbits circling the interior equilibrium $(\tfrac13, \tfrac13, \tfrac13)$, which is neutrally stable, neither attracting nor repelling.
+
+Give ties a payoff $e$. A negative $e$ penalizes playing like the crowd, favours diversity, and turns the orbits into an inward spiral toward the center, now asymptotically stable. A positive $e$ rewards conformity and spirals the population outward toward the edges, cycling between near-pure phases. Adding the Hawk-Dove game instead, the replicator converges to the ESS Hawk fraction $V/C$, linking this lesson to the last.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Read off the direction of motion">
+Take the population $(0.5, 0.3, 0.2)$ for (Rock, Paper, Scissors) with fair ties. A strategy's fitness is its expected score against this mix: Rock scores $x_S - x_P = 0.2 - 0.3 = -0.1$, Paper scores $x_R - x_S = 0.5 - 0.2 = 0.3$, Scissors scores $x_P - x_R = 0.3 - 0.5 = -0.2$.
+
+Paper is above the average, so its share grows; Rock and Scissors shrink. But as Paper rises, Scissors (which beats Paper) starts to pay, and the lead rotates. That rotation, with no strategy able to keep its advantage, is the cycle. With fair ties the loop is closed; a small tie penalty would instead pull each loop a little tighter until the population spirals into the even mix.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Replicator dynamics grow strategies that beat the average. In fair Rock-Paper-Scissors the population cycles forever on closed orbits; a small tie penalty stabilizes the even mix, a reward destabilizes it.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="replicator-dynamics"
+  id="q1"
+  badge="apply"
+  question="Under fair Rock-Paper-Scissors, what do the replicator trajectories do?"
+  options={[
+    { text: "Circle the even mix forever on closed orbits, never converging", correct: true, feedback: "Fair RPS is zero-sum, so the dynamics conserve a quantity and trace closed loops around the 1/3-1/3-1/3 point. The center is neutrally stable, neither attracting nor repelling." },
+    { text: "Converge quickly to all Rock", feedback: "No strategy can dominate: whatever is common gets beaten by the next. The population cycles rather than converging to any pure state." },
+    { text: "Jump straight to the even mix and stop", feedback: "The even mix is a rest point, but generic starting mixes orbit around it rather than landing on it, because fair RPS gives neutral cycles." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="replicator-dynamics"
+  id="q2"
+  badge="analyse"
+  question="Penalizing ties (a negative tie payoff) changes the RPS dynamics how?"
+  options={[
+    { text: "It makes matching the crowd costly, so the population spirals inward to the stable even mix", correct: true, feedback: "A tie penalty punishes playing like others, favouring diversity. The neutral orbits become an inward spiral, and the interior equilibrium turns asymptotically stable." },
+    { text: "It makes the population spiral outward to the edges", feedback: "That is what rewarding ties does. Penalizing ties pulls the population inward, toward the center." },
+    { text: "It has no effect on the dynamics", feedback: "Even a small tie payoff changes the stability of the center: negative stabilizes it, positive destabilizes it." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="replicator-dynamics"
+  id="q3"
+  badge="brings back: ESS"
+  question="How do replicator dynamics connect to evolutionarily stable strategies?"
+  options={[
+    { text: "Stable rest points of the replicator dynamics correspond to evolutionarily stable strategies, as in Hawk-Dove converging to V/C", correct: true, feedback: "The ESS is the static invasion criterion; the replicator dynamics are the motion. Where the dynamics settle (an asymptotically stable rest point) is an ESS, which is why Hawk-Dove flows to V/C." },
+    { text: "They are unrelated", feedback: "They are two views of the same thing: ESS is the resting condition, replicator dynamics the process that reaches it." },
+    { text: "Replicator dynamics never reach an ESS", feedback: "They do in games like Hawk-Dove, converging to the ESS mix. RPS is the special zero-sum case where they cycle instead." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["taylorJonker1978"]} />

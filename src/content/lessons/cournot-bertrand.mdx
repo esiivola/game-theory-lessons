@@ -1,0 +1,152 @@
+---
+title: "Cournot and Bertrand"
+tier: basic
+unit: 3
+unitName: "Applications and equilibrium selection"
+order: 13
+kind: lesson
+summary: "Two firms, one market. Competing on quantity and on price give very different answers."
+tags: ["oligopoly", "applications", "best-response"]
+estMinutes: 6
+mvp: true
+prereqs: ["pure-nash"]
+concepts: ["cournot", "bertrand", "best-response", "nash-equilibrium"]
+refs: ["cournot1838", "bertrand1883", "gibbons1992"]
+anchorEmoji: "🛢️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import ReactionCurve from '@/components/interactive/ReactionCurve.svelte';
+
+<div class="anchor"><span class="em">🛢️</span><p>Two producers supply the same market. They never meet, never agree, and each wants to earn as much as possible. Left alone they could split the monopoly profit. They will not manage it, and the reason is worth watching.</p></div>
+
+# Cournot and Bertrand
+
+<p class="lead">Give two firms the same product and one market, and how they compete depends on what they choose. Set quantities, as in Cournot, and they land between monopoly and perfect competition. Set prices, as in Bertrand, and a single undercut drives profit to zero.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A best response is the move that pays the most...", options: ["Overall", "Given what the other player does", "In the long run"], answer: 1 },
+    { q: "At a Nash equilibrium, each firm's choice is...", options: ["A best response to the other's choice", "The largest possible output", "Equal to the other's cost"], answer: 0 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Demand is $P = 120 - Q$, where $Q$ is total output, and production is free. Set your quantity; the rival best-responds. The two reaction lines cross at the equilibrium. Then flip to price competition and watch what happens.
+
+<ReactionCurve
+  client:visible
+  allowToggle
+  exhibit="Exhibit 1"
+  caption="Reaction curves in the quantity plane; toggle to price competition"
+  predict={{
+    question: 'Two firms, same product, no agreement. Roughly where do they end up?',
+    options: [{ key: 'mono', label: 'Splitting the monopoly output' }, { key: 'more', label: 'Producing more, earning less' }],
+    reveal: 'Each firm expands to grab a bigger share, so together they overproduce: 40 each, total 80, above the monopoly 60. Price falls to 40 and each earns 1600, short of half the monopoly 3600. Switch to prices and it gets starker.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Each firm treats the other's output as fixed and asks: given that, how much should I make? The answer is always a bit more than the cooperative share, because expanding steals revenue from the rival while only slightly lowering the price you get. Both reason this way, so both expand, and the extra output drags the price down for everyone. Under price competition the same logic is sharper: undercutting the rival by a penny wins the entire market, so both keep cutting until price equals cost.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Firm 1 chooses $q_1$ to maximize profit $(120 - q_1 - q_2)\,q_1$, taking $q_2$ as given. The first-order condition is
+
+$$
+120 - 2q_1 - q_2 = 0 \quad\Rightarrow\quad q_1 = \frac{120 - q_2}{2}.
+$$
+
+That is firm 1's reaction curve. By symmetry firm 2's is $q_2 = (120 - q_1)/2$. Solving both, or imposing $q_1 = q_2$, gives
+
+$$
+q_1 = q_2 = 40, \quad Q = 80, \quad P = 40, \quad \pi_1 = \pi_2 = 1600.
+$$
+
+A monopolist would set $Q = 60$, $P = 60$, and earn $3600$. The duopoly produces more and earns less in total, and as you add firms the price keeps falling toward marginal cost.
+
+<DefinitionAside label="the Bertrand paradox">
+If the same two firms compete on price with identical products and equal marginal cost $c$, the unique Nash equilibrium is $p_1 = p_2 = c$, with zero profit. Any price above cost invites the rival to undercut and take the whole market, so competition collapses margins entirely, even with just two firms. Differentiated products or capacity limits restore positive margins; the paradox is the homogeneous-goods benchmark.
+</DefinitionAside>
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Solve Cournot, then change the cost">
+Firm 1 maximizes $(120 - q_1 - q_2) q_1$. Differentiate in $q_1$ and set to zero: $120 - 2q_1 - q_2 = 0$. Impose symmetry $q_1 = q_2 = q$: $120 - 3q = 0$, so $q = 40$ and total output is $80$, price $40$, profit $40 \times 40 = 1600$ each.
+
+**Faded.** Now let marginal cost be $c = 30$. The condition becomes $120 - 2q_1 - q_2 - 30 = 0$, and with symmetry $90 - 3q = 0$, so $q = 30$ each. Higher cost, lower output.
+
+**Solo.** In the next lesson one firm gets to commit first. Guess: does moving first and committing to a large quantity help or hurt the leader?
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Competition on quantity lands between monopoly and cost; competition on price, with identical goods, drives all the way to cost. What firms choose to compete over shapes the outcome as much as how many of them there are.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="cournot-bertrand"
+  id="q1"
+  badge="apply"
+  question="At the Cournot equilibrium each firm makes 40, for a total of 80. A monopolist would make 60. What does the comparison show?"
+  options={[
+    { text: "The duopoly overproduces relative to monopoly, which lowers the price and their combined profit", correct: true, feedback: "Each firm expands to capture share, so together they exceed the monopoly output. Price falls to 40 and combined profit (3200) is below the monopoly 3600." },
+    { text: "Two firms behave just like a monopoly", feedback: "They produce 80, well above the monopoly 60. Rivalry pushes output up and price down." },
+    { text: "The duopoly restricts output below monopoly", feedback: "The opposite: 80 exceeds 60. Neither firm internalizes the harm its output does to the other's price." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="cournot-bertrand"
+  id="q2"
+  badge="analyse"
+  question="Two firms sell an identical product and compete on price, with the same marginal cost. What is the Nash equilibrium?"
+  options={[
+    { text: "Both price at marginal cost, earning zero profit", correct: true, feedback: "Any price above cost is undercut for the whole market, so the only stable prices are p = c. Two firms suffice to wipe out margins under Bertrand competition with identical goods." },
+    { text: "Both price at the monopoly level and split the profit", feedback: "Not stable: either firm gains by shaving its price a hair to take the entire market. Undercutting continues to cost." },
+    { text: "One firm prices high, the other low", feedback: "The high-priced firm sells nothing and would cut its price. The chase ends only when both sit at cost." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="cournot-bertrand"
+  id="q3"
+  badge="brings back: best response"
+  question="A firm's reaction curve slopes downward: the more the rival produces, the less it makes. Why?"
+  options={[
+    { text: "Because the rival's extra output lowers the price, so the best-responding firm scales back to avoid flooding the market", correct: true, feedback: "The reaction curve is the best-response function. More rival output means a lower price, which makes a large own quantity less attractive, so the best reply shrinks." },
+    { text: "Because firms always match each other's output", feedback: "They do not match; they best-respond. When the rival makes more, the best reply is to make less, not the same." },
+    { text: "Because higher rival output raises the firm's costs", feedback: "Costs are unchanged. What changes is the price the firm can get, which falls as total output rises." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["cournot1838", "bertrand1883", "gibbons1992"]} />

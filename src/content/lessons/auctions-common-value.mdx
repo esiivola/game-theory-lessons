@@ -1,0 +1,151 @@
+---
+title: "Common values and the winner's curse"
+tier: intermediate
+unit: 8
+unitName: "Incomplete information"
+order: 26
+kind: lesson
+summary: "When everyone wants the same unknown value, winning means you probably overbid."
+tags: ["auctions", "common-value", "winners-curse"]
+estMinutes: 6
+mvp: true
+prereqs: ["auctions-first-second-price", "bayesian-games"]
+concepts: ["common-value", "winners-curse", "auctions"]
+refs: ["wilson1969", "milgromWeber1982"]
+anchorEmoji: "🏺"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import WinnersCurse from '@/components/interactive/WinnersCurse.svelte';
+
+<div class="anchor"><span class="em">🏺</span><p>A jar of coins is passed around a room and everyone bids for it. The average guess is close to the true value, but the winning bid is far above it. The winner is not the best guesser. The winner is the one who overestimated the most.</p></div>
+
+# Common values and the winner's curse
+
+<p class="lead">In a private-value auction, your value is your own. In a common-value auction everyone wants the same thing, an oil lease, a spectrum license, a company, but nobody knows exactly what it is worth. Each bidder sees a noisy signal, and the mere fact that you won is bad news: it means your signal was probably too high.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In a second-price auction with private values, you should bid...", options: ["Below your value", "Your value", "Above your value"], answer: 1 },
+    { q: "Under incomplete information, a rational bidder best-responds to...", options: ["Their own signal only", "The distribution of others' signals", "The seller"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+The item has one true value, unknown to everyone. You see a noisy signal of it, and so does each rival. Bid, then see what it was really worth. Try adding more rivals.
+
+<WinnersCurse
+  client:visible
+  exhibit="Exhibit 1"
+  caption="A common-value auction; everyone sees a noisy signal"
+  predict={{
+    question: 'The more rivals you face, the more aggressive you should be. True or false?',
+    options: [{ key: 'higher', label: 'True: bid higher with more rivals' }, { key: 'lower', label: 'False: bid lower with more rivals' }],
+    reveal: 'False. More rivals means that winning requires beating more signals, so your winning signal is even more likely to be the highest, and the most inflated. You should bid lower, not higher, as the field grows.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Your signal is unbiased before you bid: on average it equals the true value. But condition on winning. You win when your signal is the highest of everyone's, and the highest of several unbiased signals sits above the truth. So among the times you actually win, your signal systematically overstated the value, and bidding it means overpaying. The cure is to bid as if you already know you have the highest signal, which means shading below it, and shading more the more rivals you face.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="common-value auction and the winner's curse">
+All bidders share the same unknown value; each sees a private signal correlated with it. A naive bidder who bids their unbiased signal overpays, because winning is correlated with having the highest, most optimistic signal. Correcting for this, bidders shade below their signal, and shade more as the number of rivals grows.
+</DefinitionAside>
+
+Take the wallet game: the prize is worth $t_1 + t_2$, where each $t_i$ is private and uniform on $[0,1]$. Suppose you have signal $t$. Conditional on winning, your signal is the higher of the two, so the other is uniform on $[0,t]$ with mean $t/2$. Then
+
+$$
+\mathbb{E}[\text{value} \mid \text{win}] = t + \tfrac{t}{2} = \tfrac{3t}{2},
+$$
+
+which is below the naive estimate that treats the rival's signal as an average draw. The symmetric second-price equilibrium bid is $b(t) = 2t$: it is set so that the bidder whose signal exactly ties yours is indifferent, not so that you break even on your own estimate. Bidding your raw signal, or worse the naive $t + \tfrac12$, is the curse.
+</Section>
+
+<Section id="reality">
+## A note from the real world
+
+<Callout kind="reality-check">
+The curse is not just a theorem; people fall for it. In classroom jar-of-coins auctions the winning bid routinely exceeds the true value, and inexperienced bidders in oil-lease and spectrum auctions have famously overpaid. Experienced bidders learn to shade, and to shade harder in a crowded field. The Behavioral unit returns to how bidders learn (or fail to learn) to escape the curse.
+</Callout>
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Condition on winning">
+You hold signal $t$ in the wallet game, value $t_1 + t_2$. Before bidding, your expectation of the rival's signal is $\tfrac12$, so the naive estimate of the value is $t + \tfrac12$. But you only win when your signal beats the rival's, which means the rival's signal is below $t$, uniform on $[0,t]$ with mean $t/2$. So conditional on winning, the value is $\tfrac{3t}{2}$, generally below $t + \tfrac12$ for the signals where you tend to win.
+
+The equilibrium bid $b(t) = 2t$ is pinned by indifference of the tying type, not by your own estimate: at a tie the two signals are equal, the value is $2t$, and the second price you would pay equals the rival's bid $2t$, leaving zero surplus exactly at the margin. Shade for the curse or you will pay above what winning reveals the item to be worth.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">When bidders share a common value, winning is bad news: your signal was the highest, so it overstated the prize. Shade below your signal, and shade more the more rivals you face.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="auctions-common-value"
+  id="q1"
+  badge="apply"
+  question="Your signal of a common value is unbiased. Why is bidding it a mistake?"
+  options={[
+    { text: "Because you win mainly when your signal is the highest, and the highest signal overstates the value", correct: true, feedback: "Winning is correlated with over-optimism. Conditional on winning, your signal is above the true value on average, so bidding it means overpaying. That is the winner's curse." },
+    { text: "Because signals are always too low", feedback: "Signals are unbiased before conditioning. The problem appears only once you condition on the event that you won." },
+    { text: "Because the seller sees your signal", feedback: "The seller does not see it, and that is not the issue. The curse comes from the correlation between winning and having the highest signal." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="auctions-common-value"
+  id="q2"
+  badge="analyse"
+  question="You move from 2 bidders to 8. What should happen to your bid, holding your signal fixed?"
+  options={[
+    { text: "It should fall, because winning against more rivals implies an even more inflated signal", correct: true, feedback: "With more rivals, winning means your signal beat more draws, so it is even more likely the highest and most optimistic. The curse deepens, so you shade more and bid lower." },
+    { text: "It should rise, to beat the extra competition", correct: false, feedback: "Bidding higher walks straight into the curse. More rivals make winning worse news about the value, so the correct response is to bid lower." },
+    { text: "It should not change; your signal is the same", feedback: "The signal is the same, but its meaning conditional on winning changes with the field size. More rivals call for more shading." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="auctions-common-value"
+  id="q3"
+  badge="brings back: auctions"
+  question="How does optimal bidding here differ from the private-value second-price auction you saw before?"
+  options={[
+    { text: "With private values, bidding your value is dominant; with a common value, you must shade below your signal to correct for the curse", correct: true, feedback: "The private-value logic (bid your value, since it does not affect the price you pay) breaks when winning itself carries information about the value. Common values require conditioning on winning and shading." },
+    { text: "Both cases call for bidding your signal or value truthfully", feedback: "Only the private-value second-price auction rewards truthful bidding. A common value makes winning informative, so you shade." },
+    { text: "Common-value auctions have no equilibrium", feedback: "They do have one (for the wallet game, b(t) = 2t). It just involves shading for the curse rather than bidding your signal." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["wilson1969", "milgromWeber1982"]} />

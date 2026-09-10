@@ -1,0 +1,147 @@
+---
+title: "Repeated games with imperfect monitoring"
+tier: intermediate
+unit: 7
+unitName: "Repeated games"
+order: 22
+kind: lesson
+summary: "When you see only a noisy signal, some punishment must fall on the innocent."
+tags: ["repeated-games", "imperfect-monitoring", "collusion"]
+estMinutes: 6
+mvp: true
+prereqs: ["repeated-games"]
+concepts: ["imperfect-monitoring", "green-porter", "repeated-games"]
+refs: ["greenPorter1984", "abreuPearceStacchetti1990"]
+anchorEmoji: "📉"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Monitoring from '@/components/interactive/Monitoring.svelte';
+
+<div class="anchor"><span class="em">📉</span><p>Members of a cartel cannot see each other's output. They see only the market price, and the price also moves with demand nobody controls. A low price might mean someone cheated, or it might just mean a slow quarter. How do you police a deal you cannot observe?</p></div>
+
+# Repeated games with imperfect monitoring
+
+<p class="lead">Grim trigger assumes you can tell when someone cheated. Often you cannot: you see a noisy signal that reflects both the other player's action and pure chance. Then punishment can no longer be reserved for real defections, and keeping cooperation alive means accepting that innocent players sometimes get punished too.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "Grim trigger punishes a defection by...", options: ["One round of retaliation", "Defecting forever after", "A fine"], answer: 1 },
+    { q: "Cooperation in the repeated PD needs players to be...", options: ["Impatient", "Patient enough", "Anonymous"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Both players intend to cooperate every round. But the only thing observed is a public signal, and noise can make it look bad even when nobody cheated. Set the noise and the punishment length, then run it.
+
+<Monitoring
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Both players cooperate; only a noisy signal is observed"
+  predict={{
+    question: 'To sustain cooperation under noise, should punishment be permanent or temporary?',
+    options: [{ key: 'forever', label: 'Permanent, to deter hardest' }, { key: 'temporary', label: 'Temporary, then forgive' }],
+    reveal: 'Temporary. Under grim trigger, noise alone eventually ends cooperation forever, destroying all value. A finite price war followed by a reset keeps cooperation alive, at the cost of occasional wars that no one actually caused.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+With noise, a bad signal does not prove anyone cheated. But if you never punish a bad signal, cheating becomes free, so some punishment must follow bad signals regardless of the cause. That means wars will sometimes strike honest players. Grim trigger takes this to the extreme: the first unlucky signal ends everything. The fix is to make punishment finite. You accept that occasional wars are the price of policing a deal you cannot see, and you forgive so cooperation can resume.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Suppose that in any cooperative round the public signal reads "bad" with probability $q$, even when both cooperated (a false alarm), and worse if someone defected. Under **grim trigger** (punish forever after one bad signal), the relationship survives only until the first false alarm. Since a false alarm arrives with probability $q$ each round, it is essentially certain eventually, so cooperation collapses to zero.
+
+A **trigger-and-forgive** strategy punishes for $T$ rounds after a bad signal, then resets. The long-run fraction of time spent cooperating is
+
+$$
+\text{coop fraction} = \frac{1}{1 + qT},
+$$
+
+which is positive for finite $T$ and falls as noise $q$ or punishment length $T$ rise.
+
+<DefinitionAside label="imperfect public monitoring (Green-Porter)">
+Players observe only a public signal correlated with the profile of actions, not the actions themselves. On the equilibrium path, punishments must be triggered by signals, so they sometimes fire when no one deviated. Sustaining cooperation requires accepting these on-path punishment phases; the optimal ones are finite and forgiving, not permanent.
+</DefinitionAside>
+
+Observed price wars are therefore not proof of cheating. In the Green-Porter model, cartels endure recurring price wars that nobody chose, set off by low prices that only looked like betrayal.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Why grim fails, and forgiveness saves value">
+Let the false-alarm rate be $q = 0.1$. Under grim trigger, cooperation ends the first time the signal reads bad. The chance of surviving $n$ rounds is $0.9^n$, which decays toward zero, so cooperation almost surely collapses and stays collapsed. All the value is lost to a punishment that punishes no one in particular.
+
+Now use trigger-and-forgive with $T = 4$. The cooperative fraction is $1/(1 + 0.1\times 4) = 1/1.4 \approx 0.71$. Wars still happen, about once every ten cooperative rounds, and last four rounds each, but the relationship recovers every time. A little forgiveness converts a doomed relationship into a mostly cooperative one.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">When you can only see a noisy signal, punishment must sometimes fall on the innocent. Permanent punishment destroys the relationship; finite, forgiving punishment sustains cooperation with occasional wars no one caused.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="imperfect-monitoring"
+  id="q1"
+  badge="apply"
+  question="Under noisy monitoring, why does grim trigger destroy a cooperative relationship?"
+  options={[
+    { text: "A false-alarm bad signal is eventually certain, and grim trigger reacts by defecting forever", correct: true, feedback: "Noise guarantees a bad signal will eventually appear even with no cheating. Grim trigger treats it as betrayal and ends cooperation permanently, wiping out all future value." },
+    { text: "Because players stop being patient", feedback: "Patience is unchanged. The problem is that permanent punishment is triggered by an inevitable false alarm." },
+    { text: "Because the signal is always wrong", feedback: "The signal is only sometimes wrong. Even a small false-alarm rate is enough to doom grim trigger, since one bad draw ends everything." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="imperfect-monitoring"
+  id="q2"
+  badge="analyse"
+  question="You observe a price war between two firms. What can you conclude about whether someone cheated?"
+  options={[
+    { text: "Not much: under imperfect monitoring, wars occur on the equilibrium path even when both firms cooperated", correct: true, feedback: "In the Green-Porter model punishment phases are triggered by low prices, which noise can cause on its own. A war is consistent with honest cooperation plus bad luck." },
+    { text: "Someone definitely defected", feedback: "Not necessarily. The whole point is that noise sets off wars that no defection caused. Observing a war is not evidence of cheating." },
+    { text: "The firms are not in equilibrium", feedback: "Recurring wars are part of the equilibrium here, not a sign it has broken down." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="imperfect-monitoring"
+  id="q3"
+  badge="brings back: repeated games"
+  question="Compared with the perfect-monitoring case, why must punishments happen on the equilibrium path here?"
+  options={[
+    { text: "Because punishment can only be conditioned on the noisy signal, so to deter cheating at all it must sometimes fire when no one cheated", correct: true, feedback: "With perfect monitoring you punish only observed defections, which never occur in equilibrium. With only a noisy signal, deterrence requires punishing bad signals, and those arrive by chance, so wars occur even on the cooperative path." },
+    { text: "Because players enjoy punishing each other", feedback: "Punishment is costly to both; no one enjoys it. It happens because it must be tied to the only thing observed, the noisy signal." },
+    { text: "Because the discount factor is too low", feedback: "The issue is not patience but observability. Even patient players must punish noisy signals, so on-path wars are unavoidable." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["greenPorter1984", "abreuPearceStacchetti1990"]} />

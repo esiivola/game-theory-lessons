@@ -1,0 +1,110 @@
+---
+title: "Dominant and dominated strategies"
+tier: basic
+unit: 2
+unitName: "Static solution concepts"
+order: 4
+kind: lesson
+summary: "A move that wins no matter what the other player does."
+tags: ["solution-concepts"]
+estMinutes: 5
+mvp: true
+prereqs: ["what-is-a-game", "rationality"]
+concepts: ["dominance"]
+refs: ["gibbons1992", "osborne2004"]
+anchorEmoji: "📣"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import PayoffMatrix from '@/components/interactive/PayoffMatrix.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+
+<div class="anchor"><span class="em">📣</span><p>Two firms decide whether to run an expensive ad campaign. Sometimes one choice pays more than the other no matter what the rival does. When that happens, the decision makes itself.</p></div>
+
+# Dominant and dominated strategies
+
+<p class="lead">A strategy is <span class="in-acc">dominant</span> when it beats your alternatives against every move the other player could make. Its opposite, a strictly <span class="in-def">dominated</span> strategy, should never be played, and spotting one shrinks the game.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In the payoff table, whose number comes first in each cell?", options: ["The other player's", "Yours", "The larger one"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="read">
+## Find the move that always wins
+
+<PayoffMatrix
+  client:visible
+  mode="read"
+  exhibit="Exhibit 1"
+  caption="Profit (you, them)"
+  rows={[{ key: 'A', label: 'You advertise' }, { key: 'N', label: 'You do not' }]}
+  cols={[{ key: 'A', label: 'They advertise' }, { key: 'N', label: 'They do not' }]}
+  payoffs={{ A: { A: [3, 3], N: [6, 1] }, N: { A: [1, 6], N: [4, 4] } }}
+/>
+
+Sweep across the top row of your two options. If they advertise, you get 3 from advertising versus 1 from not. If they do not, you get 6 versus 4. Advertising wins in both columns.
+
+<WorkedExample title="Eliminate the dominated move">
+For you, advertising beats not-advertising in every column ($3>1$ and $6>4$), so "do not advertise" is strictly dominated and can be crossed out. By symmetry the same holds for them. What remains is a single cell, $(\text{advertise}, \text{advertise})$, paying $(3,3)$, even though both would prefer the $(4,4)$ they reach by staying quiet. Sound familiar? That tension returns in the next unit.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">If one of your moves is at least as good against everything and strictly better against something, take it and never look back. If a move is dominated, delete it.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="dominance"
+  id="q1"
+  badge="apply"
+  question="In the table above, which is your dominant strategy?"
+  options={[
+    { text: "Advertise", correct: true, feedback: "It pays more than not-advertising in every column (3 vs 1, and 6 vs 4), so it is dominant." },
+    { text: "Do not advertise", feedback: "That move loses in both columns, so it is dominated, not dominant." },
+    { text: "It depends on what they do", feedback: "That is what makes it dominant: the answer does not depend on their choice." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="dominance"
+  id="q2"
+  badge="concept"
+  question="You eliminate strictly dominated strategies one by one. Does the order you remove them change the final result?"
+  options={[
+    { text: "No, for strict dominance the outcome is the same whatever the order", correct: true, feedback: "Iterated elimination of strictly dominated strategies is order-independent. Weak dominance is the case where order can matter." },
+    { text: "Yes, always", feedback: "Not for strict dominance. You may be thinking of weak dominance, where order can matter." },
+    { text: "Only in games with three or more players", feedback: "Player count is not the issue; strictness is." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="dominance"
+  id="q3"
+  badge="brings back: what is a game"
+  question="In the cell (advertise, advertise) = (3, 3), what does the first number mean?"
+  options={[
+    { text: "Your payoff", correct: true, feedback: "By convention the first number in each cell is the row player's payoff, which is you. Reading the table correctly is what let you spot the dominant move." },
+    { text: "The other player's payoff", feedback: "The second number is theirs. The first is always yours, the row player." },
+    { text: "The combined payoff", feedback: "Cells list each player separately, yours then theirs, not a total." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["gibbons1992", "osborne2004"]} />

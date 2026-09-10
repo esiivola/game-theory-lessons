@@ -1,0 +1,139 @@
+---
+title: "The nucleolus"
+tier: expert
+unit: 13
+unitName: "Cooperative game theory"
+order: 44
+kind: lesson
+summary: "Make the biggest complaint as small as possible, then the next, and so on."
+tags: ["cooperative", "nucleolus", "fairness"]
+estMinutes: 6
+mvp: true
+prereqs: ["coalitional-games", "shapley-value"]
+concepts: ["nucleolus", "excess", "bankruptcy"]
+refs: ["schmeidler1969", "aumannMaschler1985"]
+anchorEmoji: "📜"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Nucleolus from '@/components/interactive/Nucleolus.svelte';
+
+<div class="anchor"><span class="em">📜</span><p>An estate cannot cover everyone's claims. The Talmud, two thousand years before game theory, prescribed divisions that looked ad hoc for centuries. They turn out to be exactly the nucleolus: the split that makes the most aggrieved party as content as possible.</p></div>
+
+# The nucleolus
+
+<p class="lead">When the core is empty, no allocation is unblockable, so stability alone cannot choose. The nucleolus picks the allocation that minimizes the largest complaint, then, among those, the next-largest, and so on. It always exists, is unique, and reconstructs a famous ancient bankruptcy rule.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A coalition's excess at an allocation is what it could get minus...", options: ["Its Shapley value", "What it is offered", "The grand-coalition value"], answer: 1 },
+    { q: "The Shapley value divides by averaging each player's...", options: ["Complaints", "Marginal contributions", "Core payoffs"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+A three-player majority game: any two players can seize the whole prize, so the core is empty. Adjust the split and watch the coalition complaints. Try to shrink the worst one.
+
+<Nucleolus
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Minimize the largest complaint in the majority game"
+  predict={{
+    question: 'In this symmetric majority game, which split minimizes the largest complaint?',
+    options: [{ key: 'winner', label: 'Give it all to two players' }, { key: 'equal', label: 'Split it equally three ways' }],
+    reveal: 'Split equally: (1/3, 1/3, 1/3). Any pair that is short complains by whatever the excluded player holds, so equalizing shares makes the largest complaint as small as possible. Here the nucleolus coincides with the Shapley value; in lopsided games they differ.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+With an empty core, someone always has a grievance: every pair could have grabbed the whole prize, so any pair that is underpaid feels cheated. The nucleolus does not try to eliminate complaints (impossible here) but to be as fair as possible about them, shrinking the loudest one first. In a symmetric game that means treating everyone alike, so the equal split leaves the biggest complaint smallest. Push any share up and some pair's complaint grows.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="the nucleolus">
+For an allocation $x$, each coalition $S$ has an excess $e(S, x) = v(S) - \sum_{i \in S} x_i$, its complaint. Sort all excesses from largest to smallest. The nucleolus is the allocation that lexicographically minimizes this sorted vector: first minimize the largest excess, then among ties the next, and so on. It always exists, is unique, and lies in the core whenever the core is nonempty.
+</DefinitionAside>
+
+In the majority game, $v(S) = 1$ for any coalition of two or more. For a pair $\{i,j\}$ the excess is $1 - (x_i + x_j) = x_k$, the share of the excluded player. To minimize the largest such excess is to minimize $\max_k x_k$, which by symmetry and efficiency ($x_1 + x_2 + x_3 = 1$) is achieved at $(\tfrac13, \tfrac13, \tfrac13)$.
+
+The Talmud connection: for claims $(100, 200, 300)$ against an estate of $200$, the Talmud prescribes $(50, 75, 75)$, which is exactly the nucleolus of the associated bankruptcy game. Aumann and Maschler showed the ancient rule and the nucleolus agree across all the Talmud's cases.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Minimize the worst complaint">
+In the majority game a pair's complaint equals the excluded player's share: the pair could have taken the whole $1$ but got $1 - x_k$, so its excess is $x_k$. The three pairwise complaints are therefore $x_1$, $x_2$, and $x_3$. The largest is $\max(x_1, x_2, x_3)$.
+
+Minimizing that maximum, subject to $x_1 + x_2 + x_3 = 1$, forces the shares equal: $(\tfrac13, \tfrac13, \tfrac13)$, where the largest complaint is $\tfrac13$. Any deviation raises some share above $\tfrac13$, increasing the worst complaint. So the nucleolus is the equal split, which here matches the Shapley value because the game is symmetric. In asymmetric games, such as the Talmud estate, the nucleolus and Shapley value diverge.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">The nucleolus minimizes the largest complaint, then the next, giving a unique division even when the core is empty. It reconstructs the Talmud's bankruptcy rule, and coincides with the Shapley value only in symmetric games.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="nucleolus"
+  id="q1"
+  badge="apply"
+  question="In the majority game, why is the equal split the nucleolus?"
+  options={[
+    { text: "Each pair's complaint equals the excluded player's share, so minimizing the largest complaint means equalizing shares", correct: true, feedback: "A pair could take the whole 1, so its excess is what it does not get, the third player's share. Making the biggest such share as small as possible gives (1/3, 1/3, 1/3)." },
+    { text: "Because the core says so", feedback: "The core is empty here, so it selects nothing. The nucleolus is precisely the tool for that case, and it gives the equal split." },
+    { text: "Because equal splits are always the nucleolus", feedback: "Only in symmetric games. In asymmetric ones, like the Talmud estate, the nucleolus is unequal." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="nucleolus"
+  id="q2"
+  badge="analyse"
+  question="What advantage does the nucleolus have over the core here?"
+  options={[
+    { text: "It always exists and is unique, even when the core is empty", correct: true, feedback: "The core can be empty (as in this majority game), leaving stability silent. The nucleolus is guaranteed to exist and be a single allocation, and it sits in the core whenever the core is nonempty." },
+    { text: "It resists all coalitional blocking", feedback: "When the core is empty, no allocation resists all blocking, including the nucleolus. Its value is existence and uniqueness, not immunity from blocking." },
+    { text: "It is easier to compute than the Shapley value", feedback: "The nucleolus is generally harder to compute (a sequence of linear programs), not easier. Its appeal is conceptual: minimizing the worst complaint." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="nucleolus"
+  id="q3"
+  badge="brings back: Shapley value"
+  question="The nucleolus and the Shapley value both gave (1/3,1/3,1/3) here. Do they always agree?"
+  options={[
+    { text: "No: they coincide in symmetric games but generally differ, as in the Talmud bankruptcy example", correct: true, feedback: "Symmetry forces both to the equal split here. In asymmetric games they diverge: the nucleolus minimizes complaints, the Shapley value averages marginal contributions, and these are different principles." },
+    { text: "Yes, they are always identical", feedback: "They are distinct solution concepts. Agreement here is due to symmetry, not a general rule." },
+    { text: "No, they never agree", feedback: "They can agree, as this symmetric game shows. They just are not guaranteed to in general." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["schmeidler1969", "aumannMaschler1985"]} />

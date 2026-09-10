@@ -1,0 +1,143 @@
+---
+title: "Sequential equilibrium and refinements"
+tier: expert
+unit: 11
+unitName: "Refinements and epistemics"
+order: 33
+kind: lesson
+summary: "Small mistakes weed out equilibria that lean on moves no one would ever risk."
+tags: ["refinements", "sequential-equilibrium", "trembling-hand"]
+estMinutes: 6
+mvp: true
+prereqs: ["subgame-perfection", "perfect-bayesian-equilibrium"]
+concepts: ["sequential-equilibrium", "trembling-hand", "refinements"]
+refs: ["krepsWilson1982", "selten1975"]
+anchorEmoji: "🫨"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Tremble from '@/components/interactive/Tremble.svelte';
+
+<div class="anchor"><span class="em">🫨</span><p>Some equilibria are stable only because everyone is sure no one will ever slip. Allow for the smallest chance of a mistake, a trembling hand, and those equilibria fall apart, leaving the ones that would survive a real world of fumbles.</p></div>
+
+# Sequential equilibrium and refinements
+
+<p class="lead">Nash equilibrium, and even subgame perfection, can bless outcomes propped up by weakly dominated play that is never tested on the equilibrium path. Refinements ask more: an equilibrium should survive if players tremble, making each action with tiny probability by mistake. That extra demand throws out the equilibria that were only ever bluff.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "Subgame perfection requires optimal play at every...", options: ["Information set with beliefs", "Proper subgame", "Terminal node"], answer: 1 },
+    { q: "Perfect Bayesian equilibrium adds, to strategies, a specification of...", options: ["Payoffs", "Beliefs at information sets", "The prior only"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+A pure coordination game: only (Top, Left) pays anything, $(1,1)$; every other cell pays $(0,0)$. There are two Nash equilibria, $(T,L)$ and $(B,R)$. Test each under a small tremble.
+
+<Tremble
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Two Nash equilibria; only one survives a trembling hand"
+  predict={{
+    question: 'Does the equilibrium (Bottom, Right) survive if each player might slip with tiny probability?',
+    options: [{ key: 'yes', label: 'Yes, it is a Nash equilibrium' }, { key: 'no', label: 'No, it collapses' }],
+    reveal: 'No. If the other player might slip to Left, Top earns you a little while Bottom earns nothing, so you switch to Top. (Bottom, Right) was held up only because Left and Top were never expected to happen. (Top, Left) survives.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+In $(B,R)$ both players choose an action that only pays off in cells that never occur, so nothing punishes them for it, and it counts as a Nash equilibrium. But the moment you admit the other side might tremble to Left, your Top action starts to earn something ($1$ in the rare Left column) while Bottom still earns nothing. So you strictly prefer Top, and $(B,R)$ unravels. The tremble tests actions that the equilibrium path would otherwise leave untested.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+In the game, $(B,R)$ is a Nash equilibrium only weakly: given the other plays Right, Bottom and Top both pay $0$, so Bottom is a best response but not a strict one, and it is weakly dominated by Top (which pays $1$ against Left and $0$ against Right). Introduce a tremble: the column player intends Right but plays Left with probability $\varepsilon$. Then Row earns $\varepsilon\cdot 1 = \varepsilon$ from Top and $0$ from Bottom, so for any $\varepsilon > 0$ Row strictly prefers Top, and $(B,R)$ is not robust.
+
+<DefinitionAside label="trembling-hand and sequential equilibrium">
+A trembling-hand perfect equilibrium is a limit, as the trembles vanish, of equilibria of perturbed games in which every action is played with strictly positive probability. Sequential equilibrium requires a strategy profile and beliefs that are the limit of totally-mixed (fully trembling) behavior, so beliefs are consistent even off the path. The refinements nest: every Nash equilibrium need not be subgame perfect, every subgame-perfect one need not be sequential, and
+
+$$
+\text{Nash} \supseteq \text{subgame-perfect} \supseteq \text{sequential} \supseteq \text{trembling-hand} \supseteq \text{proper}.
+$$
+</DefinitionAside>
+
+Sequential equilibrium and PBE usually agree, but not always: sequential equilibrium's consistency requirement on off-path beliefs is stronger, ruling out belief systems PBE would permit (Selten's Horse is the classic separating example).
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Break the weak equilibrium with a tremble">
+Take $(B,R)$. Given Right, Row is indifferent between Top and Bottom (both pay $0$), so Bottom is only a weak best response. Now let the column player tremble to Left with probability $\varepsilon > 0$. Row's payoff to Top becomes $\varepsilon\cdot 1 + (1-\varepsilon)\cdot 0 = \varepsilon$; to Bottom it stays $0$. Since $\varepsilon > 0$, Top is strictly better, so Row abandons Bottom and $(B,R)$ fails trembling-hand perfection.
+
+Now $(T,L)$. Given Left trembling to Right with probability $\varepsilon$, Top pays $1-\varepsilon$ and Bottom pays $0$, so Top is strictly best; symmetrically Left is strictly best for the column player. $(T,L)$ survives every small tremble, so it is the trembling-hand perfect (and only sensible) equilibrium.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Refinements keep only the equilibria that survive small mistakes. An equilibrium resting on a weakly dominated action, tested only by a tremble that "never happens", is exactly the kind these rules discard.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="sequential-equilibrium"
+  id="q1"
+  badge="apply"
+  question="Why does (Bottom, Right) fail once trembles are allowed?"
+  options={[
+    { text: "Bottom is weakly dominated by Top, so any chance the opponent plays Left makes Top strictly better", correct: true, feedback: "Under Right the two actions tie, but Top also pays 1 against Left while Bottom pays 0. A positive tremble to Left breaks the tie in Top's favour, so Bottom is abandoned." },
+    { text: "Because (Bottom, Right) is not a Nash equilibrium", feedback: "It is a Nash equilibrium (weakly). The point is that it fails the stronger trembling-hand test, not that it fails Nash." },
+    { text: "Because trembles change the payoffs of the game", feedback: "Payoffs are unchanged. Trembles only put positive probability on every action, which tests weakly dominated moves." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="sequential-equilibrium"
+  id="q2"
+  badge="analyse"
+  question="Which ordering of solution concepts is correct, from most permissive to most selective?"
+  options={[
+    { text: "Nash contains subgame-perfect contains sequential contains trembling-hand perfect", correct: true, feedback: "Each refinement is a subset of the previous: they impose more, so they keep fewer equilibria. Nash is the loosest, trembling-hand (and proper) the tightest." },
+    { text: "Trembling-hand perfect contains Nash", feedback: "The reverse: trembling-hand perfection is more selective, a subset of Nash, not a superset." },
+    { text: "Subgame-perfect contains Nash", feedback: "Nash contains subgame-perfect, not the other way around. Subgame perfection rules out some Nash equilibria." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="sequential-equilibrium"
+  id="q3"
+  badge="brings back: subgame perfection"
+  question="Why is subgame perfection not enough to rule out (Bottom, Right) here?"
+  options={[
+    { text: "This simultaneous game has no proper subgames beyond the whole game, so subgame perfection cannot bite; you need a belief- or tremble-based refinement", correct: true, feedback: "Subgame perfection only tests proper subgames, and a one-shot simultaneous game has none to test. Sequential and trembling-hand refinements reach inside with beliefs and trembles to discard the weak equilibrium." },
+    { text: "Subgame perfection already rules it out", feedback: "It does not: with no proper subgame to check, subgame perfection coincides with Nash here and keeps (Bottom, Right)." },
+    { text: "Because subgame perfection ignores payoffs", feedback: "It uses payoffs, but only within proper subgames. Here there are none beyond the whole game, so it has no extra grip." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["krepsWilson1982", "selten1975"]} />

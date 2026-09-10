@@ -1,0 +1,139 @@
+---
+title: "Price of anarchy and Braess's paradox"
+tier: expert
+unit: 16
+unitName: "Algorithmic game theory"
+order: 54
+kind: lesson
+summary: "Selfish routing wastes at most a third, and adding a road can make everyone slower."
+tags: ["algorithmic", "price-of-anarchy", "braess"]
+estMinutes: 6
+mvp: true
+prereqs: ["congestion-games"]
+concepts: ["price-of-anarchy", "braess-paradox", "selfish-routing"]
+refs: ["roughgardenTardos2002", "braess1968"]
+anchorEmoji: "🛣️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Routing from '@/components/interactive/Routing.svelte';
+
+<div class="anchor"><span class="em">🛣️</span><p>A city builds a new road to ease traffic, and traffic gets worse. This is not a mistake in the asphalt; it is a theorem. Selfish drivers, each taking the fastest route, can be led by a new option into a jam that hurts everyone.</p></div>
+
+# Price of anarchy and Braess's paradox
+
+<p class="lead">Equilibrium does not mean efficient. The price of anarchy measures how much selfish behaviour costs compared with a coordinated optimum. For traffic with linear costs the waste is capped at a third, but the direction of "improvement" can be counterintuitive: removing options sometimes helps, and adding them can hurt.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In a congestion game, a driver's cost rises with the number of...", options: ["Roads", "Users sharing the road", "Cities"], answer: 1 },
+    { q: "A Nash equilibrium of a routing game is generally...", options: ["Socially optimal", "Not always optimal", "Impossible"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Two demonstrations. Braess: four thousand drivers on two routes, then add a zero-cost shortcut. Pigou: measure how much selfish routing wastes.
+
+<Routing
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Braess paradox and the Pigou price of anarchy"
+  predict={{
+    question: 'You add a fast, free shortcut to the road network. What happens to everyone\'s travel time?',
+    options: [{ key: 'down', label: 'It falls, more options help' }, { key: 'up', label: 'It can rise' }],
+    reveal: 'It rises. Before the shortcut, traffic splits and each driver takes 65 minutes. The shortcut tempts everyone onto the two congestible segments at once, pushing travel time to 80. Adding a road made everyone slower: Braess\'s paradox.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Each driver chases their own fastest route, ignoring the delay they add to others. The free shortcut looks individually attractive, so everyone floods onto it, overloading the congestible segments it connects. At the new equilibrium no one can improve alone, yet all are worse off than before the road existed. The gap between what selfish play produces and what coordination could achieve is the price of anarchy, and Braess shows adding options can widen it.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="price of anarchy">
+The price of anarchy is the ratio of the total cost at the worst Nash equilibrium to the cost of the socially optimal outcome. It measures the inefficiency of selfish behaviour. For routing with affine (linear) cost functions, Roughgarden and Tardos proved the price of anarchy is at most $4/3$: selfish routing is never more than a third worse than optimal.
+</DefinitionAside>
+
+**Pigou.** One unit of traffic chooses between a fixed link (cost $1$) and a congestible link (cost equal to its load). Selfishly, everyone takes the congestible link (cost $1$, tied with the fixed one) for total cost $1$. The optimum splits traffic in half, giving total cost $\tfrac12(1) + \tfrac12(\tfrac12) = 0.75$. The price of anarchy is $1 / 0.75 = 4/3$.
+
+**Braess.** Four thousand drivers, two routes each costing $\tfrac{x}{100} + 45$. Before any shortcut, traffic splits $2000/2000$, so each pays $\tfrac{2000}{100} + 45 = 65$. Add a zero-cost shortcut linking the two congestible halves: every driver now takes both congestible segments, and at equilibrium each pays $\tfrac{4000}{100} + \tfrac{4000}{100} = 80 > 65$. The extra road made the equilibrium worse.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Pigou's 4/3 and Braess's 65 to 80">
+**Pigou.** With load $f$ on the congestible link, total cost is $(1-f)\cdot 1 + f\cdot f$. Selfish drivers push $f$ to $1$ (the congestible link never looks worse than the fixed one to an individual), giving cost $1$. Minimizing $(1-f) + f^2$ gives $f = \tfrac12$ and cost $0.75$. Ratio $4/3$.
+
+**Braess.** Before: each route carries 2000, cost $2000/100 + 45 = 65$. After the shortcut, the dominant route for each driver uses two congestible segments each carrying all 4000, so each driver's time is $40 + 40 = 80$. Checking it is an equilibrium: deviating to an old pure route would cost $40 + 45 = 85 > 80$, so no one leaves. The free road raised everyone's time from 65 to 80.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Selfish routing is inefficient but boundedly so: with linear costs the price of anarchy is at most 4/3. Yet adding a road can make an equilibrium strictly worse for everyone, which is Braess's paradox.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="price-of-anarchy"
+  id="q1"
+  badge="apply"
+  question="In the Pigou example, selfish routing costs 1 and the optimum costs 0.75. What is the price of anarchy?"
+  options={[
+    { text: "4/3, the ratio of the selfish cost to the optimum", correct: true, feedback: "Price of anarchy = Nash cost / optimum = 1 / 0.75 = 4/3. It quantifies how much worse selfish routing is than a coordinated split." },
+    { text: "0.75, the optimum cost", feedback: "0.75 is the optimum. The price of anarchy is the ratio to it, 1/0.75 = 4/3." },
+    { text: "1, since selfish routing is optimal", feedback: "Selfish routing is not optimal here; it costs 1 versus the optimum 0.75, a ratio of 4/3." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="price-of-anarchy"
+  id="q2"
+  badge="analyse"
+  question="Braess's paradox shows that adding a road raised travel time from 65 to 80. How is 80 an equilibrium?"
+  options={[
+    { text: "Given everyone else uses the shortcut, deviating to an old route costs 85, so no one wants to leave 80", correct: true, feedback: "Each driver's alternative (a pure old route) would take 40 + 45 = 85, worse than the 80 they get through the shortcut. So no unilateral switch helps, making 80 a Nash equilibrium, just a bad one." },
+    { text: "It is not an equilibrium; drivers keep switching", feedback: "It is a stable equilibrium: any deviation to an old route costs 85 > 80, so no one switches. The paradox is that this equilibrium is worse than before the road." },
+    { text: "Because the shortcut is congested and slow", feedback: "The shortcut itself is free; the problem is it funnels everyone onto the two congestible segments. No driver can do better by leaving, so 80 is an equilibrium." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="price-of-anarchy"
+  id="q3"
+  badge="brings back: congestion games"
+  question="Congestion games guarantee an equilibrium exists. What does this lesson add?"
+  options={[
+    { text: "That the guaranteed equilibrium can be inefficient, and that changing the network can move it for the worse", correct: true, feedback: "Existence and convergence (last lesson) do not imply efficiency. The price of anarchy bounds the inefficiency, and Braess shows adding options can push the equilibrium to a worse outcome." },
+    { text: "That congestion games have no equilibrium", feedback: "They always have a pure equilibrium. The new point is that it need not be efficient, and can worsen when the network changes." },
+    { text: "That best response never converges", feedback: "It does converge in potential games. The issue here is the quality of the equilibrium reached, not convergence." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["roughgardenTardos2002", "braess1968"]} />

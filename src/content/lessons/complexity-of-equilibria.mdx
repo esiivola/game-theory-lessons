@@ -1,0 +1,139 @@
+---
+title: "The complexity of equilibria"
+tier: expert
+unit: 16
+unitName: "Algorithmic game theory"
+order: 52
+kind: lesson
+summary: "A Nash equilibrium always exists, but finding one can be provably hard."
+tags: ["algorithmic", "complexity", "ppad"]
+estMinutes: 5
+mvp: true
+prereqs: ["existence-of-nash"]
+concepts: ["ppad", "sperner", "computational-complexity"]
+refs: ["daskalakis2009"]
+anchorEmoji: "🧭"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Sperner from '@/components/interactive/Sperner.svelte';
+
+<div class="anchor"><span class="em">🧭</span><p>Nash proved every game has an equilibrium. That is an existence theorem, not a recipe. For large games, actually computing an equilibrium can be as hard as searching a maze that you know has an exit but cannot shortcut to.</p></div>
+
+# The complexity of equilibria
+
+<p class="lead">Existence and computability are different questions. A Nash equilibrium is guaranteed, yet finding one is PPAD-complete, believed to require exponential effort in the worst case. The gap traces back to a combinatorial fact, Sperner's lemma, where a solution provably exists but locating it can mean a long walk.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "Nash's theorem guarantees a mixed equilibrium exists in every...", options: ["Zero-sum game only", "Finite game", "Two-player game only"], answer: 1 },
+    { q: "A problem being hard to solve is different from its solution...", options: ["Not existing", "Existing but being hard to find", "Being unique"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Sperner's lemma: color a triangle's corners 1, 2, 3, and color each edge midpoint with one of its two corner colors. However you do it, at least one small triangle uses all three colors.
+
+<Sperner
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Sperner's lemma: a panchromatic triangle always exists"
+  predict={{
+    question: 'Can you color the midpoints so that no small triangle uses all three colors?',
+    options: [{ key: 'yes', label: 'Yes, with the right coloring' }, { key: 'no', label: 'No, one always appears' }],
+    reveal: 'No. Sperner\'s lemma guarantees an odd number of fully three-colored triangles, so at least one always exists, whatever the coloring. Which one it is depends on your choices, and in large versions it can take a long search to locate.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The boundary coloring forces a kind of parity: as you trace the edges, the colors must switch in a way that leaves an odd number of complete triangles inside, so at least one must exist. That is a pure existence guarantee, with no shortcut to say where. The same structure underlies Nash: a fixed-point argument (Brouwer via Sperner) proves an equilibrium is there, but the proof gives no efficient way to find it. Existence and tractability are separate.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="PPAD and finding equilibria">
+PPAD is a complexity class for problems whose solutions are guaranteed to exist by a parity argument (an "end of a directed line"), like Sperner's lemma and Brouwer fixed points. Computing a Nash equilibrium of a general game is PPAD-complete: as hard as any problem in the class. This is strong evidence that no efficient (polynomial-time) algorithm exists, even though a solution is guaranteed. The special case of two-player zero-sum games is easy, solvable as a linear program.
+</DefinitionAside>
+
+The Lemke-Howson algorithm finds a two-player Nash equilibrium by pivoting along a path of almost-equilibria, exactly the "follow the directed line to its end" structure of PPAD. Savani and von Stengel constructed games forcing this path to be exponentially long. So the guarantee that the path ends (a solution exists) does not bound how far you must walk.
+
+The contrast with zero-sum games is sharp: there, the minimax value is a linear program, computable quickly. Difficulty appears only in general (non-zero-sum) games.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Existence without a shortcut">
+Try to two-color your way out of a panchromatic triangle in the interactive: fix the corners at 1, 2, 3 and set each midpoint to one of its allowed colors. Enumerate the four small triangles. No matter the choice, an odd number of them (so at least one) carry all three colors. You cannot avoid it, and there is no rule that names the winner without checking.
+
+Now scale up. In a finely subdivided triangle with millions of cells, the panchromatic triangle still exists, but finding it may require following a corridor of cells step by step, a walk that can be exponentially long. That is the essence of PPAD: the exit is guaranteed, the search is not cheap. Computing a Nash equilibrium inherits exactly this hardness.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">A Nash equilibrium always exists, but computing one is PPAD-complete, as hard as finding the guaranteed-but-hidden panchromatic triangle in Sperner's lemma. Zero-sum games are the easy exception, solvable as a linear program.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="complexity-of-equilibria"
+  id="q1"
+  badge="apply"
+  question="Nash's theorem says an equilibrium exists. What does PPAD-completeness add?"
+  options={[
+    { text: "That finding one is likely computationally hard, even though existence is guaranteed", correct: true, feedback: "Existence and efficient computation are separate. PPAD-completeness is strong evidence that no polynomial-time algorithm finds a Nash equilibrium of a general game, despite the guarantee that one is there." },
+    { text: "That the equilibrium might not exist", feedback: "Existence is never in doubt; Nash proved it. The hardness is about locating the equilibrium, not whether it exists." },
+    { text: "That the equilibrium is unique", feedback: "Complexity says nothing about uniqueness. It concerns how hard the guaranteed solution is to compute." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="complexity-of-equilibria"
+  id="q2"
+  badge="analyse"
+  question="Why is finding a two-player zero-sum equilibrium easy while general games are hard?"
+  options={[
+    { text: "Zero-sum equilibria are the solution of a linear program; general Nash equilibria are PPAD-complete", correct: true, feedback: "Minimax in zero-sum games reduces to linear programming, which is efficient. Non-zero-sum games lose that structure and inherit the PPAD hardness of fixed-point search." },
+    { text: "Zero-sum games have no equilibrium to find", feedback: "They do have equilibria (the minimax mixes). Those are just efficiently computable, unlike general Nash equilibria." },
+    { text: "General games have no equilibrium", feedback: "General finite games always have an equilibrium; it is finding it that is hard, not its existence." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="complexity-of-equilibria"
+  id="q3"
+  badge="brings back: existence of Nash"
+  question="How does Sperner's lemma connect to Nash's existence proof?"
+  options={[
+    { text: "Both guarantee a solution by a parity/fixed-point argument that is non-constructive: it proves existence without locating the object", correct: true, feedback: "Nash's proof uses a Brouwer fixed point, which Sperner's lemma makes combinatorial. The parity guarantee gives existence but no efficient search, which is exactly why computing equilibria is PPAD-complete." },
+    { text: "Sperner's lemma proves equilibria do not exist", feedback: "It proves a panchromatic triangle always exists, mirroring the guarantee that equilibria exist. It is about existence, not non-existence." },
+    { text: "They are unrelated results", feedback: "They are tightly linked: Sperner underlies the Brouwer fixed point behind Nash's theorem, and the shared parity structure defines PPAD." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["daskalakis2009"]} />

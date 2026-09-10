@@ -1,0 +1,144 @@
+---
+title: "Matching with contracts and design without money"
+tier: expert
+unit: 14
+unitName: "Matching and market design"
+order: 47
+kind: lesson
+summary: "Deferred acceptance gives strategy-proof school assignments where prices are not allowed."
+tags: ["matching", "school-choice", "market-design"]
+estMinutes: 6
+mvp: true
+prereqs: ["stable-matching"]
+concepts: ["school-choice", "strategy-proofness", "matching-with-contracts"]
+refs: ["hatfieldMilgrom2005", "abdulkadirogluSonmez2003"]
+anchorEmoji: "🏫"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import DeferredAcceptance from '@/components/interactive/DeferredAcceptance.svelte';
+
+<div class="anchor"><span class="em">🏫</span><p>Public schools cannot auction seats to the highest bidder. Families rank schools, schools have priorities, and a mechanism assigns seats. The old Boston system quietly punished families who ranked honestly. Deferred acceptance fixed that.</p></div>
+
+# Matching with contracts and design without money
+
+<p class="lead">Many important markets forbid prices: school seats, organ transplants, cadet postings. Deferred acceptance carries over from the marriage market to school choice, where it gives stable assignments and, crucially, makes honest ranking a dominant strategy for families. The same machinery extends to matching with contract terms.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "Deferred acceptance produces a matching with no...", options: ["Proposals", "Blocking pair", "Priorities"], answer: 1 },
+    { q: "A mechanism is strategy-proof if telling the truth is...", options: ["Risky", "A best response", "Forbidden"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Three students, three schools with one seat each. Students have preferences; schools have priority orders. Run student-proposing deferred acceptance.
+
+<DeferredAcceptance
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Student-proposing deferred acceptance for school choice"
+  aName="Students"
+  bName="Schools"
+  canSwap={false}
+  aPrefs={{ s1: ['A', 'B', 'C'], s2: ['A', 'C', 'B'], s3: ['B', 'A', 'C'] }}
+  bPrefs={{ A: ['s2', 's1', 's3'], B: ['s1', 's3', 's2'], C: ['s3', 's2', 's1'] }}
+  predict={{
+    question: 'Where does student-proposing deferred acceptance place the three students?',
+    options: [{ key: 'first', label: 'Everyone at their first choice' }, { key: 'da', label: 's2 to A, s1 to B, s3 to C' }],
+    reveal: 'Not everyone can get their first choice, since s1 and s2 both want A. Deferred acceptance resolves it by priority: A keeps s2, s1 moves to B (which prefers s1), and s3 ends at C. The result is stable, and honest ranking was each student\'s best move.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Two students want school A, but A has one seat and a priority order, so it keeps the higher-priority student and rejects the other, who then tries their next choice. That rejection cascades: the displaced student bumps someone at the next school, and so on, until everyone is placed with no lingering blocking pair. Because a student never loses a seat by aiming high first, listing schools in true order is always safe. The Boston mechanism lacked this property, so families had to strategize about where to rank popular schools.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="school choice and matching with contracts">
+Treat students as proposers and school priority orders as the receiving side's preferences. Student-proposing deferred acceptance yields a stable assignment (no student-school pair both prefer each other to their assignment) and is strategy-proof for students: truthful ranking is a dominant strategy. Matching with contracts (Hatfield-Milgrom) generalizes this: a "contract" bundles a partner with terms (a wage, a schedule), and under a substitutes condition a cumulative-offer process still produces a stable outcome, with auctions as a special case.
+</DefinitionAside>
+
+Run student-proposing DA. Round 1: $s_1 \to A$, $s_2 \to A$, $s_3 \to B$. School $A$ holds its higher priority $s_2$ and rejects $s_1$. Round 2: $s_1 \to B$; $B$ prefers $s_1$ to its current $s_3$, so it swaps, rejecting $s_3$. Round 3: $s_3 \to A$, rejected (A keeps $s_2$). Round 4: $s_3 \to C$, accepted. Final: $s_2 \to A$, $s_1 \to B$, $s_3 \to C$, a stable assignment.
+
+Contrast with TTC, which would maximize efficiency but can violate priorities. School districts that value respecting priorities (stability) choose DA; the choice between DA and TTC is a real design trade-off, not a matter of one dominating the other.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Trace the rejection chain">
+Students propose to their top schools: $s_1$ and $s_2$ both go to $A$, and $s_3$ goes to $B$. School $A$ ranks $s_2 > s_1$, so it tentatively holds $s_2$ and rejects $s_1$.
+
+$s_1$ now proposes to its second choice, $B$, which already holds $s_3$. Since $B$ ranks $s_1 > s_3$, it swaps to $s_1$ and rejects $s_3$. Displaced, $s_3$ proposes to $A$, which keeps $s_2$ and rejects it; then $s_3$ proposes to $C$, which accepts. The chain settles at $s_2 \to A$, $s_1 \to B$, $s_3 \to C$. Every student ranked honestly, and none could have done better by lying, which is exactly the property the old Boston mechanism lacked.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Deferred acceptance turns school choice into a stable, strategy-proof assignment where families can safely rank honestly. It generalizes to matching with contract terms, and it trades off against efficiency-first mechanisms like top trading cycles.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="matching-with-contracts"
+  id="q1"
+  badge="apply"
+  question="Both s1 and s2 rank school A first, but A has one seat. How does deferred acceptance resolve it?"
+  options={[
+    { text: "A keeps its higher-priority applicant (s2) and rejects s1, who then proposes to their next choice", correct: true, feedback: "The school holds the applicant it ranks higher and rejects the other, triggering a chain of further proposals until everyone is placed with no blocking pair." },
+    { text: "A admits both students", feedback: "A has a single seat, so it cannot hold both. It keeps the higher-priority student and rejects the other." },
+    { text: "s1 and s2 are both rejected", feedback: "One of them is held (the higher priority, s2). Only the lower-priority applicant is rejected and moves on." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="matching-with-contracts"
+  id="q2"
+  badge="analyse"
+  question="Why is it safe for a family to rank schools honestly under deferred acceptance?"
+  options={[
+    { text: "The mechanism is strategy-proof for students: no false ranking yields a better seat than the true ranking", correct: true, feedback: "Student-proposing DA is strategy-proof, so aiming high first never costs a student a seat they would otherwise keep. Honest ranking is a dominant strategy, unlike under the old Boston mechanism." },
+    { text: "Because schools ignore the students' rankings", feedback: "Schools use their own priorities, but the students' rankings determine where they propose. Honesty is safe because of strategy-proofness, not because rankings are ignored." },
+    { text: "Because every student gets their first choice", feedback: "Not every student does (s1 and s3 do not). Honesty is still optimal because misreporting cannot improve a student's assignment." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="matching-with-contracts"
+  id="q3"
+  badge="brings back: top trading cycles"
+  question="How does deferred acceptance for school choice differ from top trading cycles?"
+  options={[
+    { text: "DA respects school priorities (stability) but can be inefficient; TTC is efficient but can violate priorities", correct: true, feedback: "The two mechanisms optimize different goals. DA never leaves a justified-envy (blocking) pair, at some cost to efficiency; TTC guarantees Pareto efficiency but may place a student where a higher-priority student is denied. Districts choose based on which they value." },
+    { text: "They always produce the same assignment", feedback: "They can differ: DA prioritizes stability, TTC prioritizes efficiency, and these do not always coincide." },
+    { text: "TTC respects priorities and DA does not", feedback: "It is the reverse: DA respects priorities (stability), while TTC can violate them in pursuit of efficiency." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["hatfieldMilgrom2005", "abdulkadirogluSonmez2003"]} />

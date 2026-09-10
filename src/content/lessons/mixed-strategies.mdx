@@ -1,0 +1,179 @@
+---
+title: "Mixed strategies and mixed Nash"
+tier: basic
+unit: 2
+unitName: "Static solution concepts"
+order: 9
+kind: lesson
+summary: "When any fixed move loses, the answer is to be unpredictable, on purpose."
+tags: ["solution-concepts", "nash", "mixing"]
+estMinutes: 6
+mvp: true
+prereqs: ["pure-nash"]
+concepts: ["mixed-strategy", "nash-equilibrium", "best-response"]
+refs: ["osborne2004", "palaciosHuerta2003"]
+anchorEmoji: "🪙"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import PayoffMatrix from '@/components/interactive/PayoffMatrix.svelte';
+import MixedStrategy from '@/components/interactive/MixedStrategy.svelte';
+
+<div class="anchor"><span class="em">🪙</span><p>A penalty kick lasts a fraction of a second. The keeper cannot wait to see where the ball goes, so kicker and keeper are really choosing at the same time. If you always aim the same way, you will be read. What do you do?</p></div>
+
+# Mixed strategies and mixed Nash
+
+<p class="lead">Some games have no resting point in fixed moves. Matching Pennies is the clean case: you want to match, they want to differ, so whatever you settle on, one of you wants to jump. The way out is to stop choosing a move and start choosing the odds.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "At a Nash equilibrium, each player's move is a best reply to...", options: ["Their own payoff", "The other players' moves", "The average payoff"], answer: 1 },
+    { q: "A best response is the move that...", options: ["Pays the most against a given opponent choice", "Always pays the most", "The opponent least expects"], answer: 0 },
+  ]}
+/>
+</Section>
+
+<Section id="pure">
+## No fixed move is stable
+
+Two players each hide a coin as Heads or Tails. You win if the faces match; they win if the faces differ. Look for a cell where neither wants to move.
+
+<PayoffMatrix
+  client:visible
+  mode="nash"
+  exhibit="Exhibit 1"
+  caption="Matching Pennies, payoffs (you, them)"
+  rows={[{ key: 'H', label: 'You Heads', tone: 'neutral' }, { key: 'T', label: 'You Tails', tone: 'neutral' }]}
+  cols={[{ key: 'H', label: 'They Heads', tone: 'neutral' }, { key: 'T', label: 'They Tails', tone: 'neutral' }]}
+  payoffs={{ H: { H: [1, -1], T: [-1, 1] }, T: { H: [-1, 1], T: [1, -1] } }}
+/>
+
+Show the best responses. Yours and theirs never land on the same cell, so there is no pure-strategy Nash equilibrium. Chase this in circles and you will chase forever.
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Instead of a move, pick a probability. The slider sets how often you play Heads. The two lines show what the opponent expects to earn from Heads and from Tails against your mix. A sharp opponent will pick their better line and beat you there.
+
+<MixedStrategy
+  client:visible
+  exhibit="Exhibit 2"
+  caption="What your mix hands the opponent"
+  topLabel="Heads"
+  bottomLabel="Tails"
+  leftLabel="Heads"
+  rightLabel="Tails"
+  matrix={[[[1, -1], [-1, 1]], [[-1, 1], [1, -1]]]}
+  predict={{
+    question: 'You cannot be read only if the opponent has no move that beats you. What mix does that?',
+    options: [{ key: 'half', label: 'Half Heads, half Tails' }, { key: 'heads', label: 'Mostly Heads' }],
+    reveal: 'Anything but 50/50 leaves the opponent a profitable side to lean on. At 50/50 the two lines cross: both of their moves pay the same, so nothing they do gains. Drag to the crossing.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+You do not mix to protect yourself directly. You mix to leave the opponent with no reason to prefer one move over the other. Once Heads and Tails pay them exactly the same, they cannot exploit you, whatever they do. That is the whole trick: choose the odds that make the other side indifferent.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+A **mixed strategy** for player $i$ is a probability distribution over their pure strategies. In Matching Pennies, yours is a single number: the probability $p$ you play Heads.
+
+<DefinitionAside label="mixed-strategy Nash equilibrium">
+A profile of mixed strategies is a Nash equilibrium if each player's mix is a best response to the others'. A player who mixes between several moves must be **indifferent** among them: each move in the mix earns the same expected payoff, or they would drop the worse one.
+</DefinitionAside>
+
+Suppose the opponent plays Heads with probability $q$. Your expected payoff to Heads is $q(1) + (1-q)(-1) = 2q - 1$, and to Tails it is $q(-1) + (1-q)(1) = 1 - 2q$. For you to be willing to mix, these must be equal:
+
+$$
+2q - 1 = 1 - 2q \quad\Rightarrow\quad q = \tfrac{1}{2}.
+$$
+
+By symmetry your own mix is $p = \tfrac{1}{2}$. Note what pinned it down: your opponent's indifference sets *your* probability, not your own payoff. You are indifferent at the equilibrium; the mix is there to discipline them.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Matching Pennies, then a game where 50/50 is wrong">
+**Matching Pennies.** Set the opponent's Heads probability to $q$. Your Heads pays $2q-1$, your Tails pays $1-2q$. Equal at $q=\tfrac12$, so each of you plays $\tfrac12$, and the value of the game is $0$.
+
+**Battle of the Sexes.** Opera/Opera pays $(2,1)$, Football/Football pays $(1,2)$, mismatches pay $(0,0)$. To make the column player indifferent, set your Opera probability $p$ so that their Opera payoff equals their Football payoff: $p\cdot 1 = (1-p)\cdot 2$, giving $p = \tfrac{2}{3}$. So the mixing answer is not always 50/50. Here you lean toward your preferred outcome two-thirds of the time.
+
+**Solo.** In Chicken, two drivers head at each other. If both swerve they each get $6$; if both go straight they crash for $0$; if one holds firm while the other swerves, the bold driver gets $7$ and the timid one $2$. Pick your probability of going Straight to make the other driver indifferent between Swerve and Straight. Setting $6 - 4q = 7 - 7q$ gives Straight with probability $\tfrac{1}{3}$.
+</WorkedExample>
+</Section>
+
+<Section id="reality">
+## A note from the real world
+
+<Callout kind="reality-check">
+Equilibrium says mix to a precise fraction. Real people do not. In first plays of new games they lean on hunches and simple reasoning, not the exact indifference point, which is why crowds are predictable in ways theory says they should not be. The Behavioral unit picks this up with models of limited reasoning. Professionals under pressure, though, get close: penalty takers and keepers mix at rates strikingly near the theory (Palacios-Huerta, 2003).
+</Callout>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">You mix to make the other player indifferent, not to hedge yourself. At the equilibrium mix you are indifferent, and that is exactly why you cannot be exploited.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="mixed-strategies"
+  id="q1"
+  badge="apply"
+  question="At the mixed-strategy equilibrium of Matching Pennies, what is your expected payoff?"
+  options={[
+    { text: "Zero, you are indifferent between Heads and Tails", correct: true, feedback: "Both moves pay the same at the equilibrium mix, and by symmetry that common value is 0. You mix to hold the opponent in check, not to raise your own payoff." },
+    { text: "Positive, because mixing beats the opponent", feedback: "Mixing does not win you the game. It denies the opponent a way to win. In this symmetric game the value is 0 for both." },
+    { text: "It depends on which face you lean toward", feedback: "At the equilibrium you lean toward neither. Leaning is exactly what a sharp opponent would punish." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="mixed-strategies"
+  id="q2"
+  badge="analyse"
+  question="In Battle of the Sexes you play Opera two-thirds of the time. Why two-thirds and not one-half?"
+  options={[
+    { text: "Because the payoffs are not symmetric, so the indifference condition gives 2/3", correct: true, feedback: "The fraction is set by making the other player indifferent, and their payoffs are lopsided (2 versus 1). Solving p·1 = (1-p)·2 gives 2/3. Symmetric games like Matching Pennies happen to give 1/2." },
+    { text: "Because Opera is the better outcome, so you play it more", feedback: "Your own ranking does not set your mix. The other player's indifference does. It just happens to come out above one-half here." },
+    { text: "Because two-thirds is the average of the payoffs", feedback: "It is not an average of payoffs. It solves the opponent's indifference equation, which for these numbers lands at 2/3." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="mixed-strategies"
+  id="q3"
+  badge="brings back: dominance"
+  question="Before mixing, you should strip out any strictly dominated move. Why does that never remove part of a mixed equilibrium?"
+  options={[
+    { text: "Because a strictly dominated move earns less against every opponent choice, so it earns less against any mix too, and a best response never puts weight on it", correct: true, feedback: "A move that loses against every pure choice also loses against every blend of them, so it can carry no probability in a best response. Deleting it first is always safe." },
+    { text: "Because dominated moves are the ones you mix over", feedback: "The opposite. Dominated moves are exactly the ones a mixed best response gives zero weight." },
+    { text: "Because mixing changes which move is dominated", feedback: "Strict dominance is fixed by the payoffs; mixing does not change it. A strictly dominated move stays out of every best response." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["osborne2004", "palaciosHuerta2003"]} />

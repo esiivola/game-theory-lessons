@@ -1,0 +1,91 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
+import '@fontsource/gfs-didot';
+import 'katex/dist/katex.min.css';
+import '@/styles/global.css';
+import TopBar from '@/components/ui/TopBar.astro';
+import BottomNav from '@/components/ui/BottomNav.astro';
+import { siteConfig } from '@/config/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  active?: 'learn' | 'map' | 'progress' | 'about';
+  variant?: 'brand' | 'lesson';
+  lessonTitle?: string;
+  totalLessons?: number;
+}
+const {
+  title,
+  description = siteConfig.description,
+  active,
+  variant = 'brand',
+  lessonTitle = '',
+  totalLessons = 0,
+} = Astro.props;
+const fullTitle = title ? `${title} · ${siteConfig.title}` : siteConfig.title;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230A6F6A'/><text x='50' y='72' font-size='64' text-anchor='middle' fill='%23F4F1E8' font-family='Georgia,serif'>G</text></svg>" />
+    <script is:inline>
+      try {
+        var s = JSON.parse(localStorage.getItem('gt.progress.v1') || 'null');
+        var t = s && s.settings && s.settings.theme;
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <TopBar variant={variant} lessonTitle={lessonTitle} totalLessons={totalLessons} />
+    <main class="container" id="main">
+      <slot />
+    </main>
+    <BottomNav active={active} />
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      import { load, setTheme } from '@/lib/progress';
+      import { ringSvg } from '@/lib/ui';
+
+      const root = document.documentElement;
+      const order = ['system', 'light', 'dark'] as const;
+      const applyTheme = (t: string) => {
+        if (t === 'light' || t === 'dark') root.setAttribute('data-theme', t);
+        else root.removeAttribute('data-theme');
+      };
+      const toggle = document.getElementById('themeToggle');
+      toggle?.addEventListener('click', () => {
+        const cur = load().settings.theme;
+        const next = order[(order.indexOf(cur as any) + 1) % order.length];
+        setTheme(next);
+        applyTheme(next);
+        toggle.setAttribute('title', 'Theme: ' + next);
+      });
+
+      const pill = document.getElementById('topProg');
+      function renderProg() {
+        if (!pill) return;
+        const total = parseInt(pill.getAttribute('data-total') || '0', 10);
+        if (!total) return;
+        const p = load();
+        const done = Object.values(p.lessons).filter((l) => l && l.status === 'complete').length;
+        const ring = document.getElementById('topRing');
+        const frac = document.getElementById('topFrac');
+        if (ring) ring.innerHTML = ringSvg(done / total, 18);
+        if (frac) frac.textContent = done + '/' + total;
+        pill.hidden = false;
+      }
+      renderProg();
+      window.addEventListener('gt:progress', renderProg);
+    </script>
+  </body>
+</html>

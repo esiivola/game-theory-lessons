@@ -1,0 +1,145 @@
+---
+title: "Cheap talk"
+tier: intermediate
+unit: 9
+unitName: "Dynamic information and communication"
+order: 30
+kind: lesson
+summary: "Costless words can still inform, but the more biased the speaker, the less they convey."
+tags: ["cheap-talk", "communication", "information"]
+estMinutes: 6
+mvp: true
+prereqs: ["bayesian-games"]
+concepts: ["cheap-talk", "communication", "information-transmission"]
+refs: ["crawfordSobel1982"]
+anchorEmoji: "🗣️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import CheapTalk from '@/components/interactive/CheapTalk.svelte';
+
+<div class="anchor"><span class="em">🗣️</span><p>An analyst who wants you to invest tells you the outlook is bright. The words cost nothing, and you know the analyst is biased. Should you ignore the message entirely? Not quite. Even a slanted source can tell you something, up to a point.</p></div>
+
+# Cheap talk
+
+<p class="lead">Signaling worked because the signal was costly. Here messages are free: an expert can say anything. You might think free words carry no information, but they can, partially. How much gets through depends on how far the expert's interests diverge from yours.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A signal is credible in Spence's model because it is...", options: ["Costless", "Differentially costly across types", "Legally binding"], answer: 1 },
+    { q: "A biased expert and a decision-maker who disagree about the ideal action will find communication...", options: ["Impossible always", "Limited by how large the bias is", "Perfect if messages are free"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+An expert privately knows a state between 0 and 1 and sends a message; you then pick an action. You want to match the state; the expert wants you to pick a bit higher, by a bias $b$. Move the bias and watch how finely the expert can credibly speak.
+
+<CheapTalk
+  client:visible
+  exhibit="Exhibit 1"
+  caption="How much a biased expert can credibly convey"
+  predict={{
+    question: 'As the expert becomes more biased, what happens to how much it can credibly tell you?',
+    options: [{ key: 'shift', label: 'Same information, just shifted up' }, { key: 'less', label: 'Less information gets through' }],
+    reveal: 'Less. A small bias still allows coarse but real information: the expert can credibly say which region the state is in. As the bias grows the regions get coarser, and past b = 1/4 talk collapses to babbling, no information at all.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The expert cannot lie freely and still be believed: you know the bias and discount accordingly. But if the expert only has to place the state in a broad bracket, it has no reason to misrepresent which bracket, because within a bracket its preferred action and yours are close enough. So credible communication is coarse: the expert reveals a region, not a point. The wider the bias, the wider the brackets must be to keep the expert honest, until only one bracket is left and the message means nothing.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+The state $\theta$ is uniform on $[0,1]$. You want to choose an action equal to $\theta$; the expert wants $\theta + b$. Messages are costless, so the only equilibria are **partition equilibria**: the expert reveals which interval of a partition contains $\theta$, and you take the interval's midpoint as your action.
+
+<DefinitionAside label="cheap talk (Crawford-Sobel)">
+With costless messages and a conflict of interest $b$, informative equilibria partition the state space into finitely many intervals; the expert reports the interval, and the receiver best-responds with its mean. The maximum number of intervals falls as $b$ rises, and for $b \ge 1/4$ (in the uniform-quadratic case) only the one-interval babbling equilibrium survives.
+</DefinitionAside>
+
+Consider the two-interval equilibrium with boundary type $a_1$. The intervals $[0,a_1]$ and $[a_1,1]$ induce actions $y_1 = a_1/2$ and $y_2 = (a_1+1)/2$. The boundary type must be indifferent between the two induced actions, given its own target $a_1 + b$:
+
+$$
+2(a_1 + b) = y_1 + y_2 = a_1 + \tfrac12 \quad\Rightarrow\quad a_1 = \tfrac12 - 2b.
+$$
+
+At $b = \tfrac18$ this gives $a_1 = \tfrac14$: the expert can credibly say only whether the state is below or above $\tfrac14$. A two-interval equilibrium needs $a_1 > 0$, so it exists only when $b < \tfrac14$.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="The most informative equilibrium at b = 1/8">
+Try two intervals split at $a_1$. The low interval $[0, a_1]$ induces the action $a_1/2$; the high interval $[a_1, 1]$ induces $(a_1 + 1)/2$. For the split to hold, the type exactly at $a_1$ must not prefer to be taken for the other interval. Its ideal action is $a_1 + b$, so indifference requires it to sit halfway between the two induced actions: $2(a_1 + b) = a_1/2 + (a_1+1)/2$.
+
+Solving, $a_1 = \tfrac12 - 2b$. At $b = \tfrac18$, $a_1 = \tfrac14$, and the receiver's two actions are $0.125$ and $0.625$. Push the bias to $\tfrac14$ and $a_1$ hits $0$: the low interval vanishes and only babbling remains. Costless words inform, but a larger bias buys coarser talk, not the same message shifted.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Costless messages can still transmit information, but only coarsely, and the amount shrinks as the speaker's bias grows. Past a threshold, a biased expert can convey nothing credible at all.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="cheap-talk"
+  id="q1"
+  badge="apply"
+  question="With bias b = 1/8, what can the expert credibly communicate?"
+  options={[
+    { text: "Only which of two regions the state is in, split at 1/4, not its exact value", correct: true, feedback: "The most informative equilibrium is a two-interval partition with boundary 1/4. The expert reveals a region, and you take its midpoint. Finer communication is not credible at this bias." },
+    { text: "The exact state, since messages are free", feedback: "Free messages do not buy full revelation when interests differ. The expert would shade a precise report, so only coarse, interval-level information survives." },
+    { text: "Nothing, because the expert is biased", feedback: "A bias of 1/8 is below the babbling threshold of 1/4, so coarse information does get through. Only larger biases kill communication entirely." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="cheap-talk"
+  id="q2"
+  badge="analyse"
+  question="Someone claims a bigger bias just shifts the expert's message upward without losing information. Why is that wrong?"
+  options={[
+    { text: "A bigger bias forces coarser partitions to keep the expert honest, so genuinely less information is transmitted", correct: true, feedback: "You already correct for a known bias, so a shift alone is undone. What a larger bias really does is widen the intervals the expert can credibly distinguish, reducing information, until only babbling remains." },
+    { text: "Nothing is wrong; it is just a shift", feedback: "A pure shift would be neutralized by the receiver. The real effect of more bias is coarser, less informative communication, not a recoverable shift." },
+    { text: "Because the expert always lies with any bias", feedback: "The expert does not lie in equilibrium; it truthfully reports a coarse interval. Bias reduces how fine that interval can be, not the expert's honesty within it." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="cheap-talk"
+  id="q3"
+  badge="brings back: signaling"
+  question="How does cheap talk differ from Spence-style signaling?"
+  options={[
+    { text: "Signaling relies on a costly action to separate types; cheap talk uses costless messages, so it can only transmit coarse information and only when interests are close enough", correct: true, feedback: "Cost is what makes a signal credible. Remove it and credibility must come from aligned enough interests, which limits communication to coarse partitions and fails entirely once the bias is too large." },
+    { text: "They are the same; both use costly messages", feedback: "Cheap talk is defined by costless messages, unlike Spence signaling where the whole point is the differential cost of the signal." },
+    { text: "Cheap talk always transmits more information than signaling", feedback: "Usually less: costless talk is limited to coarse partitions and can collapse to nothing, whereas a costly signal can fully separate types." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["crawfordSobel1982"]} />

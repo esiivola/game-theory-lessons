@@ -1,0 +1,143 @@
+---
+title: "Adverse selection and screening"
+tier: intermediate
+unit: 9
+unitName: "Dynamic information and communication"
+order: 29
+kind: lesson
+summary: "When only the seller knows the quality, the good goods leave the market first."
+tags: ["adverse-selection", "lemons", "screening"]
+estMinutes: 6
+mvp: true
+prereqs: ["bayesian-games"]
+concepts: ["adverse-selection", "lemons", "screening"]
+refs: ["akerlof1970", "rothschildStiglitz1976"]
+anchorEmoji: "🚗"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Lemons from '@/components/interactive/Lemons.svelte';
+
+<div class="anchor"><span class="em">🚗</span><p>You want to buy a used car, but the seller knows something you cannot: whether this one is a gem or a lemon. That single gap in information can be enough to shut the whole market down, good cars and all.</p></div>
+
+# Adverse selection and screening
+
+<p class="lead">Hidden information about types, not hidden actions, is the problem here. When sellers know quality and buyers do not, any price attracts the worst goods that price will tempt out. Buyers know this and shade what they will pay, which drives even more of the good goods away, until the market can unravel completely.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In a Bayesian game, uncertainty is about the other player's...", options: ["Action, already taken", "Type, drawn from a distribution", "Payoff scale"], answer: 1 },
+    { q: "A buyer who cannot verify quality should price based on...", options: ["The best possible item", "The expected quality of what is actually offered", "The seller's cost"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Car quality is spread evenly from 0 to 100. A seller will part with a car only if the price covers its quality, and a buyer values any car at 1.5 times its quality, but cannot see it. Set a price and watch which cars come to market.
+
+<Lemons
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Used cars: sellers know quality, buyers do not"
+  predict={{
+    question: 'Is there a positive price at which this market clears?',
+    options: [{ key: 'yes', label: 'Yes, at the right price' }, { key: 'no', label: 'No, it unravels to nothing' }],
+    reveal: 'No. At any price p, only cars worth p or less are offered, so their average quality is p/2, and a buyer will pay only 1.5 times that, which is 0.75p, below the price. No positive price clears. The market unravels.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The price does not just set the terms of trade; it selects which cars appear. Offer a high price and you attract cars up to that quality, but the ones you draw in are, on average, only half as good as the price suggests, because quality is spread out below it. Buyers anticipate this and will pay only three-quarters of the price for the average car on offer. That shortfall holds at every price, so trade never happens. The information gap, not any villainy, empties the market.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Quality $q$ is uniform on $[0,100]$. A seller lists a car only if the price $p$ covers its value, so the cars on the market are those with $q \le p$, whose average quality is $p/2$. Buyers value a car at $1.5q$, so their willingness to pay for the market's average car is
+
+$$
+1.5 \cdot \tfrac{p}{2} = 0.75\,p < p \quad\text{for all } p > 0.
+$$
+
+Willingness to pay is below the price at every positive price, so the only price at which the market clears is $p = 0$, where nothing of value trades. This is complete unraveling.
+
+<DefinitionAside label="adverse selection and screening">
+Adverse selection is a hidden-type problem: the informed side (the seller) self-selects in a way that worsens what the uninformed side gets. It is distinct from moral hazard, which is a hidden-action problem. One remedy is screening: the uninformed party offers a menu designed so that different types choose different options. In insurance (Rothschild-Stiglitz), a menu of contracts trading premium against deductible leads low-risk and high-risk buyers to self-select, separating the types without anyone announcing them.
+</DefinitionAside>
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Why no price clears, and how screening escapes it">
+Fix any price $p > 0$. Sellers with quality above $p$ keep their cars, so only qualities in $[0,p]$ are offered, averaging $p/2$. A buyer values that average car at $1.5 \times p/2 = 0.75p$. Since $0.75p < p$, the buyer refuses, so demand collapses at every positive price and the market clears only at $0$.
+
+**Screening** turns the problem around. Instead of one price, the uninformed side offers a menu. In insurance, pair a low premium with a high deductible and a high premium with a low deductible. Low-risk buyers, who rarely claim, prefer the cheap high-deductible plan; high-risk buyers prefer the fuller coverage. Each type reveals itself by its choice, so the menu separates types that a single price could not.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">When the informed side self-selects on hidden quality, raising the price mostly buys worse goods, so buyers pay less and the good goods leave. A well-designed menu can screen the types apart where a single price cannot.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="adverse-selection"
+  id="q1"
+  badge="apply"
+  question="At a price of 80, what is the average quality of cars offered, and will a buyer pay 80?"
+  options={[
+    { text: "Average quality 40, worth 60 to the buyer, so no", correct: true, feedback: "Only cars with quality up to 80 are listed, averaging 40. The buyer values that at 1.5 x 40 = 60, below the 80 asked, so no trade." },
+    { text: "Average quality 80, worth 120, so yes", feedback: "The listed cars are not all worth 80; they are spread from 0 to 80, averaging 40. The buyer's value is 60, not 120." },
+    { text: "Average quality 40, worth 80, so yes", feedback: "A buyer values the average car at 1.5 x 40 = 60, not 80. The shortfall is exactly why the market fails." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="adverse-selection"
+  id="q2"
+  badge="analyse"
+  question="How does screening (an insurance menu) get around adverse selection?"
+  options={[
+    { text: "It offers different contracts so that each type finds a different one most attractive, revealing the type by the choice", correct: true, feedback: "A menu trading premium against deductible makes low-risk and high-risk buyers self-select into different plans. The choice itself separates the types the seller could not observe." },
+    { text: "It lets the insurer observe each buyer's risk directly", feedback: "The insurer still cannot see the type. Screening works precisely by making buyers reveal it through which contract they pick." },
+    { text: "It sets a single price that everyone accepts", feedback: "A single price is what fails under adverse selection. Screening needs a menu so types separate themselves." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="adverse-selection"
+  id="q3"
+  badge="brings back: incomplete information"
+  question="Adverse selection is often confused with moral hazard. What is the difference?"
+  options={[
+    { text: "Adverse selection is hidden type (who you are), moral hazard is hidden action (what you do)", correct: true, feedback: "Adverse selection is about private information on types before contracting, as with car quality. Moral hazard is about unobserved actions after contracting, like effort. Different problems, different fixes." },
+    { text: "They are two names for the same hidden-action problem", feedback: "They differ: adverse selection concerns hidden types, moral hazard hidden actions. Only the latter is about behaviour after the deal." },
+    { text: "Adverse selection only occurs with more than two players", feedback: "Player count is not the distinction. It is hidden type versus hidden action, and adverse selection appears even in a two-party market." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["akerlof1970", "rothschildStiglitz1976"]} />

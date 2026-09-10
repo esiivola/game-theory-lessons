@@ -1,0 +1,149 @@
+---
+title: "Auctions: first and second price"
+tier: intermediate
+unit: 8
+unitName: "Incomplete information"
+order: 25
+kind: lesson
+summary: "Bid your value in a second-price auction, shade in a first-price one, and revenue ties."
+tags: ["auctions", "incomplete-information", "mechanism"]
+estMinutes: 7
+mvp: true
+prereqs: ["bayesian-games"]
+concepts: ["auctions", "revenue-equivalence", "dominant-strategy"]
+refs: ["vickrey1961"]
+anchorEmoji: "🔨"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import AuctionSandbox from '@/components/interactive/AuctionSandbox.svelte';
+
+<div class="anchor"><span class="em">🔨</span><p>eBay quietly bids on your behalf up to your maximum, and charges you just enough to win. Sealed procurement makes you commit to one number, blind. Two different rules, and a surprising fact: they raise the seller the same money.</p></div>
+
+# Auctions: first and second price
+
+<p class="lead">You value an item, your rivals value it too, and nobody sees anyone else's number. How you should bid depends on the rules. In a second-price auction, honesty is a dominant strategy. In a first-price auction, you must shave your bid. Yet on average the seller earns the same either way.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "Under incomplete information you best-respond to...", options: ["The realised type", "The distribution of types", "The worst case"], answer: 1 },
+    { q: "A dominant strategy is one that is best...", options: ["Only in equilibrium", "Whatever others do", "Only against rational players"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Each round you get a private value and bid against two rivals with unknown values. Toggle between second-price (you pay the runner-up's bid) and first-price (you pay your own bid), and watch the seller's average revenue in each.
+
+<AuctionSandbox
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Sealed-bid auction against two rivals, values in [0,100]"
+  predict={{
+    question: 'Which format earns you, the bidder, more surplus on average?',
+    options: [{ key: 'spa', label: 'Second-price' }, { key: 'same', label: 'Neither, they tie' }],
+    reveal: 'Neither. In the second-price auction bid your value; in the first-price auction shade it. Both leave you the same expected surplus and hand the seller the same expected revenue. That is revenue equivalence.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+In a second-price auction your bid decides only whether you win, not what you pay, so raising it above your value risks winning at a loss and lowering it only forfeits good wins. Bidding your true value is exactly right, whatever others do. In a first-price auction your bid also sets your price, so you shade below your value, trading a lower chance of winning for a better deal when you do. The two adjustments cancel: what you save by shading in the first-price auction, you give back in a higher chance of paying, and the seller nets the same.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="second-price (Vickrey) auction">
+The highest bidder wins and pays the second-highest bid. Bidding your true value is a weakly dominant strategy: your bid affects only whether you win, never the price, so you want to win exactly when your value exceeds the price and to lose otherwise, which truthful bidding achieves.
+</DefinitionAside>
+
+With three bidders valuing 40, 70, and 90, the 90-bidder wins and pays 70, keeping a surplus of 20. No one gains by misreporting.
+
+For the **first-price** auction with $n$ bidders and values drawn uniformly, the symmetric equilibrium shades each bid to
+
+$$
+b(v) = \frac{n-1}{n}\,v.
+$$
+
+With $n = 3$, you bid $\tfrac23 v$. You pay less when you win, but you win less often. Computing expected seller revenue for values uniform on $[0,1]$ gives $\tfrac{n-1}{n+1}$ in both formats: for $n = 3$, that is $\tfrac12$.
+
+<DefinitionAside label="revenue equivalence">
+Under independent private values, any auction that (in equilibrium) always gives the item to the highest-value bidder and gives a bidder with the lowest possible value zero expected surplus raises the same expected revenue. First-price and second-price auctions both qualify, so they tie.
+</DefinitionAside>
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Bid truthfully, then shade">
+**Second-price.** Your value is 60. If you bid 60 and the top rival bid is 45, you win and pay 45, surplus 15. Bidding 80 instead changes nothing when you would have won anyway, and risks winning at a price above 60 (a loss). Bidding 50 only makes you lose auctions you would have profited from. So 60, your value, is optimal no matter what others do.
+
+**First-price.** Now your bid is your price, so bidding 60 on a value of 60 leaves you zero surplus even when you win. With two rivals the equilibrium shades to $b = \tfrac23 \times 60 = 40$. You win less often but earn a margin when you do. Averaged out, the seller collects the same $\tfrac{n-1}{n+1}$ of the value scale as in the second-price auction.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Second-price auctions make honesty dominant; first-price auctions make you shade to (n-1)/n of your value. Despite the different behavior, the seller's expected revenue is identical.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="auctions-first-second-price"
+  id="q1"
+  badge="apply"
+  question="In a second-price auction, how should you bid relative to your value?"
+  options={[
+    { text: "Exactly your value: it is a dominant strategy", correct: true, feedback: "Your bid only decides whether you win, not the price you pay, so bidding your true value wins precisely the auctions worth winning. This holds whatever the others do." },
+    { text: "Shade below your value to avoid overpaying", feedback: "Shading is right for first-price auctions. In a second-price auction the price is set by the runner-up, so truthful bidding is dominant." },
+    { text: "Bid above your value to secure the win", feedback: "That risks winning at a price above your value, a loss. Bidding your value is optimal." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="auctions-first-second-price"
+  id="q2"
+  badge="analyse"
+  question="First-price bidders shade below their values, yet the seller earns the same as under second-price. How can that be?"
+  options={[
+    { text: "Shading lowers the price paid but the format collects it from the winner directly, and the two effects offset to the same expected revenue", correct: true, feedback: "Revenue equivalence: with private values and the item always going to the highest value, expected payments match. First-price bidders pay their own shaded bid; second-price bidders pay the runner-up's value; on average these coincide." },
+    { text: "First-price auctions actually raise more, the claim is a myth", feedback: "Under independent private values they raise the same in equilibrium. That is the content of the revenue equivalence theorem." },
+    { text: "Because bidders bid their values in both formats", feedback: "They do not: first-price bidders shade to (n-1)/n of value. Revenue still ties, which is the surprising part." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="auctions-first-second-price"
+  id="q3"
+  badge="brings back: bayes-nash"
+  question="Why is the first-price shading rule b(v) = (n-1)/n times v a Bayes-Nash equilibrium?"
+  options={[
+    { text: "Each bidder best-responds to the distribution of rivals' values, and shading to (n-1)/n balances a higher margin against a lower chance of winning", correct: true, feedback: "You cannot see rivals' values, so you optimize against their distribution. The shading factor is exactly the best response when everyone else shades the same way, which makes it a Bayes-Nash equilibrium." },
+    { text: "Because bidding your value is dominant in first-price auctions too", feedback: "It is not: bidding your value would leave zero surplus. First-price bidding requires shading, tuned to the number of rivals." },
+    { text: "Because the seller sets the shading rule", feedback: "The seller does not choose bidders' strategies. The shading emerges as each bidder's best response to the others under incomplete information." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["vickrey1961"]} />

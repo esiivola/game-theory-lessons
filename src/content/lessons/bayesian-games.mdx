@@ -1,0 +1,149 @@
+---
+title: "Bayesian games and Bayes-Nash"
+tier: intermediate
+unit: 8
+unitName: "Incomplete information"
+order: 24
+kind: lesson
+summary: "When you don't know a rival's type, best-respond to the whole distribution of types."
+tags: ["incomplete-information", "bayesian-games", "oligopoly"]
+estMinutes: 6
+mvp: true
+prereqs: ["cournot-bertrand", "expected-utility"]
+concepts: ["bayesian-game", "bayes-nash", "incomplete-information"]
+refs: ["harsanyi1967"]
+anchorEmoji: "🎭"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import BayesianCournot from '@/components/interactive/BayesianCournot.svelte';
+
+<div class="anchor"><span class="em">🎭</span><p>You are pricing against a competitor whose costs you cannot see. They might be a lean operation that can undercut you, or a bloated one that cannot. You have to set your output now, against a rival who could be either.</p></div>
+
+# Bayesian games and Bayes-Nash
+
+<p class="lead">Real strategic settings are full of things you do not know: a rival's cost, a bidder's value, a partner's preferences. Harsanyi's move was to treat that uncertainty as a draw of the other player's type from a known distribution, so you can best-respond to the odds even when you cannot see the outcome.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In Cournot competition, a firm's best-response output falls when the rival's output...", options: ["Falls", "Rises", "Stays fixed"], answer: 1 },
+    { q: "A rational agent facing uncertainty maximizes...", options: ["Expected money", "Expected utility", "The worst case"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Demand is $P = 12 - Q$. Your cost is zero. Your rival is low-cost (cost 0) with some probability, otherwise high-cost (cost 6), and you cannot tell which. Set your output; the two rival types sit at their equilibrium responses. Then move the prior.
+
+<BayesianCournot
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Cournot with a privately-known rival cost"
+  predict={{
+    question: 'As the rival becomes more likely to be low-cost, should you produce more or less?',
+    options: [{ key: 'more', label: 'More, to compete harder' }, { key: 'less', label: 'Less, a low-cost rival makes more' }],
+    reveal: 'Less. A low-cost rival produces more, which lowers the price, so your best output falls, from 5 at even odds toward 4 when the rival is surely low-cost. You respond to the expected rival, not to a guess about which type showed up.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+You cannot see the rival's cost, so you cannot tailor your output to it. What you can do is form the expected rival output, averaging over the types, and best-respond to that. A low-cost rival produces more, dragging the price down, so the more likely they are low-cost, the more crowded the market you expect, and the less you should produce. You are best-responding to a distribution, not to a realized type.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="Bayesian game and Bayes-Nash equilibrium">
+A Bayesian game adds a set of types for each player, a prior distribution over them, and payoffs that depend on the type profile. A strategy specifies an action for each of your own types. A Bayes-Nash equilibrium is a profile in which every type of every player is best-responding to the distribution of the others' types and their strategies.
+</DefinitionAside>
+
+Firm 2 of type with cost $c$ best-responds to $q_1$: maximizing $(12 - q_1 - q_2 - c)q_2$ gives
+
+$$
+q_2(c) = \frac{12 - q_1 - c}{2}.
+$$
+
+Firm 1 does not see $c$, so it uses the expected rival output. With the rival low-cost ($c=0$) with probability $\mu$ and high-cost ($c=6$) otherwise, $\mathbb{E}[q_2] = 3 + 3\mu - q_1/2$. Firm 1 maximizes $(12 - q_1 - \mathbb{E}[q_2])q_1$, giving
+
+$$
+q_1 = 6 - 2\mu.
+$$
+
+At $\mu = \tfrac12$, $q_1 = 5$, with $q_2(\text{low}) = 3.5$ and $q_2(\text{high}) = 0.5$. As $\mu \to 1$, $q_1 \to 4$: a rival more likely to be low-cost crowds the market, so firm 1 pulls back.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Solve the Bayes-Nash equilibrium">
+Each rival type best-responds: $q_2(c) = (12 - q_1 - c)/2$. At $\mu = \tfrac12$, the expected rival output is $\mathbb{E}[q_2] = \tfrac12\cdot\tfrac{12 - q_1}{2} + \tfrac12\cdot\tfrac{6 - q_1}{2} = 4.5 - q_1/2$.
+
+Firm 1's first-order condition, treating $\mathbb{E}[q_2]$ as its rival's output, is $q_1 = (12 - \mathbb{E}[q_2])/2$. Substituting, $q_1 = (12 - 4.5 + q_1/2)/2 = 3.75 + q_1/4$, so $q_1 = 5$. Then $q_2(\text{low}) = (12 - 5)/2 = 3.5$ and $q_2(\text{high}) = (12 - 5 - 6)/2 = 0.5$. Firm 1 never learns the cost; it just plays against the average.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Under incomplete information you best-respond to the distribution of the other player's types, not to any single one. Each of your own types plays its own best response, and all of them together form the Bayes-Nash equilibrium.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="bayesian-games"
+  id="q1"
+  badge="apply"
+  question="You cannot see whether your rival is low- or high-cost. What do you best-respond to?"
+  options={[
+    { text: "The distribution over the rival's types, using the expected rival output", correct: true, feedback: "Since you cannot observe the type, you optimize against its distribution. Here that means best-responding to the expected rival quantity, which mixes the low- and high-cost responses." },
+    { text: "Whichever type is more likely, treating it as certain", correct: false, feedback: "Collapsing to the likely type throws away the other case. Bayes-Nash averages over both, weighting by their probabilities." },
+    { text: "The type that would hurt you most", feedback: "That is worst-case (maximin) thinking, not Bayes-Nash. With a known prior you optimize against the expectation, not the worst case." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="bayesian-games"
+  id="q2"
+  badge="analyse"
+  question="As the rival becomes more likely to be low-cost, firm 1's equilibrium output moves from 5 toward 4. Why down?"
+  options={[
+    { text: "A low-cost rival produces more, pushing the price down, so firm 1's best response is to produce less", correct: true, feedback: "Outputs are strategic substitutes in Cournot: more expected rival output means a lower price, which makes a large own output less attractive. So firm 1 cuts back as low-cost becomes likelier." },
+    { text: "Firm 1 produces more to match the aggressive rival", feedback: "Matching would worsen the glut. In Cournot the best response to more rival output is less, not more." },
+    { text: "The prior does not affect firm 1's output", feedback: "It does: q1 = 6 - 2 times the low-cost probability, so it falls from 5 to 4 as that probability rises." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="bayesian-games"
+  id="q3"
+  badge="brings back: expected utility"
+  question="In what sense is Bayes-Nash just Nash equilibrium applied with expected utility?"
+  options={[
+    { text: "Each type maximizes expected utility against the others' type distribution, and all types best-responding at once is the equilibrium", correct: true, feedback: "Harsanyi's insight is exactly this: turn incomplete information into a game of types, and a Bayes-Nash equilibrium is a Nash equilibrium where each type is an expected-utility maximizer given the priors." },
+    { text: "It abandons expected utility for worst-case reasoning", feedback: "It relies on expected utility, averaging payoffs over the type distribution, not on worst-case reasoning." },
+    { text: "It only applies when there is no uncertainty", feedback: "It is built for uncertainty about others' types. With no uncertainty it reduces to ordinary Nash equilibrium." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["harsanyi1967"]} />

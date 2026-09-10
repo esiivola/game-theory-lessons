@@ -1,0 +1,137 @@
+---
+title: "Congestion and potential games"
+tier: expert
+unit: 16
+unitName: "Algorithmic game theory"
+order: 53
+kind: lesson
+summary: "When players share congestible resources, best-response dynamics always settle down."
+tags: ["algorithmic", "congestion", "potential"]
+estMinutes: 6
+mvp: true
+prereqs: ["pure-nash"]
+concepts: ["congestion-game", "potential-function", "best-response-dynamics"]
+refs: ["rosenthal1973", "mondererShapley1996"]
+anchorEmoji: "🚦"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Congestion from '@/components/interactive/Congestion.svelte';
+
+<div class="anchor"><span class="em">🚦</span><p>Every commuter picks the route that looks fastest, and the roads fill up until no switch helps. That this ever settles, rather than churning forever, is not obvious. A hidden bookkeeping quantity, the potential, guarantees it.</p></div>
+
+# Congestion and potential games
+
+<p class="lead">In a congestion game, each player picks resources and pays a cost that rises with how many others share them. These games always have a pure Nash equilibrium, and simple best-response dynamics reach it, because every improving move decreases a single potential function that cannot fall forever.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A pure Nash equilibrium is a profile where no player can gain by...", options: ["Cooperating", "Switching alone", "Waiting"], answer: 1 },
+    { q: "A best-response dynamic has each unhappy player switch to their...", options: ["Random choice", "Current best option", "Worst option"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Four drivers choose road A, whose cost equals its number of users, or road B, a flat 3. Move drivers around and watch the potential fall to its minimum.
+
+<Congestion
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Four drivers, two roads, one potential function"
+  predict={{
+    question: 'Where do best-response dynamics settle?',
+    options: [{ key: 'cycle', label: 'They cycle forever' }, { key: 'nash', label: 'At a pure equilibrium, 3 on A' }],
+    reveal: 'At a pure equilibrium: 3 on road A (each paying 3) and 1 on road B (paying 3). Every improving switch lowers the same potential, so the dynamics cannot cycle and must stop at a Nash equilibrium.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Each time a driver switches to a cheaper road, they lower their own cost, and it turns out that this also lowers a global quantity, the potential, by exactly the same amount. Since the potential is bounded below and drops with every improving move, the process cannot go on forever, and where it stops, no one can improve, which is a Nash equilibrium. The potential is a ledger that turns many selfish moves into a single decreasing number.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="congestion and potential games">
+In a congestion game, each resource has a cost that depends only on how many players use it, and a player's cost is the sum over the resources it picks. Rosenthal showed every such game admits an exact potential $\Phi$: whenever one player switches, the change in $\Phi$ equals the change in that player's cost. Because $\Phi$ strictly decreases at every improving move and takes finitely many values, best-response dynamics converge to a pure Nash equilibrium. Monderer and Shapley showed congestion games and finite potential games are essentially the same class.
+</DefinitionAside>
+
+Here $\Phi(x) = \sum_{k=1}^{x} k + 3(4 - x) = \tfrac{x(x+1)}{2} + 3(4-x)$ when $x$ drivers use road A. Evaluating: $\Phi(0) = 12$, $\Phi(1) = 10$, $\Phi(2) = 9$, $\Phi(3) = 9$, $\Phi(4) = 10$. The minimum is at $x = 3$ (and $x = 2$), and $x = 3$ is a Nash equilibrium: each road costs $3$, so no driver gains by switching. Best-response dynamics walk $\Phi$ downhill to that rest point.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Follow the potential downhill">
+Start with everyone on road B: $x = 0$, and $\Phi(0) = 0 + 3\cdot 4 = 12$. Road A costs $1$ to the first mover versus $3$ on B, so a driver switches; now $x = 1$, $\Phi(1) = 1 + 9 = 10$, down by $2$, exactly that driver's saving ($3 \to 1$).
+
+Another driver finds A (now costing $2$ if they join, making it $3$) still no worse than B's $3$, and switches; $x = 2$, $\Phi = 3 + 6 = 9$. A third does the same to reach $x = 3$, where A costs $3$, equal to B: no one gains by moving. $\Phi(3) = 6 + 3 = 9$, the minimum. The dynamics halt at the pure Nash equilibrium, guaranteed by the ever-decreasing potential.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Congestion games always have a pure Nash equilibrium and always reach it by best response, because an exact potential function decreases at every improving move and cannot fall forever.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="congestion-games"
+  id="q1"
+  badge="apply"
+  question="At the equilibrium 3 drivers on A and 1 on B, why does no one switch?"
+  options={[
+    { text: "Road A costs 3 (its three users) and road B costs 3, so switching cannot lower anyone's cost", correct: true, feedback: "Both roads cost 3 at this split. An A-user moving to B still pays 3; a B-user moving to A makes it 4 users, paying 4. No improving move exists, so it is a pure Nash equilibrium." },
+    { text: "Because the roads are equally long", feedback: "It is about congestion costs, not length. At 3-on-A both roads happen to cost 3, so no switch helps." },
+    { text: "Because a referee forbids switching", feedback: "There is no referee. Nobody switches because nobody can do better, which is what makes it an equilibrium." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="congestion-games"
+  id="q2"
+  badge="analyse"
+  question="Why can best-response dynamics in a potential game never cycle?"
+  options={[
+    { text: "Every improving switch strictly lowers the potential, which is bounded below and takes finitely many values", correct: true, feedback: "A cycle would require returning to a state, but the potential only ever falls with improving moves, so it can never come back up. With finitely many states, the dynamics must halt at a minimum, a Nash equilibrium." },
+    { text: "Because players are not allowed to revisit a state", feedback: "Nothing forbids revisiting in general; the potential does the work. It strictly decreases, so a repeat is impossible." },
+    { text: "Because there is only one state", feedback: "There are many states. The potential decreasing along improving moves is what rules out cycles." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="congestion-games"
+  id="q3"
+  badge="brings back: pure Nash"
+  question="What do congestion games guarantee that general games do not?"
+  options={[
+    { text: "A pure-strategy Nash equilibrium always exists and is reached by best response", correct: true, feedback: "General finite games guarantee only a possibly-mixed equilibrium, and best-response dynamics can cycle. Congestion (potential) games guarantee a pure equilibrium and convergence to it." },
+    { text: "That the equilibrium is socially optimal", feedback: "Equilibria of congestion games can be inefficient (the next lesson, price of anarchy). What is guaranteed is existence of a pure equilibrium and convergence, not optimality." },
+    { text: "That there is a unique equilibrium", feedback: "There can be several. The guarantee is that a pure one exists and best response finds one, not uniqueness." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["rosenthal1973", "mondererShapley1996"]} />

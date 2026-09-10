@@ -1,0 +1,163 @@
+---
+title: "Repeated games and discounting"
+tier: intermediate
+unit: 7
+unitName: "Repeated games"
+order: 20
+kind: lesson
+summary: "Play the dilemma again and again, and cooperation can hold, if you value tomorrow enough."
+tags: ["repeated-games", "cooperation", "discounting"]
+estMinutes: 7
+mvp: true
+prereqs: ["prisoners-dilemma", "subgame-perfection"]
+concepts: ["repeated-games", "grim-trigger", "discounting"]
+refs: ["friedman1971", "axelrod1984"]
+anchorEmoji: "🤝"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import RepeatedPD from '@/components/interactive/RepeatedPD.svelte';
+
+<div class="anchor"><span class="em">🤝</span><p>The two gas stations from the dilemma face each other again tomorrow, and the day after, with no end date they can point to. Suddenly holding prices is not obviously foolish. A cut today buys one good morning and a long, cold price war after.</p></div>
+
+# Repeated games and discounting
+
+<p class="lead">Played once, the Prisoner's Dilemma ends in mutual defection: betrayal is dominant. Played over and over, the calculation changes. A defection can be punished tomorrow, and if tomorrow matters enough, the threat of that punishment holds cooperation in place. The turning point is a single number.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In the one-shot Prisoner's Dilemma, defecting is...", options: ["Dominated", "A dominant strategy", "A focal point"], answer: 1 },
+    { q: "Backward induction in a finite game starts from...", options: ["The first move", "The last move", "A random move"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Each round is the Prisoner's Dilemma, the same dilemma as the gas stations, written here with the standard payoffs $T=5$ (defect on a cooperator), $R=3$ (both cooperate), $P=1$ (both defect), $S=0$ (cooperate against a defector). Only the ranking $T>R>P>S$ matters, not the units. The slider is $\delta$, the chance the relationship continues to another round, which is also how much you value next round versus this one. Pick your strategy against a grim-trigger bot and run it.
+
+<RepeatedPD
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Repeated Prisoner's Dilemma, T5 R3 P1 S0"
+  predict={{
+    question: 'How patient must you be, roughly, for cooperation to survive?',
+    options: [{ key: 'any', label: 'Any patience works' }, { key: 'half', label: 'You must value tomorrow enough' }],
+    reveal: 'Cooperation holds only when delta is at least 1/2. Below that, the one-time gain from defecting (5 instead of 3) outweighs the punishment to come, and even a cooperative strategy would rather cheat.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Defecting still pays more this round: 5 beats 3. What changed is the shadow of the future. Against a grim-trigger opponent, one defection ends cooperation for good, trading a stream of 3s for a stream of 1s. When the future is heavy enough, that lost stream costs more than the one-time gain of 2, so you cooperate. When the future is light, the quick 2 wins and cooperation collapses. The whole thing turns on how much tomorrow is worth.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="discounted repeated game">
+The stage game is repeated, and a player values a payoff $t$ rounds from now at $\delta^t$ times its face value, where $\delta \in (0,1)$ is the discount factor. Equivalently, after each round the game continues with probability $\delta$. A strategy is a rule that maps the whole history so far to a move.
+</DefinitionAside>
+
+Consider **grim trigger**: cooperate until the opponent defects once, then defect forever. Suppose both play it. Cooperating forever is worth
+
+$$
+R + \delta R + \delta^2 R + \cdots = \frac{R}{1-\delta}.
+$$
+
+Deviating means defecting once for $T$, after which the opponent punishes and you both get $P$ forever:
+
+$$
+T + \delta P + \delta^2 P + \cdots = T + \frac{\delta P}{1-\delta}.
+$$
+
+Cooperation is a best response, so grim trigger is a subgame-perfect equilibrium, exactly when the first is at least the second:
+
+$$
+\frac{R}{1-\delta} \ \ge\ T + \frac{\delta P}{1-\delta} \quad\Longleftrightarrow\quad \delta \ \ge\ \frac{T-R}{T-P}.
+$$
+
+With $T=5, R=3, P=1$ the threshold is $\tfrac{5-3}{5-1} = \tfrac12$. Value the future at least as much as the present-by-half, and cooperation stands; value it less, and it falls.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Derive the threshold, then move the numbers">
+Set cooperating forever, $R/(1-\delta)$, against defecting once and taking the punishment, $T + \delta P/(1-\delta)$. Multiply through by $1-\delta$:
+
+$$
+R \ \ge\ T(1-\delta) + \delta P.
+$$
+
+Rearranging, $R - T \ge -\delta(T - P)$, so $\delta \ge (T-R)/(T-P)$. For $T=5, R=3, P=1$ this is $\tfrac12$.
+
+**Faded.** Suppose mutual defection were less bad, $P=2$. The threshold becomes $(5-3)/(5-2) = \tfrac23$: a softer punishment means you need more patience to deter cheating.
+
+**Solo.** At $\delta = 0.6$, does tit-for-tat sustain cooperation? Since $0.6 \ge \tfrac12$, yes. The same threshold works, because a single defection against tit-for-tat also costs you the cooperative stream.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Repetition does not make cooperation automatic. It makes it possible, and only when players value the future enough: here, when the game continues with probability at least one-half.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="repeated-games"
+  id="q1"
+  badge="apply"
+  question="With T=5, R=3, P=1, the grim-trigger threshold is delta = 1/2. At delta = 0.4, what happens?"
+  options={[
+    { text: "Cooperation cannot be sustained; both defect", correct: true, feedback: "Below the threshold the one-time gain from defecting outweighs the lost future cooperation, so defection is the best response even under grim trigger. The equilibrium is mutual defection." },
+    { text: "Cooperation is sustained, since the game repeats", correct: false, feedback: "Repetition alone is not enough. At delta = 0.4 the future is discounted too heavily, and 0.4 is below the 0.5 threshold, so cooperation breaks." },
+    { text: "The players alternate cooperating and defecting", feedback: "Grim trigger does not alternate. Below the threshold it collapses straight to permanent mutual defection." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="repeated-games"
+  id="q2"
+  badge="analyse"
+  question="If mutual defection were less painful (P rises from 1 to 2), what happens to the patience needed for cooperation?"
+  options={[
+    { text: "It rises, because a milder punishment deters cheating less", correct: true, feedback: "The threshold (T-R)/(T-P) rises from 1/2 to 2/3 when P goes from 1 to 2. A weaker punishment must be offset by valuing the future more." },
+    { text: "It falls, because defection is now cheaper to punish", feedback: "A higher P makes the punishment milder, not harsher, so you need more patience, not less. The threshold rises to 2/3." },
+    { text: "It is unchanged, since only T and R matter", feedback: "P is in the formula (T-R)/(T-P). Raising P raises the threshold." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="repeated-games"
+  id="q3"
+  badge="brings back: backward induction"
+  question="Why can cooperation be sustained in the infinitely repeated PD but not in one repeated a known, finite number of times?"
+  options={[
+    { text: "With a known last round, backward induction unravels cooperation from the end: both defect in the last round, so both defect in the second-to-last, and so on", correct: true, feedback: "A fixed final round has no future to protect it, so both defect there. That makes the prior round effectively last, and the logic cascades back to the first round. An open-ended horizon removes the anchor for that unraveling." },
+    { text: "Because finite games have no Nash equilibrium", feedback: "They do have equilibria. The point is that backward induction forces defection in every round when the horizon is known and finite." },
+    { text: "Because discounting only exists in infinite games", feedback: "Discounting can apply either way. The difference is the known last round, which lets backward induction unravel cooperation." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["friedman1971", "axelrod1984"]} />

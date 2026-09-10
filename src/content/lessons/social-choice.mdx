@@ -1,0 +1,139 @@
+---
+title: "Social choice: Arrow and Gibbard-Satterthwaite"
+tier: expert
+unit: 12
+unitName: "Mechanism design and social choice"
+order: 36
+kind: lesson
+summary: "No voting rule can aggregate preferences perfectly, and none is fully strategy-proof."
+tags: ["social-choice", "voting", "arrow"]
+estMinutes: 6
+mvp: true
+prereqs: ["pure-nash"]
+concepts: ["social-choice", "condorcet", "strategy-proofness"]
+refs: ["arrow1951", "gibbard1973", "satterthwaite1975"]
+anchorEmoji: "🗳️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Condorcet from '@/components/interactive/Condorcet.svelte';
+
+<div class="anchor"><span class="em">🗳️</span><p>Three friends vote on where to eat, and each pairwise vote has a majority winner, yet there is no overall winner: the group prefers Thai to Italian, Italian to sushi, and sushi to Thai. Majority rule, the fairest thing imaginable, can eat itself.</p></div>
+
+# Social choice: Arrow and Gibbard-Satterthwaite
+
+<p class="lead">Turning individual rankings into a group ranking sounds like bookkeeping. It is not. Majority rule can cycle, and two theorems show the trouble is fundamental: no reasonable rule aggregates preferences without a dictator (Arrow), and none is immune to strategic voting (Gibbard-Satterthwaite).</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A preference ranking is transitive if preferring A to B and B to C implies...", options: ["Preferring C to A", "Preferring A to C", "Indifference"], answer: 1 },
+    { q: "A rule is strategy-proof if no voter can gain by...", options: ["Voting", "Misreporting their ranking", "Abstaining"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Three voters, three options. Each pairwise contest is decided by majority. Tap a voter to change their ranking and look for an overall winner.
+
+<Condorcet
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Pairwise majority among three options"
+  predict={{
+    question: 'With the rankings A>B>C, B>C>A, and C>A>B, does majority rule pick a winner?',
+    options: [{ key: 'yes', label: 'Yes, a clear winner' }, { key: 'no', label: 'No, the majorities cycle' }],
+    reveal: 'No winner. A beats B, B beats C, and C beats A, all by 2 to 1. Majority rule is intransitive here, a Condorcet cycle, so there is no option a majority prefers to every other.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Each individual has a perfectly sensible, transitive ranking. But majorities are made of different people in each pairwise contest, so the group's "preference" need not be consistent. There is no contradiction in any voter; the intransitivity is a property of aggregation itself. Once you see that majority rule can cycle, you start to suspect that no aggregation rule can be perfectly well-behaved, and Arrow proved exactly that.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Take rankings $A\!>\!B\!>\!C$, $B\!>\!C\!>\!A$, $C\!>\!A\!>\!B$. Pairwise: $A$ beats $B$ (voters 1 and 3), $B$ beats $C$ (voters 1 and 2), $C$ beats $A$ (voters 2 and 3). The social preference cycles, so there is no Condorcet winner.
+
+<DefinitionAside label="Arrow and Gibbard-Satterthwaite">
+Arrow's theorem: with three or more alternatives, no rule turning individual rankings into a social ranking can satisfy all of unrestricted domain, unanimity (Pareto), independence of irrelevant alternatives, and non-dictatorship at once. Gibbard-Satterthwaite: any onto voting rule over three or more alternatives that is strategy-proof (no voter ever gains by misreporting) must be a dictatorship. Together they say perfect aggregation and full strategy-proofness are impossible.
+</DefinitionAside>
+
+Strategic voting follows. Suppose plurality with $45\%$ for $A$, $30\%$ for $B$, $25\%$ for $C$, where the $C$-voters prefer $B$ to $A$. Voting sincerely elects $A$. But if the $C$-voters switch to $B$, then $B$ wins with $55\%$, an outcome they prefer. The rule is manipulable, exactly as Gibbard-Satterthwaite predicts.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="A cycle, then a manipulation">
+**The cycle.** Count each pairwise contest in the profile above. $A$ vs $B$: voters 1 and 3 rank $A$ higher, so $A$ wins $2$ to $1$. $B$ vs $C$: voters 1 and 2 prefer $B$, so $B$ wins. $C$ vs $A$: voters 2 and 3 prefer $C$, so $C$ wins. The social preference is $A > B > C > A$: a cycle, no winner.
+
+**The manipulation.** Under plurality with shares $45/30/25$ for $A/B/C$, sincere voting elects $A$. The $25\%$ who rank $C$ first but prefer $B$ to $A$ can desert $C$ and vote $B$. Now $B$ has $30 + 25 = 55\%$ and wins, which those voters prefer to $A$. A non-dictatorial rule was manipulated, illustrating Gibbard-Satterthwaite.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Aggregating preferences is not neutral bookkeeping. Majority rule can cycle, no rule escapes Arrow's conditions without a dictator, and none over three or more options is fully strategy-proof.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="social-choice"
+  id="q1"
+  badge="apply"
+  question="Why does the profile A>B>C, B>C>A, C>A>B have no Condorcet winner?"
+  options={[
+    { text: "The pairwise majorities cycle: A beats B, B beats C, and C beats A", correct: true, feedback: "Each contest has a 2-to-1 majority, but they chain into a cycle, so no option beats every other. That is a Condorcet cycle." },
+    { text: "Because one voter is irrational", feedback: "Every voter has a transitive, sensible ranking. The intransitivity arises only in aggregation, not in any individual." },
+    { text: "Because there is a tie in every contest", feedback: "There are no ties; each pairwise vote is decided 2 to 1. The problem is that the winners cycle." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="social-choice"
+  id="q2"
+  badge="analyse"
+  question="What does Arrow's theorem actually claim?"
+  options={[
+    { text: "No rule aggregating rankings can satisfy unanimity, independence of irrelevant alternatives, and non-dictatorship together (with 3+ options)", correct: true, feedback: "It is an impossibility about ranking rules under a specific set of conditions, not a proof that democracy is worthless. Relaxing any one condition can restore possibility." },
+    { text: "That democracy cannot work at all", feedback: "It is far narrower: it constrains ranking rules under IIA and related axioms. It does not say collective decision-making is impossible." },
+    { text: "That majority rule always has a winner", feedback: "The opposite motivates it: majority rule can cycle, and Arrow generalises the difficulty to all such rules." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="social-choice"
+  id="q3"
+  badge="brings back: dominance"
+  question="Under plurality, C-voters who prefer B to A abandon C and vote B to change the winner. In strategic terms, what are they doing?"
+  options={[
+    { text: "Playing a best response: sincere voting is dominated for them, so they switch to the report that yields a better outcome", correct: true, feedback: "Their sincere ballot leads to A; a strategic ballot for B leads to B, which they prefer. Misreporting is their best response, which is exactly the manipulability Gibbard-Satterthwaite guarantees for non-dictatorial rules." },
+    { text: "Voting sincerely, since they rank C first", feedback: "Ranking C first is their sincere preference, but voting C leads to their worst outcome A. Switching to B is the strategic best response." },
+    { text: "Nothing strategic; plurality is strategy-proof", feedback: "Plurality is manipulable, as this shows. Only a dictatorship among onto rules is strategy-proof with three or more options." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["arrow1951", "gibbard1973", "satterthwaite1975"]} />

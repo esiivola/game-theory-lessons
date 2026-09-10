@@ -1,0 +1,145 @@
+---
+title: "Information design and Bayesian persuasion"
+tier: intermediate
+unit: 10
+unitName: "Information design and contracts"
+order: 31
+kind: lesson
+summary: "Commit to an honest signal in advance, and you can move a skeptic without ever lying."
+tags: ["information-design", "persuasion", "commitment"]
+estMinutes: 6
+mvp: true
+prereqs: ["bayesian-games", "cheap-talk"]
+concepts: ["information-design", "bayesian-persuasion", "commitment"]
+refs: ["kamenicaGentzkow2011"]
+anchorEmoji: "⚖️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Persuasion from '@/components/interactive/Persuasion.svelte';
+
+<div class="anchor"><span class="em">⚖️</span><p>A prosecutor wants convictions; the judge wants the truth. The prosecutor cannot lie, and only 30% of defendants are actually guilty. Yet by choosing how to investigate, and committing to it before seeing the case, the prosecutor can convict 60%. No lie is told.</p></div>
+
+# Information design and Bayesian persuasion
+
+<p class="lead">Cheap talk failed because the speaker could say anything after learning the truth. Flip that: let the sender commit to an information policy in advance, before the state is known, and honesty becomes powerful. By choosing what evidence to generate, a sender can shift a rational receiver's beliefs in its favour without ever misreporting.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In cheap talk, a biased expert can convey only...", options: ["Everything", "Coarse information, less as bias grows", "Nothing ever"], answer: 1 },
+    { q: "A rational receiver updates beliefs from a signal using...", options: ["The sender's wishes", "Bayes' rule", "The prior only"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Only 30% of defendants are guilty, and the judge convicts only when the posterior probability of guilt reaches 50%. The prosecutor commits to a signal: it always reports "guilty" when the defendant is guilty, and reports "guilty" for some fraction of innocent defendants too. Tune that fraction.
+
+<Persuasion
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Prosecutor-judge: an honest but designed signal"
+  predict={{
+    question: 'Can a signal that never lies convict more than the 30% who are actually guilty?',
+    options: [{ key: 'no', label: 'No, honesty caps it at 30%' }, { key: 'yes', label: 'Yes, partial disclosure convicts more' }],
+    reveal: 'Yes, up to 60%. By flagging innocents as "guilty" just often enough that a "guilty" report lands the posterior at exactly 50%, the prosecutor keeps every report convincing while sending as many as possible. No report is a lie; the design does the work.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The trick is committing before the fact. The prosecutor is not lying about any case: a "guilty" report genuinely raises the odds of guilt. But by mixing in just enough innocents, the prosecutor makes "guilty" reports common while keeping each one exactly convincing enough to convict. Report too many innocents and the judge stops believing the report; report too few and you waste convincing power you did not need. The optimum sits right at the judge's threshold.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+The prior is $\Pr(\text{guilty}) = 0.3$, and the judge convicts iff the posterior is at least $\tfrac12$. The signal reports "guilty" always when guilty, and with probability $x$ when innocent. By Bayes, a "guilty" report yields posterior
+
+$$
+\Pr(\text{guilty}\mid\text{"guilty"}) = \frac{0.3}{0.3 + 0.7\,x}.
+$$
+
+Set this to the threshold $\tfrac12$: $0.3 = 0.5(0.3 + 0.7x)$ gives $x = \tfrac{3}{7}$. Then the chance of a "guilty" report is $0.3 + 0.7\cdot\tfrac37 = 0.6$, and every one convicts. Conviction rate $60\%$ from a $30\%$ guilt rate, with no dishonest report.
+
+<DefinitionAside label="Bayesian persuasion">
+The sender commits to a signal (a mapping from states to message probabilities) before the state is realized, and the receiver best-responds to the posterior each message induces. Any signal is feasible as long as the message-posteriors average back to the prior (Bayes plausibility). The sender's problem is to pick the best such distribution of posteriors, which is read off the concave closure of the sender's payoff. Commitment, absent in cheap talk, is what makes honest persuasion work.
+</DefinitionAside>
+
+The two extremes lose. Full disclosure convicts only the truly guilty, $30\%$. Secrecy leaves the posterior at the prior $0.3 < 0.5$, convicting no one. Honest partial disclosure beats both.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Push the posterior to the threshold">
+Let the signal flag an innocent as "guilty" with probability $x$. A "guilty" report then has posterior $0.3 / (0.3 + 0.7x)$. For the judge to convict, this must reach $\tfrac12$, and to convict as often as possible the prosecutor wants $x$ as large as it can be while still hitting $\tfrac12$ exactly.
+
+Solve $0.3/(0.3 + 0.7x) = 0.5$: multiply out to $0.3 = 0.15 + 0.35x$, so $x = 3/7 \approx 0.43$. The probability of a "guilty" report is $0.3 + 0.7 \cdot \tfrac37 = 0.6$. Every such report convicts, so the conviction rate is $60\%$. Raising $x$ past $3/7$ drops the posterior below $\tfrac12$ and the judge stops convicting; lowering it wastes convincing power. The optimum sits exactly at the threshold.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Commit to an honest information policy in advance and you can move a rational receiver far beyond the prior. The optimal signal is just convincing enough, pushing beliefs exactly to the receiver's threshold and no further.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="bayesian-persuasion"
+  id="q1"
+  badge="apply"
+  question="The optimal signal pushes the posterior after a 'guilty' report to exactly 0.5, not higher. Why not aim higher to be safe?"
+  options={[
+    { text: "A higher posterior means fewer 'guilty' reports, so aiming just above the threshold wastes convincing power and convicts less", correct: true, feedback: "Convictions equal the frequency of 'guilty' reports. Making each report more convincing than the threshold requires flagging fewer innocents, which lowers that frequency. The optimum sits right at 0.5." },
+    { text: "Because a higher posterior would be dishonest", feedback: "It would still be honest; the issue is efficiency. Overshooting the threshold sends fewer convicting reports, reducing the conviction rate." },
+    { text: "Because the judge convicts on any posterior above the prior", feedback: "The judge needs the posterior to reach 0.5, not just exceed the prior. The design targets exactly that bar." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="bayesian-persuasion"
+  id="q2"
+  badge="analyse"
+  question="Does Bayesian persuasion require the sender to lie?"
+  options={[
+    { text: "No: every message is generated by an honest, pre-committed signal; a 'guilty' report genuinely raises the odds of guilt", correct: true, feedback: "The sender commits to a truthful signal structure in advance. It shapes which evidence is produced, not whether reports are honest, so a rational receiver still trusts each message." },
+    { text: "Yes: the sender must sometimes misreport the state", feedback: "No misreporting occurs. The power comes from committing to the information policy beforehand, not from lying about any case." },
+    { text: "Yes: it only works if the receiver is naive", feedback: "It works against a fully rational, Bayesian receiver. That is what makes it striking." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="bayesian-persuasion"
+  id="q3"
+  badge="brings back: cheap talk"
+  question="Why can persuasion move beliefs so much more than cheap talk?"
+  options={[
+    { text: "The sender commits to the signal before learning the state, so its messages are credible; cheap talk lets the sender choose messages after the fact, which limits credibility", correct: true, feedback: "Commitment is the difference. A pre-committed honest signal is believed, so it can be designed to shift beliefs to the threshold. Cheap talk, chosen after learning the truth, can only convey coarse information and collapses when interests diverge." },
+    { text: "Persuasion assumes the receiver is irrational, cheap talk does not", feedback: "Both face a rational receiver. The difference is commitment to the signal, not the receiver's rationality." },
+    { text: "Cheap talk allows lying and persuasion does not", feedback: "Neither involves equilibrium lying. The distinction is timing and commitment: persuasion fixes the signal in advance." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["kamenicaGentzkow2011"]} />

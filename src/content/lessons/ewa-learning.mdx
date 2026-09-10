@@ -1,0 +1,137 @@
+---
+title: "Learning and adaptation"
+tier: expert
+unit: 17
+unitName: "Behavioral and experimental"
+order: 61
+kind: lesson
+summary: "One model with two dials spans reinforcement and belief learning, and fits real play in between."
+tags: ["behavioral", "ewa", "learning"]
+estMinutes: 6
+mvp: true
+prereqs: ["learning-in-games"]
+concepts: ["ewa", "reinforcement", "belief-learning"]
+refs: ["camererHo1999"]
+anchorEmoji: "🧮"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import EWA from '@/components/interactive/EWA.svelte';
+
+<div class="anchor"><span class="em">🧮</span><p>Two theories of how people learn games competed for years: reinforcement (repeat what paid off) and belief learning (best-respond to what you have seen). It turned out they are the same model with a dial, and real people sit in between.</p></div>
+
+# Learning and adaptation
+
+<p class="lead">Fictitious play was one learning rule; reinforcement learning is another. Experience-weighted attraction unifies them. Two parameters, one for memory and one for how much you learn from options you did not take, span the whole space, and fitting them to data lands squarely between the two classic extremes.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "Fictitious play has players best-respond to the opponent's...", options: ["Last move only", "Empirical frequency", "Payoff"], answer: 1 },
+    { q: "Reinforcement learning updates the value of...", options: ["Every action", "Only the action played", "The opponent's action"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+A learner with two dials: memory (how much past experience persists) and imagination (how much it learns from payoffs it did not actually receive). Watch how fast it finds the better action.
+
+<EWA
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Experience-weighted attraction with memory and imagination"
+  predict={{
+    question: 'Which learner homes in on the better action faster?',
+    options: [{ key: 'reinforce', label: 'One that learns only from what it played' }, { key: 'belief', label: 'One that also weighs foregone payoffs' }],
+    reveal: 'The one that weighs foregone payoffs (belief learning, high imagination) converges fastest, since it learns about every action each round. Pure reinforcement (imagination near 0) is slower, waiting to stumble onto the better action. Real people fall in between.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Reinforcement updates only the action you actually chose, so you learn about the road not taken only by eventually trying it, which is slow. Belief learning imagines the payoff every action would have given and updates them all, so it corrects course quickly. EWA puts a dial (imagination) between these: turn it to zero for reinforcement, to one for belief learning. Fitting the dial to human data lands around a half, meaning people do weigh what they missed, but not as heavily as what they experienced.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="experience-weighted attraction">
+EWA maintains an attraction $A_j$ for each action, updated as $A_j(t) = \dfrac{\phi\,N(t-1)\,A_j(t-1) + [\delta + (1-\delta)\mathbf{1}\{j\text{ played}\}]\,\pi_j(t)}{N(t)}$, with $N(t) = \rho\,N(t-1) + 1$, and choice by logit over attractions. The dial $\delta$ is imagination: $\delta = 0$ updates only the played action (reinforcement), while $\delta = 1$ with $\phi = \rho$ updates every action by its foregone payoff (belief learning / fictitious play). The dial $\phi$ is memory.
+</DefinitionAside>
+
+Setting $\delta = 0$ recovers reinforcement learning: the attraction of an unchosen action is unchanged, so you only learn by doing. Setting $\delta = 1$ with $\phi = \rho$ recovers belief learning: every action is credited with its counterfactual payoff, exactly fictitious play. Estimates from experiments put $\phi \approx 0.8$ to $1$ and $\delta \approx 0.5$: people remember most of the past and weigh foregone payoffs about half as much as realized ones. One model, tuned by data, subsumes both traditions.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Turn the imagination dial">
+Suppose action A pays $6$ and action B would have paid $4$ this round, and you played A. Under $\delta = 0$ (reinforcement), only A's attraction rises; B's is untouched, so you learn nothing about B unless you try it. Under $\delta = 1$ (belief learning), both attractions update: A by $6$, B by $4$, so you immediately compare the two and lean toward A.
+
+The reinforcement learner may take many rounds to discover B is worse (or A is better than some third option), because it only updates what it samples. The belief learner corrects in one round. EWA's $\delta \approx 0.5$ estimate says people do learn from foregone payoffs, roughly half-weight, so they adapt faster than pure reinforcement but slower than full belief learning.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Experience-weighted attraction nests reinforcement and belief learning in one model with two dials, memory and imagination. Fit to data, people weigh foregone payoffs about half as much as realized ones.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="ewa-learning"
+  id="q1"
+  badge="apply"
+  question="What does the imagination parameter delta = 0 correspond to?"
+  options={[
+    { text: "Pure reinforcement learning: only the action actually played is updated", correct: true, feedback: "With delta = 0 the foregone actions get zero weight, so you learn only from experienced payoffs. That is exactly reinforcement learning." },
+    { text: "Fictitious play", feedback: "Fictitious play is the other extreme, delta = 1 with phi = rho, where every action is updated by its would-be payoff." },
+    { text: "Random choice", feedback: "Delta = 0 still learns from played actions; it is not random. It is reinforcement learning, the slow-but-real extreme." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="ewa-learning"
+  id="q2"
+  badge="analyse"
+  question="Why does a belief learner (high delta) adapt faster than a reinforcement learner?"
+  options={[
+    { text: "It updates every action by the payoff it would have earned, so it learns about options it did not choose", correct: true, feedback: "Weighing foregone payoffs means the learner compares all actions each round, correcting course immediately, whereas reinforcement must sample an action to learn about it." },
+    { text: "It ignores the past entirely", feedback: "It still uses memory (phi). What speeds it up is learning from counterfactual payoffs, not discarding history." },
+    { text: "It always plays randomly to explore", feedback: "It does not rely on random exploration; it learns from foregone payoffs directly, which is why it needs less trial and error." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="ewa-learning"
+  id="q3"
+  badge="brings back: learning in games"
+  question="How does EWA relate to the fictitious play from the previous lesson?"
+  options={[
+    { text: "Fictitious play is the special case delta = 1, phi = rho; EWA generalizes it with tunable memory and imagination", correct: true, feedback: "Fictitious play best-responds to the empirical frequency, which EWA reproduces at delta = 1 with matched memory decay. Lowering delta blends in reinforcement, giving a family that fits real learning better than either extreme alone." },
+    { text: "They are unrelated models", feedback: "They are tightly linked: fictitious play is one corner of EWA's parameter space." },
+    { text: "EWA cannot represent fictitious play", feedback: "It can: set delta = 1 and phi = rho and EWA becomes belief learning / fictitious play." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["camererHo1999"]} />

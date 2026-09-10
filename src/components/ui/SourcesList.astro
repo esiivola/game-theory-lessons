@@ -1,0 +1,13 @@
+---
+import { resolveRefs } from '@/content/references';
+const { refs = [] } = Astro.props as { refs?: string[] };
+const items = resolveRefs(refs);
+---
+{items.length > 0 && (
+  <section class="sec">
+    <h2>Sources</h2>
+    <ol class="refs">
+      {items.map((html) => <li set:html={html} />)}
+    </ol>
+  </section>
+)}

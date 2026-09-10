@@ -1,0 +1,139 @@
+---
+title: "Stochastic stability and conventions"
+tier: expert
+unit: 15
+unitName: "Evolution and learning"
+order: 50
+kind: lesson
+summary: "With rare mistakes, the risk-dominant convention wins the long run, even if it pays less."
+tags: ["evolution", "conventions", "risk-dominance"]
+estMinutes: 6
+mvp: true
+prereqs: ["classic-2x2-games"]
+concepts: ["stochastic-stability", "risk-dominance", "conventions"]
+refs: ["kandoriMailathRob1993", "young1993"]
+anchorEmoji: "🎲"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import StochasticStability from '@/components/interactive/StochasticStability.svelte';
+
+<div class="anchor"><span class="em">🎲</span><p>Two technologies could each become the standard. One is better if everyone adopts it; the other is safer if you are unsure what others will do. Over the long run, with the occasional random switch, the safe one tends to take over, even though the world would be better off with the other.</p></div>
+
+# Stochastic stability and conventions
+
+<p class="lead">A coordination game has several equilibria, and the ESS cannot say which a society lands on. Add rare mistakes, mutations or experiments, and the tie breaks: the population spends almost all its time at the risk-dominant convention, the one with the larger basin, regardless of which pays more.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "Stag Hunt has two pure equilibria: all-Stag and...", options: ["all-Hare", "Stag-Hare", "mixed only"], answer: 0 },
+    { q: "Risk-dominance favours the equilibrium with the larger...", options: ["Payoff", "Basin of attraction", "Number of players"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+In the Stag Hunt, all-Stag pays 4 each and all-Hare pays 3, but Stag is only worth it if you are confident others hunt. Add rare mutations and watch which convention the population settles into over the long run.
+
+<StochasticStability
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Stag Hunt with rare mutations"
+  predict={{
+    question: 'Over the long run, which convention does the population spend most of its time at?',
+    options: [{ key: 'stag', label: 'All-Stag, since it pays more' }, { key: 'hare', label: 'All-Hare, the safer one' }],
+    reveal: 'All-Hare. Stag is a best response only if you expect over three-quarters of others to hunt, so its basin is small. Rare mutations knock the population out of the fragile Stag equilibrium far more easily than out of Hare, so Hare, the risk-dominant convention, dominates the long run.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Both all-Stag and all-Hare are stable against a single defector. What separates them is how much noise it takes to escape each. Escaping all-Hare toward Stag requires a lot of players to mistakenly hunt at once, because Stag only pays when most others do. Escaping all-Stag toward Hare needs only a few mistakes, since Hare is safe. So random shocks tip the population out of Stag easily and out of Hare rarely, and over a long horizon it lingers at Hare, even though everyone would prefer Stag.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="stochastic stability and risk-dominance">
+In an evolutionary model where players best-respond but occasionally make random mistakes (mutations), a convention is stochastically stable if the population spends a non-vanishing fraction of time there as the mistake rate goes to zero. For 2x2 coordination games it is the risk-dominant equilibrium, the one whose basin of attraction is larger, that is stochastically stable. Payoff-dominance does not decide it.
+</DefinitionAside>
+
+In the Stag Hunt, Stag pays $4$ against Stag and $0$ against Hare; Hare pays $3$ regardless. Playing Stag is a best response only if you believe the partner hunts with probability $q$ satisfying $4q \ge 3$, that is $q \ge \tfrac34$. So Stag's basin (the beliefs for which it is optimal) is only $\tfrac14$, while Hare's is $\tfrac34$.
+
+Since Hare's basin exceeds one-half, Hare is risk-dominant and therefore stochastically stable. Lowering the mutation rate does not change which convention wins; it only lengthens the time the population waits before drifting back to Hare. The long-run outcome is start-independent.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Compare the basins">
+You should hunt Stag only if the expected payoff beats Hare. Stag pays $4q$ when the partner hunts with probability $q$ (and $0$ otherwise); Hare pays $3$ no matter what. So Stag is a best response iff $4q \ge 3$, i.e., $q \ge \tfrac34$. That leaves only a $\tfrac14$ slice of beliefs favouring Stag, and $\tfrac34$ favouring Hare.
+
+The larger basin belongs to Hare, so Hare is risk-dominant. In the noisy dynamics, the population is pushed out of the small Stag basin by even modest mutation, but escaping the large Hare basin requires an improbable coincidence of mistakes. So it settles at Hare in the long run, despite Stag being payoff-dominant. Lowering the mutation rate only makes the rare escapes rarer; it does not favour Stag.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">With rare mistakes, the long-run winner among conventions is the risk-dominant one, with the larger basin, not the payoff-dominant one. Lowering the noise changes only the waiting time, not the outcome.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="stochastic-stability"
+  id="q1"
+  badge="apply"
+  question="In the Stag Hunt, why is all-Hare stochastically stable even though all-Stag pays more?"
+  options={[
+    { text: "Hare has the larger basin, so rare mutations escape Stag easily but escape Hare only very rarely", correct: true, feedback: "Stag is optimal only for beliefs above 3/4, a small basin. Noise tips the population out of Stag far more readily than out of Hare, so the long run is spent at Hare." },
+    { text: "Because Hare pays more than Stag", feedback: "Hare pays less (3 versus 4). It wins the long run because of its larger basin, not a higher payoff." },
+    { text: "Because all-Stag is not an equilibrium", feedback: "All-Stag is a strict equilibrium. It just has a small basin, making it fragile to noise." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="stochastic-stability"
+  id="q2"
+  badge="analyse"
+  question="What happens if you lower the mutation rate toward zero?"
+  options={[
+    { text: "The same convention (Hare) still wins; only the time spent before drifting back lengthens", correct: true, feedback: "Stochastic stability is defined in the low-noise limit. Reducing mistakes does not switch the winner; it just makes transitions rarer, so the population sits at Hare even longer." },
+    { text: "The population switches to all-Stag", feedback: "Lower noise does not favour the payoff-dominant equilibrium. Hare remains stochastically stable; the dynamics just slow down." },
+    { text: "The population starts cycling between the two", feedback: "It does not cycle; it spends almost all its time at Hare, with ever-rarer excursions as noise falls." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="stochastic-stability"
+  id="q3"
+  badge="brings back: classic 2x2 games"
+  question="How does this refine the Stag Hunt's two equilibria from the earlier zoo lesson?"
+  options={[
+    { text: "The zoo showed both all-Stag and all-Hare are equilibria; stochastic stability selects Hare as the long-run convention", correct: true, feedback: "Equilibrium analysis left the choice open between the payoff-dominant and risk-dominant outcomes. Adding noisy dynamics breaks the tie in favour of the risk-dominant one, Hare." },
+    { text: "It shows the Stag Hunt has only one equilibrium after all", feedback: "It still has two equilibria. Stochastic stability does not remove one; it predicts which the population lingers at over time." },
+    { text: "It shows all-Stag always wins", feedback: "The opposite: the risk-dominant all-Hare wins the long run, despite all-Stag paying more." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["kandoriMailathRob1993", "young1993"]} />

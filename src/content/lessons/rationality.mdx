@@ -1,0 +1,121 @@
+---
+title: "Rationality and common knowledge"
+tier: basic
+unit: 1
+unitName: "Foundations"
+order: 2
+kind: lesson
+summary: "Why the smart guess depends on how smart you think everyone else is."
+tags: ["foundations"]
+estMinutes: 5
+mvp: true
+prereqs: ["what-is-a-game"]
+concepts: ["common-knowledge", "beauty-contest"]
+refs: ["nagel1995", "osborne2004"]
+anchorEmoji: "🔢"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import BeautyContest from '@/components/interactive/BeautyContest.svelte';
+
+<div class="anchor"><span class="em">🔢</span><p>Everyone picks a number from 0 to 100. Whoever lands closest to two-thirds of the average wins. What do you play?</p></div>
+
+# Rationality and common knowledge
+
+<p class="lead">Being rational is not enough to know what to do. You also need a view about how the other players think, and about how they think you think. This game makes that chain visible.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In a game, your best move depends on...", options: ["Only your own payoffs", "What the others do", "The referee"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Pick your number, then play it against a crowd that reasons to different depths. See where the winning number lands, and where you land.
+
+<BeautyContest
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Guess two-thirds of the average"
+  predict={{
+    question: 'Playing against a normal crowd, what number tends to win?',
+    options: [{ key: 'zero', label: 'Zero, the pure-logic answer' }, { key: 'twenties', label: 'Somewhere in the 20s' }],
+    reveal: 'Usually the low 20s to low 30s, not 0. Real players reason a step or two, not infinitely far, so the average lands well above 0 and two-thirds of it does too. Guess 0 and you lose.',
+  }}
+/>
+</Section>
+
+<Section id="ladder">
+## The reasoning ladder
+
+If everyone chose at random, the average would be about 50, so two-thirds of it is about 33. But if everyone is smart enough to see that, they all aim for 33, and now two-thirds of the average is 22. Keep going and the chain marches down toward 0.
+
+<Callout kind="ask">
+So should you guess 0? Only if you believe everyone else will reason all the way down too, and believe that they believe it, and so on. That endless "everyone knows that everyone knows" is called common knowledge of rationality. Real people stop after a step or two, so the winning number is usually around 20 to 33, not 0.
+</Callout>
+
+<WorkedExample title="Walk the ladder">
+Level 0 plays randomly, average $50$. Level 1 best-responds: $\tfrac{2}{3}\cdot 50 = 33$. Level 2 best-responds to that: $\tfrac{2}{3}\cdot 33 = 22$. The unique Nash equilibrium is $0$, reached only in the limit. Nagel (1995) found real players cluster at $33$ and $22$, that is, one and two steps of reasoning.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Rationality alone does not pin down a choice. What pins it down is a shared, and often wrong, assumption about how deeply everyone else reasons.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="rationality"
+  id="q1"
+  badge="apply"
+  question="You are playing this game against a normal crowd of people, for real money. What is the smarter guess?"
+  options={[
+    { text: "0, the equilibrium", feedback: "Against real people 0 loses. It only wins if everyone reasons infinitely far, which they do not." },
+    { text: "About 22", correct: true, feedback: "Two steps down from 50 is where real crowds tend to cluster, so it usually wins." },
+    { text: "50, the raw average", feedback: "That ignores the two-thirds rule entirely." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="rationality"
+  id="q2"
+  badge="concept"
+  question="What does common knowledge of a fact require?"
+  options={[
+    { text: "Everyone knows it", feedback: "Necessary but not enough. Common knowledge needs more." },
+    { text: "Everyone knows it, and knows that everyone knows it, and so on without end", correct: true, feedback: "That infinite tower is exactly what common knowledge means, and it is what the ladder relies on." },
+    { text: "One person announces it", feedback: "An announcement can create common knowledge, but the announcement is not the same as the condition itself." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="rationality"
+  id="q3"
+  badge="brings back: what is a game"
+  question="What makes the beauty contest a game in the normal-form sense, rather than a solo puzzle?"
+  options={[
+    { text: "Your best guess depends on everyone else's guesses, and all of you choose at once", correct: true, feedback: "Players, a strategy each (a number), and payoffs that depend on the whole profile: that is a normal-form game. The interdependence is exactly why one step of reasoning is not enough." },
+    { text: "There is a referee who sets the winning number", feedback: "No referee sets it; the winning number emerges from everyone's guesses. That interdependence is what makes it a game." },
+    { text: "Each player's payoff depends only on their own guess", feedback: "It depends on the others too, through the average. If it depended only on your own guess, it would be a solo puzzle, not a game." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["nagel1995", "osborne2004"]} />

@@ -1,0 +1,139 @@
+---
+title: "Political economy"
+tier: applied
+unit: 18
+unitName: "Game theory in the wild"
+order: 10
+label: "A10"
+kind: case
+placement: "capstone"
+summary: "Why candidates converge on the median voter, when they do not, and lobbying as an all-pay contest."
+tags: ["applied", "voting", "median-voter"]
+estMinutes: 6
+mvp: true
+prereqs: ["focal-points", "social-choice"]
+concepts: ["median-voter", "hotelling", "all-pay-auction"]
+refs: ["downs1957", "bayeKovenockDeVries1993"]
+anchorEmoji: "🗳️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import MedianVoter from '@/components/interactive/MedianVoter.svelte';
+
+<div class="anchor"><span class="em">🗳️</span><p>Two candidates start at opposite ends of the spectrum, then edge toward the center, and toward each other, until both sound almost the same. Voters complain there is no real choice. That drift is not cowardice; it is the median voter theorem, and it is a Nash equilibrium.</p></div>
+
+# Political economy
+
+<p class="lead">Game theory reaches politics too. Downs and Hotelling explain why two candidates converge on the median voter, why that breaks down with abstention or three candidates, and why lobbying is an all-pay contest where money is burned even in defeat.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "The median voter theorem predicts two candidates converge on the...", options: ["Extremes", "Median position", "Mean turnout"], answer: 1 },
+    { q: "In an all-pay contest, a loser...", options: ["Gets a refund", "Still pays their bid", "Pays nothing"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Drag two candidates along a spectrum with a visible voter distribution. Vote shares update, and any off-median position gets beaten. Add an extremism turnout penalty to break the convergence.
+
+<MedianVoter
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Two candidates competing for votes on a spectrum"
+  predict={{
+    question: 'Where do two vote-maximizing candidates end up on a left-right spectrum?',
+    options: [{ key: 'ends', label: 'At opposite extremes, matching their base' }, { key: 'median', label: 'Both at the median voter' }],
+    reveal: 'Both converge on the median. Any candidate off the median can be beaten by a rival who moves just inside them and captures the majority. Both-at-median is the only Nash equilibrium, which is why platforms often look so similar. Abstention or a third candidate can break it.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Candidates want votes, and on a single left-right dimension each voter picks the nearer candidate. If one candidate sits away from the median, the other can move just inside them, closer to the middle, and win everyone on that side plus the median, a majority. So any position but the median is beatable, and both-at-median is the only stable outcome. This is why rivals often sound alike: they are chasing the same pivotal voter, not their base. The convergence breaks when extremists abstain if a candidate drifts too far center (pulling platforms apart to hold turnout), when there are three or more candidates, or when the policy space is multi-dimensional, where a median generally does not exist. Lobbying is a different game: an all-pay contest where spending is sunk whether you win or lose.
+</Callout>
+</Section>
+
+<Section id="math">
+## The real strategy
+
+<DefinitionAside label="median voter and all-pay lobbying">
+Downs (1957), building on Hotelling, showed that with single-peaked preferences on one dimension, two office-seeking candidates both converge to the median voter's position; that is the unique Nash equilibrium. The result is fragile: it fails with three or more candidates, in multiple policy dimensions (no median in general), and when extremist abstention penalizes centrism. Lobbying is modeled as an all-pay auction (Baye, Kovenock and de Vries, 1993): contestants spend to win a prize, but all spending is forfeit, so total resources burned can approach the prize's value, and rational ignorance means most voters do not monitor it.
+</DefinitionAside>
+
+Take voters at positions $\{0.1, 0.2, 0.5, 0.8, 0.9\}$; the median is $0.5$. If A stands at $0.4$ and B at $0.6$, B can slide to $0.5$ and win the median plus everyone to the right, a majority, so A is beaten anywhere but the median, and vice versa. Both-at-median is the only Nash equilibrium. Add a rule that voters far from both candidates abstain, and a candidate who hugs the center loses their own flank, so equilibrium platforms spread apart. Lobbying overlays an all-pay contest: firms and groups spend on influence, and because losers do not get their money back, aggregate spending can dissipate much of the prize, while rationally ignorant voters rarely police it.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Convergence, and when it breaks">
+With voters at $\{0.1, 0.2, 0.5, 0.8, 0.9\}$, the median is $0.5$. Suppose A is at $0.4$ and B at $0.6$. B moves to $0.5$: now B is nearer to the median voter and to everyone at $0.8$ and $0.9$, winning at least three of five, a majority. A can only respond by moving to $0.5$ too. Once both sit at $0.5$, neither can profitably deviate, since any move loses the median to the other. That is the unique Nash equilibrium, and it explains platform convergence.
+
+Now let voters abstain if the nearest candidate is too far from them. A candidate at dead center now loses their own extreme supporters to abstention, so shifting slightly toward one's base can gain more turnout than it loses at the middle. The equilibrium platforms pull apart, and full convergence fails, matching real elections where candidates court their base as well as the center. With three candidates the logic collapses entirely: a third entrant near the median can leapfrog, and no stable median position exists. Meanwhile lobbying runs as an all-pay auction, where each side's spending is sunk, so competition can burn resources up to the value of the favour sought.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Two vote-maximizing candidates converge on the median voter, the unique Nash equilibrium, which is why platforms look alike. The result breaks with abstention, three candidates, or multiple dimensions. Lobbying is an all-pay contest where spending is sunk even in defeat.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="case-political-economy"
+  id="q1"
+  badge="apply"
+  question="Why do two candidates on a single left-right spectrum both end up at the median voter?"
+  options={[
+    { text: "Any candidate off the median can be beaten by a rival who moves just inside them and captures the majority, so both-at-median is the only Nash equilibrium", correct: true, feedback: "Off-median positions are always beatable by moving closer to the center. The only position with no profitable deviation is the median itself, for both candidates." },
+    { text: "Because candidates sincerely hold centrist views", feedback: "The model assumes they chase votes, not sincerity. Convergence is a strategic best response, not a statement of belief." },
+    { text: "Because voters force them to the center by law", feedback: "No law is needed. The incentive to capture the pivotal median voter drives convergence on its own." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-political-economy"
+  id="q2"
+  badge="analyse"
+  question="Name one condition under which median-voter convergence breaks down."
+  options={[
+    { text: "Extremist abstention, three or more candidates, or a multi-dimensional policy space", correct: true, feedback: "Each breaks the theorem: abstention punishes centrism, a third candidate can leapfrog, and in multiple dimensions a median generally does not exist. The clean result holds only in the one-dimensional two-candidate case." },
+    { text: "When both candidates want to win", feedback: "Wanting to win is exactly what drives convergence in the base model. The breakdowns come from abstention, extra candidates, or extra dimensions." },
+    { text: "When voters have single-peaked preferences", feedback: "Single-peaked preferences on one dimension are the condition that makes convergence hold, not break." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-political-economy"
+  id="q3"
+  badge="brings back: auctions"
+  question="Why is lobbying modeled as an all-pay auction, and what follows?"
+  options={[
+    { text: "Contestants spend to win influence but forfeit the spending whether they win or lose, so competition can burn resources up to the prize's value", correct: true, feedback: "In an all-pay contest losers do not get refunds, so aggregate spending can dissipate much of the prize. Rational ignorance means voters rarely monitor it, compounding the waste." },
+    { text: "Because only the winner pays, like a normal auction", feedback: "That is the point of contrast: lobbying is all-pay, so losers also pay. That is why so many resources can be dissipated." },
+    { text: "Because lobbying always buys votes directly", feedback: "It is modeled as spending on influence in a contest, not direct vote-buying, and the all-pay structure is what makes it wasteful." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["downs1957", "bayeKovenockDeVries1993"]} />

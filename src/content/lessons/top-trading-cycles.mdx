@@ -1,0 +1,139 @@
+---
+title: "Top trading cycles"
+tier: expert
+unit: 14
+unitName: "Matching and market design"
+order: 46
+kind: lesson
+summary: "Swap along cycles of who wants whose house, for an efficient, strategy-proof allocation."
+tags: ["matching", "ttc", "exchange"]
+estMinutes: 6
+mvp: true
+prereqs: ["stable-matching"]
+concepts: ["top-trading-cycles", "core", "strategy-proofness"]
+refs: ["shapleyScarf1974", "rothSonmezUnver2004"]
+anchorEmoji: "🔑"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import TopTrading from '@/components/interactive/TopTrading.svelte';
+
+<div class="anchor"><span class="em">🔑</span><p>Four people each own a house and each would rather have someone else's. There is no money, just swaps. Kidney exchange works the same way: patients with willing but incompatible donors trade donors around a cycle so everyone gets a transplant.</p></div>
+
+# Top trading cycles
+
+<p class="lead">When goods must be reassigned without money and everyone starts with something, top trading cycles is the answer. Each person points to whoever owns their favourite item; wherever the pointing forms a cycle, that cycle trades and leaves. The result is efficient, in the core, and impossible to game.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "An allocation is in the core if no coalition can...", options: ["Trade internally to do better", "Vote it down", "Add a member"], answer: 0 },
+    { q: "Deferred acceptance is strategy-proof for...", options: ["The receiving side", "The proposing side", "Neither"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Four agents, each owning one house, each with a ranking. Run the cycles and see who ends up where.
+
+<TopTrading
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Housing exchange by top trading cycles"
+  predict={{
+    question: 'Will top trading cycles give everyone their first-choice house?',
+    options: [{ key: 'yes', label: 'Yes, everyone' }, { key: 'no', label: 'No, scarcity forces compromises' }],
+    reveal: 'No. Agents 1, 3, and 2 form a cycle and each gets a house they wanted, but agent 4, whose favourites are taken, keeps its own. Scarcity means not everyone lands their first choice, but no one can do better by lying.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+A cycle is a chain of wants that closes on itself: 1 wants 3's house, 3 wants 2's, 2 wants 1's. Everyone in that loop can be satisfied at once by rotating the houses around it, and because each got the best house still available to them, no one in the cycle envies anyone. Once a cycle trades and leaves, the rest repeat. Agents whose favourites are already gone simply keep what they have. Nothing rewards misreporting, because your pointing only ever helps complete a cycle that includes you.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="top trading cycles">
+Each agent owns one object and has strict preferences. Build a graph in which every remaining agent points to the owner of its favourite remaining object. Because every node has exactly one outgoing edge, at least one cycle exists. Every agent on a cycle receives the object it points to, then leaves with it. Repeat on what remains. The allocation is Pareto efficient, is the unique allocation in the core, and the mechanism is strategy-proof.
+</DefinitionAside>
+
+With agents $1,2,3,4$ owning $h_1,\dots,h_4$ and the given preferences, round 1 has $1 \to 3$ (owner of $h_3$), $2 \to 1$, $3 \to 2$, $4 \to 3$. The cycle $1 \to 3 \to 2 \to 1$ trades: agent 1 gets $h_3$, agent 3 gets $h_2$, agent 2 gets $h_1$. Agent 4 pointed into the cycle but is not on it, so it waits. Round 2 leaves only agent 4 and house $h_4$, which it takes. Final allocation: $(h_3, h_1, h_2, h_4)$.
+
+Compare with deferred acceptance: in school choice, TTC is efficient but can violate priorities, whereas DA respects priorities (is stable) but is not always efficient. The two mechanisms optimize different things.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Find and execute the cycle">
+Each agent points to the owner of its top remaining house. Agent 1's favourite is $h_3$, owned by agent 3, so $1 \to 3$. Agent 2's favourite is $h_1$ (agent 1), so $2 \to 1$. Agent 3's favourite is $h_2$ (agent 2), so $3 \to 2$. Agent 4's favourite is $h_3$ (agent 3), so $4 \to 3$.
+
+Follow the arrows: $1 \to 3 \to 2 \to 1$ closes into a cycle; agent 4 points into it but is not part of it. Execute the cycle by giving each member the house it points to: agent 1 takes $h_3$, agent 3 takes $h_2$, agent 2 takes $h_1$. Remove them and their houses. Only agent 4 and $h_4$ remain, so agent 4 keeps $h_4$. No agent could have done better by misreporting, and no coalition can re-trade to improve, so the outcome is both strategy-proof and in the core.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Top trading cycles reassigns owned goods by rotating them around cycles of mutual demand. The result is efficient, the unique core allocation, and strategy-proof, though scarcity means not everyone gets their first choice.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="top-trading-cycles"
+  id="q1"
+  badge="apply"
+  question="Agent 4 points at agent 3, but agent 3 is in the cycle 1-3-2. What happens to agent 4 in round 1?"
+  options={[
+    { text: "Nothing yet: agent 4 points into the cycle but is not on it, so it waits for a later round", correct: true, feedback: "Only agents whose pointing forms a closed loop trade in a round. Agent 4 is a tail leading into the cycle, so it stays and re-points once the cycle members leave." },
+    { text: "Agent 4 also trades and gets h3", feedback: "h3 goes to agent 1 in the cycle. Agent 4 is not part of any cycle this round, so it does not trade yet." },
+    { text: "Agent 4 is removed with no house", feedback: "No agent leaves empty-handed. Agent 4 simply waits and ends up with h4 in round 2." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="top-trading-cycles"
+  id="q2"
+  badge="analyse"
+  question="Why is top trading cycles strategy-proof?"
+  options={[
+    { text: "Your pointing only ever completes a cycle that includes you, so misreporting cannot get you a better object than truthful pointing would", correct: true, feedback: "You obtain an object exactly when you sit on a trading cycle, and pointing to your true favourite gives you the best available such object. Lying can only delay or worsen your outcome, never improve it." },
+    { text: "Because there is no money to manipulate", feedback: "Absence of money does not by itself prevent gaming. Strategy-proofness here comes from the cycle structure, which makes honest pointing optimal." },
+    { text: "Because everyone gets their first choice", feedback: "Not everyone does (agent 4 does not). Strategy-proofness holds despite that: no misreport improves your assignment." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="top-trading-cycles"
+  id="q3"
+  badge="brings back: the core"
+  question="How does the TTC outcome relate to the core of the housing market?"
+  options={[
+    { text: "It is the unique core allocation: no coalition can re-trade its own houses to make all its members better off", correct: true, feedback: "TTC lands exactly on the core, which for the housing market is a single allocation. Any group that tried to break away and swap among themselves could do no better than what TTC already gave them." },
+    { text: "It is one of many core allocations", feedback: "For the housing market the core is a single point, and TTC finds it. It is not one of several." },
+    { text: "It lies outside the core, like the Shapley value can", feedback: "Unlike the Shapley value in non-convex games, the TTC allocation is always in the core, in fact it is the core." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["shapleyScarf1974", "rothSonmezUnver2004"]} />

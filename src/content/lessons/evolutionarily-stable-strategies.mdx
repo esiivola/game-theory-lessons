@@ -1,0 +1,139 @@
+---
+title: "Evolutionarily stable strategies"
+tier: expert
+unit: 15
+unitName: "Evolution and learning"
+order: 48
+kind: lesson
+summary: "A strategy is evolutionarily stable if a rare mutant playing anything else cannot invade."
+tags: ["evolution", "ess", "hawk-dove"]
+estMinutes: 6
+mvp: true
+prereqs: ["mixed-strategies"]
+concepts: ["ess", "hawk-dove", "invasion"]
+refs: ["maynardSmithPrice1973"]
+anchorEmoji: "🦅"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import HawkDove from '@/components/interactive/HawkDove.svelte';
+
+<div class="anchor"><span class="em">🦅</span><p>Animals of the same species fight over food and mates, but rarely to the death. Too much aggression and everyone gets injured; too little and the meek get pushed aside. Evolution settles on a mix, and game theory predicts exactly what fraction.</p></div>
+
+# Evolutionarily stable strategies
+
+<p class="lead">Nash equilibrium assumes reasoning. Evolution needs none: strategies that do well reproduce, those that do badly die out. An evolutionarily stable strategy is one that, once common, resists invasion by any rare mutant. In Hawk-Dove it is a precise mix of aggression and restraint.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A mixed strategy is a probability distribution over...", options: ["Players", "Pure strategies", "Payoffs"], answer: 1 },
+    { q: "At a mixed equilibrium a player is...", options: ["Maximising alone", "Indifferent among the mixed moves", "Always winning"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Hawks fight; Doves back down. Fighting over a resource worth $V$ risks an injury cost $C$. Set the values and let the population evolve: the higher-fitness type reproduces faster.
+
+<HawkDove
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Hawk-Dove; fitness drives the population mix"
+  predict={{
+    question: 'With value V = 2 and injury cost C = 6, what stable fraction of Hawks does the population settle at?',
+    options: [{ key: 'all', label: 'All Hawks' }, { key: 'third', label: 'About one-third' }],
+    reveal: 'One-third: the ESS Hawk fraction is V/C = 2/6 = 1/3. When Hawks are rare they win easily and multiply; when common they injure each other and decline. The population is pulled back to 1/3 from either side.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The mix is self-correcting. When Hawks are scarce, they mostly meet Doves and grab the resource uncontested, so they thrive and their share rises. When Hawks are common, they mostly meet other Hawks and pay the injury cost, so they do worse than Doves and their share falls. The only fraction where neither type has an edge, so neither grows, is $V/C$. No animal is reasoning; the arithmetic of reproduction does the work.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="evolutionarily stable strategy">
+A strategy is an ESS if, when almost everyone plays it, no rare mutant playing anything else can earn higher average fitness and invade. Formally $s$ is an ESS if for every alternative $s'$, either $u(s,s) > u(s',s)$, or $u(s,s) = u(s',s)$ and $u(s,s') > u(s',s')$. Every ESS is a Nash equilibrium, but the invasion condition is strictly stronger.
+</DefinitionAside>
+
+Hawk-Dove payoffs: two Hawks split the resource and share the injury, $(V-C)/2$; a Hawk against a Dove takes it all, $V$; a Dove against a Hawk gets nothing; two Doves share peacefully, $V/2$. With $V = 2$, $C = 6$, that is Hawk-Hawk $= -2$, Hawk-Dove $= 2$, Dove-Hawk $= 0$, Dove-Dove $= 1$.
+
+When $C > V$ there is no pure ESS: all-Hawk is invadable by Doves (Hawks injure each other), and all-Dove is invadable by Hawks (a lone Hawk cleans up). The stable mix sets Hawk and Dove fitness equal. At Hawk fraction $p$, Hawk fitness is $2 - 4p$ and Dove fitness is $1 - p$; equating gives $p^* = V/C = 1/3$.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Find the stable Hawk fraction">
+At a Hawk fraction $p$, a Hawk meets a Hawk with probability $p$ (payoff $-2$) and a Dove with probability $1-p$ (payoff $2$), so its fitness is $-2p + 2(1-p) = 2 - 4p$. A Dove earns $0$ against Hawks and $1$ against Doves, so its fitness is $1 - p$.
+
+Set them equal: $2 - 4p = 1 - p$, giving $3p = 1$, so $p^* = 1/3 = V/C$. Below $1/3$, Hawks earn more and their share grows; above $1/3$, they earn less and it shrinks. So $1/3$ is stable against invasion from either side, exactly the ESS. Raising the injury cost $C$ lowers the stable Hawk share, since fighting becomes more dangerous.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">An evolutionarily stable strategy resists invasion by any rare mutant, a stronger test than Nash. In Hawk-Dove with costly injuries, the stable population is a mix, with a Hawk fraction of exactly V/C.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="evolutionarily-stable-strategies"
+  id="q1"
+  badge="apply"
+  question="Injury cost rises from C = 6 to C = 10 (value still 2). What happens to the stable Hawk fraction?"
+  options={[
+    { text: "It falls to V/C = 1/5, since fighting is now more dangerous", correct: true, feedback: "The ESS Hawk fraction is V/C, so raising C lowers it. Costlier fights mean fewer Hawks can be sustained, here dropping from 1/3 to 1/5." },
+    { text: "It rises, because Hawks become more valuable", feedback: "Higher injury cost makes Hawks worse off when they meet, so their stable share falls, not rises." },
+    { text: "It stays at 1/3", feedback: "It depends on C through V/C. Raising C to 10 moves the ESS to 1/5." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="evolutionarily-stable-strategies"
+  id="q2"
+  badge="analyse"
+  question="Why is all-Hawk not evolutionarily stable when C > V?"
+  options={[
+    { text: "In an all-Hawk population every fight is costly, so a rare Dove that avoids fights earns more and invades", correct: true, feedback: "When Hawks meet Hawks they pay (V-C)/2 < 0. A mutant Dove sidesteps that, earning 0, which beats the Hawks' negative fitness, so it invades. All-Hawk cannot resist it." },
+    { text: "Because Hawks always cooperate", feedback: "Hawks do not cooperate; they fight and injure each other. That is exactly why a Dove mutant can invade an all-Hawk population." },
+    { text: "Because all-Hawk is not a Nash equilibrium", feedback: "The issue is invadability, the stronger ESS condition. When C > V, a Dove mutant earns more, so all-Hawk fails the invasion test." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="evolutionarily-stable-strategies"
+  id="q3"
+  badge="brings back: mixed strategies"
+  question="How does the ESS relate to the mixed Nash equilibrium of Hawk-Dove?"
+  options={[
+    { text: "The stable mix is the mixed Nash equilibrium, but ESS adds an invasion condition that mere Nash does not require", correct: true, feedback: "The Hawk fraction V/C is the mixed Nash equilibrium; the ESS is that same mix plus the requirement that no mutant can invade. Every ESS is a Nash equilibrium, not conversely." },
+    { text: "The ESS ignores Nash equilibrium entirely", feedback: "It builds on it: an ESS is always a Nash equilibrium, with the extra invasion requirement layered on top." },
+    { text: "The ESS requires players to reason to the equilibrium", feedback: "No reasoning is needed. Reproduction dynamics carry the population to the ESS, which happens to coincide with the mixed Nash mix." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["maynardSmithPrice1973"]} />

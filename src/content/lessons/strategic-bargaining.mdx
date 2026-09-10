@@ -1,0 +1,147 @@
+---
+title: "Strategic bargaining"
+tier: intermediate
+unit: 6
+unitName: "Bargaining"
+order: 19
+kind: lesson
+summary: "Alternating offers with impatience give one clean split, agreed in the first round."
+tags: ["bargaining", "sequential", "subgame-perfection"]
+estMinutes: 6
+mvp: true
+prereqs: ["subgame-perfection", "nash-bargaining"]
+concepts: ["rubinstein-bargaining", "discounting", "subgame-perfection"]
+refs: ["rubinstein1982"]
+anchorEmoji: "⏳"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Rubinstein from '@/components/interactive/Rubinstein.svelte';
+
+<div class="anchor"><span class="em">⏳</span><p>A house sale stalls over the last few thousand dollars. Every week the deal drags on, both sides lose: the buyer pays rent, the seller pays a second mortgage. The clock, more than any argument, decides the price.</p></div>
+
+# Strategic bargaining
+
+<p class="lead">The axiomatic answer said what a fair split looks like. Rubinstein asked how bargaining actually plays out when offers alternate and delay is costly. The result is sharp: a single subgame-perfect split, agreed immediately, set by who loses less from waiting.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A subgame-perfect equilibrium requires optimal play...", options: ["Only at the start", "At every decision node", "Only on the equilibrium path"], answer: 1 },
+    { q: "In Nash bargaining, a better outside option gives you...", options: ["A smaller share", "A larger share", "The same share"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+You and a bot alternate offers to split a pie of 1. Each round of delay shrinks its value by $\delta$. You move first. Propose how much to keep; the bot responds by playing the equilibrium.
+
+<Rubinstein
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Alternating offers with discount factor delta"
+  predict={{
+    question: 'Who gets more, and does being patient help?',
+    options: [{ key: 'first', label: 'The first mover takes almost all' }, { key: 'patience', label: 'Patience matters; moving first helps only a little' }],
+    reveal: 'The proposer keeps 1/(1+delta). When both are patient (delta near 1) that is close to half; the first-mover edge is small. Impatience, not turn order, is what costs you.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Why settle at once instead of haggling for rounds? Because both sides can see how it ends. If you lowball, the responder rejects, becomes the proposer next round, and claims the proposer's share of a slightly smaller pie. Knowing that, you offer them exactly what waiting is worth to them, no more, and they accept immediately. Delay only shrinks the pie, so no one chooses it in equilibrium.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Let the proposer's equilibrium share be $x$. By symmetry of the stationary game, if the responder rejects, they become the proposer and claim $x$ of a pie discounted to $\delta$, worth $\delta x$ to them now. So the proposer must leave them at least $\delta x$:
+
+$$
+x = 1 - \delta x \quad\Longrightarrow\quad x = \frac{1}{1+\delta}.
+$$
+
+At $\delta = 0.9$ the proposer keeps $\tfrac{1}{1.9} \approx 0.526$: barely more than half. The advantage of moving first vanishes as players get patient.
+
+<DefinitionAside label="Rubinstein bargaining">
+With alternating offers and a common discount factor $\delta \in (0,1)$, the infinite-horizon game has a unique subgame-perfect equilibrium: the first proposer offers $(\tfrac{1}{1+\delta}, \tfrac{\delta}{1+\delta})$ and it is accepted at once. With different discount factors the proposer's share is $\tfrac{1-\delta_2}{1-\delta_1\delta_2}$: the more patient side gets more.
+</DefinitionAside>
+
+As $\delta \to 1$ the split approaches $(\tfrac12, \tfrac12)$, matching the Nash bargaining solution with equal footing. Two different questions, the axiomatic and the strategic, converge on the same answer. That link is the Nash program.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Solve for the split, then vary patience">
+The proposer leaves the responder their continuation value. If the responder rejects, they propose next round and keep $x$ of a pie worth $\delta$, so their continuation is $\delta x$. The proposer keeps the rest: $x = 1 - \delta x$, giving $x = 1/(1+\delta)$.
+
+At $\delta = 0.5$ the proposer keeps $1/1.5 \approx 0.667$; at $\delta = 0.9$, about $0.526$; at $\delta \to 1$, exactly $0.5$. Patience compresses the first-mover advantage.
+
+With unequal patience, the proposer (player 1) keeps $\tfrac{1 - \delta_2}{1 - \delta_1 \delta_2}$. If player 1 is very patient ($\delta_1$ near 1) and player 2 is not, player 1 takes almost the whole pie. Relative patience is the source of bargaining power.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Alternating-offer bargaining ends in the first round at a split set by patience: the proposer keeps 1/(1+delta). The one who loses less from waiting wins the larger share.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="strategic-bargaining"
+  id="q1"
+  badge="apply"
+  question="Both players share a discount factor delta = 0.9. What is the proposer's equilibrium share, and when is the deal struck?"
+  options={[
+    { text: "About 0.53, agreed in the first round", correct: true, feedback: "The proposer keeps 1/(1+0.9) = 1/1.9 ≈ 0.526, and since delay only shrinks the pie, the responder accepts immediately. No haggling occurs in equilibrium." },
+    { text: "About 0.9, agreed in the first round", feedback: "0.9 is the discount factor, not the share. The proposer keeps 1/(1+delta) ≈ 0.53, only a slight edge when both are patient." },
+    { text: "0.5, after several rounds of offers", feedback: "The split is about 0.53, not exactly half, and it is agreed at once. Multiple rounds never happen on the equilibrium path." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="strategic-bargaining"
+  id="q2"
+  badge="analyse"
+  question="As both players become perfectly patient (delta approaches 1), what happens to the split?"
+  options={[
+    { text: "It approaches 50/50, matching the Nash bargaining solution", correct: true, feedback: "1/(1+delta) tends to 1/2 as delta approaches 1. The strategic model and the axiomatic solution meet, which is the Nash program." },
+    { text: "The proposer takes everything", feedback: "The proposer's edge shrinks with patience, toward an even split. The first mover dominates only when the responder is impatient." },
+    { text: "The pie is never divided", feedback: "Agreement still happens in round one. Patience changes the split toward 50/50, it does not prevent a deal." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="strategic-bargaining"
+  id="q3"
+  badge="brings back: subgame perfection"
+  question="Why is the outcome agreement in the very first round, rather than a long sequence of rejected offers?"
+  options={[
+    { text: "Subgame perfection: each side foresees the equilibrium of every future subgame, so the proposer offers exactly the responder's continuation value and it is accepted at once", correct: true, feedback: "Backward reasoning over the stationary subgames pins down the continuation value. The proposer leaves precisely that, the responder has no reason to reject, and delay, which only shrinks the pie, never occurs." },
+    { text: "Because rejecting an offer is against the rules", feedback: "Rejection is allowed; it just is not optimal. The proposer offers the responder's continuation value, so accepting is weakly better than waiting." },
+    { text: "Because the first mover can force acceptance", feedback: "Nothing is forced. Subgame perfection makes immediate acceptance the responder's best reply to the equilibrium offer." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["rubinstein1982"]} />

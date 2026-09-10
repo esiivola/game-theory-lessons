@@ -1,0 +1,130 @@
+---
+title: "Preferences and expected utility"
+tier: basic
+unit: 1
+unitName: "Foundations"
+order: 3
+kind: lesson
+summary: "Why rational does not mean maximising expected money."
+tags: ["foundations", "decision-theory"]
+estMinutes: 5
+mvp: true
+prereqs: ["what-is-a-game"]
+concepts: ["expected-utility", "risk"]
+refs: ["vonNeumannMorgenstern1944", "osborne2004"]
+anchorEmoji: "🎲"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import RiskCurve from '@/components/interactive/RiskCurve.svelte';
+
+<div class="anchor"><span class="em">🎲</span><p>You can take a coin flip for 100 dollars or nothing, or a sure 40 dollars. The expected value of the flip is 50, more than 40. Most people still take the 40. Are they wrong?</p></div>
+
+# Preferences and expected utility
+
+<p class="lead">To compare risky options we need utilities, not just money. A rational player maximises expected <span class="in-acc">utility</span>, and a curved utility can make a sure thing beat a better-on-average gamble.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A payoff table lists utilities that mainly capture...", options: ["Exact dollars", "How a player ranks outcomes", "The referee's opinion"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Bend the utility curve and watch the coin flip lose its shine. The gamble pays \$0 or \$100, so it averages \$50. Drag the risk attitude and see the sure amount this person would accept instead.
+
+<RiskCurve
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Utility of money, and the value of a 50-50 gamble"
+  predict={{
+    question: 'A cautious person is offered a coin flip worth $50 on average. What sure amount would they take instead?',
+    options: [{ key: 'more', label: 'More than $50' }, { key: 'less', label: 'Less than $50' }],
+    reveal: 'Less. A curved (concave) utility makes the downside of the flip sting more than the upside pleases, so the person accepts a sure amount below $50. The more cautious they are, the further below.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The two outcomes are equally likely, but they are not equally weighted in utility. Going from \$50 down to \$0 costs more happiness than going from \$50 up to \$100 adds, because each extra dollar is worth a little less than the last. So the gamble's expected utility sits below the utility of its \$50 average, and the sure thing that matches it, the certainty equivalent, is less than \$50.
+</Callout>
+</Section>
+
+<Section id="eu">
+## Value the risk, not the cash
+
+Assign each amount a utility $u(x)$. The value of a gamble is its expected utility, the probability-weighted average of $u$. If $u$ is concave (each extra dollar is worth a little less than the last), the player is risk-averse and will pay to avoid a fair bet. That is exactly why insurance exists.
+
+<DefinitionAside label="expected utility">
+The von Neumann and Morgenstern theorem says a player whose preferences over lotteries obey a few consistency axioms acts as if maximising $\mathbb{E}[u(x)]$ for some utility $u$, unique up to a positive affine transformation.
+</DefinitionAside>
+
+<WorkedExample title="Find the certainty equivalent">
+Take $u(x)=\sqrt{x}$ and the gamble (50% of \$0, 50% of \$100). Its expected utility is $0.5\sqrt{0}+0.5\sqrt{100}=5$. The sure amount worth the same is $x$ with $\sqrt{x}=5$, so $x=\$25$. This player would swap the gamble for a guaranteed \$25, well below its \$50 average. That gap is the risk premium.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Rational does not mean chasing the highest average payout. It means maximising expected utility, which can be cautious by design.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="expected-utility"
+  id="q1"
+  badge="concept"
+  question="A person with a concave (risk-averse) utility is offered a fair bet: pay 50 for a 50-50 shot at 0 or 100. What do they do?"
+  options={[
+    { text: "Decline, and may pay to avoid it", correct: true, feedback: "Concave utility means the downside hurts more than the equal upside helps, so a fair bet is unattractive." },
+    { text: "Always accept, since it is fair", feedback: "Fair in money is not fair in utility for a risk-averse player." },
+    { text: "It depends on the referee", feedback: "There is no referee. It depends only on the shape of their utility." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="expected-utility"
+  id="q2"
+  badge="concept"
+  question="You multiply every payoff in a game by 10 and add 5. Do the players' best choices change?"
+  options={[
+    { text: "No, a positive affine transform leaves decisions unchanged", correct: true, feedback: "Expected-utility preferences are invariant to a positive affine rescaling, so nothing about the choices changes." },
+    { text: "Yes, bigger numbers change behaviour", feedback: "Only the ranking and relative gaps matter, and an affine transform preserves both." },
+    { text: "Only if the numbers become negative", feedback: "Sign alone does not matter here; the transform preserves the preference order." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="expected-utility"
+  id="q3"
+  badge="brings back: what is a game"
+  question="Given all this, what do the numbers in a payoff table really represent?"
+  options={[
+    { text: "Utilities, which already fold in each player's attitude to risk", correct: true, feedback: "Payoffs are utilities, not raw dollars. A risk-averse player's caution is already built into the numbers, so you can compare cells directly." },
+    { text: "Exact dollar amounts every player values the same", feedback: "Money is not utility, and two players can value the same dollars differently. The table lists utilities to sidestep that." },
+    { text: "Only the ranking of outcomes, with sizes meaningless", feedback: "Rankings are not enough for gambles: expected utility needs the sizes too, which is why payoffs are cardinal utilities, not just an order." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["vonNeumannMorgenstern1944", "osborne2004"]} />

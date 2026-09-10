@@ -1,0 +1,139 @@
+---
+title: "Optimal auctions"
+tier: expert
+unit: 12
+unitName: "Mechanism design and social choice"
+order: 39
+kind: lesson
+summary: "To maximize revenue, run a second-price auction with a reserve, and it never moves with n."
+tags: ["auctions", "mechanism-design", "revenue"]
+estMinutes: 6
+mvp: true
+prereqs: ["mechanism-design", "auctions-first-second-price"]
+concepts: ["optimal-auction", "reserve-price", "virtual-value"]
+refs: ["myerson1981"]
+anchorEmoji: "🏷️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import OptimalReserve from '@/components/interactive/OptimalReserve.svelte';
+
+<div class="anchor"><span class="em">🏷️</span><p>eBay lets sellers set a reserve, a secret minimum below which the item does not sell. Set it too high and you scare off bidders; too low and you leave money on the table. There is one right answer, and it does not depend on how many bidders show up.</p></div>
+
+# Optimal auctions
+
+<p class="lead">Revenue equivalence said the format does not matter for revenue. But it took the rules as given. Myerson asked the harder question: across all mechanisms, which raises the most? The answer is clean. Run a second-price auction with a reserve set where the bidder's virtual value turns positive.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "Revenue equivalence says first- and second-price auctions raise...", options: ["Different revenue", "The same expected revenue", "Zero revenue"], answer: 1 },
+    { q: "A reserve price is a threshold below which the item...", options: ["Sells cheaply", "Does not sell", "Sells to everyone"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Bidders' values are uniform on $[0,1]$. Set the reserve and the number of bidders, and watch the seller's expected revenue. Then change the number of bidders and see where the peak moves.
+
+<OptimalReserve
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Expected revenue versus reserve, values uniform on [0,1]"
+  predict={{
+    question: 'With more bidders competing, should the seller raise the reserve?',
+    options: [{ key: 'raise', label: 'Yes, raise it' }, { key: 'same', label: 'No, keep it at 1/2' }],
+    reveal: 'Keep it at 1/2. The optimal reserve is where the virtual value hits zero, which for uniform values is 1/2 regardless of how many bidders there are. More competition raises revenue, but not the reserve.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The reserve is really a price you post to the winning bidder, and the right price to post to a single buyer with a uniform value is $1/2$, maximizing $p(1-p)$. Adding more bidders makes it more likely someone clears that bar and pushes up the price they actually pay through competition, so revenue rises. But the threshold itself, the point below which selling is not worth it, is a property of one bidder's value distribution, not of how many bidders there are. So the reserve stays put at $1/2$.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="virtual value and the optimal auction">
+For a bidder with value $v$ and distribution $F$, the virtual value is $\psi(v) = v - \frac{1 - F(v)}{f(v)}$. Myerson's theorem: the revenue-maximizing auction allocates the item to the bidder with the highest virtual value, provided it is nonnegative, and charges accordingly. For regular distributions this is a second-price auction with a reserve $r$ solving $\psi(r) = 0$.
+</DefinitionAside>
+
+For the uniform distribution, $\psi(v) = 2v - 1$, so the reserve solves $2r - 1 = 0$, giving $r^* = \tfrac12$, independent of $n$. Intuitively, revenue is expected virtual surplus, and you only want to sell to a bidder whose virtual value is positive, that is, whose value clears $\tfrac12$.
+
+With a single buyer, this is just posting a price $p$ to maximize $p(1-p)$, which peaks at $p = \tfrac12$ with revenue $\tfrac14$. Note the optimal auction sometimes does not sell (when every value is below the reserve), so revenue maximization is not the same as efficiency: the seller accepts occasional no-sales to keep prices up.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Find the reserve, and see it ignore n">
+The uniform virtual value is $\psi(v) = 2v - 1$. Set it to zero: $2r - 1 = 0$, so $r^* = \tfrac12$. This uses only one bidder's distribution, so it holds for any number of bidders.
+
+Check the single-buyer case directly: posting price $p$ sells with probability $1-p$ for revenue $p(1-p)$, maximized at $p = \tfrac12$, revenue $\tfrac14$. Now add bidders. Competition raises the price the winner pays (toward the second-highest value), so expected revenue climbs with $n$, but the reserve that maximizes it stays at $\tfrac12$. Raising the reserve when bidders are plentiful would only forgo sales without helping, since the threshold is a fact about a single value draw.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">The revenue-maximizing auction is a second-price auction with a reserve where the virtual value turns positive. For uniform values that reserve is 1/2, whatever the number of bidders, and it deliberately trades some efficiency for revenue.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="optimal-auctions"
+  id="q1"
+  badge="apply"
+  question="Values are uniform on [0,1]. What is the optimal reserve, and how does it change with more bidders?"
+  options={[
+    { text: "1/2, and it does not change with the number of bidders", correct: true, feedback: "The reserve solves the virtual value 2r - 1 = 0, giving 1/2, which depends only on one bidder's distribution, not on n. More bidders raise revenue but not the reserve." },
+    { text: "It rises toward 1 as bidders increase", feedback: "The reserve is independent of n for iid values. Competition lifts revenue, but the optimal threshold stays at 1/2." },
+    { text: "It falls toward 0 as bidders increase", feedback: "It does not fall either; it is fixed at 1/2 regardless of how many bidders compete." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="optimal-auctions"
+  id="q2"
+  badge="analyse"
+  question="Why is the revenue-maximizing auction not the same as the efficient one?"
+  options={[
+    { text: "The reserve means the item sometimes goes unsold even when a bidder values it positively, sacrificing efficiency for a higher price", correct: true, feedback: "Efficiency would sell to the highest-value bidder always. The optimal auction withholds the item when all values are below the reserve, accepting no-sales to keep expected revenue up." },
+    { text: "They are the same thing", feedback: "They differ: the reserve creates occasional no-sales that an efficient mechanism would avoid. Revenue maximization is not efficiency." },
+    { text: "Because the efficient auction has no winner", feedback: "The efficient auction does have a winner (the highest value). The difference is the reserve, which the optimal auction adds and the efficient one does not." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="optimal-auctions"
+  id="q3"
+  badge="brings back: revelation principle"
+  question="How does the revelation principle underpin Myerson's result?"
+  options={[
+    { text: "It lets the designer search only over truthful direct mechanisms, so revenue maximization reduces to choosing an allocation and payments over reported values", correct: true, feedback: "Because any outcome is achievable by a truthful direct mechanism, Myerson optimizes over those, expresses revenue as expected virtual value, and reads off the second-price-with-reserve form. The revelation principle is what makes the search tractable." },
+    { text: "It proves the first-price auction is optimal", feedback: "The optimal auction is second-price with a reserve, not first-price. The revelation principle is a tool for finding it, not a claim about first-price." },
+    { text: "It removes bidders' private information", feedback: "Private information remains; the principle just makes honesty optimal, which lets the designer optimize over reports." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["myerson1981"]} />

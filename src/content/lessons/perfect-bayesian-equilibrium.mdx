@@ -1,0 +1,139 @@
+---
+title: "Perfect Bayesian equilibrium"
+tier: intermediate
+unit: 9
+unitName: "Dynamic information and communication"
+order: 27
+kind: lesson
+summary: "Add beliefs to sequential play: act optimally given what each move leads you to think."
+tags: ["incomplete-information", "beliefs", "signaling"]
+estMinutes: 6
+mvp: true
+prereqs: ["bayesian-games", "subgame-perfection"]
+concepts: ["perfect-bayesian-equilibrium", "beliefs", "sequential-rationality"]
+refs: ["fudenbergTirole1991"]
+anchorEmoji: "🎁"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import PbeChecker from '@/components/interactive/PbeChecker.svelte';
+
+<div class="anchor"><span class="em">🎁</span><p>A company offers you a free trial. It might be a good product hoping you will love it, or a lock-in hoping you will get stuck. You cannot tell which from the offer alone. Whether you should accept depends entirely on what a free trial makes you believe.</p></div>
+
+# Perfect Bayesian equilibrium
+
+<p class="lead">When players move in turn and some of them hide private information, equilibrium needs two things at once: a strategy for everyone, and a belief at every point about what has happened so far. Perfect Bayesian equilibrium ties them together, so each move is optimal given beliefs, and beliefs are updated from the moves.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In a Bayesian game you best-respond to...", options: ["The realised type", "The distribution of types", "The worst type"], answer: 1 },
+    { q: "Subgame perfection requires optimal play...", options: ["Only at the start", "At every decision point", "Only on the equilibrium path"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+The Gift game. A sender is a Friend (good intentions) with probability $p$, or an Enemy otherwise, and chooses whether to give you a gift. Seeing a gift but not the type, you accept or reject. Accepting a Friend's gift is good, an Enemy's is bad. Set the prior and check whether "both types give" can hold up.
+
+<PbeChecker
+  client:visible
+  exhibit="Exhibit 1"
+  caption="The Gift game; is pooling on Give an equilibrium?"
+  predict={{
+    question: 'At a prior of 40% Friend, can "both types give a gift" be an equilibrium?',
+    options: [{ key: 'yes', label: 'Yes' }, { key: 'no', label: 'No' }],
+    reveal: 'No. If both types give, a gift tells you nothing beyond the prior, 40% Friend, which is below the half you need to accept. So you reject, and then neither type wants to give. Pooling on Give collapses.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Your decision hinges on a belief: how likely is this gift to come from a Friend? If both types give, the gift is uninformative, so your belief stays at the prior. When the prior is high enough you accept, and giving pays off for both types, so the arrangement holds. When the prior is too low you reject, and a gift becomes a trap you avoid, so no one bothers to give. The equilibrium is a strategy and a belief that agree with each other.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="perfect Bayesian equilibrium">
+A perfect Bayesian equilibrium is a strategy profile together with a belief at every information set such that: (1) beliefs on the equilibrium path are derived from the strategies by Bayes' rule; (2) every player acts sequentially rationally, choosing the best action given their belief at each information set, on and off the path; and (3) off-path beliefs are unrestricted by Bayes but the actions they induce must still be optimal. It extends subgame perfection to games where private information means proper subgames may not exist.
+</DefinitionAside>
+
+In the Gift game the receiver's belief after a gift is $b = \Pr(\text{Friend} \mid \text{gift})$. Accepting is worth $b\cdot 1 + (1-b)\cdot(-1) = 2b - 1$, and rejecting is worth $0$, so the receiver accepts iff $b \ge \tfrac12$.
+
+Consider both types giving. On the path Bayes sets $b = p$, the prior. If $p \ge \tfrac12$ the receiver accepts, and since both senders prefer a gift accepted (payoff 1) to not giving (0), pooling on Give is a PBE. If $p < \tfrac12$ the receiver rejects, both senders then earn $-1 < 0$ and deviate to Not, so pooling on Give fails; the PBE is pooling on Not, supported by an off-path belief that a gift would come from an Enemy.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Two priors, two equilibria">
+**p = 0.6.** Suppose both types give. On the path a gift implies belief $0.6$, and accepting is worth $2(0.6) - 1 = 0.2 > 0$, so the receiver accepts. Both senders then get $1$ from giving versus $0$ from not, so neither deviates. Pooling on Give is a PBE.
+
+**p = 0.4.** Suppose both types give. Now a gift implies belief $0.4$, accepting is worth $-0.2 < 0$, so the receiver rejects, and both senders get $-1 < 0$: they deviate to Not. The surviving PBE is pooling on Not. To support it, assign the off-path belief after a (never-sent) gift to be Enemy, so a deviating giver would be rejected and earn $-1$, confirming that not giving is optimal.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">A perfect Bayesian equilibrium pairs strategies with beliefs: act optimally given your belief at every point, and update beliefs by Bayes wherever you can. A signal is trusted only when the belief it induces clears the bar for acting on it.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="perfect-bayesian-equilibrium"
+  id="q1"
+  badge="apply"
+  question="Both types give a gift. What belief does the receiver hold after seeing one, and why?"
+  options={[
+    { text: "The prior, because a gift sent by both types reveals nothing new", correct: true, feedback: "When both types pool on the same action, that action carries no information, so Bayes leaves the belief at the prior. The gift is uninformative." },
+    { text: "Certainty that the sender is a Friend", feedback: "Only if Friends alone gave gifts. Since both types give, a gift does not single out a Friend; the belief stays at the prior." },
+    { text: "Whatever the receiver wants to believe", feedback: "On the equilibrium path beliefs are pinned by Bayes' rule, not chosen freely. Only off-path beliefs are unrestricted." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="perfect-bayesian-equilibrium"
+  id="q2"
+  badge="analyse"
+  question="At p = 0.4, pooling on Not is the equilibrium. What role do off-path beliefs play?"
+  options={[
+    { text: "A gift is off the path, so its belief is free, and setting it to Enemy makes a deviating gift get rejected, which keeps Not optimal", correct: true, feedback: "Bayes says nothing about actions that never occur, so the off-path belief is a modelling choice. Choosing an Enemy belief there makes deviation unprofitable, sustaining pooling on Not." },
+    { text: "Off-path beliefs are irrelevant to whether the profile is a PBE", feedback: "They are essential: the actions off-path beliefs induce must make deviations unprofitable. Here they are what deter a deviating gift." },
+    { text: "Off-path beliefs must also come from Bayes' rule", feedback: "Bayes cannot condition on a zero-probability event, so off-path beliefs are unrestricted, though the actions they induce must still be optimal." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="perfect-bayesian-equilibrium"
+  id="q3"
+  badge="brings back: subgame perfection"
+  question="Why do we need PBE rather than just subgame perfection for the Gift game?"
+  options={[
+    { text: "The receiver cannot tell the type, so there is no proper subgame at their move; PBE adds beliefs to restore sequential rationality there", correct: true, feedback: "Subgame perfection bites only at proper subgames, and the receiver's information set (a gift from an unknown type) does not start one. PBE supplies a belief at that set so we can still require optimal play." },
+    { text: "Subgame perfection already handles it identically", feedback: "It does not: with hidden types there is no proper subgame at the receiver's move, so subgame perfection has no grip there. PBE fills the gap with beliefs." },
+    { text: "Because the Gift game has no Nash equilibrium", feedback: "It has equilibria; the issue is refining them with beliefs at information sets, which is what PBE does." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["fudenbergTirole1991"]} />

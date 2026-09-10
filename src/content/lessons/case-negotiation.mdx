@@ -1,0 +1,139 @@
+---
+title: "Bargaining and negotiation"
+tier: applied
+unit: 18
+unitName: "Game theory in the wild"
+order: 7
+label: "A7"
+kind: case
+placement: "after:strategic-bargaining"
+summary: "Alternating offers, why patience and your BATNA decide the split, and where strikes come from."
+tags: ["applied", "bargaining", "negotiation"]
+estMinutes: 6
+mvp: true
+prereqs: ["nash-bargaining", "strategic-bargaining"]
+concepts: ["batna", "alternating-offers", "strikes"]
+refs: ["rubinstein1982", "nash1950"]
+anchorEmoji: "🤝"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Rubinstein from '@/components/interactive/Rubinstein.svelte';
+
+<div class="anchor"><span class="em">🤝</span><p>A union and a firm argue over how to split the surplus from a contract. Every week they fail to agree, the pie shrinks: lost output, lost wages. That shrinking is the discount factor, and it decides who gets what long before anyone walks out.</p></div>
+
+# Bargaining and negotiation
+
+<p class="lead">Real negotiation, a labour contract, a house sale, a merger, is alternating offers over a pie that decays with delay. Rubinstein's model turns that into a sharp prediction: the split depends on patience and on each side's outside option (BATNA), not on who talks loudest.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In alternating offers, delay is costly because the pie...", options: ["Grows", "Shrinks (is discounted)", "Stays fixed"], answer: 1 },
+    { q: "Your BATNA is your best option if the talks...", options: ["Succeed", "Fail", "Restart"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Negotiate against a bot with a shrinking pie. Set offers, tune patience, and add an outside option to see the equilibrium split move.
+
+<Rubinstein
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Alternating-offers bargaining with discounting"
+  predict={{
+    question: 'In alternating offers, who gets more of the pie?',
+    options: [{ key: 'first', label: 'The first mover, always, by a lot' }, { key: 'patient', label: 'The more patient side; the first-mover edge fades as both get patient' }],
+    reveal: 'The proposer gets 1/(1+delta), the responder delta/(1+delta). At delta=0.9 that is 0.526 vs 0.474, a slim edge that vanishes as delta approaches 1 and the split approaches 50/50. Patience, not volume, moves the deal.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Each side can reject and counter, but rejecting costs a round of shrinkage. A patient player (delta near 1) barely minds waiting, so they can hold out for more; an impatient player (low delta) settles quickly and cheaply. The subgame-perfect split balances these exactly. Outside options set the floor: no one accepts less than their BATNA, so a better alternative pulls the split your way, and a worse one pushes it away. Strikes and lockouts are the BATNA made visible, the costly disagreement point that disciplines both sides. When information is symmetric, rational players settle immediately; strikes happen mostly because of asymmetric information about what the other side can bear.
+</Callout>
+</Section>
+
+<Section id="math">
+## The real strategy
+
+<DefinitionAside label="Rubinstein alternating offers, and Nash bargaining">
+In Rubinstein's model two players alternate offers over a pie of size 1, discounting the future by delta each round. The unique subgame-perfect equilibrium gives the proposer $1/(1+\delta)$ and the responder $\delta/(1+\delta)$, agreed in the first round. As $\delta \to 1$ this approaches the 50/50 Nash bargaining solution. Outside options (BATNAs) truncate the range: if a side can walk away for a known value, no deal below it is accepted, which shifts the equilibrium split toward whoever has the better alternative.
+</DefinitionAside>
+
+At $\delta = 0.9$ the proposer gets $1/1.9 \approx 0.526$ and the responder $0.9/1.9 \approx 0.474$. The first-mover advantage is real but small, and it shrinks to nothing as both sides grow patient. Change a BATNA and the whole split moves: improve your outside option and you capture more; worsen it and you concede. That is why negotiators spend more effort improving their alternatives than polishing their arguments. Strikes are not proof that bargaining is irrational; with full information the parties would settle at once. They arise when each side is unsure of the other's true reservation value and testing that costs a round of the shrinking pie.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Patience, BATNA, and the split">
+Start with no outside options and $\delta = 0.9$. The proposer offers themselves $1/(1+\delta) = 0.526$ and the responder $0.474$, and the responder accepts, because rejecting and countering next round would give them only $0.526$ of a pie already shrunk by $0.9$, which is worse. As $\delta \to 1$, both approach $0.5$: patience erases the first-mover edge.
+
+Now give the responder a BATNA of $0.4$: an outside deal worth $0.4$ if talks collapse. Any split offering them less than $0.4$ is rejected, so the equilibrium share cannot fall below $0.4$; the responder's slice rises toward their alternative and the proposer concedes. Improve the responder's BATNA further and they capture still more. A strike is this outside option in action: by absorbing the cost of no agreement, a side signals what it can endure, and the settlement moves accordingly, most sharply when neither is sure of the other's limit.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">In alternating-offers bargaining the split is set by patience and by each side's BATNA, not by who moves first or argues hardest. The first-mover edge fades as both grow patient, a better outside option wins a better deal, and strikes come from asymmetric information, not irrationality.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="case-negotiation"
+  id="q1"
+  badge="apply"
+  question="Two negotiators alternate offers with delta = 0.9. Roughly how does the pie split, and why?"
+  options={[
+    { text: "About 0.526 to the proposer, 0.474 to the responder; the small edge comes from moving first and shrinks as patience rises", correct: true, feedback: "The proposer gets 1/(1+delta) and the responder delta/(1+delta). At delta=0.9 that is 0.526 vs 0.474, and as delta approaches 1 both approach 0.5." },
+    { text: "The proposer takes almost everything because they move first", feedback: "The first-mover advantage is small (0.526 vs 0.474 here) and vanishes as both sides get patient. It is not a landslide." },
+    { text: "Exactly 50/50 regardless of patience", feedback: "It is 50/50 only in the limit as delta goes to 1. With delta=0.9 the proposer gets a slight edge." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-negotiation"
+  id="q2"
+  badge="analyse"
+  question="Why does improving your BATNA get you a better deal even if talks succeed?"
+  options={[
+    { text: "No one accepts less than their outside option, so a better BATNA raises the floor and shifts the equilibrium split toward you", correct: true, feedback: "The outside option truncates the bargaining range. A stronger alternative means you can credibly refuse worse offers, so the settlement moves your way even though you never actually walk." },
+    { text: "It does not matter unless talks actually fail", feedback: "The BATNA shapes the deal you get even when talks succeed, because it sets the minimum you will accept and everyone bargains against it." },
+    { text: "A better BATNA only helps the other side", feedback: "It helps you: it raises your reservation value, so the equilibrium split shifts in your favour, not the other side's." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-negotiation"
+  id="q3"
+  badge="brings back: bargaining"
+  question="If rational bargainers settle immediately, why do real strikes and lockouts happen?"
+  options={[
+    { text: "Asymmetric information: each side is unsure of the other's true reservation value, and a costly delay is how that gets tested", correct: true, feedback: "With full information the parties would agree in round one. Strikes arise mostly from private information about what the other side can bear, so a costly standoff signals resolve, not irrationality." },
+    { text: "Because bargaining is fundamentally irrational", feedback: "The theory shows rational players settle at once under symmetric information. Strikes come from information asymmetry, not from irrationality." },
+    { text: "Because the first mover always refuses to negotiate", feedback: "The first mover proposes and both settle in equilibrium. Delay comes from uncertainty about the other's limits, not first-mover behaviour." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["rubinstein1982", "nash1950"]} />

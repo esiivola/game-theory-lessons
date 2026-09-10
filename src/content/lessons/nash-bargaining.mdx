@@ -1,0 +1,151 @@
+---
+title: "Nash bargaining"
+tier: intermediate
+unit: 6
+unitName: "Bargaining"
+order: 18
+kind: lesson
+summary: "The fair split maximizes the product of what each side gains over walking away."
+tags: ["bargaining", "cooperation", "axiomatic"]
+estMinutes: 6
+mvp: true
+prereqs: ["pure-nash"]
+concepts: ["nash-bargaining", "disagreement-point"]
+refs: ["nash1950"]
+anchorEmoji: "🤝"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Bargaining from '@/components/interactive/Bargaining.svelte';
+
+<div class="anchor"><span class="em">🤝</span><p>A union and a firm are dividing the gains from a deal that is worth more together than apart. Both know that if they walk away, each has a fallback. Those fallbacks, more than any notion of fairness, decide who gets what.</p></div>
+
+# Nash bargaining
+
+<p class="lead">Two parties can split a surplus many ways. Nash asked a different question: not how bargaining unfolds, but what a fair, sensible split should satisfy. A few reasonable axioms pin down a single answer, and it turns out to hinge on what each side gets if the talks collapse.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A Nash equilibrium is a profile where no player gains by...", options: ["Cooperating", "Deviating alone", "Waiting"], answer: 1 },
+    { q: "A shared signal that beats every Nash equilibrium of Chicken is a...", options: ["Focal point", "Correlated equilibrium", "Dominant strategy"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+You and another party split a pie worth 1. If you fail to agree, you get your outside option and they get nothing. Drag your share, and watch the Nash product, the thing the fair solution maximizes. Then give yourself a better fallback and see the split move.
+
+<Bargaining
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Splitting a pie of 1; the Nash product peaks at the solution"
+  predict={{
+    question: 'With no outside options, where is the fair split? And if your fallback improves?',
+    options: [{ key: 'half', label: '50/50, and it never moves' }, { key: 'shift', label: '50/50, but a better fallback shifts it to you' }],
+    reveal: 'With symmetric fallbacks it is 50/50. Raise your own walk-away value and the fair split tilts toward you, not away: a better outside option is bargaining power.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Your outside option is what you can walk away with, so it sets a floor on any deal you would accept. Improve that floor and you can credibly refuse worse offers, which pulls the settlement in your direction. It feels backwards at first, a stronger fallback sounds like less need to bargain, but in fact it is leverage: the other side must give you more to keep you at the table.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Let the pie be 1, your share $x$, theirs $1 - x$, and the disagreement point $d = (d_1, d_2)$, what each gets if talks fail. The Nash bargaining solution maximizes the Nash product
+
+$$
+(x - d_1)\,(1 - x - d_2).
+$$
+
+Differentiating and setting to zero gives
+
+$$
+x^* = \frac{1 + d_1 - d_2}{2}.
+$$
+
+With $d = (0,0)$ this is $\tfrac12$, an even split. With $d_1 = 0.2$ and $d_2 = 0$ it is $0.6$: your stronger fallback earns you more.
+
+<DefinitionAside label="the four axioms">
+Nash showed this is the unique split satisfying: efficiency (no waste, the whole pie is divided), symmetry (if the two sides are interchangeable, they split evenly), invariance to affine rescaling of either party's utility, and independence of irrelevant alternatives (removing unchosen options does not change the outcome). One split meets all four: the one that maximizes the Nash product.
+</DefinitionAside>
+
+This is an axiomatic answer: it says what a fair split looks like, not how haggling reaches it. The next lesson gives the strategic story.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Maximize the Nash product">
+With $d = (0,0)$, maximize $x(1 - x)$. The derivative $1 - 2x = 0$ gives $x = \tfrac12$: the even split.
+
+Now let your outside option be $d_1 = 0.2$ (theirs still 0). Maximize $(x - 0.2)(1 - x)$. The derivative is $(1 - x) - (x - 0.2) = 1.2 - 2x$, zero at $x = 0.6$. Your improved fallback raised your share from $0.5$ to $0.6$. The other side's collapse value, not their need, is what shrank their piece.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">The Nash solution splits the surplus to maximize the product of each side's gain over its walk-away value. A better outside option is bargaining power: it wins you a larger share, not a smaller one.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="nash-bargaining"
+  id="q1"
+  badge="apply"
+  question="Your outside option improves while the other side's stays at zero. What happens to your Nash-bargaining share?"
+  options={[
+    { text: "It rises, because a better fallback is leverage to demand more", correct: true, feedback: "The solution x* = (1 + d1 - d2)/2 increases in your disagreement payoff d1. A stronger walk-away position lets you credibly refuse worse offers." },
+    { text: "It falls, since you need the deal less", correct: false, feedback: "Needing the deal less is exactly what strengthens your hand. The formula moves x* up with d1, not down." },
+    { text: "It stays at 50/50 regardless", feedback: "50/50 holds only with symmetric fallbacks. An asymmetric disagreement point shifts the split." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="nash-bargaining"
+  id="q2"
+  badge="analyse"
+  question="The Nash bargaining solution is called axiomatic. What does that mean here?"
+  options={[
+    { text: "It is defined by properties a fair split should satisfy, not by a model of how bargaining actually proceeds", correct: true, feedback: "Nash derived the split from axioms (efficiency, symmetry, invariance, independence of irrelevant alternatives) rather than from a game of offers and counteroffers. That strategic account comes next." },
+    { text: "It assumes players behave irrationally", feedback: "It assumes nothing about behaviour; it characterises a split by axioms. Rationality is not the issue." },
+    { text: "It only works when the split is 50/50", feedback: "It handles asymmetric outside options too, giving splits away from 50/50. Axiomatic refers to how it is derived." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="nash-bargaining"
+  id="q3"
+  badge="brings back: nash equilibrium"
+  question="How does the disagreement point here play a role like a benchmark you have seen before?"
+  options={[
+    { text: "It is a threat point: like a best-response floor, no party accepts less than it can guarantee by walking away", correct: true, feedback: "Just as a Nash equilibrium requires each player to do at least as well as any deviation, the bargaining solution never leaves a party below its disagreement payoff. The fallback sets the floor." },
+    { text: "It is the highest payoff either party could get", feedback: "It is the floor from walking away, not a ceiling. The solution divides the surplus above these floors." },
+    { text: "It is irrelevant once the parties start bargaining", feedback: "It is central: the split x* = (1 + d1 - d2)/2 depends directly on the disagreement point." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["nash1950"]} />

@@ -1,0 +1,139 @@
+---
+title: "Network and graphical games"
+tier: expert
+unit: 16
+unitName: "Algorithmic game theory"
+order: 55
+kind: lesson
+summary: "On a network, who provides a shared good depends on position, not just payoffs."
+tags: ["algorithmic", "graphical-games", "networks"]
+estMinutes: 6
+mvp: true
+prereqs: ["public-goods", "pure-nash"]
+concepts: ["graphical-game", "network-structure", "independent-set"]
+refs: ["kearnsLittmanSingh2001"]
+anchorEmoji: "🕸️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import GraphicalGame from '@/components/interactive/GraphicalGame.svelte';
+
+<div class="anchor"><span class="em">🕸️</span><p>One household on a street buys a hedge trimmer and the neighbours borrow it; nobody else needs to. Who ends up buying depends entirely on who is next to whom. Structure, not just preferences, decides the outcome.</p></div>
+
+# Network and graphical games
+
+<p class="lead">When payoffs depend only on your neighbours, a game lives on a graph. Graphical games make network structure the star: the same simple rule produces very different outcomes on a star, a cycle, or a hub, and local best responses can often find an equilibrium without any global solver.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In a public-goods problem, the benefit of contributing is...", options: ["Kept private", "Shared with others", "Zero"], answer: 1 },
+    { q: "A pure Nash equilibrium requires every player to be playing a...", options: ["Random move", "Best response", "Dominated move"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+A best-shot public good: each node can pay 1 to provide something worth 2 to itself and its neighbours. A node is content providing only if no neighbour does. Toggle nodes, then let them best-respond.
+
+<GraphicalGame
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Best-shot public goods on a network"
+  predict={{
+    question: 'On a star (one hub, five leaves), how many nodes end up providing the good?',
+    options: [{ key: 'all', label: 'All six' }, { key: 'one', label: 'Just the hub' }],
+    reveal: 'Just the hub. The centre provides, and all five leaves free-ride off it, so society pays only 1. On a six-cycle the same rule forces three providers. Position, not payoffs, drives the difference.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The good only needs to be provided once within each neighbourhood. On a star, the hub touches everyone, so if the hub provides, the whole network is covered and every leaf can free-ride. On a cycle, no single node reaches everyone, so providers must be spaced out, one, skip, one, skip, taking three of six. Same incentives, same rule, but the graph's shape sets how many providers are needed and who they are.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="graphical games">
+A graphical game places players on a graph so that each player's payoff depends only on its own action and its neighbours'. This makes the game compact to describe and often tractable to solve, since local structure can be exploited. In the best-shot public-goods game, a pure Nash equilibrium is exactly a maximal independent set of providers: no two providers are adjacent (that would waste a contribution), and every non-provider has a provider neighbour (or it would rather provide itself).
+</DefinitionAside>
+
+Each node's best response: provide if and only if no neighbour provides. In equilibrium the providers form an independent set (none adjacent) that is maximal (every other node is adjacent to a provider). On a star, the hub alone is a maximal independent set, so one node provides and society's cost is $1$. On a six-cycle, a maximal independent set has size $3$ (alternate nodes), so three provide, cost $3$.
+
+Because best responses depend only on neighbours, local update dynamics converge to such an equilibrium without a global computation, one reason graphical games are attractive for large networks.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Star versus cycle">
+On the star, suppose the hub provides. Every leaf has the hub as a neighbour, so each leaf is content to free-ride (a provider neighbour exists), and the hub, whose only neighbours are non-providing leaves, is content to provide. That is a maximal independent set of size $1$: the whole street served for a cost of $1$.
+
+On the six-cycle, try one provider: some node two steps away has no providing neighbour, so it would rather provide, breaking the profile. Space providers every other node and you get three, an independent set (no two adjacent) that is maximal (every gap node touches a provider). Cost $3$. The identical best-shot rule triples the social cost purely because the cycle has no hub to cover everyone at once.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">In a graphical game, payoffs depend only on neighbours, so network structure drives the outcome. In best-shot public goods, equilibria are maximal independent sets, and a hub can serve everyone while a cycle forces many providers.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="network-games"
+  id="q1"
+  badge="apply"
+  question="Why does the star need only one provider while the six-cycle needs three?"
+  options={[
+    { text: "The hub is adjacent to everyone, so its single contribution covers the whole network; a cycle has no such node, so providers must be spaced out", correct: true, feedback: "Coverage depends on adjacency. One hub reaches all leaves, so one provider suffices. On a cycle, reaching everyone requires an alternating independent set of three." },
+    { text: "Because leaves value the good less", feedback: "Values are the same everywhere. The difference is purely structural: the hub's high degree lets one contribution serve all." },
+    { text: "Because the cycle has more nodes", feedback: "Both have six nodes. The star needs one provider and the cycle three because of connectivity, not node count." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="network-games"
+  id="q2"
+  badge="analyse"
+  question="What do the pure Nash equilibria of the best-shot game correspond to?"
+  options={[
+    { text: "Maximal independent sets of providers: no two adjacent, and every non-provider has a provider neighbour", correct: true, feedback: "Two adjacent providers would waste a contribution (each would rather stop), and a non-provider with no provider neighbour would rather provide. Both conditions together define a maximal independent set." },
+    { text: "Sets where everyone provides", feedback: "Everyone providing is not an equilibrium: adjacent providers each would rather free-ride. Equilibria are maximal independent sets, which are much smaller." },
+    { text: "Any subset of nodes", feedback: "Only maximal independent sets are equilibria. Arbitrary subsets leave some node wanting to switch." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="network-games"
+  id="q3"
+  badge="brings back: public goods"
+  question="How does this differ from the basic public-goods dilemma?"
+  options={[
+    { text: "Here the good is best-shot (one provider per neighbourhood suffices) and structure decides who provides, rather than everyone free-riding to zero", correct: true, feedback: "The classic public-goods game had contributions collapse to zero. Best-shot on a network is different: exactly enough nodes provide to cover everyone, and which nodes depends on the graph, not on a race to the bottom." },
+    { text: "It is the same game with the same all-zero outcome", feedback: "The outcomes differ: best-shot equilibria have a specific set of providers (a maximal independent set), not universal free-riding." },
+    { text: "Network position is irrelevant here", feedback: "Position is decisive: the star needs one provider and the cycle three, purely because of structure." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["kearnsLittmanSingh2001"]} />

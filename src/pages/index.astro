@@ -1,0 +1,138 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { withBase } from '@/config/site';
+
+const tierOrder: Record<string, number> = { basic: 0, intermediate: 1, expert: 2, applied: 3 };
+const all = await getCollection('lessons');
+const lessons = all.sort(
+  (a, b) => (tierOrder[a.data.tier] - tierOrder[b.data.tier]) || a.data.order - b.data.order
+);
+const total = lessons.length;
+
+const TIERS = [
+  { id: 'basic', name: 'Basic', note: 'The shared spine. Static games, equilibrium, sequential play.' },
+  { id: 'intermediate', name: 'Intermediate', note: 'Repetition, incomplete information, auctions, information design, contracts.' },
+  { id: 'expert', name: 'Expert', note: 'Refinements, mechanism design, cooperative theory, dynamics, computation, and behavioral game theory.' },
+  { id: 'applied', name: 'Applied', note: 'Game theory in the wild: real cases from markets to security.' },
+];
+
+type Entry = (typeof lessons)[number];
+interface Unit { name: string; items: Entry[]; }
+interface Group { id: string; name: string; note: string; count: number; units: Unit[]; }
+
+const groups: Group[] = [];
+for (const t of TIERS) {
+  const tierLessons = lessons.filter((l) => l.data.tier === t.id);
+  if (!tierLessons.length) continue;
+  const units: Unit[] = [];
+  for (const l of tierLessons) {
+    let u = units.find((x) => x.name === l.data.unitName);
+    if (!u) { u = { name: l.data.unitName, items: [] }; units.push(u); }
+    u.items.push(l);
+  }
+  groups.push({ id: t.id, name: t.name, note: t.note, count: tierLessons.length, units });
+}
+---
+<BaseLayout active="learn" totalLessons={total}>
+  <section class="map-hero">
+    <div class="eyebrow">A visual, playable course</div>
+    <h1>Game theory, played</h1>
+    <p>Start with two people in separate rooms. Build up to auctions, matching markets, and the math behind them. You play first, then the idea and the proof follow.</p>
+  </section>
+
+  <div class="overall">
+    <div class="row"><b>Progress</b><span id="ovText">&nbsp;</span></div>
+    <div class="bar"><i id="ovBar" style="width:0%"></i></div>
+  </div>
+
+  {groups.map((g) => (
+    <section>
+      <div class="tier-head">
+        <h2>{g.name}</h2>
+        <span class="meta" data-tier={g.id}>0/{g.count}</span>
+      </div>
+      <p class="tier-note">{g.note}</p>
+      {g.units.map((u) => (
+        <>
+          <div class="unit-label"><span class="k">{u.name}</span><span class="ln"></span></div>
+          {u.items.map((l, i) => (
+            <div
+              class={'node-row' + (i === 0 ? ' first' : '') + (i === u.items.length - 1 ? ' last' : '')}
+              data-slug={l.id}
+              data-tier={l.data.tier}
+            >
+              <div class="node">{l.data.label ?? l.data.order}</div>
+              <a class="lrow" href={withBase('lessons/' + l.id)}>
+                <span class="t">{l.data.title}</span>
+                {l.data.kind === 'case' && <span class="pill case">Case</span>}
+                <span class="chev">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </span>
+              </a>
+            </div>
+          ))}
+        </>
+      ))}
+    </section>
+  ))}
+</BaseLayout>
+
+<script>
+  import { load } from '@/lib/progress';
+  import { checkSvg } from '@/lib/ui';
+
+  function render() {
+    const p = load();
+    const done = (slug: string | null) => !!(slug && p.lessons[slug]?.status === 'complete');
+    const rows = Array.from(document.querySelectorAll<HTMLElement>('.node-row[data-slug]'));
+
+    let doneCount = 0;
+    let nextAssigned = false;
+    for (const row of rows) {
+      const slug = row.dataset.slug || null;
+      const node = row.querySelector<HTMLElement>('.node')!;
+      const lrow = row.querySelector<HTMLElement>('.lrow')!;
+      const orig = node.dataset.orig ?? (node.dataset.orig = (node.textContent || '').trim());
+      // reset
+      node.classList.remove('complete', 'next');
+      lrow.classList.remove('done');
+      lrow.querySelectorAll('.pill.start, .pill.done').forEach((n) => n.remove());
+
+      if (done(slug)) {
+        doneCount++;
+        node.classList.add('complete');
+        node.innerHTML = checkSvg(17);
+        lrow.classList.add('done');
+      } else {
+        node.textContent = orig;
+        if (!nextAssigned) {
+          nextAssigned = true;
+          node.classList.add('next');
+          const pill = document.createElement('span');
+          pill.className = 'pill start';
+          pill.textContent = 'Start here';
+          lrow.querySelector('.t')!.after(pill);
+        }
+      }
+    }
+
+    const total = rows.length;
+    const pct = total ? Math.round((doneCount / total) * 100) : 0;
+    const bar = document.getElementById('ovBar');
+    const txt = document.getElementById('ovText');
+    if (bar) bar.style.width = pct + '%';
+    if (txt) txt.textContent = `${doneCount} of ${total} lessons, ${pct}%`;
+
+    document.querySelectorAll<HTMLElement>('.tier-head .meta[data-tier]').forEach((m) => {
+      const tier = m.dataset.tier;
+      const inTier = rows.filter((r) => r.dataset.tier === tier);
+      const d = inTier.filter((r) => done(r.dataset.slug || null)).length;
+      m.textContent = `${d}/${inTier.length}`;
+    });
+  }
+
+  render();
+  window.addEventListener('gt:progress', render);
+  window.addEventListener('pageshow', render);
+</script>

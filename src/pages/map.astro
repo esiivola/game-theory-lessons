@@ -1,0 +1,200 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { withBase } from '@/config/site';
+
+const tierOrder: Record<string, number> = { basic: 0, intermediate: 1, expert: 2, applied: 3 };
+const all = await getCollection('lessons');
+const lessons = all.sort(
+  (a, b) => (tierOrder[a.data.tier] - tierOrder[b.data.tier]) || a.data.order - b.data.order
+);
+
+const ids = new Set(lessons.map((l) => l.id));
+const byId = new Map(lessons.map((l) => [l.id, l]));
+// Only count prerequisites that actually exist in the collection.
+const prereqsOf = (id: string) => (byId.get(id)?.data.prereqs ?? []).filter((p) => ids.has(p));
+
+// Longest-path depth over the prerequisite DAG gives each lesson its layer.
+const layerCache = new Map<string, number>();
+function layerOf(id: string, seen = new Set<string>()): number {
+  if (layerCache.has(id)) return layerCache.get(id) as number;
+  if (seen.has(id)) return 0; // cycle guard; the graph is acyclic in practice
+  seen.add(id);
+  const ps = prereqsOf(id);
+  const depth = ps.length === 0 ? 0 : 1 + Math.max(...ps.map((p) => layerOf(p, seen)));
+  layerCache.set(id, depth);
+  return depth;
+}
+
+const globalIndex = new Map(lessons.map((l, i) => [l.id, i]));
+interface Node { id: string; title: string; order: number; label: string; layer: number; x: number; y: number; tier: string; prereqs: string[]; }
+
+const layered = new Map<number, string[]>();
+for (const l of lessons) {
+  const ly = layerOf(l.id);
+  if (!layered.has(ly)) layered.set(ly, []);
+  (layered.get(ly) as string[]).push(l.id);
+}
+const maxLayer = Math.max(...[...layered.keys()]);
+
+const VBW = 360, yTop = 36, yStep = 84, R = 14;
+const nodes: Node[] = [];
+for (const [ly, groupUnsorted] of layered) {
+  const group = groupUnsorted.sort((a, b) => (globalIndex.get(a) as number) - (globalIndex.get(b) as number));
+  const k = group.length;
+  group.forEach((id, i) => {
+    const l = byId.get(id)!;
+    nodes.push({
+      id,
+      title: l.data.title,
+      order: l.data.order,
+      label: l.data.label ?? String(l.data.order),
+      layer: ly,
+      x: Math.round((VBW * (i + 1)) / (k + 1)),
+      y: yTop + ly * yStep,
+      tier: l.data.tier,
+      prereqs: prereqsOf(id),
+    });
+  });
+}
+const pos = new Map(nodes.map((n) => [n.id, n]));
+const edges = nodes.flatMap((n) => n.prereqs.map((p) => ({ from: pos.get(p)!, to: n })));
+const VBH = yTop + maxLayer * yStep + 36;
+
+const short = (t: string) => (t.length > 15 ? t.slice(0, 14) + '…' : t);
+
+// The key, grouped by tier, so numbers on the graph map back to titles.
+const TIERS = [
+  { id: 'basic', name: 'Basic' },
+  { id: 'intermediate', name: 'Intermediate' },
+  { id: 'expert', name: 'Expert' },
+  { id: 'applied', name: 'Applied' },
+];
+const keyGroups = TIERS.map((t) => ({ name: t.name, items: lessons.filter((l) => l.data.tier === t.id) })).filter((g) => g.items.length);
+---
+<BaseLayout title="Concept map" active="map" totalLessons={lessons.length}>
+  <section class="map-hero">
+    <div class="eyebrow">The dependency graph</div>
+    <h1>Concept map</h1>
+    <p>How the lessons build on each other. An arrow means the lower lesson leans on the one above it. Finish a lesson and it fills in; once its prerequisites are done, the next one opens.</p>
+  </section>
+
+  <div class="cmap-legend">
+    <span class="lg done"><i></i>Done</span>
+    <span class="lg next"><i></i>Start next</span>
+    <span class="lg open"><i></i>Open</span>
+    <span class="lg locked"><i></i>Locked</span>
+  </div>
+
+  <div class="cmap-wrap">
+    <svg viewBox={`0 0 ${VBW} ${VBH}`} class="cmap" role="img" aria-label="Prerequisite graph of the lessons">
+      <g class="edges">
+        {edges.map((e) => {
+          const y1 = e.from.y + R, y2 = e.to.y - R, my = (y1 + y2) / 2;
+          return <path d={`M ${e.from.x} ${y1} C ${e.from.x} ${my} ${e.to.x} ${my} ${e.to.x} ${y2}`} class="edge" data-to={e.to.id} />;
+        })}
+      </g>
+      {nodes.map((n) => (
+        <a
+          class="cnode"
+          href={withBase('lessons/' + n.id)}
+          data-slug={n.id}
+          data-order={n.order}
+          data-prereqs={n.prereqs.join(',')}
+          aria-label={`${n.title}. ${n.prereqs.length ? 'Needs ' + n.prereqs.map((p) => byId.get(p)?.data.title).join(', ') + '.' : 'No prerequisites.'}`}
+        >
+          <title>{n.title}</title>
+          <circle cx={n.x} cy={n.y} r={R} class="disc" />
+          <text x={n.x} y={n.y + 3.5} text-anchor="middle" class="num">{n.label}</text>
+          <text x={n.x} y={n.y + R + 13} text-anchor="middle" class="cl">{short(n.title)}</text>
+        </a>
+      ))}
+    </svg>
+  </div>
+
+  <div class="cmap-key">
+    {keyGroups.map((g) => (
+      <div class="kg">
+        <div class="kglab">{g.name}</div>
+        {g.items.map((l) => (
+          <a class="ki" href={withBase('lessons/' + l.id)} data-slug={l.id}>
+            <span class="kn mono">{l.data.label ?? l.data.order}</span>
+            <span class="kt">{l.data.title}</span>
+          </a>
+        ))}
+      </div>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .cmap-legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 18px 0 6px; font-size: 11.5px; font-weight: 600; color: var(--ink-muted); }
+  .lg { display: inline-flex; align-items: center; gap: 6px; }
+  .lg i { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--border-strong); background: var(--surface); }
+  .lg.done i { background: var(--accent); border-color: var(--accent); }
+  .lg.next i { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .lg.locked i { opacity: .4; }
+
+  .cmap-wrap { border: 1px solid var(--border); border-radius: 12px; padding: 8px; background: var(--surface); margin: 10px 0 4px; }
+  .cmap { width: 100%; height: auto; display: block; }
+  .edge { fill: none; stroke: var(--path); stroke-width: 1.4; }
+  .cnode { cursor: pointer; }
+  .cnode .disc { fill: var(--surface); stroke: var(--border-strong); stroke-width: 1.5; transition: fill .2s, stroke .2s; }
+  .cnode .num { font-family: var(--font-mono); font-weight: 700; font-size: 10.5px; fill: var(--ink-muted); }
+  .cnode .cl { font-size: 8px; fill: var(--ink-muted); font-weight: 600; }
+  .cnode:hover .disc { stroke: var(--accent); }
+  .cnode:hover .cl { fill: var(--ink); }
+  .cnode.complete .disc { fill: var(--accent); stroke: var(--accent); }
+  .cnode.complete .num { fill: var(--bg); }
+  .cnode.next .disc { stroke: var(--accent); stroke-width: 2.5; }
+  .cnode.next .num { fill: var(--accent); }
+  .cnode.locked { opacity: .42; }
+  .cnode.locked .disc { stroke-dasharray: 3 2.5; }
+
+  .cmap-key { margin: 20px 0 8px; }
+  .kg { margin-bottom: 16px; }
+  .kglab { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  .ki { display: flex; align-items: center; gap: 10px; padding: 6px 2px; text-decoration: none; color: var(--ink); border-radius: 8px; }
+  .ki:hover { color: var(--accent); }
+  .ki.done .kt { color: var(--ink-muted); text-decoration: line-through; text-decoration-color: var(--border-strong); }
+  .kn { width: 26px; height: 26px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 50%; border: 1.5px solid var(--border-strong); font-size: 10px; font-weight: 700; color: var(--ink-muted); }
+  .ki.done .kn { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .kt { font-size: 14px; font-weight: 500; }
+</style>
+
+<script>
+  import { load } from '@/lib/progress';
+
+  function render() {
+    const p = load();
+    const done = (slug: string) => p.lessons[slug]?.status === 'complete';
+
+    const nodes = Array.from(document.querySelectorAll<SVGAElement>('.cnode[data-slug]'));
+    let nextAssigned = false;
+    for (const n of nodes) {
+      const slug = n.dataset.slug as string;
+      const prereqs = (n.dataset.prereqs || '').split(',').filter(Boolean);
+      n.classList.remove('complete', 'next', 'locked', 'open');
+      if (done(slug)) {
+        n.classList.add('complete');
+        continue;
+      }
+      const unlocked = prereqs.every((pr) => done(pr));
+      if (!unlocked) {
+        n.classList.add('locked');
+      } else if (!nextAssigned) {
+        nextAssigned = true;
+        n.classList.add('next');
+      }
+    }
+
+    // Key list: strike through completed lessons.
+    document.querySelectorAll<HTMLElement>('.ki[data-slug]').forEach((k) => {
+      k.classList.toggle('done', done(k.dataset.slug as string));
+    });
+  }
+
+  render();
+  window.addEventListener('gt:progress', render);
+  window.addEventListener('pageshow', render);
+</script>

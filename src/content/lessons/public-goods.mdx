@@ -1,0 +1,153 @@
+---
+title: "Public goods and the commons"
+tier: basic
+unit: 3
+unitName: "Applications and equilibrium selection"
+order: 14
+kind: lesson
+summary: "Everyone gains if all contribute, and each gains by contributing nothing."
+tags: ["public-goods", "commons", "applications"]
+estMinutes: 6
+mvp: true
+prereqs: ["prisoners-dilemma"]
+concepts: ["public-goods", "free-riding", "dominance"]
+refs: ["hardin1968", "ledyard1995"]
+anchorEmoji: "🎣"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import PublicGoods from '@/components/interactive/PublicGoods.svelte';
+
+<div class="anchor"><span class="em">🎣</span><p>A fishing ground feeds four villages. If each takes a modest catch, the stock renews and everyone eats for years. If each grabs all it can, the stock collapses and everyone starves. Each village decides alone.</p></div>
+
+# Public goods and the commons
+
+<p class="lead">A public good is one everyone shares whether or not they paid for it: clean air, a stocked fishery, a stable climate. That sharing is the problem. When the benefit of your contribution spreads to everyone, your own slice of it is too small to justify the cost, so the sensible move is to let others carry it.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A strategy that beats your alternatives whatever others do is called...", options: ["Dominated", "Dominant", "Mixed"], answer: 1 },
+    { q: "In the Prisoner's Dilemma, both players defect because...", options: ["They cannot communicate", "Defecting is dominant", "They dislike each other"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+You and three others each start with \$10. Whatever the group puts in is multiplied by 1.6 and split evenly four ways. One of your neighbours is a free-rider; two start out cooperative but watch what everyone else does. Set your contribution and play a few rounds.
+
+<PublicGoods
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Four contributors; the pot is multiplied by 1.6 and split evenly"
+  predict={{
+    question: 'What contribution leaves you richest, and what would make the group richest?',
+    options: [{ key: 'match', label: 'Give the same either way' }, { key: 'gap', label: 'Give nothing yourself, give all for the group' }],
+    reveal: 'Every dollar you give hands you back only 40 cents, so selfishly you give 0. But if all four gave a dollar, each would net 60 cents. The gap between 0 and full contribution is the whole dilemma.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Put in a dollar and the pot grows by \$1.60, but that \$1.60 is split four ways, so you personally get 40 cents back on your dollar: a loss of 60 cents. That is true no matter what anyone else does, so contributing nothing is a dominant strategy. Yet the same arithmetic run for the group says every dollar contributed creates \$1.60 of value. Private incentive and group interest point in opposite directions, and watching the cooperators give up round by round is the commons collapsing in slow motion.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Four players, each endowed with \$10. Let $g_i$ be $i$'s contribution. The pot $\sum_j g_j$ is multiplied by $1.6$ and split evenly, so
+
+$$
+u_i = 10 - g_i + \frac{1.6}{4}\sum_j g_j = 10 - g_i + 0.4\sum_j g_j.
+$$
+
+The **marginal per-capita return** is $0.4$: each dollar you contribute returns $0.40$ to you. Since $0.4 < 1$, raising $g_i$ lowers $u_i$ whatever the others do, so $g_i = 0$ is a dominant strategy and the unique Nash equilibrium is no contribution at all.
+
+Now the group. Total welfare is $\sum_i u_i = 40 + (1.6 - 1)\sum_j g_j = 40 + 0.6\sum_j g_j$, which rises in every contribution. So the social optimum is full contribution, \$10 each, and everyone ends with \$16 rather than \$10.
+
+<DefinitionAside label="public-goods game">
+A public good is non-excludable: its benefit reaches everyone regardless of who paid. When the private return to contributing (here $0.4$) is below $1$ but the social return (here $1.6$) is above $1$, self-interest gives zero and efficiency demands full contribution. That gap is the tragedy of the commons.
+</DefinitionAside>
+</Section>
+
+<Section id="reality">
+## A note from the real world
+
+<Callout kind="reality-check">
+Theory predicts zero contribution. Real people do better than that. In public-goods experiments, most players start out giving around half, and many are conditional cooperators: they contribute if others do. But without a way to punish free-riders, contributions decay toward zero over repeated rounds, just as in the play above. The Behavioral unit takes up why cooperation starts high, why it unravels, and what sustains it.
+</Callout>
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Private loss, social gain">
+Contribute \$1. The pot grows by \$1.60, split four ways, so you get \$0.40 back. Netting the dollar you put in, you are down \$0.60. Because this holds regardless of the others, the self-interested contribution is \$0.
+
+Now suppose all four contribute \$1. The pot grows by \$6.40, and each person's share is \$1.60. Netting each person's own dollar, everyone is up \$0.60. The move that is privately bad is collectively good, which is why the equilibrium (all zero) sits so far below the optimum (all ten).
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">When a benefit is shared but the cost is private, contributing nothing is each person's dominant move, and the group ends up far poorer than it could be. The commons fails not from malice but from ordinary self-interest.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="public-goods"
+  id="q1"
+  badge="apply"
+  question="Each dollar contributed returns 40 cents to you but creates $1.60 of total value. What does self-interest prescribe?"
+  options={[
+    { text: "Contribute nothing, since your own return of 40 cents is less than the dollar it costs you", correct: true, feedback: "You capture only your quarter-share of the multiplied dollar. At 40 cents back for a dollar spent, the dominant move is zero, even though the group would gain." },
+    { text: "Contribute everything, since the total value created exceeds the cost", correct: false, feedback: "That is the social optimum, not the private one. You personally get back only 40 cents per dollar, so alone you are worse off contributing." },
+    { text: "Contribute half, to be fair", feedback: "Fairness is not what the private incentive tracks. Any positive contribution loses you 60 cents on the dollar, so self-interest says zero." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="public-goods"
+  id="q2"
+  badge="analyse"
+  question="A larger group shares the same multiplied pot among more people. What happens to the incentive to free-ride?"
+  options={[
+    { text: "It strengthens, because each person's share of any contribution shrinks", correct: true, feedback: "Splitting the multiplied pot among more people lowers the per-capita return, so the private payoff to contributing falls and free-riding looks even better. Bigger commons are harder, not easier." },
+    { text: "It weakens, because more people means more cooperation", feedback: "More people means each keeps a smaller slice of what they contribute, so the temptation to free-ride grows. Size works against cooperation here." },
+    { text: "It is unchanged, since the multiplier is the same", feedback: "The multiplier is fixed, but it is divided among more people, so each person's return per dollar drops. The incentive to free-ride rises." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="public-goods"
+  id="q3"
+  badge="brings back: dominance"
+  question="In what sense is the commons problem the Prisoner's Dilemma with more than two players?"
+  options={[
+    { text: "Contributing nothing is a dominant strategy, yet everyone contributing would make all better off", correct: true, feedback: "Just as defecting dominates in the Prisoner's Dilemma, free-riding dominates here, and the all-zero equilibrium is worse for everyone than full contribution. It is the same trap scaled up." },
+    { text: "There is no dominant strategy, unlike the Prisoner's Dilemma", feedback: "There is one: contribute zero. That is exactly what makes it a many-player Prisoner's Dilemma." },
+    { text: "The group optimum and the equilibrium coincide", feedback: "They diverge sharply: the equilibrium is all-zero, the optimum is full contribution. That gap is the dilemma." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["hardin1968", "ledyard1995"]} />

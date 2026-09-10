@@ -1,0 +1,139 @@
+---
+title: "Contracts and the law"
+tier: applied
+unit: 18
+unitName: "Game theory in the wild"
+order: 11
+label: "A11"
+kind: case
+placement: "after:moral-hazard"
+summary: "Incentive pay under noisy output, and why most disputes settle but some go to trial."
+tags: ["applied", "moral-hazard", "settlement"]
+estMinutes: 6
+mvp: true
+prereqs: ["moral-hazard", "adverse-selection"]
+concepts: ["incentive-contracts", "risk-sharing", "settlement"]
+refs: ["holmstrom1979", "shavell2004"]
+anchorEmoji: "⚖️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import MoralHazard from '@/components/interactive/MoralHazard.svelte';
+
+<div class="anchor"><span class="em">⚖️</span><p>Pay a salesperson pure commission and you load all the risk of a bad quarter onto them; pay pure salary and they have no reason to hustle. Every contract sits somewhere between, and the same tension, incentives against risk, runs through employment, insurance, and litigation.</p></div>
+
+# Contracts and the law
+
+<p class="lead">Contracts and legal disputes are games of hidden action and private information. Optimal incentive pay balances motivation against the cost of imposing risk (Holmström), and most lawsuits settle to avoid trial costs, except when the two sides disagree too much about who will win.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "Moral hazard is a problem of hidden...", options: ["Types", "Action (effort)", "Prices"], answer: 1 },
+    { q: "Two parties usually settle a lawsuit to avoid the cost of...", options: ["Signing", "Trial", "Negotiating"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+As principal, set an incentive contract slope. The agent chooses effort, and the app shows the tradeoff between motivating effort and dumping risk on a risk-averse agent.
+
+<MoralHazard
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Setting an incentive slope under noisy output"
+  predict={{
+    question: 'Should the agent bear all the risk (pure pay-for-output) to maximize effort?',
+    options: [{ key: 'all', label: 'Yes, full risk gives full incentives' }, { key: 'share', label: 'No, a risk-averse agent must be paid too much to bear all the noise' }],
+    reveal: 'No. Output is noisy, so loading all risk onto a risk-averse agent means paying a large risk premium for outcomes they cannot control. The optimal contract shares risk: enough slope to motivate effort, not so much that you overpay for noise.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The principal cannot see effort, only noisy output, so pay must be tied to output to motivate. But output also depends on luck, and a risk-averse agent dislikes bearing that luck; to accept a high-powered contract they demand a risk premium. The optimal contract trades these off: steep enough to induce effort, flat enough to avoid overpaying for noise. Make the agent bear all risk and you over-punish them for bad luck and pay dearly for it; make pay flat and effort collapses. Litigation is the mirror image with private information: both sides usually prefer to settle and split the saved trial costs, but if each is too optimistic about winning, or holds private information the other lacks, their acceptable ranges stop overlapping and the case goes to trial.
+</Callout>
+</Section>
+
+<Section id="math">
+## The real strategy
+
+<DefinitionAside label="incentive contracts and settlement">
+Holmström (1979) showed the optimal incentive contract balances the benefit of motivating effort against the cost of imposing risk on a risk-averse agent, and that pay should depend on any signal informative about effort (the informativeness principle), filtering out noise the agent cannot control. In litigation (Shavell, 2004), a plaintiff who expects to win with some probability, net of trial costs, has a minimum acceptable settlement; the defendant has a maximum. When these overlap there is a settlement surplus and the parties settle; when optimism or asymmetric information pushes them apart, the ranges miss and the case is tried.
+</DefinitionAside>
+
+Suppose a plaintiff wins $100\text{k}$ with probability $0.6$ (an expected $60\text{k}$), and each side faces $10\text{k}$ in trial costs. The plaintiff's trial value is $60\text{k} - 10\text{k} = 50\text{k}$: they will settle for anything above that. The defendant's expected loss at trial is $60\text{k} + 10\text{k} = 70\text{k}$: they will pay up to that to avoid it. Any settlement in $[50\text{k}, 70\text{k}]$ beats trial for both, a $20\text{k}$ surplus from the saved costs, so rational parties settle. Now let the plaintiff believe they will win with probability $0.9$ and the defendant believe only $0.3$: the plaintiff now demands more than the defendant will pay, the ranges no longer overlap, and the dispute goes to trial. Divergent estimates or asymmetric information, not irrationality, drive cases to court.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Risk-sharing, and when suits settle">
+On the contract side, imagine output is effort plus noise, and the agent is risk-averse. A pure commission (all risk on the agent) maximizes the incentive to work but forces the principal to pay a large risk premium for outcomes driven by luck. A flat salary removes the premium but kills effort. The optimum is an intermediate slope: enough pay-for-performance to motivate, filtered so it responds to informative signals of effort and not to pure noise. Over-punishing a risk-averse agent for bad luck is both unfair and expensive.
+
+On the legal side, take the numbers above. The plaintiff's trial value is $50\text{k}$ and the defendant's is $70\text{k}$, so any settlement between them saves both the $20\text{k}$ in combined trial costs, and they settle. But if the plaintiff thinks they will win $90\%$ of the time and the defendant thinks only $30\%$, the plaintiff wants more than $80\text{k}$ while the defendant will pay at most about $40\text{k}$; the ranges do not overlap and the case is litigated. So most disputes settle (the ranges usually overlap), and trials cluster where beliefs diverge sharply or one side holds private information, exactly the pattern the model predicts.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Optimal incentive pay balances motivating effort against the cost of loading risk onto a risk-averse agent, so full pay-for-output is rarely best. Most lawsuits settle to split the saved trial costs; they go to trial mainly when optimism or asymmetric information makes the acceptable ranges miss.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="case-contracts-law"
+  id="q1"
+  badge="apply"
+  question="Why is making the agent bear all the risk (pure pay-for-output) usually a mistake?"
+  options={[
+    { text: "Output is noisy, so a risk-averse agent demands a large premium to bear luck they cannot control, making full-risk contracts expensive", correct: true, feedback: "High-powered incentives over-punish the agent for bad luck. The optimal contract shares risk: enough slope to motivate, not so much that you overpay a risk-averse agent for noise." },
+    { text: "Because agents never respond to incentives", feedback: "Agents do respond, which is why some slope is optimal. The problem is that all-risk contracts overpay for noise, not that incentives fail." },
+    { text: "Because pay should never depend on output", feedback: "Pay should depend on informative signals of effort, including output. The point is balance, not zero incentive." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-contracts-law"
+  id="q2"
+  badge="analyse"
+  question="Plaintiff wins 100k with probability 0.6; each side's trial cost is 10k. Why do they settle?"
+  options={[
+    { text: "The plaintiff accepts anything above 50k and the defendant pays up to 70k, so any settlement in [50k, 70k] beats trial for both", correct: true, feedback: "Plaintiff trial value = 60k expected minus 10k cost = 50k; defendant expected loss = 60k + 10k = 70k. The overlapping range is the 20k in saved trial costs, so rational parties settle." },
+    { text: "Because settlement is legally required", feedback: "It is not required; they settle because both do better than at trial. The overlapping acceptable ranges create a surplus from saved costs." },
+    { text: "Because the plaintiff is certain to win", feedback: "The plaintiff wins only with probability 0.6. Settlement happens because the acceptable ranges overlap, not because of certainty." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-contracts-law"
+  id="q3"
+  badge="brings back: asymmetric information"
+  question="Given that settlement usually beats trial, why do some cases still go to court?"
+  options={[
+    { text: "When each side is too optimistic about winning, or holds private information, their acceptable ranges stop overlapping", correct: true, feedback: "If the plaintiff expects to win 0.9 and the defendant only 0.3, the plaintiff demands more than the defendant will pay and the ranges miss. Divergent estimates or asymmetric information, not irrationality, drive cases to trial." },
+    { text: "Because rational parties always litigate", feedback: "Rational parties usually settle; trials are the exception, arising when beliefs diverge or information is asymmetric enough that the ranges do not overlap." },
+    { text: "Because trial costs are always zero", feedback: "Trial costs are positive, which is exactly what creates the settlement surplus. Cases go to trial despite those costs when the ranges fail to overlap." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["holmstrom1979", "shavell2004"]} />

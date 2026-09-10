@@ -1,0 +1,142 @@
+---
+title: "Culture, context, and design"
+tier: expert
+unit: 17
+unitName: "Behavioral and experimental"
+order: 63
+kind: lesson
+summary: "Fairness varies across societies, so mechanisms must be designed for the players you actually have."
+tags: ["behavioral", "culture", "market-design"]
+estMinutes: 6
+mvp: true
+prereqs: ["social-preferences"]
+concepts: ["culture", "weird", "market-integration"]
+refs: ["henrich2001"]
+anchorEmoji: "🌍"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Ultimatum from '@/components/interactive/Ultimatum.svelte';
+
+<div class="anchor"><span class="em">🌍</span><p>The ultimatum game was run in fifteen small-scale societies, from Amazonian foragers to whale hunters. Offers ranged from stingy to hyper-generous, and some groups even rejected offers that were too high. There is no single human bargaining instinct.</p></div>
+
+# Culture, context, and design
+
+<p class="lead">The fairness this unit measured is not a universal constant. Cross-cultural experiments show offers and rejections vary widely with how a society is organized, and undergraduate subjects turn out to be outliers. A mechanism that assumes one fairness norm can fail badly on players who hold another.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In the ultimatum game, a fairness-minded responder rejects offers that are...", options: ["Too high", "Too low", "Exactly half"], answer: 1 },
+    { q: "A mechanism is strategy-proof if honesty is a...", options: ["Risk", "Best response", "Rare choice"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Switch the responder's cultural norm and see how the acceptable offer changes. The same game, different people, different thresholds.
+
+<Ultimatum
+  client:visible
+  exhibit="Exhibit 1"
+  caption="The ultimatum game across cultural norms"
+  presets={[
+    { key: 'weird', label: 'WEIRD (fair-minded)', alpha: 0.5 },
+    { key: 'market', label: 'Market-integrated', alpha: 0.7 },
+    { key: 'small', label: 'Small-scale society', alpha: 0.15 },
+  ]}
+  predict={{
+    question: 'Do all human societies reject unfair ultimatum offers at the same threshold?',
+    options: [{ key: 'yes', label: 'Yes, fairness is universal' }, { key: 'no', label: 'No, it varies widely by culture' }],
+    reveal: 'It varies widely. Market-integrated groups make higher, more equal offers and reject stingy ones; some small-scale societies treat the game as a windfall and offer little, with few rejections. Western undergraduates, the usual subjects, are not representative.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+People bring the norms of their daily lives into the lab. Societies with lots of anonymous market exchange have strong norms of fair dealing with strangers, so they offer close to half and punish stinginess. Groups that rarely trade with outsiders may see a stranger's money as a windfall, offer little, and rarely reject. A few societies with heavy gift-giving norms even make over-generous offers that get rejected because accepting would incur an obligation. The "fairness" a designer counts on is a local product, not a human universal.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="WEIRD subjects and market integration">
+Most experimental results come from WEIRD populations (Western, Educated, Industrialized, Rich, Democratic), which turn out to be unusual. Henrich and colleagues ran the ultimatum game in fifteen small-scale societies: mean offers ranged from about 26 percent (the Machiguenga) to 57 percent (the Lamalera whale hunters), and rejection behaviour varied with the group's degree of market integration and cooperation in daily life. Fairness norms are learned from institutions, not fixed by biology.
+</DefinitionAside>
+
+In inequity-aversion terms, the envy weight $\alpha$ that governs when a responder rejects differs across cultures: higher in market-integrated groups (they punish unfairness), lower in insular ones (they accept low offers). A designer who plugs in a single $\alpha$, typically the WEIRD value, will mispredict behaviour elsewhere. The practical upshot connects back to market design: the pre-1998 medical match and Boston's old school mechanism failed partly because they assumed behaviour their participants did not exhibit. Good mechanisms are built for the players you actually have.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="One game, three thresholds">
+Take the same $\$10$ ultimatum and vary the responder's envy weight $\alpha$. A market-integrated responder with high $\alpha$ rejects sizable offers below an even split, so a proposer must offer close to half. A WEIRD responder ($\alpha$ around $0.5$) rejects below roughly a quarter. A small-scale-society responder with low $\alpha$ accepts almost any positive offer, so a proposer can offer little and still succeed.
+
+A designer optimizing offers, or building a market that relies on fair play, gets very different answers depending on which $\alpha$ holds. Assume the WEIRD value everywhere and you will over- or under-shoot elsewhere. The lesson: measure the population's actual norms, and design the mechanism for them, not for an idealized universal player.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Fairness is learned from institutions and varies across cultures, and the usual lab subjects are outliers. Effective mechanism design measures the norms of the actual players rather than assuming a universal one.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="culture-and-context"
+  id="q1"
+  badge="apply"
+  question="Cross-cultural ultimatum experiments found that mean offers..."
+  options={[
+    { text: "Varied widely, from around a quarter to over half of the pie", correct: true, feedback: "Henrich et al. found offers ranging from about 26% (Machiguenga) to 57% (Lamalera), with rejection behaviour tied to market integration. There is no single universal offer." },
+    { text: "Were always close to 50/50 everywhere", feedback: "That is roughly the WEIRD pattern, but other societies differed markedly, some far lower, some higher. Fairness is not universal in magnitude." },
+    { text: "Were always near zero", feedback: "Offers were substantial in many societies and even hyper-generous in some. They varied, rather than clustering at zero." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="culture-and-context"
+  id="q2"
+  badge="analyse"
+  question="Why does market integration predict more equal, fairness-enforcing offers?"
+  options={[
+    { text: "Societies with frequent anonymous exchange develop strong norms of fair dealing with strangers, which people carry into the game", correct: true, feedback: "Everyday market interaction builds and rewards fair-dealing norms with strangers, so those subjects offer more and punish stinginess. Insular groups, trading rarely with outsiders, lack that norm and treat the game differently." },
+    { text: "Because market-integrated people have more money", feedback: "Wealth is not the driver; the learned norm of fair exchange with strangers is. The stakes are scaled to be meaningful everywhere." },
+    { text: "Because markets make people purely selfish", feedback: "The evidence points the other way here: market integration is associated with more fairness in these games, not less." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="culture-and-context"
+  id="q3"
+  badge="brings back: market design"
+  question="What does this imply for designing mechanisms like matching markets or auctions?"
+  options={[
+    { text: "Design for the players you actually have: a mechanism assuming one fairness norm can fail on a population that holds another", correct: true, feedback: "Behaviour is not universal, so a theoretically optimal mechanism can misfire if its behavioral assumptions do not match the participants. Good design measures the real population's norms, echoing why strategy-proof mechanisms that ask no gaming often succeed." },
+    { text: "Assume WEIRD behaviour everywhere for simplicity", feedback: "That is exactly the trap: WEIRD subjects are outliers, so assuming their norms elsewhere leads to mispredictions and failed mechanisms." },
+    { text: "Ignore behaviour, since theory is enough", feedback: "The chapter's whole point is that behaviour and context matter. A mechanism blind to them can fail, as historical market-design failures show." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["henrich2001"]} />

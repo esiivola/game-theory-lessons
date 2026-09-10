@@ -1,0 +1,139 @@
+---
+title: "The Prisoner's Dilemma"
+tier: basic
+unit: 2
+unitName: "Static solution concepts"
+order: 7
+kind: lesson
+summary: "Two rational players both betray, and both lose."
+tags: ["dilemma", "cooperation"]
+estMinutes: 6
+mvp: true
+prereqs: ["pure-nash"]
+concepts: ["prisoners-dilemma", "dominance"]
+refs: ["axelrod1984", "flood1958", "nash1950", "osborneRubinstein1994"]
+anchorEmoji: "🕊"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import PayoffMatrix from '@/components/interactive/PayoffMatrix.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+
+<div class="anchor"><span class="em">🕊</span><p>Christmas 1914: enemy soldiers climbed out of the trenches and shook hands. Why does trust sometimes break out, and sometimes collapse? It starts with one small game.</p></div>
+
+# The Prisoner's Dilemma
+
+<p class="lead">Two gas stations sit across the street from each other. Each morning each owner makes one choice: <span class="in-coop">hold prices</span>, or <span class="in-def">cut them</span> to pull in the other's customers. If both hold, both do well. If one cuts while the other holds, the cutter takes the street.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A move that beats your alternatives no matter what the other player does is called what?", options: ["Dominant", "Dominated", "Mixed"], answer: 0 },
+    { q: "At a Nash equilibrium, a player who changes strategy alone will...", options: ["Gain", "Not gain", "Always lose"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+<PayoffMatrix
+  client:visible
+  mode="play"
+  exhibit="Exhibit 1"
+  caption="Payoffs per round (you, them), in profit"
+  rows={[{ key: 'C', label: 'You hold', tone: 'coop' }, { key: 'D', label: 'You cut', tone: 'def' }]}
+  cols={[{ key: 'C', label: 'They hold', tone: 'coop' }, { key: 'D', label: 'They cut', tone: 'def' }]}
+  payoffs={{ C: { C: [2, 2], D: [-1, 3] }, D: { C: [3, -1], D: [0, 0] } }}
+  youChoiceLabels={{ C: 'Hold prices', D: 'Cut prices' }}
+  predict={{
+    question: 'Both owners are sensible and self-interested. It is an ordinary morning. What happens?',
+    options: [{ key: 'hold', label: 'Both hold prices' }, { key: 'cut', label: 'Both cut' }],
+    reveal: 'Cutting pays more whatever the other does, so both cut and each walks away with 0, instead of the +2 they would get by holding. Play a few rounds and watch it happen.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Cutting pays more for you whatever the other owner does. If they hold, cutting wins the street. If they cut, you cannot afford to be the only one holding. So both cut, and both earn less than if they had left prices alone. Neither owner is careless. They are stuck in the logic of the situation.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Write the game in normal form as $G=(N,(S_i),(u_i))$: players $N=\{1,2\}$, a strategy set $S_i=\{C,D\}$ for each (hold or cut), and a payoff $u_i$ for every pair of choices.
+
+Label the four payoffs with the usual names: $R$ for both holding (reward), $T$ for cutting against a holder (temptation), $P$ for both cutting (punishment), $S$ for holding against a cutter (sucker). Here $R=2,\ T=3,\ P=0,\ S=-1$, which meet the two conditions that make it a Prisoner's Dilemma:
+
+$$
+T > R > P > S \quad\text{and}\quad 2R > T + S.
+$$
+
+Cutting strictly dominates holding, since the cutter does better against either move ($3>2$ and $0>-1$):
+
+$$
+u_i(D, a) > u_i(C, a) \quad \forall\, a.
+$$
+
+<DefinitionAside label="Nash equilibrium">
+A profile $s^*$ is a Nash equilibrium if $u_i(s_i^*, s_{-i}^*) \ge u_i(s_i, s_{-i}^*)$ for every $s_i$ and every $i$.
+</DefinitionAside>
+
+A strictly dominant strategy is played in every equilibrium, so $(D,D)$ is the only one, paying $(0,0)$. But $(C,C)$ pays $(2,2)$ and beats it for both players. The equilibrium is the outcome nobody wanted.
+</Section>
+
+<Section id="worked">
+## Find the equilibrium yourself
+
+<WorkedExample title="Show that both-cut is the only equilibrium">
+Check each player's best reply. If they **hold**, you get $2$ from holding but $3$ from cutting, so you cut. If they **cut**, you get $-1$ from holding but $0$ from cutting, so you cut again. Cutting is your best reply to everything, and the same is true for them. The only cell where neither wants to move is $(\text{cut}, \text{cut})$, paying $(0,0)$.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Each player, acting sensibly alone, drives both to the outcome they were trying to avoid.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="prisoners-dilemma"
+  id="q1"
+  badge="apply"
+  question="Which outcome is the Nash equilibrium, the one neither owner regrets given the other's choice?"
+  options={[
+    { text: 'Both hold (+2, +2)', feedback: 'It pays the most for the pair, but it is not stable: either owner can grab +3 by cutting, so it breaks.' },
+    { text: 'Both cut (0, 0)', correct: true, feedback: 'Switching to hold alone drops you to -1, so nobody moves. Stable, even though both-hold pays more.' },
+    { text: 'You cut, they hold (+3, -1)', feedback: 'Your best case, but they would not stay at -1. They cut too, and you both fall to 0.' },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="prisoners-dilemma"
+  id="q2"
+  badge="brings back: dominance"
+  question="Two airlines keep undercutting fares until both barely profit, though both would earn more holding prices. In game terms, cutting fares is each airline's what?"
+  options={[
+    { text: 'Dominant strategy', correct: true, feedback: 'Cutting beats holding whatever the rival does, so it is dominant. A price war is exactly this dilemma at industry scale.' },
+    { text: 'Dominated strategy', feedback: 'The reverse. A dominated strategy is one you would never pick. Cutting is the one each airline is drawn to.' },
+    { text: 'A focal point', feedback: 'A focal point helps players coordinate on one of several equilibria. This game has a single equilibrium, reached through dominance.' },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["axelrod1984", "flood1958", "nash1950", "osborneRubinstein1994"]} />

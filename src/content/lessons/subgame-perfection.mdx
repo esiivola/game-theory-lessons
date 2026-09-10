@@ -1,0 +1,167 @@
+---
+title: "Subgame perfection and commitment"
+tier: basic
+unit: 4
+unitName: "Sequential games"
+order: 16
+kind: lesson
+summary: "Keep only credible equilibria, and see why tying your own hands can pay."
+tags: ["sequential", "subgame-perfection", "commitment", "stackelberg"]
+estMinutes: 7
+mvp: true
+prereqs: ["backward-induction", "cournot-bertrand"]
+concepts: ["subgame-perfection", "credibility", "commitment", "stackelberg"]
+refs: ["selten1975", "schelling1960", "stackelberg1934"]
+anchorEmoji: "🚢"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import PayoffMatrix from '@/components/interactive/PayoffMatrix.svelte';
+import ReactionCurve from '@/components/interactive/ReactionCurve.svelte';
+
+<div class="anchor"><span class="em">🚢</span><p>A commander lands an army and burns the ships behind it. Retreat is now impossible, and that is the point: the enemy knows there will be no retreat, and plans around a foe who cannot run. Throwing away an option made the army stronger.</p></div>
+
+# Subgame perfection and commitment
+
+<p class="lead">Some Nash equilibria are held up by threats no one would carry out. Subgame perfection throws those away and keeps only the credible ones. The same idea, run forward, explains why moving first and committing, giving up your own flexibility, can leave you better off.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "Backward induction solves a game tree by starting from...", options: ["The first move", "The last decisions", "The middle"], answer: 1 },
+    { q: "In Cournot with P = 120 - Q and zero cost, each firm produces...", options: ["30", "40", "60"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Back to the two Cournot firms. This time you move first and commit to a quantity the rival then sees before choosing its own. You are giving up the chance to react. Does that help you or hurt you?
+
+<ReactionCurve
+  client:visible
+  leader
+  exhibit="Exhibit 1"
+  caption="You commit q1 first; the rival best-responds"
+  predict={{
+    question: 'You lock in your output before the rival chooses. Compared with moving at the same time, you end up...',
+    options: [{ key: 'worse', label: 'Worse, you lost flexibility' }, { key: 'better', label: 'Better, the rival must accommodate' }],
+    reveal: 'Commit to 60, the rival best-responds with 30, and you earn 1800 against the Cournot 1600. Giving up your option to react forced the rival to shrink. Slide to 60 and see.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+When both firms move together, each hedges against the other. When you commit first, the rival can no longer hope you will back down: your large quantity is a fact, and its best reply is to make less. Because your commitment is visible and irreversible, it changes what the rival does. The same logic that exposes an empty threat, looking ahead to what each player would really do, is what makes a credible commitment valuable.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Run the entry game from the last lesson as a simultaneous table instead of a tree. It has two Nash equilibria. Show the best responses.
+
+<PayoffMatrix
+  client:visible
+  mode="nash"
+  exhibit="Exhibit 2"
+  caption="The entry game in normal form (entrant, incumbent)"
+  rows={[{ key: 'In', label: 'Enter', tone: 'coop' }, { key: 'Out', label: 'Stay out', tone: 'neutral' }]}
+  cols={[{ key: 'A', label: 'Accommodate', tone: 'coop' }, { key: 'F', label: 'Fight', tone: 'def' }]}
+  payoffs={{ In: { A: [2, 1], F: [-1, 0] }, Out: { A: [0, 2], F: [0, 2] } }}
+/>
+
+Two gold cells: $(\text{In},\text{Accommodate})$ and $(\text{Out},\text{Fight})$. Both are Nash. But $(\text{Out},\text{Fight})$ survives only because the incumbent's threat to fight is never tested when the entrant stays out.
+
+<DefinitionAside label="subgame-perfect equilibrium">
+A strategy profile is subgame perfect if it is a Nash equilibrium in every subgame, not just in the game as a whole. Equivalently, it prescribes optimal play at every decision node, which is exactly what backward induction finds. Here only $(\text{In},\text{Accommodate})$ qualifies; the fight is not optimal in the subgame that follows entry.
+</DefinitionAside>
+
+Now commitment, through Stackelberg. The leader picks $q_1$, foreseeing the follower's reaction $q_2 = (120 - q_1)/2$. Substituting into the leader's profit,
+
+$$
+\pi_1 = \left(120 - q_1 - \tfrac{120 - q_1}{2}\right)q_1 = \tfrac{1}{2}(120 - q_1)\,q_1,
+$$
+
+which is maximized at $q_1 = 60$. Then $q_2 = 30$, $P = 30$, and the leader earns $1800$, above the Cournot $1600$. The ability to commit, not react, is worth $200$.
+</Section>
+
+<Section id="reality">
+## A note from the real world
+
+<Callout kind="reality-check">
+Credibility has limits that are not on the blackboard. In the ultimatum game one player offers a split of \$10 and the other accepts or rejects; reject and both get nothing. Subgame perfection says offer a single penny and it will be taken, since a penny beats zero. Real responders routinely reject anything they see as unfair, walking away from real money to punish a lopsided offer. The Behavioral unit takes up why, and what it means for the theory of credible commitment.
+</Callout>
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Prune the empty threat, then solve Stackelberg">
+**Credibility.** In the table, $(\text{Out},\text{Fight})$ is a Nash equilibrium: given the incumbent would fight, staying out is the entrant's best reply, and given the entrant stays out, the incumbent is indifferent, so fighting is a best reply too. But look at the subgame after entry: there, fighting pays $0$ and accommodating pays $1$. Fighting is not optimal in that subgame, so the profile is not subgame perfect. Only $(\text{In},\text{Accommodate})$ is.
+
+**Commitment.** Substitute the follower's reaction $q_2 = (120 - q_1)/2$ into the leader's profit to get $\tfrac12(120 - q_1)q_1$. The first-order condition $60 - q_1 = 0$ gives $q_1 = 60$, then $q_2 = 30$, $P = 30$, leader profit $1800$. Moving first and committing beats the $1600$ of simultaneous Cournot, because the follower must adjust to a quantity it cannot undo.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Subgame perfection keeps only equilibria that are credible at every point in the game. Its forward-looking twin is commitment: a visible, irreversible move can beat keeping your options open.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="subgame-perfection"
+  id="q1"
+  badge="apply"
+  question="The entry game has two Nash equilibria in normal form. Which is subgame perfect, and why?"
+  options={[
+    { text: "(Enter, Accommodate), because accommodating is optimal in the subgame after entry", correct: true, feedback: "Subgame perfection demands optimal play in every subgame. After entry, accommodating (1) beats fighting (0), so only (Enter, Accommodate) survives. (Stay out, Fight) leans on an untested threat." },
+    { text: "(Stay out, Fight), because it deters entry", feedback: "It deters only if the entrant believes the fight, but fighting is not optimal after entry, so it is not subgame perfect. Deterrence here is not credible." },
+    { text: "Both, since both are Nash equilibria", feedback: "Both are Nash, but only one is subgame perfect. The fight is not optimal in the post-entry subgame, so (Stay out, Fight) is ruled out." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="subgame-perfection"
+  id="q2"
+  badge="analyse"
+  question="Why does committing first to a large quantity raise the Stackelberg leader's profit above Cournot?"
+  options={[
+    { text: "The commitment is irreversible, so the follower must best-respond by producing less, leaving the leader a larger share", correct: true, feedback: "By moving first and being unable to undo it, the leader forces the follower down its reaction curve to q2 = 30. The leader's 60 earns 1800, above the 1600 of moving simultaneously." },
+    { text: "The leader produces the monopoly quantity and keeps all the profit", feedback: "The leader makes 60, the monopoly total, but the follower still adds 30, so price falls to 30 and the leader earns 1800, not the monopoly 3600." },
+    { text: "Because moving first always guarantees a higher payoff in every game", feedback: "First-mover advantage is not universal; it depends on the payoffs. Here it helps because commitment shifts the follower's best response in the leader's favour." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="subgame-perfection"
+  id="q3"
+  badge="brings back: backward induction"
+  question="How is finding a subgame-perfect equilibrium related to backward induction?"
+  options={[
+    { text: "In a finite game of perfect information, backward induction produces exactly the subgame-perfect equilibrium", correct: true, feedback: "Both require optimal play at every node. Folding the tree from the end is the procedure; subgame perfection is the property that folding guarantees." },
+    { text: "They are unrelated methods that happen to agree", feedback: "They are the same idea. Backward induction is how you compute the subgame-perfect equilibrium in a perfect-information tree." },
+    { text: "Backward induction finds all Nash equilibria, subgame perfection finds one", feedback: "Backward induction does not enumerate all Nash equilibria; it finds the subgame-perfect one by requiring optimality at each node." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["selten1975", "schelling1960", "stackelberg1934"]} />

@@ -1,0 +1,153 @@
+---
+title: "Entry deterrence in business"
+tier: applied
+unit: 18
+unitName: "Game theory in the wild"
+order: 4
+label: "A4"
+kind: case
+placement: "after:subgame-perfection"
+summary: "A threat to fight entry is empty, unless a sunk investment makes fighting the profitable choice."
+tags: ["applied", "commitment", "entry-deterrence"]
+estMinutes: 6
+mvp: true
+prereqs: ["subgame-perfection", "cournot-bertrand"]
+concepts: ["entry-deterrence", "commitment", "capacity"]
+refs: ["dixit1980", "selten1975"]
+anchorEmoji: "🏭"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import GameTree from '@/components/interactive/GameTree.svelte';
+
+<div class="anchor"><span class="em">🏭</span><p>An incumbent monopolist wants to scare off entrants by threatening a price war. But once a rival has entered, fighting hurts the incumbent too, so the threat rings hollow. The fix is counterintuitive: spend money in a way that makes fighting your best option.</p></div>
+
+# Entry deterrence in business
+
+<p class="lead">This is subgame perfection and commitment applied to industrial strategy. A bare threat to fight entry is not credible, so it does not deter. But a sunk investment, like building excess capacity, can change the incumbent's own payoffs so that fighting becomes profitable, and the threat becomes real.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A threat is credible only if carrying it out is the threatener's...", options: ["Announced plan", "Best response when the moment comes", "Legal duty"], answer: 1 },
+    { q: "Commitment can help a player by...", options: ["Adding options", "Removing options to change others' behaviour", "Delaying"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Walk the entry game as the incumbent. First without commitment: if the entrant enters, will you really fight? Solve it backward.
+
+<GameTree
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Entry game, payoffs (entrant, incumbent)"
+  players={["Entrant", "Incumbent"]}
+  tree={{
+    kind: 'node', player: 0, label: 'Entrant',
+    branches: [
+      { label: 'Stay out', child: { kind: 'leaf', payoff: [0, 100] } },
+      { label: 'Enter', child: {
+        kind: 'node', player: 1, label: 'Incumbent',
+        branches: [
+          { label: 'Accommodate', child: { kind: 'leaf', payoff: [40, 50] } },
+          { label: 'Fight', child: { kind: 'leaf', payoff: [-10, 20] } },
+        ],
+      } },
+    ],
+  }}
+  predict={{
+    question: 'Without any prior commitment, does the incumbent fight an entrant?',
+    options: [{ key: 'fight', label: 'Yes, to protect its monopoly' }, { key: 'acc', label: 'No, accommodating pays more' }],
+    reveal: 'No. After entry, accommodating pays the incumbent 50 versus 20 for fighting, so it accommodates, and the entrant enters. The threat to fight is not credible, so it fails to deter. A sunk investment that raises the fight payoff can flip this.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Once the entrant is in, the incumbent compares two futures: fight and earn 20, or accommodate and earn 50. It accommodates, so the entrant safely enters. Announcing "I will fight" changes nothing, because the entrant looks ahead and sees the incumbent would not. The way to deter is to change your own payoffs before the fact: sink money into capacity that only pays off if you produce aggressively, so that after entry, fighting actually earns more than accommodating. Now the threat is credible, and the entrant stays out.
+</Callout>
+</Section>
+
+<Section id="math">
+## The real strategy
+
+<DefinitionAside label="commitment through sunk investment (Dixit)">
+Deterrence requires a credible threat, and subgame perfection says a threat is credible only if the incumbent would prefer to carry it out after entry. Dixit (1980) showed how a sunk investment in capacity changes this: by pre-building capacity, the incumbent lowers its marginal cost of producing a lot, so a post-entry price war becomes profitable rather than ruinous. The investment is valuable precisely because it removes the incumbent's temptation to accommodate.
+</DefinitionAside>
+
+Without commitment, post-entry payoffs are Accommodate $50 >$ Fight $20$, so the incumbent accommodates and entry occurs; the incumbent earns $50$ instead of its monopoly $100$. Now suppose a sunk capacity investment raises the fight payoff above the accommodate payoff (say fighting now yields more than accommodating because the capacity is already paid for). Then fighting is the credible best response, the entrant foresees a loss from entering, and stays out, letting the incumbent keep its monopoly. Paradoxically, spending money to make one option better can be worth more than the flexibility it destroys.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="From empty threat to credible deterrence">
+Solve the tree without commitment. At the incumbent's node, Accommodate pays $50$ and Fight pays $20$, so it accommodates. The entrant, foreseeing $40$ from entering versus $0$ from staying out, enters. The incumbent is stuck at $50$, and its threat to fight was never credible.
+
+Now sink an investment in capacity that makes producing aggressively cheap, so that after entry, fighting yields, say, $60$ while accommodating still yields $50$. Now the incumbent's best response to entry is to fight, and the entrant, foreseeing a loss of $-10$, stays out. The incumbent keeps its monopoly. The investment worked not by being used (fighting never happens on the equilibrium path) but by making the threat credible, exactly the value of commitment.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">A bare threat to fight entry is not credible and does not deter. A sunk investment that makes fighting the incumbent's profitable response turns the threat real, so the entrant stays out, and commitment beats flexibility.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="case-entry-deterrence"
+  id="q1"
+  badge="apply"
+  question="Without commitment, why does the incumbent's threat to fight fail to deter entry?"
+  options={[
+    { text: "After entry, accommodating (50) beats fighting (20), so the entrant knows the incumbent will not fight", correct: true, feedback: "Subgame perfection: the incumbent would accommodate once entry occurs, so the threat is empty and the entrant enters. Only changing the post-entry payoffs makes fighting credible." },
+    { text: "The entrant cannot hear the threat", feedback: "The threat is heard; it is just not believed, because fighting is not the incumbent's best response after entry." },
+    { text: "Because entry is illegal", feedback: "Entry is allowed; the issue is that the incumbent's threat to fight it is not credible without commitment." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-entry-deterrence"
+  id="q2"
+  badge="analyse"
+  question="How does a sunk capacity investment deter entry?"
+  options={[
+    { text: "It changes the incumbent's payoffs so that fighting becomes more profitable than accommodating, making the threat credible", correct: true, feedback: "Pre-built capacity makes aggressive production cheap, so a post-entry price war now pays more than accommodating. The entrant foresees this and stays out. The commitment works by removing the incumbent's temptation to accommodate." },
+    { text: "It scares the entrant with a bigger announcement", feedback: "Announcements do not deter; changed payoffs do. The investment makes fighting the incumbent's actual best response." },
+    { text: "It lowers the incumbent's profit, which helps it", feedback: "The point is not lower profit but changed incentives: the sunk cost makes fighting optimal, which deters entry and protects the monopoly." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-entry-deterrence"
+  id="q3"
+  badge="brings back: commitment"
+  question="Why can removing your own option (via sunk investment) leave you better off?"
+  options={[
+    { text: "It commits you to an action the rival must now plan around, changing their behaviour in your favour", correct: true, feedback: "This is the commitment principle from subgame perfection: by making fighting your credible best response, you deter entry entirely, which is worth more than keeping the flexibility to accommodate." },
+    { text: "Because fewer options always means higher payoffs", feedback: "Not always; commitment helps only when it changes others' behaviour beneficially, as here where it deters entry. It is not a general rule that fewer options are better." },
+    { text: "Because sunk costs should always be spent", feedback: "Sunk costs are not always worth incurring. This one pays off because it makes a deterring threat credible, not as a general principle." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["dixit1980", "selten1975"]} />

@@ -1,0 +1,139 @@
+---
+title: "The roots of cooperation"
+tier: applied
+unit: 18
+unitName: "Game theory in the wild"
+order: 6
+label: "A6"
+kind: case
+placement: "after:folk-theorems"
+summary: "Axelrod's tournaments showed tit-for-tat wins, and why cartels need a credible punishment."
+tags: ["applied", "repeated-games", "cooperation"]
+estMinutes: 6
+mvp: true
+prereqs: ["repeated-games", "folk-theorems"]
+concepts: ["tit-for-tat", "axelrod", "collusion"]
+refs: ["axelrod1984"]
+anchorEmoji: "🤝"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import RepeatedPD from '@/components/interactive/RepeatedPD.svelte';
+
+<div class="anchor"><span class="em">🤝</span><p>In 1980 Robert Axelrod invited game theorists to submit strategies for a repeated Prisoner's Dilemma tournament. The winner was the simplest entry of all: tit-for-tat, four lines of code that cooperate first, then copy the opponent. Nice, retaliatory, forgiving, and clear.</p></div>
+
+# The roots of cooperation
+
+<p class="lead">Where does cooperation come from among selfish players? Axelrod's tournaments gave a striking answer: not from saintliness but from repetition and reciprocity. The same math explains why cartels can sustain high prices, and why they collapse when the future stops mattering.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In the repeated PD, grim trigger sustains cooperation when delta is at least...", options: ["Any value", "1/2", "1"], answer: 1 },
+    { q: "The folk theorem says many outcomes are equilibria as long as they beat the...", options: ["Best payoff", "Minmax", "Average"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Run an Axelrod-style setup: pick your strategy against a grim-trigger bot, tune patience, and see the round-robin tournament rank the strategies.
+
+<RepeatedPD
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Repeated PD tournament, T5 R3 P1 S0"
+  predict={{
+    question: 'In Axelrod\'s repeated-PD tournament, which kind of strategy won?',
+    options: [{ key: 'nasty', label: 'A clever, exploitative one' }, { key: 'nice', label: 'A simple, nice, retaliatory one (tit-for-tat)' }],
+    reveal: 'Tit-for-tat: cooperate first, then mirror the opponent. It never defects first (nice), punishes defection at once (retaliatory), forgives when the other returns (forgiving), and is easy to read. Nasty strategies won early rounds but lost the war.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Against a one-shot opponent, defecting is dominant. Repeated play changes that: a strategy that provokes lasting retaliation pays for its greed. Tit-for-tat thrives because it earns the cooperative payoff with fellow cooperators and refuses to be exploited by defectors, while never starting fights. Cartels rely on the same logic: firms sustain high prices only because cheating triggers a price war that wipes out the short-run gain. When patience is high, the threat holds; when the future is discounted heavily, or the end is near, cooperation unravels.
+</Callout>
+</Section>
+
+<Section id="math">
+## The real episodes
+
+<DefinitionAside label="Axelrod's tournaments and cartels">
+Axelrod ran round-robin and evolutionary tournaments of repeated-PD strategies. Tit-for-tat won both, and successful strategies shared four traits: nice (never defect first), retaliatory (punish defection), forgiving (return to cooperation), and clear (easy to read). Real cartels are the same game: collusion on high prices is sustained by the threat of a price war, and it holds only when firms value future profits enough. The Joint Executive Committee railroad cartel of the 1880s alternated collusion and price wars exactly as the repeated-game model predicts.
+</DefinitionAside>
+
+The condition is the familiar one: grim trigger (or tit-for-tat) sustains cooperation when $\delta \ge (T-R)/(T-P) = 1/2$ for the standard payoffs. Patient firms cooperate; impatient ones defect. Cartels break down when the short-run gain from undercutting beats the discounted stream of future collusive profits, which is why entry, demand shocks, or an approaching end date destabilize them. The folk theorem adds that many collusive prices, not just one, are self-enforcing.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Why nice beats nasty over the long run">
+A purely exploitative strategy defects whenever it can grab the temptation payoff. Against a single opponent it may win, but in a population it provokes retaliation and ends up mired in mutual defection, earning the low punishment payoff round after round. Tit-for-tat, by contrast, reaches mutual cooperation with anyone willing to cooperate, and cuts its losses against defectors after one round.
+
+Cartels show the same arithmetic. Cooperating (holding price high) forever is worth $R/(1-\delta)$; undercutting once grabs $T$ now but triggers a price war paying $P$ thereafter. Cooperation holds when $\delta \ge 1/2$. A firm tempted to cheat weighs a one-time gain against a permanent loss of the collusive premium, and only patience keeps it in line. When the future dims, the cartel cracks, just as tit-for-tat cannot sustain cooperation against a very impatient partner.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Cooperation among selfish players comes from repetition and reciprocity, not virtue. Tit-for-tat, nice, retaliatory, forgiving, and clear, wins Axelrod's tournaments, and the same logic sustains cartels only while the future matters enough.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="case-cooperation"
+  id="q1"
+  badge="apply"
+  question="What four traits did the successful strategies in Axelrod's tournaments share?"
+  options={[
+    { text: "Nice, retaliatory, forgiving, and clear", correct: true, feedback: "Tit-for-tat embodies all four: it never defects first, punishes defection immediately, forgives once the other cooperates, and is simple to read. Those traits, not cleverness, won the tournaments." },
+    { text: "Aggressive, secretive, unforgiving, and complex", feedback: "Those are the losing traits. Nasty, opaque strategies won early exchanges but lost the round-robin and evolutionary tournaments." },
+    { text: "Random, generous, silent, and slow", feedback: "Randomness and pure generosity fare poorly. The winners were nice but retaliatory, forgiving, and clear." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-cooperation"
+  id="q2"
+  badge="analyse"
+  question="Why do cartels collapse when firms become impatient or the end approaches?"
+  options={[
+    { text: "The one-time gain from undercutting outweighs the discounted future collusive profit, so cheating pays", correct: true, feedback: "Cooperation holds only when delta clears the threshold. As the future is discounted more (or a known end nears), the punishment loses bite and defection becomes profitable, cracking the cartel." },
+    { text: "Because collusion is always unstable regardless of patience", feedback: "It is stable when firms are patient enough (delta at least 1/2 here). Instability comes specifically from impatience or an approaching horizon." },
+    { text: "Because antitrust law forbids it", feedback: "The model's mechanism is economic: the future must outweigh the temptation. Legal enforcement is separate from why the incentive to cheat grows with impatience." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-cooperation"
+  id="q3"
+  badge="brings back: folk theorems"
+  question="How does the folk theorem relate to cartel pricing?"
+  options={[
+    { text: "Many collusive prices above the competitive level are self-enforcing equilibria, not just one", correct: true, feedback: "The folk theorem says any feasible payoff above the minmax can be sustained by patient players. So a cartel could stabilize at many different high prices, all held up by the threat of a price war." },
+    { text: "Only one collusive price is ever possible", feedback: "The folk theorem gives a continuum of sustainable outcomes above minmax, so many collusive prices can be equilibria, not a unique one." },
+    { text: "The folk theorem forbids collusion", feedback: "It does the opposite: it shows collusion (and much else) can be an equilibrium of the repeated game when players are patient." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["axelrod1984"]} />

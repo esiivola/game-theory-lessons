@@ -1,0 +1,7 @@
+---
+const { label } = Astro.props as { label?: string };
+---
+<div class="def-aside">
+  <div class="lab">{label ? `Definition, ${label}` : 'Definition'}</div>
+  <slot />
+</div>

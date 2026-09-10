@@ -1,0 +1,143 @@
+---
+title: "The Shapley value"
+tier: expert
+unit: 13
+unitName: "Cooperative game theory"
+order: 43
+kind: lesson
+summary: "Pay each player their average marginal contribution across all the orders they could join."
+tags: ["cooperative", "shapley", "fairness"]
+estMinutes: 6
+mvp: true
+prereqs: ["coalitional-games"]
+concepts: ["shapley-value", "marginal-contribution", "fairness"]
+refs: ["shapley1953"]
+anchorEmoji: "⚖️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import ShapleySampler from '@/components/interactive/ShapleySampler.svelte';
+
+<div class="anchor"><span class="em">⚖️</span><p>Three towns want to share the cost of a runway. The core told us what is stable; it did not tell us what is fair. The Shapley value answers a different question: what does each party, on average, actually add to the group?</p></div>
+
+# The Shapley value
+
+<p class="lead">The core can be a single harsh point, a whole region, or empty. When you want one canonical, fair division rather than a stability set, the Shapley value delivers it: give each player the average of the value they add as coalitions form in every possible order.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "The core of the seller-plus-two-buyers game is...", options: ["A whole region", "The single point (100,0,0)", "Empty"], answer: 1 },
+    { q: "A player's marginal contribution to a coalition is...", options: ["Its total value", "The value it adds when it joins", "The average payoff"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Same seller-plus-two-buyers game. Sample the orders in which the three players might join the coalition, record each one's marginal contribution, and watch the averages converge.
+
+<ShapleySampler
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Averaging marginal contributions over join orders"
+  predict={{
+    question: 'What is the seller\'s Shapley value in this game?',
+    options: [{ key: 'hundred', label: '100, as in the core' }, { key: 'twothirds', label: 'About 66.7' }],
+    reveal: 'About 66.7, that is 200/3. In two of the six join orders the seller arrives first and adds nothing; in the other four it adds 100. Averaging gives 400/6 = 66.7, and each buyer gets 16.7. Unlike the core, the Shapley value gives the buyers a share.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The Shapley value credits each player with what they add, averaged fairly over every order of arrival. The seller is worth 100 whenever it joins after at least one buyer, but nothing if it arrives first with no buyer yet present. A buyer adds 100 only when it arrives to a lone seller, and nothing otherwise. Averaging over all six orders splits the credit so the seller gets the lion's share but the buyers, who are sometimes pivotal, get something too. That is a fairness verdict, not a stability one.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="the Shapley value">
+The Shapley value gives player $i$ the average of its marginal contribution $v(S \cup \{i\}) - v(S)$ over all orders in which the players could join the grand coalition. It is the unique allocation satisfying four axioms: efficiency (the whole value is shared), symmetry (interchangeable players get equal shares), the null-player property (a player adding nothing gets nothing), and additivity across games.
+</DefinitionAside>
+
+For the seller (player $s$), consider the six orders. The seller's marginal contribution is $100$ exactly when at least one buyer is already present, which happens in four of the six orders, and $0$ in the two where the seller is first. So
+
+$$
+\varphi_s = \frac{0 + 0 + 100 + 100 + 100 + 100}{6} = \frac{400}{6} = \frac{200}{3} \approx 66.7,
+$$
+
+and by symmetry each buyer gets $\varphi_b = 50/3 \approx 16.7$. Note $\varphi_s + \varphi_{b_1} = 83.3 < 100$, so the Shapley value lies outside the core: this game is not convex, and the fair division is not the stable one.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Average the seller's contributions">
+List the six join orders and the seller's marginal contribution in each. If the seller arrives first (orders $s,b_1,b_2$ and $s,b_2,b_1$), no coalition value exists yet, so it adds $0$. In the other four orders a buyer is already present, so the seller completes a coalition worth $100$ and adds $100$.
+
+Average: $(0 + 0 + 100 + 100 + 100 + 100)/6 = 400/6 = 200/3 \approx 66.7$. The two buyers split the rest by symmetry, each getting $50/3 \approx 16.7$. Check that this sits outside the core: $66.7 + 16.7 = 83.3 < 100$, so the coalition of the seller and one buyer could block it. Fairness (Shapley) and stability (core) genuinely diverge here.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">The Shapley value pays each player their average marginal contribution over all join orders, the unique fair division by four natural axioms. It need not lie in the core: fairness and stability can point to different splits.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="shapley-value"
+  id="q1"
+  badge="apply"
+  question="Why is the seller's Shapley value 200/3 rather than 100?"
+  options={[
+    { text: "In two of the six join orders the seller arrives first and adds nothing, so its average contribution is 400/6", correct: true, feedback: "The seller adds 100 only when a buyer is already present, which is four of six orders. Averaging in the two zero-contribution orders pulls the value down to 200/3 ≈ 66.7." },
+    { text: "Because the seller splits its value equally with the buyers", feedback: "It is not an equal split; it is an average of marginal contributions. The seller keeps the largest share, 200/3, but not all 100." },
+    { text: "Because the core says so", feedback: "The core says (100,0,0). The Shapley value is a different rule and gives 200/3, showing the two concepts disagree here." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="shapley-value"
+  id="q2"
+  badge="analyse"
+  question="The Shapley value here is (66.7, 16.7, 16.7). What does it mean that this is outside the core?"
+  options={[
+    { text: "A coalition (seller plus one buyer, worth 100) is offered only 83.3, so it could block this fair division", correct: true, feedback: "Fairness and stability part ways: the Shapley allocation gives the seller-plus-buyer coalition less than it can secure, so it is not immune to blocking. The game is not convex, so the Shapley value escapes the core." },
+    { text: "It means the Shapley value was computed incorrectly", feedback: "It is correct; it simply is not a core allocation. In non-convex games the Shapley value can lie outside the core." },
+    { text: "It means the core is empty", feedback: "The core here is the single point (100,0,0), not empty. The Shapley value just differs from it." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="shapley-value"
+  id="q3"
+  badge="brings back: the core"
+  question="When would the Shapley value be guaranteed to lie inside the core?"
+  options={[
+    { text: "When the game is convex (coalitions get more valuable as they grow)", correct: true, feedback: "For convex games the Shapley value is always in the core. This game is not convex, which is why fairness and stability diverge. Convexity is the condition that reconciles them." },
+    { text: "Always; the Shapley value is a core allocation by definition", feedback: "Not always: as here, it can fall outside the core. Only convexity guarantees it lands inside." },
+    { text: "Only when the core is empty", feedback: "If the core is empty the Shapley value cannot be in it at all. It is guaranteed inside precisely when the game is convex, which implies a nonempty core." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["shapley1953"]} />

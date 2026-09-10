@@ -1,0 +1,153 @@
+---
+title: "Signaling games"
+tier: intermediate
+unit: 9
+unitName: "Dynamic information and communication"
+order: 28
+kind: lesson
+summary: "A costly action can credibly reveal private information, even when it does nothing else."
+tags: ["signaling", "incomplete-information", "spence"]
+estMinutes: 6
+mvp: true
+prereqs: ["perfect-bayesian-equilibrium"]
+concepts: ["signaling", "separating-equilibrium", "single-crossing"]
+refs: ["spence1973", "choKreps1987"]
+anchorEmoji: "🎓"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Signaling from '@/components/interactive/Signaling.svelte';
+
+<div class="anchor"><span class="em">🎓</span><p>A degree can raise your wage even if nothing you studied is used on the job. That sounds like a waste, and in one famous model it is exactly a waste, on purpose. The diploma is worth paying for because it is harder for the wrong person to earn.</p></div>
+
+# Signaling games
+
+<p class="lead">When you know something an employer cannot verify, saying "I am talented" is cheap and unbelievable. What works is doing something costly that a less talented person would not find worthwhile. Spence showed education can play that role, sorting workers by type without teaching a thing.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A perfect Bayesian equilibrium pairs strategies with...", options: ["A referee", "Beliefs at every information set", "Random moves"], answer: 1 },
+    { q: "A signal is believed only when the belief it creates...", options: ["Is always 50/50", "Clears the bar for acting on it", "Is chosen by the sender"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Two worker types: Low productivity (worth 1) and High (worth 2), equally likely. Education costs $e/\theta$, so a year of school is cheaper for the High type. Firms pay the productivity they infer. You are the High worker choosing how much education to get. How little is enough to prove you are not the Low type?
+
+<Signaling
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Education as a costly signal; cost is e divided by productivity"
+  predict={{
+    question: 'What is the least education that credibly separates the High worker from the Low worker?',
+    options: [{ key: 'zero', label: 'None: talent speaks for itself' }, { key: 'one', label: 'Just enough that the Low type would not copy it' }],
+    reveal: 'Just enough. The least-cost separating level is e = 1: any less and the Low worker would happily mimic it for the High wage; e = 1 is exactly the point where mimicking stops paying the Low type. The High worker signals no more than necessary.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The signal works because it is differentially costly. Education does not make anyone more productive here, but it hurts the Low worker more per year than the High worker. So there is a level of schooling the High type will pay for and the Low type will not, and a firm seeing that level can safely infer High. The diploma is not proof of skill; it is proof that faking it was not worth the trouble.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Low productivity is $\theta_L = 1$, High is $\theta_H = 2$, each with probability $\tfrac12$. Education $e$ adds nothing to productivity but costs $c(e,\theta) = e/\theta$. In a **separating equilibrium** the High type picks some $e^*$ and the Low type picks $0$; firms pay $w = 2$ for $e \ge e^*$ and $w = 1$ below.
+
+Two incentive constraints must hold. The Low type must not want to mimic:
+
+$$
+\underbrace{2 - e^*}_{\text{mimic}} \le \underbrace{1}_{\text{stay at }0} \quad\Longrightarrow\quad e^* \ge 1.
+$$
+
+The High type must prefer to separate:
+
+$$
+\underbrace{2 - \tfrac{e^*}{2}}_{\text{separate}} \ge \underbrace{1}_{\text{pool down}} \quad\Longrightarrow\quad e^* \le 2.
+$$
+
+Any $e^*$ in $[1, 2]$ is a separating equilibrium, so there is a continuum. The **least-cost** one is $e^* = 1$: wages are $w(0) = 1$, $w(1) = 2$, and the High worker nets $2 - \tfrac12 = 1.5$.
+
+<DefinitionAside label="single crossing and refinement">
+The signal sorts types because the cost curves satisfy single crossing: the marginal cost of education is lower for the High type, so their indifference curves cross a wage-education line only once. That gap is what makes a separating level exist. The multiplicity of separating equilibria is usually resolved by a refinement (the intuitive criterion of Cho and Kreps), which selects the least-cost signal, and in the companion beer-quiche game rules out implausible pooling supported by odd off-path beliefs.
+</DefinitionAside>
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Find the least-cost separating education">
+Write the two constraints. The Low type, if it buys education $e^*$ and is paid the High wage, nets $2 - e^*/1$. It will not mimic as long as that is no better than staying at zero for the Low wage: $2 - e^* \le 1$, so $e^* \ge 1$.
+
+The High type buys $e^*$ at cost $e^*/2$ and is paid $2$, netting $2 - e^*/2$. It prefers this to skipping school for the Low wage of $1$ as long as $2 - e^*/2 \ge 1$, so $e^* \le 2$.
+
+Both hold on $[1, 2]$. The cheapest signal that still separates is $e^* = 1$: the Low type is just indifferent about mimicking (so it does not), and the High type nets $2 - 0.5 = 1.5$. Signalling any more than $e^* = 1$ only burns money.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">A costly action credibly reveals private information when it is cheaper for one type than another. Education can sort workers by talent without adding any, and the efficient signal is the smallest one the weaker type would not copy.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="signaling-games"
+  id="q1"
+  badge="apply"
+  question="Why is education a credible signal of productivity in this model, even though it teaches nothing job-relevant?"
+  options={[
+    { text: "It is more costly for the Low type, so there is a level the High type will buy and the Low type will not", correct: true, feedback: "Credibility comes from differential cost. The signal separates because mimicking it is too expensive for the Low worker, so the firm can trust it." },
+    { text: "Because schooling actually raises everyone's productivity", feedback: "Not in pure Spence: education adds no productivity here. Its whole value is as a costly, type-revealing signal." },
+    { text: "Because firms can observe the worker's true type", feedback: "Firms cannot see the type; that is the problem. They infer it from the observable, costly signal." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="signaling-games"
+  id="q2"
+  badge="analyse"
+  question="There is a whole range of separating education levels, from 1 to 2. Why single out e = 1?"
+  options={[
+    { text: "It is the least-cost separating signal: any more education just wastes resources without changing the inference", correct: true, feedback: "All of [1,2] separates, but higher levels burn extra cost for no informational gain. The intuitive-criterion refinement selects the cheapest, e = 1." },
+    { text: "Because e = 1 is the only separating equilibrium", feedback: "It is not unique: every level in [1,2] separates. e = 1 is picked because it is the least costly, not the only one." },
+    { text: "Because below e = 1 the High type refuses to separate", feedback: "Below 1 the problem is the Low type mimicking, not the High type refusing. The High type is happy to separate anywhere up to 2." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="signaling-games"
+  id="q3"
+  badge="brings back: perfect Bayesian equilibrium"
+  question="What makes a separating profile here a perfect Bayesian equilibrium?"
+  options={[
+    { text: "Firms' beliefs are pinned by Bayes on the path (each education level maps to a type) and everyone, workers and firms, acts optimally given those beliefs", correct: true, feedback: "Separation means the signal is informative, so Bayes gives firms a definite belief at each observed education, they pay the matching wage, and no worker type gains by deviating. That is exactly a PBE." },
+    { text: "Both worker types choose the same education", feedback: "That would be pooling, not separating. In a separating equilibrium the types choose different education levels, which is what makes the signal informative." },
+    { text: "Firms ignore education and pay the average productivity", feedback: "Paying the average is the pooling outcome. Separation has firms condition the wage on the observed signal." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["spence1973", "choKreps1987"]} />

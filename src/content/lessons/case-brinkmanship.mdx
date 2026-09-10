@@ -1,0 +1,140 @@
+---
+title: "Deterrence and brinkmanship"
+tier: applied
+unit: 18
+unitName: "Game theory in the wild"
+order: 3
+label: "A3"
+kind: case
+placement: "capstone"
+summary: "The Cuban Missile Crisis as a game of Chicken, and the strategy of leaving something to chance."
+tags: ["applied", "chicken", "deterrence"]
+estMinutes: 6
+mvp: true
+prereqs: ["focal-points", "subgame-perfection"]
+concepts: ["chicken", "brinkmanship", "deterrence"]
+refs: ["schelling1960", "schelling1966"]
+anchorEmoji: "☢️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import PayoffMatrix from '@/components/interactive/PayoffMatrix.svelte';
+
+<div class="anchor"><span class="em">☢️</span><p>For thirteen days in October 1962 the world sat at the edge of nuclear war. Neither the US nor the USSR wanted to fire, but neither wanted to back down. That is a game of nerve, and Schelling used it to explain how threats work when carrying them out would be insane.</p></div>
+
+# Deterrence and brinkmanship
+
+<p class="lead">The Cuban Missile Crisis is often modeled as Chicken: two sides on a collision course, each hoping the other swerves, disaster if neither does. The model is contested, but it captures the core puzzle of deterrence, how to make a threat credible when executing it would be catastrophic for you too.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In Chicken, the worst outcome for both is when...", options: ["Both swerve", "Both hold firm", "One swerves"], answer: 1 },
+    { q: "A threat is credible only if the threatener would actually...", options: ["Announce it", "Prefer to carry it out", "Regret it"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Model the crisis as Chicken: swerve (back down) or hold firm (escalate). Mutual holding is catastrophe. Reveal the equilibria.
+
+<PayoffMatrix
+  client:visible
+  mode="nash"
+  exhibit="Exhibit 1"
+  caption="The crisis as Chicken (US, USSR)"
+  rows={[{ key: 'Sw', label: 'US backs down', tone: 'coop' }, { key: 'St', label: 'US holds firm', tone: 'def' }]}
+  cols={[{ key: 'Sw', label: 'USSR backs down', tone: 'coop' }, { key: 'St', label: 'USSR holds firm', tone: 'def' }]}
+  payoffs={{ Sw: { Sw: [0, 0], St: [-1, 1] }, St: { Sw: [1, -1], St: [-10, -10] } }}
+/>
+
+Two pure equilibria, each where one side holds and the other backs down, plus a catastrophe both must avoid. The problem is which side gets to be the one that holds.
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Both sides prefer to be the one who holds firm while the other swerves, so the pure equilibria are lopsided, and neither wants to be the swerver. A flat threat to hold no matter what is not credible, because if the other truly will not swerve, holding means catastrophe. Schelling's insight was that you do not need a credible threat of certain disaster; you need a credible risk of it. By committing to a course that raises the chance of an accidental slide into war, you make backing down the other side's best move, even though nobody chose the disaster outright.
+</Callout>
+</Section>
+
+<Section id="math">
+## The model, and its limits
+
+Write the crisis as Chicken: mutual backing-down $(0,0)$, one holds and one swerves $(\pm 1)$, mutual holding a catastrophe $(-10,-10)$. There are two pure equilibria (one side holds, the other swerves) and a symmetric mixed one. In the mixed equilibrium each side holds firm with probability $p$ that makes the other indifferent: $-10p + 1(1-p) = 0$, giving $p = 1/11 \approx 9\%$. Brinkmanship is committing to a positive probability of catastrophe large enough that the rival prefers to yield.
+
+<DefinitionAside label="the threat that leaves something to chance">
+Schelling argued that a threat of certain mutual destruction is not credible (you would not push the button), but a threat that creates a genuine risk of accidental escalation can be. By taking steps that partly remove your own control, a blockade, an alert posture, you commit to a probability of disaster, making the opponent's best response to concede. Caveat: modeling the crisis as static Chicken is contested; Dixit and others argue a dynamic, sequential-bargaining account fits the actual back-and-forth better. Treat Chicken as the entry point, not the last word.
+</DefinitionAside>
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Brinkmanship as a committed risk">
+In the mixed equilibrium of this Chicken game, a side holds firm with probability $p$ chosen to make the opponent indifferent between holding and swerving. Setting the opponent's payoff to holding equal to swerving, $-10p + 1(1-p) = 0$, gives $p = 1/11$, about a $9\%$ chance of catastrophe on each side. That small but real risk is what deters.
+
+Brinkmanship operationalizes this: rather than threaten certain war (incredible), a leader takes actions that raise the chance of an uncontrolled slide, a naval blockade, forces on hair-trigger alert, so that the rival, facing a genuine probability of disaster, prefers to yield. Kennedy's blockade did exactly this, creating pressure without a first strike. The credibility came from the risk, not from a promise to end the world on purpose.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Deterrence in a game of nerve works not by threatening certain catastrophe, which is not credible, but by committing to a genuine risk of it. That is brinkmanship, and Chicken is a useful, if contested, model of the Cuban Missile Crisis.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="case-brinkmanship"
+  id="q1"
+  badge="apply"
+  question="Why is a threat of certain mutual destruction not credible in this game?"
+  options={[
+    { text: "If the other side truly will not swerve, carrying out the threat means catastrophe for you too, so you would not do it", correct: true, feedback: "Mutual holding is the worst outcome for both, so a promise to hold no matter what is not believable. The threatener would rather swerve than trigger disaster, which is why a certain-doom threat fails." },
+    { text: "Because the other side cannot hear the threat", feedback: "Communication is not the issue; credibility is. Executing certain mutual destruction is against the threatener's own interest, so the threat is empty." },
+    { text: "Because Chicken has no equilibrium", feedback: "It has two pure equilibria and a mixed one. The problem is the credibility of a certain-catastrophe threat, not existence." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-brinkmanship"
+  id="q2"
+  badge="analyse"
+  question="What is Schelling's 'threat that leaves something to chance'?"
+  options={[
+    { text: "Committing to actions that raise the probability of accidental disaster, making a genuine risk (not certain doom) the credible deterrent", correct: true, feedback: "A credible risk of catastrophe can deter even when a threat of certain catastrophe cannot. By partly ceding control, a leader makes the rival face real odds of disaster and prefer to yield." },
+    { text: "Threatening to definitely start a war", feedback: "That is the incredible threat. Brinkmanship substitutes a credible probability of disaster for an incredible certainty of it." },
+    { text: "Randomly choosing whether to negotiate", feedback: "It is not idle randomization; it is a deliberate commitment to a risk of escalation that shifts the rival's best response." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-brinkmanship"
+  id="q3"
+  badge="brings back: credibility"
+  question="Modeling the crisis as static Chicken is a useful entry point but contested. Why?"
+  options={[
+    { text: "The real crisis was a dynamic, sequential bargaining process, which a one-shot Chicken matrix cannot fully capture", correct: true, feedback: "Chicken frames the core standoff, but the actual thirteen days were a back-and-forth of moves and signals. Dynamic sequential-bargaining models arguably fit the sequence better, so Chicken is the entry point, not the final word." },
+    { text: "Because Chicken has no relevance to real conflict", feedback: "It is quite relevant as a model of the standoff; the caveat is that a static matrix omits the dynamics, not that it is useless." },
+    { text: "Because the crisis had no equilibrium behaviour", feedback: "The point is about static versus dynamic modeling, not the absence of equilibrium reasoning. Chicken captures the nerve game but not the sequence." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["schelling1960", "schelling1966"]} />

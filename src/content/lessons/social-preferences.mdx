@@ -1,0 +1,137 @@
+---
+title: "Social preferences: fairness"
+tier: expert
+unit: 17
+unitName: "Behavioral and experimental"
+order: 58
+kind: lesson
+summary: "People reject unfair offers and give without being forced, so payoffs are not just their own money."
+tags: ["behavioral", "fairness", "ultimatum"]
+estMinutes: 6
+mvp: true
+prereqs: ["subgame-perfection"]
+concepts: ["fairness", "inequity-aversion", "ultimatum"]
+refs: ["guth1982", "fehrSchmidt1999", "berg1995"]
+anchorEmoji: "⚖️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Ultimatum from '@/components/interactive/Ultimatum.svelte';
+
+<div class="anchor"><span class="em">⚖️</span><p>Offer someone $2 out of $10, take it or leave it. Pure self-interest says they should take it: $2 beats nothing. Around half the time, they refuse, burning their own money to deny you yours. That single fact reshapes what we mean by a payoff.</p></div>
+
+# Social preferences: fairness
+
+<p class="lead">The subgame-perfect prediction for the ultimatum game is stark: offer a penny, and it will be accepted. Real responders reject lowball offers, and dictators give money away with nothing forcing them to. People care about fairness, and modeling that as part of the payoff explains the data.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "Subgame perfection predicts the ultimatum responder accepts...", options: ["Only fair offers", "Any positive offer", "Nothing"], answer: 1 },
+    { q: "A payoff in game theory represents a player's...", options: ["Dollars only", "Utility, including any fairness concerns", "Rank"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Split $10 with a responder who has fairness preferences: they accept or reject, and rejection leaves both empty-handed. Find how low you can go.
+
+<Ultimatum
+  client:visible
+  exhibit="Exhibit 1"
+  caption="The ultimatum game with a fairness-minded responder"
+  predict={{
+    question: 'What is the lowest offer this responder will still accept?',
+    options: [{ key: 'penny', label: 'A single penny' }, { key: 'quarter', label: 'Around a quarter of the pie' }],
+    reveal: 'Around a quarter. A responder with inequity aversion rejects offers below about $2.50, preferring nothing to a humiliating split. The subgame-perfect penny is refused; the modal real offer is close to half.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Standard theory assumes the responder cares only about their own dollars, so any positive amount beats zero. But people also dislike being treated unfairly, and that distaste is real enough to outweigh a small payout. Rejecting a stingy offer is not irrational once you include fairness in the utility: the responder is trading a little money for the satisfaction of not being exploited. Proposers anticipate this, which is why real offers cluster near an even split, not at a penny.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="inequity aversion (Fehr-Schmidt)">
+A responder who keeps $s$ (proposer keeps $\text{pie} - s$) has utility $s - \alpha\max(\text{other} - s, 0) - \beta\max(s - \text{other}, 0)$: the envy term $\alpha$ penalizes being behind, the guilt term $\beta$ (smaller) penalizes being ahead. Rejecting yields $0$, so the responder rejects any offer whose utility is negative. This turns fairness into part of the payoff, restoring rational choice.
+</DefinitionAside>
+
+When behind ($s < \text{pie}/2$), utility is $s - \alpha(\text{pie} - 2s)$, which is negative when $s < \dfrac{\alpha \cdot \text{pie}}{1 + 2\alpha}$. With $\alpha = 0.5$ and a pie of $10$, the threshold is $\dfrac{0.5 \cdot 10}{2} = 2.5$: the responder rejects offers below $\$2.50$, matching the empirical rejection spike. Dictator games (where the responder cannot reject) show smaller but still positive giving, and trust games show investors sending money that trustees partly return, all evidence that people value more than their own cash.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Find the rejection threshold">
+Suppose the responder is offered $s$ with envy weight $\alpha = 0.5$ on a $\$10$ pie. Being behind, their utility is $s - 0.5\,(\,(10 - s) - s\,) = s - 0.5(10 - 2s) = s - 5 + s = 2s - 5$.
+
+Set this to zero: $2s - 5 = 0$, so $s = 2.5$. Below $\$2.50$ the utility is negative, so the responder rejects, preferring the $0$ of walking away to the sting of a lopsided split. Above $\$2.50$ they accept. A stronger envy weight raises this threshold, and a proposer who understands it offers close to half to avoid rejection, exactly what the experiments show.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">People reject unfair offers and give unprompted, so payoffs are utility, not just money. Modeling fairness as inequity aversion turns "irrational" rejections into rational choices and predicts near-even offers.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="social-preferences"
+  id="q1"
+  badge="apply"
+  question="A responder with envy weight 0.5 faces a $10 pie. What is the lowest offer they accept?"
+  options={[
+    { text: "$2.50: below that, the utility of accepting turns negative", correct: true, feedback: "Utility when behind is 2s - 5, which is zero at s = 2.5. Offers below $2.50 are rejected, matching the observed rejection of lowball splits." },
+    { text: "$0.01, since any money beats nothing", feedback: "That is the self-interest prediction. A fairness-minded responder rejects up to about $2.50, preferring nothing to an unfair split." },
+    { text: "$5, an exact even split", feedback: "They will accept less than half; the threshold is $2.50. They only reject clearly unfair offers, not everything below 50/50." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="social-preferences"
+  id="q2"
+  badge="analyse"
+  question="How does inequity aversion make rejecting a lowball offer rational?"
+  options={[
+    { text: "It adds a disutility from being behind, which can outweigh the small money gained, so rejecting yields higher utility than accepting", correct: true, feedback: "Once fairness is in the payoff, a stingy offer can be worth less than nothing to the responder. Rejecting is then the utility-maximizing choice, not a lapse in rationality." },
+    { text: "It assumes the responder cannot do arithmetic", feedback: "The responder computes carefully; they simply value fairness. Rejection maximizes their (fairness-inclusive) utility." },
+    { text: "It makes money worthless to the responder", feedback: "Money still matters (the s term). It is just traded off against the disutility of an unfair split, which can dominate for low offers." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="social-preferences"
+  id="q3"
+  badge="brings back: subgame perfection"
+  question="Why does the subgame-perfect 'offer a penny' prediction fail?"
+  options={[
+    { text: "It assumes the responder maximizes only their own money; with fairness in the payoff, the penny is rejected", correct: true, feedback: "Subgame perfection is correct given self-interested payoffs, but real payoffs include fairness. Once the responder's utility penalizes unfairness, the credible threat to reject a penny is real, so proposers offer more." },
+    { text: "Because subgame perfection is mathematically wrong", feedback: "The logic is sound; the assumption about payoffs is not. Fix the payoffs to include fairness and the prediction changes." },
+    { text: "Because the ultimatum game has no equilibrium", feedback: "It has an equilibrium; the issue is that the self-interest payoffs mispredict behaviour. Fairness preferences correct it." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["guth1982", "fehrSchmidt1999", "berg1995"]} />

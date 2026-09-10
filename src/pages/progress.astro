@@ -1,0 +1,113 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { withBase } from '@/config/site';
+
+const tierOrder: Record<string, number> = { basic: 0, intermediate: 1, expert: 2, applied: 3 };
+const all = await getCollection('lessons');
+const lessons = all.sort(
+  (a, b) => (tierOrder[a.data.tier] - tierOrder[b.data.tier]) || a.data.order - b.data.order
+);
+const total = lessons.length;
+const TIERS = [
+  { id: 'basic', name: 'Basic' },
+  { id: 'intermediate', name: 'Intermediate' },
+  { id: 'expert', name: 'Expert' },
+  { id: 'applied', name: 'Applied' },
+];
+const tierTotals = TIERS.map((t) => ({ ...t, total: lessons.filter((l) => l.data.tier === t.id).length })).filter(
+  (t) => t.total > 0
+);
+---
+<BaseLayout active="progress" totalLessons={total} title="Progress">
+  <div class="eyebrow">Your journey</div>
+  <h1 style="font-size:clamp(26px,6.5vw,29px);letter-spacing:-.8px;margin-bottom:2px">Progress</h1>
+
+  <div class="ringwrap">
+    <div id="bigRing" aria-hidden="true"></div>
+    <div class="cap"><b id="ringCap">0 of {total} lessons</b><span>From two suspects to market design.</span></div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat"><div class="v" id="xp" style="color:var(--gold)">0</div><div class="l">Total XP</div></div>
+    <div class="stat"><div class="v" id="days" style="color:var(--accent)">0</div><div class="l">Days learned</div></div>
+  </div>
+
+  <div class="eyebrow" style="margin-top:6px">By tier</div>
+  <div class="tier-prog">
+    {tierTotals.map((t) => (
+      <div class="tp" data-tier={t.id} data-total={t.total}>
+        <span class="name">{t.name}</span>
+        <span class="bar"><i style="width:0%"></i></span>
+        <span class="n">0/{t.total}</span>
+      </div>
+    ))}
+  </div>
+
+  <div class="eyebrow" style="margin-top:22px">Lessons</div>
+  <div class="plist">
+    {lessons.map((l) => (
+      <a class="prow" href={withBase('lessons/' + l.id)} data-slug={l.id} data-tier={l.data.tier}>
+        <span class="pr-ring" aria-hidden="true"></span>
+        <span class="t">{l.data.title}</span>
+        <span class="st">To do</span>
+      </a>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .plist { display: flex; flex-direction: column; margin-top: 14px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .prow { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-bottom: 1px solid var(--border); text-decoration: none; color: var(--ink); }
+  .prow:last-child { border-bottom: 0; }
+  .prow .t { flex: 1; font-size: 13.5px; font-weight: 500; }
+  .prow .st { font-size: 10.5px; font-weight: 700; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .4px; }
+  .prow.done .st { color: var(--accent); }
+  .pr-ring { display: inline-flex; width: 20px; height: 20px; }
+</style>
+
+<script>
+  import { load } from '@/lib/progress';
+  import { ringSvg } from '@/lib/ui';
+
+  function render() {
+    const p = load();
+    const rows = Array.from(document.querySelectorAll<HTMLElement>('.prow[data-slug]'));
+    const isDone = (s: string | null) => !!(s && p.lessons[s]?.status === 'complete');
+    const total = rows.length;
+    const done = rows.filter((r) => isDone(r.dataset.slug || null)).length;
+    const frac = total ? done / total : 0;
+
+    const ring = document.getElementById('bigRing');
+    if (ring) ring.innerHTML = ringSvg(frac, 92);
+    const cap = document.getElementById('ringCap');
+    if (cap) cap.textContent = `${done} of ${total} lessons, ${Math.round(frac * 100)}%`;
+    const xp = document.getElementById('xp');
+    if (xp) xp.textContent = String(p.xp);
+    const days = document.getElementById('days');
+    if (days) days.textContent = String(p.daysLearned.length);
+
+    document.querySelectorAll<HTMLElement>('.tp[data-tier]').forEach((tp) => {
+      const tier = tp.dataset.tier;
+      const t = parseInt(tp.dataset.total || '0', 10);
+      const d = rows.filter((r) => r.dataset.tier === tier && isDone(r.dataset.slug || null)).length;
+      const bar = tp.querySelector<HTMLElement>('.bar > i');
+      if (bar) bar.style.width = (t ? Math.round((d / t) * 100) : 0) + '%';
+      const n = tp.querySelector<HTMLElement>('.n');
+      if (n) n.textContent = `${d}/${t}`;
+    });
+
+    rows.forEach((r) => {
+      const d = isDone(r.dataset.slug || null);
+      r.classList.toggle('done', d);
+      const rr = r.querySelector<HTMLElement>('.pr-ring');
+      if (rr) rr.innerHTML = ringSvg(d ? 1 : 0, 20);
+      const st = r.querySelector<HTMLElement>('.st');
+      if (st) st.textContent = d ? 'Done' : 'To do';
+    });
+  }
+
+  render();
+  window.addEventListener('gt:progress', render);
+  window.addEventListener('pageshow', render);
+</script>

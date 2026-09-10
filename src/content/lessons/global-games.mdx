@@ -1,0 +1,145 @@
+---
+title: "Global games"
+tier: expert
+unit: 11
+unitName: "Refinements and epistemics"
+order: 35
+kind: lesson
+summary: "A little private noise turns a game with many self-fulfilling outcomes into one with a single threshold."
+tags: ["global-games", "coordination", "crises"]
+estMinutes: 6
+mvp: true
+prereqs: ["bayesian-games", "supermodular-games"]
+concepts: ["global-games", "threshold-equilibrium", "coordination"]
+refs: ["carlssonVanDamme1993", "morrisShin1998"]
+anchorEmoji: "💱"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import GlobalGames from '@/components/interactive/GlobalGames.svelte';
+
+<div class="anchor"><span class="em">💱</span><p>A currency peg holds if few speculators attack and collapses if enough do. With everyone sure of the fundamentals, either outcome can be self-fulfilling. Give each trader a slightly noisy read of the economy and the ambiguity vanishes: there is one threshold, and everyone knows which side of it they are on.</p></div>
+
+# Global games
+
+<p class="lead">Coordination games have many equilibria, and stories about crises often lean on that: the attack succeeds because everyone expects it to. Global games puncture the mystery. Add a small amount of private noise to each player's information and the multiplicity collapses to a single equilibrium pinned by the fundamentals, not by mood.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In a Bayesian game each player conditions its action on...", options: ["The realised state", "Its private signal", "The average payoff"], answer: 1 },
+    { q: "A coordination game with strategic complements typically has...", options: ["No equilibrium", "Multiple equilibria", "A dominant strategy"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+The peg falls if the fraction attacking exceeds the economy's fundamental strength $\theta$; attacking costs $c$. Each speculator sees a slightly noisy signal of $\theta$ and attacks if it looks weak enough. Set the cost and see which economies collapse.
+
+<GlobalGames
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Currency attack: the threshold theta* = 1 - c"
+  predict={{
+    question: 'Does making an attack cheaper make crises more or less likely?',
+    options: [{ key: 'less', label: 'Less likely' }, { key: 'more', label: 'More likely' }],
+    reveal: 'More likely. The unique threshold is theta* = 1 - c, so a lower cost c raises the threshold: more economies fall below it and collapse. Cheaper attacks mean more crises, not fewer.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+With everyone perfectly informed of the same fundamental, there is a middle range where both "all attack" and "none attack" are equilibria, and the outcome seems arbitrary. Private noise breaks the symmetry: no one is quite sure what others saw, so each must reason about the whole distribution of signals. That reasoning ties every player to a single switching point. A cheaper attack lowers the bar for finding it worthwhile, so the threshold at which the regime survives moves up, and more economies fall.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+The regime collapses if the mass of attackers reaches the fundamental $\theta$; attacking costs $c$ and pays off only if the regime falls. Under complete information, for intermediate $\theta$ there are two equilibria (everyone attacks, or no one does). Now let each speculator $i$ see a private signal $x_i = \theta + \text{noise}$.
+
+<DefinitionAside label="global game">
+A global game is a coordination game where each player observes the payoff-relevant state with a small idiosyncratic error. As the noise shrinks, the game has a unique equilibrium in threshold strategies: attack iff your signal is below a cutoff. The uniqueness comes from the noise, which prevents beliefs about others from being common knowledge and forces iterated reasoning to a single outcome.
+</DefinitionAside>
+
+At the switching signal, the marginal speculator's belief about the fraction of others attacking is uniform on $[0,1]$ (the Laplacian property). Indifference between attacking and not then gives the fundamental threshold
+
+$$
+\theta^* = 1 - c.
+$$
+
+The regime falls exactly when $\theta < \theta^*$. With $c = \tfrac12$, $\theta^* = \tfrac12$. Lower the cost and $\theta^*$ rises, so crises become more common: strong fundamentals no longer guarantee safety once they dip below $1-c$.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Find the crisis threshold">
+Consider the marginal speculator, the one whose signal sits exactly at the switching cutoff. A key property of the global-games limit is that this agent's posterior over the fraction of others who attack is uniform on $[0,1]$. So conditional on being marginal, the regime falls with probability equal to that fraction, and the expected benefit of attacking is the probability the regime falls, which averages to $\tfrac12$ of a unit payoff scaled by where the threshold sits.
+
+Setting the marginal agent indifferent, attack cost $c$ equals the expected gain, and working through the uniform belief gives the fundamental threshold $\theta^* = 1 - c$. At $c = \tfrac12$ this is $\tfrac12$: economies with $\theta < \tfrac12$ collapse, those above survive. Halve the cost to $c = \tfrac14$ and $\theta^* = \tfrac34$: now three-quarters of economies are vulnerable. Cheaper attacking makes crises more likely.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Small private noise selects a unique threshold equilibrium out of a coordination game's many equilibria. Crises are not pure sunspots: the regime falls exactly when fundamentals drop below 1 minus the cost of attacking.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="global-games"
+  id="q1"
+  badge="apply"
+  question="Attacking becomes cheaper (c falls from 1/2 to 1/4). What happens to the crisis threshold?"
+  options={[
+    { text: "It rises from 1/2 to 3/4, so more economies collapse", correct: true, feedback: "The threshold is theta* = 1 - c, which rises as c falls. A larger share of fundamentals now lies below it, so crises are more frequent." },
+    { text: "It falls, so fewer economies collapse", feedback: "Lower cost raises the threshold (1 - c), not lowers it. Cheaper attacks make crises more likely." },
+    { text: "It stays at 1/2 regardless of cost", feedback: "The threshold depends directly on c through theta* = 1 - c, so it moves to 3/4 when c = 1/4." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="global-games"
+  id="q2"
+  badge="analyse"
+  question="What does adding small private noise do to the set of equilibria?"
+  options={[
+    { text: "It collapses the multiplicity to a single threshold equilibrium", correct: true, feedback: "Complete information leaves multiple self-fulfilling equilibria in a middle range. Noise removes common knowledge of others' information and selects one unique cutoff, so the outcome is pinned by fundamentals." },
+    { text: "It leaves the multiple equilibria unchanged", feedback: "Even tiny noise changes things qualitatively: it selects a unique equilibrium, which is the central result of global games." },
+    { text: "It destroys all equilibria", feedback: "It does not remove equilibrium; it selects a unique one in threshold strategies." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="global-games"
+  id="q3"
+  badge="brings back: supermodular games"
+  question="Global games build on coordination with strategic complements. How does the crisis story relate to that structure?"
+  options={[
+    { text: "Attacking is more attractive the more others attack, a complementarity, which under complete information gives multiple equilibria; noise selects one", correct: true, feedback: "The payoff to attacking rises with the number of attackers, exactly the strategic-complements structure that yields multiple self-fulfilling equilibria. Global games apply small noise to that setting to pick out a unique threshold." },
+    { text: "Attacking is a dominant strategy regardless of others", feedback: "It is not dominant: its appeal depends on how many others attack. That complementarity is what creates the multiplicity noise then resolves." },
+    { text: "The game has no relation to coordination or complements", feedback: "It is precisely a coordination game with complements; global games are the tool for selecting among its equilibria." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["carlssonVanDamme1993", "morrisShin1998"]} />

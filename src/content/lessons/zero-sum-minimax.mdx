@@ -1,0 +1,167 @@
+---
+title: "Zero-sum games and minimax"
+tier: basic
+unit: 2
+unitName: "Static solution concepts"
+order: 11
+kind: lesson
+summary: "When one player's gain is the other's loss, the safe mix is the equilibrium."
+tags: ["solution-concepts", "zero-sum", "minimax"]
+estMinutes: 6
+mvp: true
+prereqs: ["existence-of-nash"]
+concepts: ["zero-sum", "minimax", "mixed-strategy"]
+refs: ["vonNeumann1928", "osborne2004", "palaciosHuerta2003"]
+anchorEmoji: "⚔️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import MixedStrategy from '@/components/interactive/MixedStrategy.svelte';
+
+<div class="anchor"><span class="em">⚔️</span><p>A raider picks which of two flanks to hit. The defender picks one flank to guard. Every point the raider takes is a point the defender loses. There is no shared good outcome to hope for, only the other side's mistake.</p></div>
+
+# Zero-sum games and minimax
+
+<p class="lead">In a strictly competitive game, whatever you win the other player loses. That sounds bleak, but it makes the game unusually clean: there is a single number, the value, that a careful player can guarantee no matter how cleverly the opponent plays. The way to guarantee it is to mix.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In Rock-Paper-Scissors the equilibrium mix is...", options: ["Whatever beats the last move", "One-third on each move", "All Rock"], answer: 1 },
+    { q: "Adding the same constant to every payoff in a game...", options: ["Changes the equilibrium", "Leaves choices unchanged", "Reverses who wins"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+You are the raider. The strong flank is worth more if you get through, but the defender knows that too. The slider sets how often you hit the strong flank. Each line shows what you can guarantee if the defender guards one flank or the other. A guaranteed payoff is the worse of the two, so you want to lift that floor.
+
+<MixedStrategy
+  client:visible
+  mode="security"
+  exhibit="Exhibit 1"
+  caption="What you can guarantee, payoffs to you"
+  topLabel="the strong flank"
+  bottomLabel="the weak flank"
+  leftLabel="guards strong"
+  rightLabel="guards weak"
+  matrix={[[[-1, 1], [2, -2]], [[1, -1], [-1, 1]]]}
+  predict={{
+    question: 'Pick any fixed flank and the defender can guard it. What can you actually lock in?',
+    options: [{ key: 'pos', label: 'A guaranteed positive payoff' }, { key: 'zero', label: 'Nothing better than break-even' }],
+    reveal: 'With the right mix you guarantee 1/5 of a point per raid, come what may. Any single flank lets the defender hold you to a loss. The floor is highest where the two lines cross.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+If you commit to one flank, the defender guards it and you lose. If you mix, the defender cannot cover both, and there is one mix where guarding either flank leaves you the same expected gain. At that mix the defender has no good reply, so the payoff you get there is one you can guarantee whatever they do. That guaranteed number is the value of the game.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="zero-sum game">
+A two-player game is zero-sum (more generally, constant-sum) if the payoffs in every cell add to the same constant, so one player's gain is exactly the other's loss. We can write it with a single payoff matrix to the row player; the column player earns its negative.
+</DefinitionAside>
+
+Let the raider play the strong flank with probability $p$. The guaranteed payoff against each defense is
+
+$$
+\text{vs guard-strong: } 1 - 2p, \qquad \text{vs guard-weak: } 3p - 1.
+$$
+
+The defender will pick whichever is worse for you, so your floor is $\min(1-2p,\,3p-1)$. That minimum is highest where the two lines meet:
+
+$$
+3p - 1 = 1 - 2p \quad\Rightarrow\quad p = \tfrac{2}{5}, \qquad \text{value} = 3\cdot\tfrac{2}{5} - 1 = \tfrac{1}{5}.
+$$
+
+<DefinitionAside label="von Neumann's minimax theorem">
+In any finite two-player zero-sum game, the most the row player can guarantee (the maximin) equals the least the column player can hold them to (the minimax). That common number is the value of the game, and the mixes that achieve it form a Nash equilibrium. So here minimax is not pessimism: it is the equilibrium.
+</DefinitionAside>
+
+The defender solves the mirror problem and mixes $\tfrac35$ on guarding the strong flank, holding you to $\tfrac15$ from above. Maximin from below and minimax from above meet at the value.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Find the value and the optimal mix">
+Write the raider's guarantee against each pure defense as a line in $p$: guarding the strong flank yields $-p + (1-p) = 1 - 2p$; guarding the weak flank yields $2p + (-1)(1-p) = 3p - 1$. One line rises in $p$, the other falls, so their crossing is the highest floor.
+
+Set $3p - 1 = 1 - 2p$ to get $p = \tfrac25$, and substitute back for a value of $\tfrac15$. Because the game is zero-sum, the defender's optimal mix guarantees the same value from the other side, so $\tfrac15$ is the value of the game, not just a floor.
+</WorkedExample>
+</Section>
+
+<Section id="reality">
+## A note from the real world
+
+<Callout kind="reality-check">
+Minimax mixing sounds like a blackboard ideal, too demanding for anyone under pressure. Yet it shows up in the field. Studying thousands of penalty kicks, Palacios-Huerta (2003) found professional kickers and keepers mix left and right at rates almost exactly matching the equilibrium, and in no readable order. The Behavioral unit returns to where this holds and where it breaks.
+</Callout>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">In a zero-sum game there is one number you can guarantee, the value, and the mix that guarantees it is the equilibrium. Minimax play is not cautious here; it is optimal.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="zero-sum-minimax"
+  id="q1"
+  badge="recognise"
+  question="What does it mean for a game to be zero-sum?"
+  options={[
+    { text: "The payoffs in each cell sum to a constant, so one player's gain is the other's loss", correct: true, feedback: "Constant-sum is the general form; a fixed total to divide. It does not mean both players get zero." },
+    { text: "Both players always end up with zero", feedback: "The name misleads. It means the payoffs sum to a constant across cells, not that each player scores zero." },
+    { text: "Neither player can affect the outcome", feedback: "Players very much affect the outcome. Zero-sum only says gains and losses offset." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="zero-sum-minimax"
+  id="q2"
+  badge="apply"
+  question="In this raid game, what does mixing 2/5 on the strong flank get you?"
+  options={[
+    { text: "A guaranteed 1/5 per raid, whatever the defender does", correct: true, feedback: "At that mix both defenses hold you to the same 1/5, so it is a floor you cannot be pushed below. That is the value of the game." },
+    { text: "The most you can win if the defender guesses wrong", feedback: "That would be the best case, not a guarantee. The 2/5 mix is about the floor, the payoff you secure against any defense." },
+    { text: "Break-even, since the game is zero-sum", feedback: "Zero-sum between the two players does not make your value zero. Here the raider can lock in a positive 1/5." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="zero-sum-minimax"
+  id="q3"
+  badge="brings back: mixed strategies"
+  question="Why is minimax play in a zero-sum game not merely defensive pessimism?"
+  options={[
+    { text: "Because the maximin mix and the minimax mix coincide, so the safe mix is also the equilibrium", correct: true, feedback: "Von Neumann's theorem makes the floor you guarantee equal to the ceiling the opponent can impose. Playing safe and playing the equilibrium are the same thing here." },
+    { text: "Because the opponent is assumed to play badly", feedback: "It assumes the opposite: the guarantee holds even against a perfect opponent. That is what makes it strong, not pessimistic." },
+    { text: "Because zero-sum games have no equilibrium", feedback: "They do have one. The minimax mixes are exactly a Nash equilibrium of the game." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["vonNeumann1928", "osborne2004", "palaciosHuerta2003"]} />

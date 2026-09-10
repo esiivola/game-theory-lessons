@@ -1,0 +1,139 @@
+---
+title: "The commons"
+tier: applied
+unit: 18
+unitName: "Game theory in the wild"
+order: 9
+label: "A9"
+kind: case
+placement: "after:public-goods"
+summary: "Hardin's tragedy, Ostrom's rescue, and why monitoring plus graduated sanctions beat privatization."
+tags: ["applied", "public-goods", "commons"]
+estMinutes: 6
+mvp: true
+prereqs: ["public-goods", "prisoners-dilemma"]
+concepts: ["tragedy-of-the-commons", "ostrom", "graduated-sanctions"]
+refs: ["ostrom1990", "hardin1968"]
+anchorEmoji: "🎣"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import PublicGoodsPunishment from '@/components/interactive/PublicGoodsPunishment.svelte';
+
+<div class="anchor"><span class="em">🎣</span><p>A shared fishery feeds a village. Each boat gains the full value of one more fish, while the cost of a thinning stock is spread across everyone. So everyone takes more, the stock crashes, and all end up worse. Hardin called it the tragedy of the commons. Ostrom found it is not inevitable.</p></div>
+
+# The commons
+
+<p class="lead">A common resource, a fishery, a pasture, the atmosphere, is a public-goods game in reverse: private incentives push everyone to overuse it until it collapses. Hardin concluded you must privatize or nationalize. Ostrom showed communities routinely find a third way, with monitoring and graduated sanctions.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In a commons, the gain from extracting more is private while the depletion cost is...", options: ["Also private", "Shared by all", "Zero"], answer: 1 },
+    { q: "Ostrom showed self-governing communities can sustain a commons using monitoring and...", options: ["A single huge penalty", "Graduated sanctions", "No rules"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Harvest a shared, regenerating stock alongside bots. Overshoot the regeneration and it crashes. Toggle communication, monitoring, and graduated sanctions to see the resource recover.
+
+<PublicGoodsPunishment
+  client:visible
+  exhibit="Exhibit 1"
+  caption="A shared stock with monitoring and graduated sanctions"
+  predict={{
+    question: 'How is a common resource best saved from collapse?',
+    options: [{ key: 'privatize', label: 'Only by privatizing or nationalizing it' }, { key: 'ostrom', label: 'Often by self-governance: monitoring plus graduated sanctions' }],
+    reveal: 'Ostrom documented hundreds of commons sustained for centuries by the users themselves, using clear boundaries, monitoring, and graduated sanctions that start small and escalate for repeat offenders. Privatization and state control are not the only, or always the best, answers.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Each user weighs a private gain (one more fish, one more cow) against a cost that everyone shares, so the individually rational choice is to overextract, and the sum of those choices overshoots the sustainable yield until the stock collapses. That is the tragedy, and it is a many-player Prisoner's Dilemma. But the game changes once users can observe each other and punish defectors. Ostrom's field studies found the successful commons share design principles: clear boundaries, rules matched to local conditions, collective choice, monitoring by the users, and graduated sanctions that start mild and grow for repeat offenders. Those change the payoffs enough that restraint becomes the equilibrium, without needing an owner or a state.
+</Callout>
+</Section>
+
+<Section id="math">
+## The real evidence
+
+<DefinitionAside label="Ostrom's design principles">
+Elinor Ostrom's Governing the Commons (1990) documented long-lasting common-pool resources, alpine pastures, Spanish irrigation, Japanese forests, coastal fisheries, and distilled eight design principles. The crucial pair for the game are monitoring (users watch each other, cheaply, as a byproduct of use) and graduated sanctions (first offences draw small penalties, repeat offences larger ones). Together they make cooperation an equilibrium: cheating is detected and punished in proportion, so the temptation to overextract shrinks. Ostrom won the 2009 Nobel for showing self-governance is a real alternative to Hardin's stark privatize-or-nationalize dichotomy.
+</DefinitionAside>
+
+The fishery is a regenerating stock: harvest below the regeneration rate and it persists; harvest above it and it crashes, sometimes irreversibly. Without institutions, private incentives drive extraction past that threshold. Add monitoring and the graduated sanctions Ostrom documented, and defection becomes costly enough that users hold near the sustainable yield. Climate is the same game at global scale, a shared carbon budget with cross-national free-riding, which is why it is hard, but the lesson is that it is not simply a pure Prisoner's Dilemma with no exit; institutions, monitoring, and proportionate enforcement can shift the equilibrium.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="From collapse to sustainable yield">
+With no rules, each fisher reasons: one more fish is worth its full value to me, and the resulting decline in the stock is borne by all fishers together. So each extracts more, total harvest overshoots the regeneration rate, and the stock falls year on year until it collapses. This is the dominant-strategy outcome of the commons game, and it is worse for everyone than restraint.
+
+Now add Ostrom's institutions. Users monitor each other's catch (easy, since they fish the same waters), and a first violation draws a small fine, a repeat a larger one, and persistent cheating exclusion. A fisher now compares a small private gain against a growing, near-certain sanction, and the calculus flips toward restraint. Total harvest settles near the sustainable yield and the stock holds. Crucially, graduated sanctions outperform a single draconian penalty: mild first penalties preserve goodwill and information, and escalation deters the persistent few, which is exactly the pattern Ostrom found in commons that survived for centuries.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">A commons collapses when private extraction gains outrun a shared depletion cost, but it is not doomed. Monitoring plus graduated sanctions, Ostrom's self-governance, can restore the sustainable yield without privatization or state control, and graduated penalties beat one big one.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="case-commons"
+  id="q1"
+  badge="apply"
+  question="Why does an unmanaged common fishery tend to collapse?"
+  options={[
+    { text: "Each fisher gets the full value of an extra fish while the depletion cost is shared, so all overextract past the sustainable yield", correct: true, feedback: "The private gain is concentrated and the cost is diffuse, so the dominant choice is to take more. Summed across users, harvest overshoots regeneration and the stock crashes, the tragedy of the commons." },
+    { text: "Because fish naturally die out regardless of harvesting", feedback: "The stock regenerates if harvest stays below the regeneration rate. Collapse comes from overextraction driven by the incentive structure, not natural decline." },
+    { text: "Because fishers cannot catch enough fish", feedback: "The problem is catching too many: private incentives push total harvest past the sustainable yield, crashing the stock." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-commons"
+  id="q2"
+  badge="analyse"
+  question="What did Ostrom show about saving a commons, against Hardin's conclusion?"
+  options={[
+    { text: "Self-governing communities can sustain a commons using monitoring and graduated sanctions, so privatization or state control are not the only options", correct: true, feedback: "Ostrom documented commons sustained for centuries by their users, with clear boundaries, monitoring, and graduated sanctions. That third way changes the payoffs enough to make restraint an equilibrium." },
+    { text: "That the commons must always be privatized", feedback: "That is Hardin's dichotomy, which Ostrom refuted by documenting successful self-governance. Privatization is not required." },
+    { text: "That no institution can ever save a commons", feedback: "The opposite: Ostrom showed specific institutions (monitoring, graduated sanctions) reliably do save commons." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-commons"
+  id="q3"
+  badge="brings back: public goods"
+  question="Why do graduated sanctions outperform a single large penalty?"
+  options={[
+    { text: "Mild first penalties preserve goodwill and information while escalation deters the persistent few, matching the pattern in long-lived commons", correct: true, feedback: "A small first sanction corrects honest mistakes without destroying cooperation, and rising penalties handle repeat offenders. Ostrom found this graduated structure in commons that survived for centuries." },
+    { text: "Because one big penalty is illegal", feedback: "It is not about legality. Graduated sanctions work better because they preserve cooperation for minor lapses while still deterring repeat offenders." },
+    { text: "Because sanctions never affect behaviour", feedback: "Sanctions clearly affect behaviour here; the point is that graduated ones do so more effectively than a single draconian penalty." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["ostrom1990", "hardin1968"]} />

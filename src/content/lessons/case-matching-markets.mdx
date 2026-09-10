@@ -1,0 +1,143 @@
+---
+title: "Matching markets in the wild"
+tier: applied
+unit: 18
+unitName: "Game theory in the wild"
+order: 1
+label: "A1"
+kind: case
+placement: "after:top-trading-cycles"
+summary: "How deferred acceptance rescued the medical match, school choice, and kidney exchange."
+tags: ["applied", "matching", "market-design"]
+estMinutes: 6
+mvp: true
+prereqs: ["stable-matching", "top-trading-cycles"]
+concepts: ["deferred-acceptance", "market-design", "matching"]
+refs: ["galeShapley1962", "roth2015"]
+anchorEmoji: "🏥"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import DeferredAcceptance from '@/components/interactive/DeferredAcceptance.svelte';
+
+<div class="anchor"><span class="em">🏥</span><p>For decades the market that places new doctors in hospitals kept collapsing into chaos: exploding offers, jumped deadlines, doctors trapped by early contracts. The fix was not more rules but a better algorithm, the same deferred acceptance you have already seen.</p></div>
+
+# Matching markets in the wild
+
+<p class="lead">Deferred acceptance is not a toy. The National Resident Matching Program, Boston and New York school choice, and kidney exchange all run on it or its cousins. This case shows the theory doing real work: producing stable assignments that markets left to themselves could not.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A matching is stable if there is no pair who both prefer...", options: ["Their assignments", "Each other", "To stay unmatched"], answer: 1 },
+    { q: "Student-proposing deferred acceptance is strategy-proof for the...", options: ["Schools", "Students", "Neither"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Three doctors, three hospitals with one post each. Run doctor-proposing deferred acceptance, then swap to hospital-proposing.
+
+<DeferredAcceptance
+  client:visible
+  exhibit="Exhibit 1"
+  caption="A residency match by deferred acceptance"
+  aName="Doctors"
+  bName="Hospitals"
+  aPrefs={{ d1: ['A', 'B', 'C'], d2: ['A', 'C', 'B'], d3: ['B', 'A', 'C'] }}
+  bPrefs={{ A: ['d2', 'd1', 'd3'], B: ['d1', 'd3', 'd2'], C: ['d3', 'd2', 'd1'] }}
+  predict={{
+    question: 'A stable match exists. What did the pre-1950s medical market lack that caused chaos?',
+    options: [{ key: 'algo', label: 'A clearinghouse producing a stable match' }, { key: 'doctors', label: 'Enough doctors' }],
+    reveal: 'A clearinghouse. Without one, hospitals made earlier and earlier exploding offers to lock in doctors, unraveling the market. Deferred acceptance produces a stable match all at once, which is why the NRMP adopted it and it has run smoothly since.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Left alone, a matching market unravels: if any doctor-hospital pair prefer each other to their assigned partners, they cut a private deal, so hospitals rush to lock in doctors ever earlier with exploding offers. A stable matching removes every such incentive, because no blocking pair exists by construction. Deferred acceptance computes one for everyone simultaneously, replacing a scramble with a single clean assignment. That is why real clearinghouses adopted it.
+</Callout>
+</Section>
+
+<Section id="math">
+## The real episodes
+
+<DefinitionAside label="matching in practice">
+The National Resident Matching Program adopted a deferred-acceptance algorithm (redesigned by Roth and Peranson in 1998) and matches tens of thousands of doctors yearly with almost no unraveling. Boston switched its school assignment to a strategy-proof deferred-acceptance mechanism in 2005, so families could rank honestly. Kidney exchange (Roth, Sonmez and Unver) uses top-trading-cycles ideas: patients with willing but incompatible donors swap donors around cycles and chains, unlocking transplants that no single pair could achieve.
+</DefinitionAside>
+
+Two design lessons recur. First, stability prevents the unraveling that plagued unregulated markets. Second, strategy-proofness matters: the old Boston mechanism punished honest ranking, so sophisticated families gamed it and naive ones lost out. Deferred acceptance lets everyone report truthfully, which is fairer and simpler. Kidney exchange adds the twist that a non-directed donor can start a long chain, relaxing the mutual-compatibility bottleneck of a simple two-way swap.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Stability is what markets could not self-provide">
+Run the match: doctors propose, hospitals hold their favourite so far and reject the rest, rejected doctors try their next choice, and the process settles at a stable assignment with no blocking pair. Every doctor is as well off as any stable matching allows, and no hospital-doctor pair would both rather defect.
+
+Now imagine no clearinghouse. A hospital that fears losing a top doctor makes an exploding offer months early; doctors accept out of fear; the market moves earlier each year until it breaks. This is exactly the instability that a stable matching rules out. The medical match, school choice, and kidney exchange all work because a central algorithm supplies the stability, and the strategy-proofness, that decentralized dealing cannot.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Real matching markets unravel without a clearinghouse. Deferred acceptance and top trading cycles supply stable, strategy-proof assignments, which is why they run the medical match, school choice, and kidney exchange.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="case-matching-markets"
+  id="q1"
+  badge="apply"
+  question="Why did the unregulated medical market unravel into ever-earlier offers?"
+  options={[
+    { text: "Without a stable clearinghouse, blocking pairs formed private deals, so hospitals rushed to lock in doctors before rivals", correct: true, feedback: "Instability creates an incentive to jump ahead: any pair who prefer each other defect, so offers move earlier and earlier. A stable matching, computed centrally, removes that incentive." },
+    { text: "There were too few doctors", feedback: "Supply was not the problem; instability was. Deferred acceptance fixed the unraveling without changing the number of doctors." },
+    { text: "Doctors were not smart enough to choose", feedback: "The issue was market structure, not doctor competence. A stable clearinghouse solved it." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-matching-markets"
+  id="q2"
+  badge="analyse"
+  question="Why did Boston switch to a strategy-proof deferred-acceptance mechanism?"
+  options={[
+    { text: "So families could rank schools honestly without being penalized, as the old mechanism punished truthful ranking", correct: true, feedback: "The old Boston mechanism rewarded gaming your list, hurting naive families. Deferred acceptance makes honest ranking a dominant strategy for students, which is fairer and simpler." },
+    { text: "To maximize total student happiness above all", feedback: "DA prioritizes stability and strategy-proofness, not raw efficiency (TTC does that). The switch was about honest ranking and stability." },
+    { text: "Because it guarantees everyone their first choice", feedback: "No mechanism can do that under scarcity. DA guarantees stability and safe honest reporting, not universal first choices." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-matching-markets"
+  id="q3"
+  badge="brings back: top trading cycles"
+  question="How does kidney exchange use the top-trading-cycles idea?"
+  options={[
+    { text: "Patients with incompatible donors swap donors around cycles (and chains), so each patient's donor gives to someone compatible", correct: true, feedback: "TTC's cycle-swapping is exactly the mechanism: rotate donors around a cycle so everyone ends up with a compatible one. A non-directed donor can start a chain, unlocking even more transplants." },
+    { text: "It is a simple first-come waiting list", feedback: "It is not a waiting list; it actively finds cycles and chains of compatible swaps, which is the TTC idea applied to organs." },
+    { text: "It uses deferred acceptance, not cycles", feedback: "Kidney exchange is built on top-trading-cycles-style swapping, not deferred acceptance. Both are market-design tools, but the cycle structure is what matches donors here." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["galeShapley1962", "roth2015"]} />

@@ -1,0 +1,32 @@
+---
+import { getCollection, render } from 'astro:content';
+import LessonLayout from '@/layouts/LessonLayout.astro';
+import { withBase } from '@/config/site';
+
+const tierOrder: Record<string, number> = { basic: 0, intermediate: 1, expert: 2, applied: 3 };
+
+export async function getStaticPaths() {
+  const order: Record<string, number> = { basic: 0, intermediate: 1, expert: 2, applied: 3 };
+  const all = await getCollection('lessons');
+  const sorted = all.sort(
+    (a, b) => (order[a.data.tier] - order[b.data.tier]) || a.data.order - b.data.order
+  );
+  return sorted.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, next: sorted[i + 1] ?? null, total: sorted.length },
+  }));
+}
+
+const { entry, next, total } = Astro.props;
+const { Content } = await render(entry);
+const nextHref = next ? withBase('lessons/' + next.id) : undefined;
+---
+<LessonLayout
+  slug={entry.id}
+  title={entry.data.title}
+  totalLessons={total}
+  nextHref={nextHref}
+  nextTitle={next?.data.title}
+>
+  <Content />
+</LessonLayout>

@@ -1,0 +1,137 @@
+---
+title: "Limited reasoning: level-k"
+tier: expert
+unit: 17
+unitName: "Behavioral and experimental"
+order: 56
+kind: lesson
+summary: "Real players reason a step or two ahead, not to infinity, and that predicts their play."
+tags: ["behavioral", "level-k", "beauty-contest"]
+estMinutes: 6
+mvp: true
+prereqs: ["rationality"]
+concepts: ["level-k", "cognitive-hierarchy", "bounded-reasoning"]
+refs: ["nagel1995", "camererHoChong2004"]
+anchorEmoji: "🪜"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import BeautyContest from '@/components/interactive/BeautyContest.svelte';
+
+<div class="anchor"><span class="em">🪜</span><p>Ask a room to guess two-thirds of the average, and the winning number is almost never zero, the "rational" answer. It clusters around 22 and 33. People reason one or two steps, then stop, and the theory that captures this predicts real play far better than full rationality.</p></div>
+
+# Limited reasoning: level-k
+
+<p class="lead">Equilibrium assumes reasoning goes all the way down: everyone is rational, knows others are, and so on without end. Real people truncate. Level-k models say each person best-responds to a belief that others reason one step less than they do, and that simple idea fits laboratory play remarkably well.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "The Nash equilibrium of the two-thirds-of-the-average game is...", options: ["50", "0", "33"], answer: 1 },
+    { q: "Common knowledge of rationality requires reasoning that goes...", options: ["One step", "To infinity", "Backwards"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Guess two-thirds of the average against a realistic crowd of reasoners at different depths.
+
+<BeautyContest
+  client:visible
+  exhibit="Exhibit 1"
+  caption="The beauty contest against a level-mixed crowd"
+  predict={{
+    question: 'Against real people, what number tends to win the two-thirds-of-the-average game?',
+    options: [{ key: 'zero', label: '0, the equilibrium' }, { key: 'twenties', label: 'The low 20s to low 30s' }],
+    reveal: 'The low 20s to low 30s. Level-0 players scatter around 50, level-1 best-respond with 33, level-2 with 22, and few go deeper, so the average stays well above 0 and two-thirds of it wins around 20 to 25. Guessing 0 loses.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Getting to 0 requires believing everyone reasons infinitely far, and that they believe it too. Real crowds do not. Most people take one or two steps: "if others guess randomly (average 50), I should say 33; if they say 33, I should say 22." Then they stop. Knowing the crowd stops early, the winning guess is not 0 but a bit below the average the crowd actually produces. Modeling the distribution of reasoning depths, rather than assuming it is infinite, is what predicts real behaviour.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="level-k and cognitive hierarchy">
+In a level-k model, a level-0 player acts non-strategically (here, guesses uniformly, averaging 50). A level-$k$ player best-responds to the belief that everyone else is level-$(k-1)$. In the beauty contest, level-1 guesses $\tfrac23 \cdot 50 = 33$, level-2 guesses $\tfrac23 \cdot 33 = 22$, and so on. The cognitive-hierarchy variant assumes a level-$k$ player best-responds to a mix of all lower levels, with the depth distribution often Poisson with mean around $1.5$.
+</DefinitionAside>
+
+Full rationality iterates the two-thirds map to the fixed point $0$. Empirically the modal guesses are $33$ and $22$, exactly one and two steps down from $50$ (Nagel, 1995). Because the crowd is a mixture of shallow reasoners, the average lands well above $0$, and the best response to that crowd, around $20$ to $22$, wins. The equilibrium prediction of $0$ is not just wrong; it is a losing guess.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Climb the ladder, then stop early">
+Level-0 guesses average $50$. A level-1 reasoner best-responds: $\tfrac23 \cdot 50 = 33$. A level-2 reasoner assumes others are level-1 and guesses $\tfrac23 \cdot 33 = 22$. Level-3 would guess $\tfrac23 \cdot 22 \approx 15$. Iterating forever reaches $0$, the Nash equilibrium.
+
+But suppose the crowd is mostly level-1 and level-2, with a few level-0 and level-3. The average of their guesses is roughly in the low $30$s, so two-thirds of it is around $20$ to $22$. Best-responding to the actual crowd, not to an imagined infinitely-deep one, you should guess about $20$. Playing $0$ assumes everyone else reasoned to the limit, which they did not, so it loses.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">People reason a bounded number of steps, not to infinity. Level-k and cognitive-hierarchy models best-respond to shallow-reasoning crowds and predict real play, where the equilibrium of 0 both mispredicts and loses.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="level-k"
+  id="q1"
+  badge="apply"
+  question="A level-2 reasoner in the beauty contest guesses about what?"
+  options={[
+    { text: "22, best-responding to level-1 players who guess 33", correct: true, feedback: "Level-2 assumes others are level-1 (guessing 33) and plays two-thirds of that, about 22. Each level is one two-thirds step below the one it responds to." },
+    { text: "0, the equilibrium", feedback: "That is the infinite-reasoning limit, not level-2. A level-2 player stops after two steps, guessing about 22." },
+    { text: "50, the random average", feedback: "50 is level-0 (non-strategic) play. Level-2 has reasoned two steps down to about 22." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="level-k"
+  id="q2"
+  badge="analyse"
+  question="Why does the Nash prediction of 0 fail in practice?"
+  options={[
+    { text: "It assumes unbounded reasoning by everyone, but real crowds stop after one or two steps, so the average stays well above 0", correct: true, feedback: "Zero is the fixed point of infinite iteration. Since most players reason shallowly, the actual average is far higher, and two-thirds of it, around 20, wins. The equilibrium both mispredicts and loses." },
+    { text: "Because 0 is not actually the Nash equilibrium", feedback: "0 is the Nash equilibrium. The point is that it fails empirically because reasoning is bounded, not that the equilibrium is miscomputed." },
+    { text: "Because players cannot compute two-thirds", feedback: "They can do the arithmetic; they just do not iterate it to infinity. Bounded depth, not inability, is the issue." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="level-k"
+  id="q3"
+  badge="brings back: common knowledge"
+  question="How does level-k relate to common knowledge of rationality?"
+  options={[
+    { text: "It relaxes it: instead of infinite mutual knowledge of rationality, each level assumes others reason one step less", correct: true, feedback: "Common knowledge of rationality drives the guess to 0. Level-k replaces that infinite tower with finite depths, which is why predicted (and actual) play stops well short of the equilibrium." },
+    { text: "It assumes even deeper common knowledge", feedback: "The opposite: it assumes shallower reasoning than full common knowledge, which is what matches behaviour." },
+    { text: "It ignores what others do entirely", feedback: "Each level explicitly best-responds to a belief about others' depth. It is strategic, just boundedly so." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["nagel1995", "camererHoChong2004"]} />

@@ -1,0 +1,139 @@
+---
+title: "Coalitional games and the core"
+tier: expert
+unit: 13
+unitName: "Cooperative game theory"
+order: 42
+kind: lesson
+summary: "An allocation is stable only if no coalition can walk away and do better."
+tags: ["cooperative", "core", "coalitions"]
+estMinutes: 6
+mvp: true
+prereqs: ["pure-nash"]
+concepts: ["coalitional-game", "core", "blocking"]
+refs: ["gillies1959", "vonNeumannMorgenstern1944"]
+anchorEmoji: "🤲"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import CoreExplorer from '@/components/interactive/CoreExplorer.svelte';
+
+<div class="anchor"><span class="em">🤲</span><p>One seller has a good that two buyers want, but only one can have it. The buyers would love to split the surplus with the seller. They cannot, and the reason is simple: whatever they are offered, the seller can always deal with the other buyer instead.</p></div>
+
+# Coalitional games and the core
+
+<p class="lead">So far players acted alone. Cooperative game theory asks what groups can achieve by working together, and how the joint value gets divided. The core is the sharpest answer: an allocation is stable only if no coalition could break off and guarantee its members more than they are being offered.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A Nash equilibrium is stable against deviations by...", options: ["Coalitions", "Single players", "The referee"], answer: 1 },
+    { q: "The value a coalition can guarantee itself is given by its...", options: ["Shapley value", "Characteristic function", "Nash equilibrium"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+The seller and either buyer can create value 100 together; the two buyers alone make nothing. Split the 100 among the three and see which coalitions object.
+
+<CoreExplorer
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Seller plus two buyers; find an unblocked split"
+  predict={{
+    question: 'Can the two buyers, by cooperating, extract any share of the surplus?',
+    options: [{ key: 'yes', label: 'Yes, some share' }, { key: 'no', label: 'No, the seller takes all 100' }],
+    reveal: 'No. Give a buyer anything and the seller can defect with the other buyer, who is happy to take slightly less; that coalition blocks the split. The only core allocation is (100, 0, 0). Scarcity on the seller side is decisive.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The two buyers are substitutes: the seller needs only one of them. So the buyers compete, and competition drives their share to zero. Any allocation that hands a buyer a positive amount can be undercut, because the seller and the excluded buyer can form a coalition worth 100 and split it in a way both prefer. Stability requires that no such blocking coalition exists, and here that forces the entire surplus to the scarce seller.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="coalitional game and the core">
+A coalitional (transferable-utility) game gives each coalition $S$ a value $v(S)$, the total its members can guarantee together. An allocation $x$ divides the grand-coalition value $v(N)$ among the players. The core is the set of allocations that are efficient ($\sum_i x_i = v(N)$) and unblocked: for every coalition $S$, $\sum_{i \in S} x_i \ge v(S)$. If some coalition could get more on its own, it blocks, and the allocation is not in the core.
+</DefinitionAside>
+
+Here $v(\{s,b_1\}) = v(\{s,b_2\}) = 100$, $v(\{b_1,b_2\}) = 0$, and $v(N) = 100$. A core allocation $(x_s, x_1, x_2)$ must satisfy $x_s + x_1 \ge 100$ (else the seller and buyer 1 block) and $x_s + x_2 \ge 100$. Adding to efficiency $x_s + x_1 + x_2 = 100$, the first inequality forces $x_2 \le 0$, so $x_2 = 0$; the second forces $x_1 = 0$; hence $x_s = 100$. The core is the single point $(100, 0, 0)$.
+
+The core can also be empty (the three-player majority game has no unblocked allocation), which motivates other solution concepts in the next lessons.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Pin down the core">
+Write the blocking conditions. The coalition of the seller and buyer 1 can secure $100$, so any stable split must give them at least that: $x_s + x_1 \ge 100$. Symmetrically $x_s + x_2 \ge 100$. Efficiency requires $x_s + x_1 + x_2 = 100$.
+
+From $x_s + x_1 \ge 100$ and the total being $100$, we get $x_2 \le 0$, so $x_2 = 0$. The same argument gives $x_1 = 0$. Therefore $x_s = 100$: the unique core allocation is $(100, 0, 0)$. No matter how the buyers coordinate, competition between them leaves the seller with everything.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">The core keeps only allocations no coalition can beat by going it alone. When one side is scarce, competition on the other side collapses its share to nothing, and the core can even be empty.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="coalitional-games"
+  id="q1"
+  badge="apply"
+  question="Why does the allocation (80, 10, 10) fail to be in the core?"
+  options={[
+    { text: "The seller and one buyer can secure 100 but are offered only 90, so they block it", correct: true, feedback: "The coalition {seller, buyer 1} is worth 100 but receives 80 + 10 = 90 here, so it can break away and do better. That blocking means the allocation is outside the core." },
+    { text: "It is not efficient", feedback: "It is efficient: 80 + 10 + 10 = 100. The problem is that a coalition can block it, not the total." },
+    { text: "The two buyers together are worth 20", feedback: "The two buyers alone are worth 0, not 20. The binding objection comes from a seller-plus-buyer coalition." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="coalitional-games"
+  id="q2"
+  badge="analyse"
+  question="Why does the entire surplus go to the seller?"
+  options={[
+    { text: "The buyers are substitutes, so they compete, and the seller can always deal with whichever buyer is offered less", correct: true, feedback: "Scarcity on the seller side plus competition on the buyer side is decisive. Any positive buyer share is undercut by a seller-plus-other-buyer coalition, forcing buyer shares to zero." },
+    { text: "Because the seller moves first", feedback: "There is no move order here; it is a cooperative game. The seller's advantage comes from being the scarce, indispensable party." },
+    { text: "Because the buyers dislike each other", feedback: "No animosity is needed. Pure competition between substitute buyers hands the surplus to the seller." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="coalitional-games"
+  id="q3"
+  badge="brings back: nash equilibrium"
+  question="How does core stability differ from Nash-equilibrium stability?"
+  options={[
+    { text: "The core resists deviations by any coalition; Nash equilibrium only resists deviations by single players", correct: true, feedback: "Nash equilibrium asks that no individual gains by moving alone. The core is stronger in this respect: no group, of any size, can break away and do better for all its members." },
+    { text: "They are the same stability concept", feedback: "They differ: the core protects against coalitional deviations, Nash equilibrium only against unilateral ones." },
+    { text: "The core only considers single-player deviations", feedback: "The reverse: the core considers every coalition, which is exactly what makes it demanding (and sometimes empty)." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["gillies1959", "vonNeumannMorgenstern1944"]} />

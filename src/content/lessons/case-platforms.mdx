@@ -1,0 +1,139 @@
+---
+title: "Co-opetition and platforms"
+tier: applied
+unit: 18
+unitName: "Game theory in the wild"
+order: 5
+label: "A5"
+kind: case
+placement: "after:focal-points"
+summary: "Complementors grow the pie, and platforms price one side low to ignite the other."
+tags: ["applied", "platforms", "network-effects"]
+estMinutes: 6
+mvp: true
+prereqs: ["focal-points", "classic-2x2-games"]
+concepts: ["co-opetition", "two-sided-markets", "network-effects"]
+refs: ["brandenburgerNalebuff1996", "rochetTirole2003"]
+anchorEmoji: "🔌"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import PlatformPricing from '@/components/interactive/PlatformPricing.svelte';
+
+<div class="anchor"><span class="em">🔌</span><p>A game console maker sells hardware at a loss and makes it up on games. A card network courts shoppers so hard that merchants have to accept its cards. These are not charity or folly; they are the logic of two-sided markets, where one side's growth feeds the other.</p></div>
+
+# Co-opetition and platforms
+
+<p class="lead">Business is not only rivalry. Complementors, firms whose products make yours more valuable, expand the whole pie, and platforms live or die on cross-side network effects. That is why a platform will price one side below cost: cheap access on one side pulls in the other, and the profit follows.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A focal point helps players coordinate using something outside the...", options: ["Payoffs", "Rules", "Game"], answer: 0 },
+    { q: "A complementor is a firm whose product makes yours...", options: ["Less valuable", "More valuable", "Obsolete"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Run a two-sided platform. Set a price to each side, and watch adoption, where each side grows with the other, and total profit.
+
+<PlatformPricing
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Pricing a two-sided platform with cross-side effects"
+  predict={{
+    question: 'Why would a platform price one side below cost?',
+    options: [{ key: 'mistake', label: 'It is a pricing mistake' }, { key: 'ignite', label: 'To grow that side and pull in the other' }],
+    reveal: 'To ignite the network. A cheap or subsidized side attracts many users, which through the cross-side effect draws the other side, where the platform makes its money. Consoles subsidize hardware, cards subsidize shoppers, apps take a cut from developers.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+On a two-sided platform, each side wants to be where the other side is: developers go where the users are, users go where the apps are. So growing one side raises the value of joining the other. A platform exploits this by subsidizing the side that is more price-sensitive or more pivotal, sometimes below cost, to build critical mass, then monetizes the side that will pay to reach it. Pricing each side to cover its own cost, as in a one-sided market, would leave the network stuck below the threshold where it takes off.
+</Callout>
+</Section>
+
+<Section id="math">
+## The real strategy
+
+<DefinitionAside label="two-sided markets (Rochet-Tirole)">
+A platform serves two groups whose benefits depend on each other's participation (cross-side network effects). The profit-maximizing prices are not cost-based per side; the platform balances the two, often charging one side little or nothing and recovering profit from the other. The classic examples are payment cards (courting cardholders, charging merchants), game consoles (cheap hardware, royalties on games), and app stores (a large cut from developers, free to users).
+</DefinitionAside>
+
+Adoption on each side rises with the other side's size, so the two demands reinforce each other. Cutting the price on one side raises its adoption, which raises the value and adoption on the other side, and the platform captures the surplus where it charges. The upshot: the price structure across sides can be highly skewed, and a side may even be paid to join. This is co-opetition in Brandenburger and Nalebuff's sense, where a firm's job is to grow the pie (via complementors and network effects), not only to fight over a fixed one.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Subsidize to ignite">
+Start with a symmetric price on both sides. Adoption is moderate on each. Now cut the price on side A sharply, even below zero. Side A adoption jumps, and because side B's value rises with side A's size, side B adoption climbs too, without lowering B's price. The platform now earns strong margins on side B while side A, though unprofitable directly, is the magnet that made side B lucrative.
+
+That is why consoles sell hardware near cost and profit on game royalties, and why card networks lavish rewards on shoppers and bill merchants. Treating each side as a standalone business, and insisting it cover its own cost, would miss the cross-side spillover and leave the network below the tipping point where it becomes valuable at all.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">In two-sided markets each side grows with the other, so platforms price one side low, sometimes below cost, to ignite the network and monetize the other. Complementors and network effects expand the pie, which is the essence of co-opetition.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="case-platforms"
+  id="q1"
+  badge="apply"
+  question="Why does a game console maker sell hardware near or below cost?"
+  options={[
+    { text: "Cheap hardware grows the user base, which draws developers and lets the platform profit on game royalties", correct: true, feedback: "The two sides feed each other: more users attract more games, and more games attract more users. Subsidizing hardware ignites that loop, and the profit comes from the developer side." },
+    { text: "Because hardware is genuinely unprofitable to make", feedback: "It is a deliberate pricing choice, not an accident of costs. The subsidy builds the network that makes the software side lucrative." },
+    { text: "To lose money and claim a tax break", feedback: "The strategy is about cross-side network effects, not tax. Cheap hardware grows the ecosystem that pays off elsewhere." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-platforms"
+  id="q2"
+  badge="analyse"
+  question="Why is pricing each side to cover its own cost the wrong rule for a platform?"
+  options={[
+    { text: "It ignores cross-side effects: a subsidized side pulls in the other, so skewed prices can grow both and total profit", correct: true, feedback: "In a two-sided market the sides reinforce each other. Cost-based per-side pricing can leave the network below critical mass, whereas subsidizing one side ignites adoption on both." },
+    { text: "Because costs cannot be measured", feedback: "Costs can be measured; the point is that per-side cost-based pricing misses the cross-side spillover that makes platforms special." },
+    { text: "Because platforms should always price at zero", feedback: "Not zero on both sides; the platform monetizes the side that will pay. Only the pivotal side is subsidized." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-platforms"
+  id="q3"
+  badge="brings back: coordination"
+  question="How does the co-opetition view change the classic picture of firms as pure rivals?"
+  options={[
+    { text: "Complementors and network effects mean firms can grow the whole pie, not just fight over a fixed one", correct: true, feedback: "Brandenburger and Nalebuff stress that value creation is not zero-sum: complementors raise everyone's value, and coordinating a two-sided market expands the market itself, echoing coordination rather than pure conflict." },
+    { text: "It says competitors are only ever rivals", feedback: "The opposite: it adds complementors, whose success helps you, so the relationship is not purely adversarial." },
+    { text: "It says a bigger market share always means more profit", feedback: "On a platform, profit comes from balancing the two sides, not from raw share. Growing the pie, not just the slice, is the point." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["brandenburgerNalebuff1996", "rochetTirole2003"]} />

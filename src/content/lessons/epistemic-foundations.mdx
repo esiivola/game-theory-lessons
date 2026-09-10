@@ -1,0 +1,137 @@
+---
+title: "Epistemic foundations"
+tier: expert
+unit: 11
+unitName: "Refinements and epistemics"
+order: 34
+kind: lesson
+summary: "What players know about what others know, all the way up, can change everything."
+tags: ["epistemics", "common-knowledge", "agreement"]
+estMinutes: 6
+mvp: true
+prereqs: ["rationality"]
+concepts: ["common-knowledge", "higher-order-knowledge", "no-trade"]
+refs: ["aumann1976", "rubinstein1989"]
+anchorEmoji: "👁️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import MuddyChildren from '@/components/interactive/MuddyChildren.svelte';
+
+<div class="anchor"><span class="em">👁️</span><p>A group of children have muddy foreheads. Each can see the others but not themselves. A visitor announces something everyone can already see, that at least one is muddy, and somehow that changes what they can work out. A known fact, said aloud, becomes actionable.</p></div>
+
+# Epistemic foundations
+
+<p class="lead">Game theory usually assumes rationality is common knowledge: everyone is rational, everyone knows that, everyone knows that everyone knows it, without end. That infinite tower is not a technicality. The muddy-children puzzle shows a public announcement of an already-visible fact can unlock a deduction that private knowledge alone could not.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "Common knowledge of a fact requires...", options: ["Everyone knows it", "Everyone knows it, knows others know it, and so on without end", "One person announces it"], answer: 1 },
+    { q: "In the beauty contest, reasoning stalls because players are unsure...", options: ["Of the rules", "How many steps others will reason", "Of their own payoff"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Set how many children are muddy. Each sees the others but not their own forehead, and the oracle has announced that at least one is muddy. Nobody speaks; they only act (leave) once they are sure. Step through the nights.
+
+<MuddyChildren
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Muddy children: common knowledge from a public announcement"
+  predict={{
+    question: 'With 3 muddy children, on which night do they all leave?',
+    options: [{ key: 'one', label: 'Night 1' }, { key: 'three', label: 'Night 3' }],
+    reveal: 'Night 3. Each muddy child sees 2 others and waits: if those 2 were the only muddy ones, they would leave on night 2. When night 2 passes with no one leaving, each realizes there must be a third, itself, and all three leave on night 3.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+For two or more children the announcement states nothing anyone could not see: everyone already sees a muddy face. What it adds is higher-order knowledge. Before, you knew at least one was muddy, and you knew the others knew it, but the chain gave out at some level. The public statement makes "at least one is muddy" common knowledge to every order at once, and that is what lets the count-down induction run. Each night that passes without anyone leaving is itself informative, ruling out one possibility, until the muddy ones are forced to conclude.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Argue by induction on the number of muddy children $k$. If $k=1$, the one muddy child sees no other muddy face, so the announcement ("at least one") tells it directly, and it leaves on night $1$. Suppose $k$ muddy children would leave on night $k$. With $k+1$, each muddy child sees $k$ muddy others and reasons: "if I were clean, there would be $k$ muddy children, who by the inductive step leave on night $k$." When night $k$ passes with no departure, each muddy child concludes it is muddy too, and all $k+1$ leave on night $k+1$.
+
+<DefinitionAside label="common knowledge and no-trade">
+A fact is common knowledge if everyone knows it, everyone knows that everyone knows it, and so on to every order. The public announcement creates exactly this for "at least one is muddy". Aumann's agreement theorem uses the same idea: two people with a common prior who commonly know each other's posteriors cannot disagree. A corollary is the no-trade theorem: rational traders with common priors will not take opposite sides of a purely speculative bet, because the willingness to trade would itself reveal information that erases the disagreement.
+</DefinitionAside>
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Why the announcement matters">
+Take $k=3$. Each muddy child sees $2$ muddy foreheads. It reasons: "if only those $2$ were muddy, then by the two-child argument they would leave on night $2$." Night $2$ comes and goes with no one leaving. That silence tells every muddy child there must be a third muddy face, which can only be its own, so all three leave on night $3$.
+
+Why does the seemingly redundant announcement matter? With $k \ge 2$, everyone already sees a muddy face, so "at least one is muddy" is not new first-order knowledge. But the induction needs the base case ($k=1$) to be common knowledge to all orders, and only the public announcement supplies that. Remove it and the countdown never starts.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Higher-order knowledge, what you know others know others know, can be decisive. A public announcement of an already-visible fact matters because it creates common knowledge to every order, and rational agents with common priors cannot simply agree to disagree.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="epistemic-foundations"
+  id="q1"
+  badge="apply"
+  question="With 4 muddy children, on which night do they leave, and what does each night of silence convey?"
+  options={[
+    { text: "Night 4; each passing night rules out there being fewer muddy children", correct: true, feedback: "The induction reaches night 4 for four muddy children. Each night nobody leaves tells everyone the count is not that small yet, until the fourth night forces the conclusion." },
+    { text: "Night 1, once the announcement is made", feedback: "Only a single muddy child leaves on night 1. With four, the countdown runs to night 4." },
+    { text: "They never leave, since no one speaks", feedback: "Actions (leaving) and the silence of not leaving are informative. Four muddy children leave on night 4." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="epistemic-foundations"
+  id="q2"
+  badge="analyse"
+  question="For 3 muddy children, everyone already sees a muddy face. So what does the oracle's announcement add?"
+  options={[
+    { text: "It makes 'at least one is muddy' common knowledge to every order, which the private sightings alone did not guarantee", correct: true, feedback: "Each child saw a muddy face, but the tower of 'I know that you know that they know...' was incomplete. The public statement completes it to all orders, and the induction needs that." },
+    { text: "Nothing at all; it is purely redundant", feedback: "It is redundant as first-order information but not as higher-order knowledge. Without the common-knowledge base case, the countdown cannot begin." },
+    { text: "It tells each child the colour of its own forehead", feedback: "It does not reveal anyone's own state directly. It supplies common knowledge that, combined with the nights of silence, lets them deduce it." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="epistemic-foundations"
+  id="q3"
+  badge="brings back: common knowledge"
+  question="Aumann's no-trade result says two rational traders with a common prior will not take opposite sides of a speculative bet. Why?"
+  options={[
+    { text: "Your eagerness to trade reveals your information; once posteriors are commonly known, the disagreement that motivated the bet disappears", correct: true, feedback: "With a common prior, commonly known posteriors cannot differ (agreement theorem). The very willingness to bet is a signal that, once accounted for, removes the disagreement, so purely speculative trade unravels." },
+    { text: "Because trading is against the rules", feedback: "Trading is allowed; it just cannot be purely speculative between rational common-prior agents, because the disagreement needed to motivate it cannot be common knowledge." },
+    { text: "Because one trader is always irrational", feedback: "No irrationality is assumed. The result follows from common priors and common knowledge of posteriors alone." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["aumann1976", "rubinstein1989"]} />

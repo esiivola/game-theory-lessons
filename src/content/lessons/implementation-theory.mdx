@@ -1,0 +1,143 @@
+---
+title: "Implementation and Myerson-Satterthwaite"
+tier: expert
+unit: 12
+unitName: "Mechanism design and social choice"
+order: 40
+kind: lesson
+summary: "With private information on both sides, some efficient trades can never be reached."
+tags: ["mechanism-design", "impossibility", "bargaining"]
+estMinutes: 6
+mvp: true
+prereqs: ["mechanism-design", "nash-bargaining"]
+concepts: ["myerson-satterthwaite", "implementation", "efficiency"]
+refs: ["myersonSatterthwaite1983", "maskin1999"]
+anchorEmoji: "🤝"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import DoubleAuction from '@/components/interactive/DoubleAuction.svelte';
+
+<div class="anchor"><span class="em">🤝</span><p>A buyer would pay up to 60 for a house; a seller would let it go for 50. There is a deal to be had, worth 10 to split. Yet each hides their number to bargain harder, and often the deal that should happen simply does not.</p></div>
+
+# Implementation and Myerson-Satterthwaite
+
+<p class="lead">Mechanism design asks what outcomes rules can implement. Sometimes the answer is a hard no. When a buyer and a seller each hold private information, Myerson and Satterthwaite proved that no mechanism can always trade when it should, break even, and respect both parties' incentives. Some efficient trades are simply unreachable.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A mechanism is individually rational if each party is willing to...", options: ["Lie", "Participate", "Subsidize others"], answer: 1 },
+    { q: "In Nash bargaining, gains from trade exist when the buyer values the good...", options: ["Below the seller's cost", "Above the seller's cost", "At exactly the cost"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+The buyer's value and the seller's cost are each uniform on $[0,1]$, and each shades in the double auction. Move both and see when trade happens, and when a genuinely good deal is missed.
+
+<DoubleAuction
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Bilateral trade under two-sided private information"
+  predict={{
+    question: 'A deal is efficient whenever the buyer values the good more than the seller. How big must that gap be for trade to actually happen?',
+    options: [{ key: 'any', label: 'Any positive gap' }, { key: 'quarter', label: 'At least 1/4' }],
+    reveal: 'At least 1/4. Both sides shade, the buyer bidding below their value and the seller asking above their cost, so trade requires the gap v_b - v_s to reach 1/4. Efficient trades in the 0-to-1/4 gap are lost.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Each side has an incentive to misrepresent: the buyer wants to look less eager, the seller more reluctant, so each shades. That shading is individually rational, but collectively it means small gains from trade get squeezed out, because neither will move far enough to close a thin margin. There is no clever payment scheme that undoes this while keeping both parties honest and the budget balanced. The loss is baked into two-sided private information.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Buyer value $v_b$ and seller cost $v_s$ are each uniform on $[0,1]$. The efficient rule trades whenever $v_b \ge v_s$, with first-best expected gains $\tfrac16$. In the Chatterjee-Samuelson linear equilibrium the buyer bids $\tfrac23 v_b + \tfrac1{12}$ and the seller asks $\tfrac23 v_s + \tfrac14$; trade happens when the bid meets the ask, which reduces to
+
+$$
+v_b \ge v_s + \tfrac14.
+$$
+
+So every efficient trade with $0 \le v_b - v_s < \tfrac14$ is missed. The linear mechanism realizes surplus $\tfrac{9}{64} \approx 0.141$, below the first-best $\tfrac16 \approx 0.167$.
+
+<DefinitionAside label="Myerson-Satterthwaite and Maskin monotonicity">
+Myerson-Satterthwaite: for bilateral trade with independent private values that overlap, no mechanism is simultaneously efficient, incentive compatible, individually rational, and budget balanced. Something must give. On the positive side, Maskin's theorem characterizes which social goals can be Nash-implemented: a rule is implementable only if it is Maskin monotonic (roughly, if an outcome is chosen and it rises in everyone's ranking, it is still chosen), plus a no-veto condition.
+</DefinitionAside>
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="The 1/4 gap and the lost surplus">
+The buyer's bid $\tfrac23 v_b + \tfrac1{12}$ meets the seller's ask $\tfrac23 v_s + \tfrac14$ exactly when $\tfrac23(v_b - v_s) \ge \tfrac14 - \tfrac1{12} = \tfrac16$, that is $v_b - v_s \ge \tfrac14$. Trade requires a gap of at least a quarter.
+
+Now the surplus. First-best trades whenever $v_b \ge v_s$, giving expected gains $\iint_{v_b \ge v_s} (v_b - v_s)\,dv_b\,dv_s = \tfrac16$. The linear equilibrium only trades above the $\tfrac14$ gap, capturing $\tfrac{9}{64} \approx 0.141$. The difference is the deadweight loss forced by two-sided private information, and no mechanism removes it entirely.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">When both sides hold private information, efficiency, honesty, participation, and budget balance cannot all hold. Rational bargainers shade, thin gains from trade vanish, and some deals that should happen never do.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="implementation-theory"
+  id="q1"
+  badge="apply"
+  question="The buyer values the good at 0.6 and the seller's cost is 0.5. Does the double auction trade?"
+  options={[
+    { text: "No: the gap is 0.1, below the 1/4 needed, so this efficient trade is missed", correct: true, feedback: "There are real gains (0.6 > 0.5), but both shade, so trade needs a gap of at least 1/4. A 0.1 gap falls in the missed band." },
+    { text: "Yes, because the buyer values it more than the seller", correct: false, feedback: "Positive gains are not enough here. Shading means trade only occurs when the gap reaches 1/4, which 0.1 does not." },
+    { text: "Only if the seller lowers their cost", feedback: "Costs are fixed private information. The issue is the equilibrium shading, which blocks trades with gaps under 1/4." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="implementation-theory"
+  id="q2"
+  badge="analyse"
+  question="What exactly does the Myerson-Satterthwaite theorem rule out?"
+  options={[
+    { text: "A mechanism that is at once efficient, incentive compatible, individually rational, and budget balanced under two-sided private values", correct: true, feedback: "All four cannot hold together. You can keep any three, but not all; the efficient trades in the shading gap cannot be captured without subsidy or coercion." },
+    { text: "Any trade at all between privately informed parties", feedback: "Trade still happens, just not every efficient one. The theorem is about the impossibility of getting all four properties, not about blocking trade entirely." },
+    { text: "The existence of gains from trade", feedback: "Gains from trade exist whenever the buyer values the good above the seller's cost. The theorem says not all such gains can be realized." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="implementation-theory"
+  id="q3"
+  badge="brings back: nash bargaining"
+  question="How does this square with the Nash bargaining solution, which always splits the surplus efficiently?"
+  options={[
+    { text: "Nash bargaining assumes the parties know the surplus; Myerson-Satterthwaite adds private information, which is what makes full efficiency impossible", correct: true, feedback: "The axiomatic Nash solution presumes a known frontier. Once each side privately knows its own value and must be given incentives to reveal it, efficiency can no longer be guaranteed. Information, not bargaining skill, is the obstacle." },
+    { text: "Nash bargaining is simply wrong", feedback: "It is not wrong; it solves a different problem, one with known values. Adding private information is what introduces the impossibility." },
+    { text: "They describe the same setting and contradict each other", feedback: "They differ in a key assumption: Nash bargaining has complete information about the surplus, Myerson-Satterthwaite has two-sided private information." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["myersonSatterthwaite1983", "maskin1999"]} />

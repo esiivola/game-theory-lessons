@@ -1,0 +1,141 @@
+---
+title: "Stable matching"
+tier: expert
+unit: 14
+unitName: "Matching and market design"
+order: 45
+kind: lesson
+summary: "Deferred acceptance always finds a stable matching, and the proposing side does best."
+tags: ["matching", "gale-shapley", "stability"]
+estMinutes: 6
+mvp: true
+prereqs: ["pure-nash"]
+concepts: ["stable-matching", "deferred-acceptance", "blocking-pair"]
+refs: ["galeShapley1962"]
+anchorEmoji: "💞"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import DeferredAcceptance from '@/components/interactive/DeferredAcceptance.svelte';
+
+<div class="anchor"><span class="em">💞</span><p>Every year thousands of new doctors are matched to hospitals by an algorithm, not a market. It has to produce assignments that no doctor and hospital would both rather undo. Gale and Shapley showed such a matching always exists, and how to find it.</p></div>
+
+# Stable matching
+
+<p class="lead">Match two sides with preferences, medical residents to hospitals, students to schools, and you want stability: no pair who would both prefer each other to their assigned partners. Deferred acceptance always reaches a stable matching, and it quietly favours whichever side does the proposing.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A matching is unstable if there is a pair who both prefer...", options: ["Their assigned partners", "Each other to their partners", "To stay single"], answer: 1 },
+    { q: "An algorithm is strategy-proof if no one gains by...", options: ["Participating", "Misreporting preferences", "Waiting"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Three men and three women, with cyclic preferences designed to make the sides clash. Run deferred acceptance, then swap which side proposes.
+
+<DeferredAcceptance
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Deferred acceptance on a cyclic marriage market"
+  aName="Men"
+  bName="Women"
+  aPrefs={{ m1: ['w1', 'w2', 'w3'], m2: ['w2', 'w3', 'w1'], m3: ['w3', 'w1', 'w2'] }}
+  bPrefs={{ w1: ['m2', 'm3', 'm1'], w2: ['m3', 'm1', 'm2'], w3: ['m1', 'm2', 'm3'] }}
+  predict={{
+    question: 'When the men propose, who does better, the men or the women?',
+    options: [{ key: 'women', label: 'The women' }, { key: 'men', label: 'The men' }],
+    reveal: 'The men. Man-proposing deferred acceptance gives every man his first choice and every woman her last. Swap the proposing side and it flips. Both matchings are stable, so stability alone does not choose between them.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Proposers get to try their top choice first and only move down when rejected, so they end up as high on their own list as stability allows. Receivers can only accept or reject what comes to them, so they end up as low as stability allows. The result is stable either way: no pair wants to defect. But the two runs produce different stable matchings, one best for each side, which is why the question of who proposes is a real design choice, not a technicality.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="deferred acceptance and stability">
+A matching is stable if no unmatched pair prefer each other to their assigned partners (no blocking pair). In deferred acceptance, each member of the proposing side proposes down its list; each receiver tentatively holds its best proposer so far and rejects the rest; rejected proposers try their next choice. The process ends with a stable matching, and it is proposer-optimal: every proposer gets the best partner it could have in any stable matching, and every receiver the worst.
+</DefinitionAside>
+
+In the cyclic instance, man-proposing round 1 has $m_1 \to w_1$, $m_2 \to w_2$, $m_3 \to w_3$, and every woman receives exactly one proposal, so all are held and the algorithm stops. Each man gets his first choice; each woman ($w_1$ ranks $m_2 > m_3 > m_1$, and so on) gets her last. Checking stability: every man already has his top choice, so no man would leave, and therefore no blocking pair exists. Woman-proposing produces the mirror image, best for the women.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Run it, then check for blocking pairs">
+Man-proposing: in round 1 each man proposes to his first choice, $m_1 \to w_1$, $m_2 \to w_2$, $m_3 \to w_3$. No woman gets two proposals, so each holds hers and the algorithm ends immediately. Every man has his first choice; every woman her last.
+
+Now hunt for a blocking pair. Take $w_1$, who got $m_1$ (her least favourite) and would prefer $m_2$. But $m_2$ has $w_2$, his first choice, and prefers her to $w_1$. So $(m_2, w_1)$ is not a blocking pair. The same holds everywhere: every man has his top choice and will not stray. No blocking pair exists, so the matching is stable, even though every woman is matched to her worst option.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Deferred acceptance always yields a stable matching, and it is best for the proposing side and worst for the receiving side. Stability does not pin down a unique matching, so who proposes is a genuine design decision.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="stable-matching"
+  id="q1"
+  badge="apply"
+  question="Under man-proposing deferred acceptance in this game, what do the women get?"
+  options={[
+    { text: "Their least-preferred partners, though the matching is still stable", correct: true, feedback: "The proposing side (men) gets its best stable outcome, so the receiving side (women) gets its worst. It is stable because every man has his top choice and will not form a blocking pair." },
+    { text: "Their first choices", feedback: "That happens under woman-proposing. When men propose, the women end up with their worst stable partners." },
+    { text: "An unstable matching", feedback: "Deferred acceptance always produces a stable matching. The women simply do poorly within the set of stable matchings." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="stable-matching"
+  id="q2"
+  badge="analyse"
+  question="Both man-proposing and woman-proposing give stable matchings, and they differ. What does that tell you?"
+  options={[
+    { text: "Stability does not uniquely determine the matching; who proposes selects among the stable ones", correct: true, feedback: "There can be several stable matchings. Deferred acceptance picks the one best for the proposing side, so the choice of proposer is a real lever, not a formality." },
+    { text: "One of the two matchings must be unstable", feedback: "Both are stable. The point is exactly that multiple stable matchings exist and the proposing side gets its favourite." },
+    { text: "The algorithm is broken", feedback: "It works correctly; it just reveals that stability alone leaves room, filled by whichever side proposes." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="stable-matching"
+  id="q3"
+  badge="brings back: dominant strategy"
+  question="For the proposing side, deferred acceptance is strategy-proof. What does that mean here?"
+  options={[
+    { text: "No proposer can get a better partner by submitting a false preference list; truthful ranking is a dominant strategy", correct: true, feedback: "Proposer-optimality comes with strategy-proofness for that side: reporting your true ranking is a best response whatever others do. The receiving side, by contrast, can sometimes gain by misreporting." },
+    { text: "Both sides can always improve by lying", feedback: "The proposing side cannot gain by lying; truthful reporting is dominant for them. Only the receiving side is sometimes manipulable." },
+    { text: "The matching is unaffected by preferences", feedback: "Preferences drive the whole outcome. Strategy-proofness means honest preferences are optimal to report, not that they do not matter." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["galeShapley1962"]} />

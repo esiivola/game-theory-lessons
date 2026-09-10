@@ -1,0 +1,143 @@
+---
+title: "Mechanism design and the revelation principle"
+tier: expert
+unit: 12
+unitName: "Mechanism design and social choice"
+order: 37
+kind: lesson
+summary: "Anything achievable in equilibrium is achievable by a mechanism where honesty is optimal."
+tags: ["mechanism-design", "revelation-principle", "auctions"]
+estMinutes: 6
+mvp: true
+prereqs: ["bayesian-games", "auctions-first-second-price"]
+concepts: ["mechanism-design", "revelation-principle", "incentive-compatibility"]
+refs: ["myerson1979", "gibbard1973"]
+anchorEmoji: "🔧"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import RevelationPrinciple from '@/components/interactive/RevelationPrinciple.svelte';
+
+<div class="anchor"><span class="em">🔧</span><p>Designing a market feels open-ended: sealed bids, open outcry, reserve prices, endless rules. The revelation principle tames it. Whatever any clever mechanism achieves in equilibrium, you can also achieve by simply asking everyone to tell the truth.</p></div>
+
+# Mechanism design and the revelation principle
+
+<p class="lead">Mechanism design runs game theory backward: fix the outcome you want, then build the rules that deliver it. The revelation principle is the key simplification. Any equilibrium outcome of any mechanism can be reproduced by a direct mechanism in which telling the truth is a best response, so you never have to search beyond honest, direct rules.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In a first-price auction with two bidders (uniform values), the equilibrium bid is...", options: ["Your value", "Half your value", "Zero"], answer: 1 },
+    { q: "A mechanism is incentive compatible if truth-telling is...", options: ["Illegal", "A best response", "Impossible"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Two bidders, values uniform on $[0,1]$. In the first-price auction you shade your bid to half your value. Toggle to a direct mechanism where you simply report your value, and compare the outcome.
+
+<RevelationPrinciple
+  client:visible
+  exhibit="Exhibit 1"
+  caption="First-price auction versus its truthful direct equivalent"
+  predict={{
+    question: 'Does rebuilding the auction as "just report your value" change what the designer can achieve?',
+    options: [{ key: 'more', label: 'Yes, direct rules do more' }, { key: 'same', label: 'No, the outcome is identical' }],
+    reveal: 'Identical. The direct mechanism charges each type exactly the expected payment the first-price auction produced, so allocation, payments, and revenue all match, and now truth-telling is optimal. The principle simplifies, it does not expand.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+In the first-price auction you shade because your bid sets your price. The designer can absorb that shading into the rules: instead of asking for a bid and making you shave it, ask for your value and charge you the payment your shaded bid would have produced. Facing that direct rule, you have no reason to lie, because any misreport just moves you to the outcome of a different type, which you did not prefer. The strategic shading is folded into the mechanism, leaving honesty optimal.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+With two bidders and values uniform on $[0,1]$, the first-price equilibrium bid is $b(v) = v/2$. A bidder of value $v$ wins when the rival's value is below $v$, which happens with probability $v$, and pays its bid $v/2$ when it wins. Its interim expected payment is
+
+$$
+m(v) = v \cdot \tfrac{v}{2} = \tfrac{v^2}{2}.
+$$
+
+The direct mechanism: each bidder reports a value, the highest report wins, and a bidder reporting $v$ pays $m(v) = v^2/2$ in expectation. This reproduces the same allocation and the same payments, and truth-telling is a best response.
+
+<DefinitionAside label="the revelation principle">
+For any mechanism and any Bayes-Nash equilibrium of it, there is a direct mechanism (players report their types) in which truthful reporting is an equilibrium and which yields the same outcome. So without loss of generality the designer can restrict attention to incentive-compatible, individually rational direct mechanisms. It characterises what is achievable; it says nothing about robustness or simplicity in practice.
+</DefinitionAside>
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="From shaded bids to truthful reports">
+In the two-bidder first-price auction, a type $v$ bids $v/2$. Probability of winning is $\Pr(\text{rival} < v) = v$, and the payment on winning is the bid $v/2$, so the interim expected payment is $v \cdot v/2 = v^2/2$, and interim surplus is $v \cdot v - v^2/2 = v^2/2$.
+
+Now build the direct mechanism: ask each bidder for a number, award the item to the highest, and charge a reporter of $v$ the amount $v^2/2$ in expectation. A bidder considering reporting $r \ne v$ would receive the win probability and payment of type $r$, but since $v$'s own bundle was already optimal in the original auction, deviating cannot help. Truth-telling is optimal, and every number, the allocation, the payment, the revenue, matches the first-price auction.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">The revelation principle lets a designer study only direct, truthful mechanisms without losing any achievable outcome. It is a lens for what is possible, not a claim that direct mechanisms are the best to run in practice.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="mechanism-design"
+  id="q1"
+  badge="apply"
+  question="The direct mechanism charges a reporter of value v the payment v squared over two. Where does that number come from?"
+  options={[
+    { text: "It is the interim expected payment the bidder made in the first-price auction: win probability v times bid v/2", correct: true, feedback: "The direct mechanism simply reproduces the payments of the original equilibrium. Since the first-price bidder paid v/2 with probability v, the direct charge is v^2/2, keeping the outcome identical." },
+    { text: "It is the bidder's full value", feedback: "Bidders never pay their full value in expectation here; they keep surplus. The direct payment matches the first-price auction's v^2/2." },
+    { text: "It is chosen to maximise the bidder's surplus", feedback: "It is chosen to replicate the first-price outcome, not to maximise the bidder's surplus. The point is equivalence." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="mechanism-design"
+  id="q2"
+  badge="analyse"
+  question="What does the revelation principle let a designer ignore?"
+  options={[
+    { text: "All the indirect mechanisms: any outcome they achieve is matched by a truthful direct one", correct: true, feedback: "Because every equilibrium outcome is reproducible by an incentive-compatible direct mechanism, the designer can search only over those without missing anything achievable." },
+    { text: "The bidders' private information", feedback: "Private information is central and remains. The principle says honesty can be made optimal despite it, not that it disappears." },
+    { text: "Incentive and participation constraints", feedback: "Those constraints are exactly what a direct mechanism must satisfy. The principle narrows the search to mechanisms meeting them, it does not remove them." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="mechanism-design"
+  id="q3"
+  badge="brings back: bayes-nash"
+  question="In what sense is truthful reporting in the direct mechanism a Bayes-Nash equilibrium?"
+  options={[
+    { text: "Each type best-responds to the distribution of others' types by reporting truthfully, because any misreport gives the outcome of a type it did not prefer", correct: true, feedback: "The direct mechanism is built so that reporting your true value is optimal given others report truthfully and given the type distribution, which is exactly a Bayes-Nash equilibrium in the reporting game." },
+    { text: "Because reporting is a dominant strategy in every mechanism", feedback: "Truthfulness here is a Bayes-Nash equilibrium, not necessarily dominant. Dominant-strategy truthfulness is a stronger property some mechanisms (like VCG) achieve." },
+    { text: "Because the designer forbids lying", feedback: "Lying is allowed; it simply is not profitable. The mechanism makes truth-telling a best response, which is why it is an equilibrium." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["myerson1979", "gibbard1973"]} />

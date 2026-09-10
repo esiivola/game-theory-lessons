@@ -1,0 +1,143 @@
+---
+title: "Folk theorems"
+tier: intermediate
+unit: 7
+unitName: "Repeated games"
+order: 21
+kind: lesson
+summary: "With enough patience, almost any reasonable payoff can be an equilibrium."
+tags: ["repeated-games", "folk-theorem", "equilibrium"]
+estMinutes: 6
+mvp: true
+prereqs: ["repeated-games"]
+concepts: ["folk-theorem", "minmax", "repeated-games"]
+refs: ["fudenbergMaskin1986", "friedman1971"]
+anchorEmoji: "🗺️"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import FolkTheorem from '@/components/interactive/FolkTheorem.svelte';
+
+<div class="anchor"><span class="em">🗺️</span><p>A cartel could hold prices high, or settle on a dozen other arrangements, and each one, once everyone expects it, sustains itself. Repeated play does not predict cooperation so much as it predicts almost anything.</p></div>
+
+# Folk theorems
+
+<p class="lead">The last lesson showed cooperation can survive if players are patient. The folk theorem says far more, and it is a warning as much as a result: when the future matters enough, nearly every outcome that clears a low bar can be held up as an equilibrium. Repetition explains too much.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In the repeated PD, cooperation survives under grim trigger when delta is...", options: ["Any value", "At least 1/2", "Below 1/2"], answer: 1 },
+    { q: "In a strictly competitive game, the most a player can guarantee themselves alone is called the...", options: ["Best payoff", "Value they can guarantee (maximin)", "Average payoff"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+The plot is the space of average payoffs in the repeated Prisoner's Dilemma. The teal region is what the game can produce; the shaded box is where both players clear their minmax of 1. Drag a target and see whether it can be sustained.
+
+<FolkTheorem
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Feasible payoffs; the shaded area is individually rational"
+  predict={{
+    question: 'Which target payoffs can be sustained as an equilibrium when players are patient?',
+    options: [{ key: 'coop', label: 'Only mutual cooperation (3,3)' }, { key: 'many', label: 'Any feasible point above the minmax' }],
+    reveal: 'Almost any of them. (3,3), (4,1), even lopsided splits: if a point is feasible and gives both players at least their minmax of 1, it is an equilibrium payoff for a patient enough pair. (0.5,0.5) fails, because it is below what a player can guarantee alone.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The engine is the threat. Any deviation can be met with punishment that drives the deviator down to their minmax, the most they can guarantee themselves while everyone else ganks them. As long as the target leaves both players above that floor, the loss from being punished outweighs the one-time gain from cheating, so nobody deviates. Patience makes the future punishment loom large enough to hold almost any arrangement in place.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+The feasible payoffs are the convex hull of the stage-game outcomes: for the PD with $T=5, R=3, P=1, S=0$, the hull of $(3,3), (5,0), (0,5), (1,1)$. A player's **minmax** is the lowest payoff the others can force on them while the player best-responds; in the PD that is $P = 1$ (defect against a defector).
+
+<DefinitionAside label="folk theorem">
+For an infinitely repeated game, take any feasible payoff profile in which every player earns strictly more than their minmax value. Then for discount factors close enough to 1, there is a subgame-perfect equilibrium of the repeated game whose average payoff is exactly that profile. The set of equilibrium payoffs fills the entire feasible, individually rational region.
+</DefinitionAside>
+
+So $(3,3)$ is an equilibrium, but so is $(4,1)$, and so are countless asymmetric splits. Two flavors: the Nash-threat version (Friedman) punishes with a stage-game Nash equilibrium; the stronger minmax version (Fudenberg-Maskin) punishes down to the minmax, which enlarges the supportable set.
+
+The lesson is sobering. Repetition does not pick out cooperation; it makes prediction hard, because so many outcomes are consistent with equilibrium.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Support a point, and check the floor">
+**Symmetric.** To hold $(3,3)$, both play grim trigger: cooperate, and defect forever if the other ever does. A one-time defection gains $5 - 3 = 2$ now but forfeits the cooperative stream, so for $\delta$ high enough nobody deviates. Standard cooperation.
+
+**Asymmetric.** To hold $(3.5, 2)$, alternate outcomes over time (say, favouring player 1 in some rounds) so the long-run averages land there, and back it with the threat of minmax punishment. Both averages exceed the minmax of 1, so each player prefers the arrangement to being punished, and the profile is supportable.
+
+**The floor.** Try $(0.5, 0.5)$: both are below the minmax of 1. A player can guarantee 1 by simply defecting forever, so no equilibrium can pin them at 0.5. The individually rational bound is what rules a target out.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">With patient players, every feasible payoff above the minmax is an equilibrium of the repeated game. The folk theorem does not predict cooperation; it shows repetition can rationalize almost anything.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="folk-theorems"
+  id="q1"
+  badge="apply"
+  question="Can the payoff (0.5, 0.5) be sustained as an equilibrium of the repeated PD?"
+  options={[
+    { text: "No, both players are below the minmax of 1, which each can guarantee by defecting forever", correct: true, feedback: "The individually rational bound is the floor. Since a player can secure 1 alone, no equilibrium can hold them at 0.5, no matter how patient." },
+    { text: "Yes, any payoff can be sustained with enough patience", feedback: "Only feasible payoffs above the minmax qualify. Points below a player's guaranteed value, like 0.5 here, are ruled out." },
+    { text: "Yes, because it is symmetric", feedback: "Symmetry does not help. Both coordinates are below the minmax of 1, so the point is unsupportable." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="folk-theorems"
+  id="q2"
+  badge="analyse"
+  question="A colleague says the folk theorem proves that repetition produces cooperation. What is wrong with that?"
+  options={[
+    { text: "It shows almost any feasible payoff above the minmax is an equilibrium, so it explains too much to single out cooperation", correct: true, feedback: "The theorem populates the whole individually rational region with equilibria, cooperative and not. It is a statement about what is possible, not a prediction that cooperation occurs." },
+    { text: "Nothing, the folk theorem does guarantee cooperation", feedback: "It does not. Mutual cooperation is one of a continuum of equilibrium payoffs, including many uncooperative ones." },
+    { text: "The folk theorem only applies to finite games", feedback: "It is a result about infinitely repeated (or long-horizon) games. Its content is the breadth of equilibria, not a cooperation guarantee." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="folk-theorems"
+  id="q3"
+  badge="brings back: repeated games"
+  question="What role does patience (delta near 1) play in the folk theorem?"
+  options={[
+    { text: "It makes future punishment loom large enough to deter any one-time deviation, so the target profile holds", correct: true, feedback: "As in the discounting lesson, a high delta means the stream of future losses from punishment outweighs the immediate gain from cheating. That is what sustains the wide set of equilibria." },
+    { text: "It shrinks the set of equilibria to just cooperation", feedback: "Higher patience enlarges the supportable set toward the whole IR region, it does not shrink it to cooperation." },
+    { text: "It removes the need for any punishment threat", feedback: "The threat is exactly what patience empowers. Without a credible punishment, deviations would pay." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["fudenbergMaskin1986", "friedman1971"]} />

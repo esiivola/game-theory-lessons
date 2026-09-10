@@ -1,0 +1,147 @@
+---
+title: "Contract theory and moral hazard"
+tier: intermediate
+unit: 10
+unitName: "Information design and contracts"
+order: 32
+kind: lesson
+summary: "When effort is unobservable, pay has to reward output, and the agent keeps a rent."
+tags: ["moral-hazard", "principal-agent", "contracts"]
+estMinutes: 6
+mvp: true
+prereqs: ["bayesian-games", "adverse-selection"]
+concepts: ["moral-hazard", "principal-agent", "incentives"]
+refs: ["holmstrom1979", "grossmanHart1983"]
+anchorEmoji: "💼"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import MoralHazard from '@/components/interactive/MoralHazard.svelte';
+
+<div class="anchor"><span class="em">💼</span><p>You hire someone whose effort you cannot watch. Pay a flat salary and they coast. Tie pay to results and they work, but results are noisy, so you end up paying for luck as well as effort. There is no contract that gets you the effort for free.</p></div>
+
+# Contract theory and moral hazard
+
+<p class="lead">Moral hazard is a hidden-action problem: the agent chooses effort you cannot see, and only a noisy outcome is observable. To motivate effort you must make pay depend on the outcome, which hands the agent a reward for good luck. That extra pay, the rent, is the price of not being able to watch.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "Adverse selection is about hidden types; moral hazard is about hidden...", options: ["Prices", "Actions", "Payoffs"], answer: 1 },
+    { q: "A risk-neutral agent evaluates a contract by its...", options: ["Worst case", "Expected pay minus effort cost", "Highest possible pay"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Output is High (100) or Low (0). Effort costs the agent 15 and lifts the chance of High output from 40% to 80%. You cannot observe the effort, only the output. Design the pay: a base plus a bonus for high output.
+
+<MoralHazard
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Design a contract when effort is hidden"
+  predict={{
+    question: 'What contract maximizes the principal\'s profit?',
+    options: [{ key: 'flat', label: 'A generous flat salary' }, { key: 'bonus', label: 'Zero base, just enough bonus' }],
+    reveal: 'Zero base and a bonus of 37.5. A flat salary buys no effort. The smallest bonus that makes effort worthwhile is 37.5, which leaves the agent a rent of 15 and gives the principal profit 50, beating the 40 from not motivating effort.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Because effort is hidden, a flat wage gives the agent no reason to bear the cost of working, so they shirk. The only lever you have is the outcome, so pay must rise with high output. But output is noisy: a hard worker sometimes gets Low and a shirker sometimes gets High. To make effort the agent's best choice, the bonus has to be big enough that the extra chance of the bonus outweighs the effort cost, and that same bonus overpays the agent on average, leaving them a rent. You cannot separate rewarding effort from rewarding luck.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Output is $100$ (High) or $0$ (Low). Effort $e \in \{0,1\}$ costs $15$ when $e=1$; $\Pr(\text{High}\mid 1) = 0.8$ and $\Pr(\text{High}\mid 0) = 0.4$. The agent is risk-neutral with limited liability (wages $\ge 0$) and reservation utility $0$. Write the contract as a base $w_L$ and a high-output wage $w_H$.
+
+**Incentive compatibility.** The agent picks $e=1$ over $e=0$ iff
+
+$$
+0.8\,w_H + 0.2\,w_L - 15 \ \ge\ 0.4\,w_H + 0.6\,w_L,
+$$
+
+which simplifies to $w_H - w_L \ge 37.5$. The bonus, not the base, drives effort.
+
+**Cheapest incentive contract.** With limited liability set $w_L = 0$, so $w_H = 37.5$. The agent's expected utility is $0.8(37.5) - 15 = 15 > 0$, so participation (IR) is slack: the agent earns a **rent** of $15$. The principal's profit is $0.8(100) - 0.8(37.5) = 50$, above the $40$ from paying nothing and letting the agent shirk.
+
+<DefinitionAside label="moral hazard and the rent">
+When actions are hidden, pay must be tied to observable output to satisfy incentive compatibility, which exposes a risk-averse or limited-liability agent to outcome risk and generally leaves them a rent. With observable effort (the first best) the principal would pay just the effort cost $15$ and keep $65$. The hidden-action loss here is $65 - 50 = 15$, exactly the rent the agent captures.
+</DefinitionAside>
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Find the profit-maximising contract">
+Start with incentive compatibility. Effort raises the chance of High by $0.8 - 0.4 = 0.4$, so the expected gain from effort is $0.4(w_H - w_L)$, and the agent works only if this covers the cost: $0.4(w_H - w_L) \ge 15$, i.e., $w_H - w_L \ge 37.5$.
+
+Make the spread as cheap as possible under limited liability: $w_L = 0$, $w_H = 37.5$. Check participation: expected pay is $0.8(37.5) = 30$, minus effort $15$, leaves $15 \ge 0$, so the agent accepts and pockets a rent of $15$. Principal profit is expected output minus expected wage, $80 - 30 = 50$. Inducing no effort would pay $0$ and earn $0.4(100) = 40$, so motivating effort is better. The best contract is $(0, 37.5)$, and the $15$ rent is the cost of the hidden action.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Hidden effort forces you to pay for output, not effort, which rewards luck and leaves the agent a rent. A flat salary kills incentives; the fix is the smallest bonus that makes working worthwhile, and its rent is the price of not being able to watch.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="moral-hazard"
+  id="q1"
+  badge="apply"
+  question="Why can a generous flat salary not solve the moral-hazard problem?"
+  options={[
+    { text: "Flat pay is the same whether the agent works or shirks, so it gives no reason to bear the effort cost", correct: true, feedback: "Incentives come from the gap between high- and low-output pay. A flat salary has no gap, so the agent shirks regardless of how generous it is." },
+    { text: "A flat salary is too expensive for the principal", feedback: "Cost is not the issue; incentives are. Even a large flat salary leaves the agent indifferent to effort, so they shirk." },
+    { text: "Flat salaries are illegal in principal-agent settings", feedback: "They are perfectly legal. They simply fail to motivate effort because pay does not depend on the outcome." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="moral-hazard"
+  id="q2"
+  badge="analyse"
+  question="The optimal contract leaves the agent a rent of 15. What does that rent represent?"
+  options={[
+    { text: "The cost of hidden action: the profit the principal loses versus a world where effort is observable", correct: true, feedback: "With observable effort the principal would pay just the cost 15 and keep 65; with hidden effort profit is 50. The 15 gap is exactly the rent the incentive bonus hands the agent." },
+    { text: "A mistake in the contract that could be designed away", feedback: "It cannot be designed away here. Tying pay to noisy output to satisfy incentive compatibility necessarily leaves this rent under limited liability." },
+    { text: "The agent's effort cost, which the principal always covers", feedback: "The effort cost is 15 too, but the rent is separate: it is pay above what would make the agent just willing to participate, forced by the incentive bonus." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="moral-hazard"
+  id="q3"
+  badge="brings back: adverse selection"
+  question="How does moral hazard differ from the adverse selection of the last unit?"
+  options={[
+    { text: "Moral hazard is hidden action (effort chosen after contracting); adverse selection is hidden type (private information before contracting)", correct: true, feedback: "Here the agent's effort is unobservable and chosen after the deal, so the fix is incentive pay. Adverse selection is about hidden types before the deal, fixed by screening. Different problems, different remedies." },
+    { text: "They are the same hidden-information problem", feedback: "They are distinct: hidden action versus hidden type. Moral hazard is solved with incentives, adverse selection with screening." },
+    { text: "Moral hazard only arises with risk-averse agents", feedback: "It arises here with a risk-neutral, limited-liability agent too. The core issue is that effort is hidden, not the agent's risk attitude." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["holmstrom1979", "grossmanHart1983"]} />

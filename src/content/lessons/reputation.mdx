@@ -1,0 +1,143 @@
+---
+title: "Reputation"
+tier: intermediate
+unit: 7
+unitName: "Repeated games"
+order: 23
+kind: lesson
+summary: "A small doubt about your type, defended early, can deter rivals for a long time."
+tags: ["repeated-games", "reputation", "incomplete-information"]
+estMinutes: 7
+mvp: true
+prereqs: ["backward-induction", "repeated-games"]
+concepts: ["reputation", "chain-store", "incomplete-information"]
+refs: ["krepsWilson1982", "milgromRoberts1982"]
+anchorEmoji: "🏪"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import ChainStore from '@/components/interactive/ChainStore.svelte';
+
+<div class="anchor"><span class="em">🏪</span><p>A chain opens stores in one town after another, and in each a local rival decides whether to compete. The chain cannot beat them all on the merits. But if it crushes the first few challengers, the rest may not dare try. A reputation for ferocity does the work that force cannot.</p></div>
+
+# Reputation
+
+<p class="lead">Backward induction said a threat to fight entry is empty: once entry happens, fighting only hurts you. That logic breaks when rivals are not sure who they are dealing with. A sliver of doubt that you might be the type who always fights, defended by fighting early, can deter challengers for a very long time.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In the one-shot entry game, the incumbent's threat to fight is...", options: ["Credible", "Not credible", "Always carried out"], answer: 1 },
+    { q: "A finitely repeated Prisoner's Dilemma unravels because of...", options: ["Noise", "Backward induction from the last round", "Impatience"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+You are a sequence of entrants, one per town, facing the same incumbent. You cannot see its type: with a small chance it is tough and always fights, otherwise it is a normal firm that would rather accommodate. You watch its history and decide each town.
+
+<ChainStore
+  client:visible
+  exhibit="Exhibit 1"
+  caption="You are the entrants; the incumbent's type is hidden"
+  predict={{
+    question: 'The incumbent has fought the first two entrants. Do you enter the third town?',
+    options: [{ key: 'in', label: 'Enter, it must be bluffing' }, { key: 'out', label: 'Stay out, the fights are a warning' }],
+    reveal: 'Stay out. Whether it is genuinely tough or a normal firm protecting its record, it will keep fighting while towns remain. Entry only becomes safe in the last town or two, when the incumbent no longer gains from defending its name.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+A normal incumbent would rather accommodate any single entrant. But accommodating once tells every future entrant that it is normal, and they all pour in. Fighting, by contrast, keeps them guessing and keeps them out. As long as there are enough towns left, the future deterrence is worth more than the one-time cost of a fight, so even a normal firm fights, and the small chance it is genuinely tough is enough to make entrants believe the fight will come. The doubt is the weapon.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Let the incumbent be **tough** with small prior probability $\mu$ (it always fights, perhaps because fighting is how it is wired), and **normal** otherwise (payoffs as in the entry game: accommodating an entrant beats fighting in a single town). There are $N$ towns.
+
+Solve from the end. In the **last** town the normal incumbent has no future to protect, so it accommodates; entrants there can safely enter. But **earlier**, a normal incumbent compares two paths. Accommodate now: gain $1$ this town, but reveal normality and face entry in every remaining town. Fight now: lose the one-period cost, but keep entrants out for many towns to come. When enough towns remain, the deterrence value swamps the cost, so the normal type fights.
+
+<DefinitionAside label="reputation effect (KMRW)">
+With a small probability that a long-lived player is a committed type, the normal type mimics that type to build a reputation. In the chain-store game, a tiny doubt about toughness supports deterrence across almost all towns; the reputation only unravels in the final rounds, where mimicry no longer pays. Entrants stay out precisely because they cannot tell a tough incumbent from a normal one defending its name.
+</DefinitionAside>
+
+This resolves **Selten's chain-store paradox**. Under complete information, backward induction says the incumbent cannot deter anyone: fighting is never credible, so entry occurs everywhere. Add an ounce of incomplete information and deterrence returns across the whole chain. The paradox was an artifact of assuming the type was known.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Why a normal incumbent fights early">
+Take the entrant payoffs: accommodate gives the entrant $+2$, a fight gives $-1$, staying out gives $0$. An entrant enters only if the expected payoff beats $0$, that is, if a fight is unlikely enough.
+
+**Last town.** The normal incumbent accommodates (no future to protect). Knowing this, and that the incumbent is tough only with small probability, entry pays, so entrants enter.
+
+**Earlier towns.** If the normal incumbent ever accommodates, it is revealed normal and every later entrant enters, costing it the monopoly profit in all those towns. Fighting instead preserves the doubt and keeps entrants out. With many towns left, the preserved profits exceed the one-period cost of fighting (accommodate $1$ versus fight $0$), so the normal type fights. Because both the tough and normal types then fight, an entrant who sees fights cannot rule out toughness, so the expected payoff to entering stays negative and they stay out. Deterrence holds until the horizon comes into view.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">A small doubt about your type, worth defending, lets you build a reputation that deters rivals. It holds across a long horizon and cracks only near the end, when protecting the reputation no longer pays.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="reputation"
+  id="q1"
+  badge="apply"
+  question="Does building a deterring reputation require the incumbent to actually be the tough type?"
+  options={[
+    { text: "No, a small probability that it might be tough is enough for a normal incumbent to deter by mimicking", correct: true, feedback: "Entrants only need to be unsure. A normal incumbent fights to keep the doubt alive, and because it fights just as a tough type would, entrants cannot tell them apart and stay out." },
+    { text: "Yes, only a genuinely tough incumbent can deter", feedback: "The whole result is that a normal incumbent deters too, by exploiting the entrants' uncertainty. Actual toughness is not required, only doubt." },
+    { text: "No, reputation works even with zero probability of a tough type", feedback: "Some positive doubt is needed. With zero chance of toughness, backward induction returns and deterrence collapses (Selten's paradox)." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="reputation"
+  id="q2"
+  badge="analyse"
+  question="Under complete information, backward induction says the incumbent cannot deter entry anywhere. What changes with a little incomplete information?"
+  options={[
+    { text: "The small chance of a tough type lets the normal type mimic it, restoring deterrence across nearly all towns", correct: true, feedback: "This is the resolution of Selten's chain-store paradox: a tiny doubt about the incumbent's type supports fighting and deterrence over the whole chain, except near the very end." },
+    { text: "Nothing changes; deterrence still fails everywhere", feedback: "It changes a great deal. Incomplete information is exactly what makes the threat to fight credible enough to deter." },
+    { text: "Entry becomes impossible in every town", feedback: "Not every town. Deterrence holds early but unravels in the last town or two, where mimicry no longer pays." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="reputation"
+  id="q3"
+  badge="brings back: backward induction"
+  question="Why does the reputation eventually collapse in the final towns?"
+  options={[
+    { text: "With no future entrants left to deter, fighting no longer pays, so backward induction makes the normal type accommodate at the end", correct: true, feedback: "Reputation is only worth defending while there is a future to protect. In the last town the normal incumbent has nothing to gain from fighting, so it accommodates, and that unravels a short way back from the end." },
+    { text: "Because entrants run out of patience", feedback: "It is not about patience. The reputation cracks because the incumbent's incentive to defend it vanishes once few towns remain." },
+    { text: "Because the incumbent is revealed to be tough", feedback: "The opposite: near the end the normal incumbent accommodates, revealing it is not tough. That is why deterrence fails there." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["krepsWilson1982", "milgromRoberts1982"]} />

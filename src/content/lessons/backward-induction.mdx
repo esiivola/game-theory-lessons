@@ -1,0 +1,165 @@
+---
+title: "Extensive form and backward induction"
+tier: basic
+unit: 4
+unitName: "Sequential games"
+order: 15
+kind: lesson
+summary: "When players move in turn, solve the last decision first and work backward."
+tags: ["sequential", "extensive-form", "backward-induction"]
+estMinutes: 6
+mvp: true
+prereqs: ["pure-nash"]
+concepts: ["extensive-form", "backward-induction", "credibility"]
+refs: ["selten1965", "rosenthal1981"]
+anchorEmoji: "🌳"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import GameTree from '@/components/interactive/GameTree.svelte';
+
+<div class="anchor"><span class="em">🌳</span><p>A startup weighs entering a market that one big incumbent already owns. The incumbent could slash prices to punish the newcomer, or share the market and keep its margins. The startup has to guess which, before it spends a cent.</p></div>
+
+# Extensive form and backward induction
+
+<p class="lead">Until now everyone chose at once. Many games are not like that: one player moves, the other sees it and responds. Drawing the game as a tree, and reasoning from the final move back to the first, tells you what will actually happen, and which threats are just talk.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A Nash equilibrium is a profile where no player can gain by...", options: ["Cooperating", "Deviating alone", "Waiting"], answer: 1 },
+    { q: "A best response is a move that is optimal...", options: ["Given the others' choices", "In every game", "Only when moving first"], answer: 0 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Here is the entry game as a tree. You are the entrant and move first. Walk down a path to read a payoff, then hit "Solve backward" to see what rational play folds it to.
+
+<GameTree
+  client:visible
+  exhibit="Exhibit 1"
+  caption="The entry game, payoffs (entrant, incumbent)"
+  players={["Entrant", "Incumbent"]}
+  tree={{
+    kind: 'node', player: 0, label: 'Entrant',
+    branches: [
+      { label: 'Stay out', child: { kind: 'leaf', payoff: [0, 2] } },
+      { label: 'Enter', child: {
+        kind: 'node', player: 1, label: 'Incumbent',
+        branches: [
+          { label: 'Accommodate', child: { kind: 'leaf', payoff: [2, 1] } },
+          { label: 'Fight', child: { kind: 'leaf', payoff: [-1, 0] } },
+        ],
+      } },
+    ],
+  }}
+  predict={{
+    question: 'If you enter, what does the incumbent actually do?',
+    options: [{ key: 'fight', label: 'Fight, to punish you' }, { key: 'acc', label: 'Accommodate and share' }],
+    reveal: 'Once you have entered, fighting earns the incumbent 0 and accommodating earns 1, so it accommodates. Knowing that, you enter (2 beats 0). The threat to fight is real only until the moment it would have to be carried out.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The incumbent would love you to believe it will fight, because fear keeps you out. But suppose you enter anyway. Now fighting costs the incumbent (0 instead of 1), so it will not actually do it. A rational entrant looks ahead to that moment, sees the threat evaporate, and enters. Working backward from the last decision strips out every move a player would never really make.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+An **extensive-form game** is a tree: nodes are decision points labeled with whose turn it is, edges are the moves, and leaves carry a payoff for each player. A **subgame** is any node together with everything below it.
+
+<DefinitionAside label="backward induction">
+Start at the last decision nodes, where the payoffs are known. At each, the mover picks the branch best for them, and you replace the node with that branch's payoff. Repeat up the tree. The path of choices this produces is the backward-induction solution.
+</DefinitionAside>
+
+Solve the incumbent's node first: Accommodate pays $1$, Fight pays $0$, so it accommodates, and the node is worth $(2,1)$. Now the entrant compares entering, worth $2$, against staying out, worth $0$, and enters. The solution is $(\text{In},\text{Accommodate})$ with payoff $(2,1)$.
+
+Notice what backward induction discards. "Stay out because the incumbent will fight" would keep the entrant at $0$, but it rests on a move the incumbent would never make once tested. That is a non-credible threat, and the next lesson gives it a name.
+</Section>
+
+<Section id="reality">
+## A note from the real world
+
+<Callout kind="reality-check">
+Backward induction can predict strange things. In the centipede game, two players alternately choose to grab a growing pot or pass; backward induction says grab immediately, on the very first move. Real players pass for several rounds, growing the pot and splitting more than the theory allows. The Behavioral unit returns to why people depart from the backward-induction path, and when it costs them.
+</Callout>
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Fold the tree, then change a leaf">
+Solve the incumbent's node: $\text{Accommodate} = 1 > \text{Fight} = 0$, so replace the node with its value $(2,1)$. Then the entrant compares $\text{In} = 2$ against $\text{Out} = 0$ and enters. Outcome $(\text{In},\text{Accommodate})$, payoff $(2,1)$.
+
+**Faded.** Suppose fighting were cheap for the incumbent, so In-then-Fight paid $(-1, 2)$ instead of $(-1, 0)$. Now the incumbent's node compares Accommodate $1$ against Fight $2$: it fights. Foreseeing $-1$ from entering, the entrant stays out for $0$. Changing one leaf flips the whole prediction, because it made the threat credible.
+
+**Solo.** Take a three-move centipede and fold it from the last node back. You will find the grab-now result, and can check it against what you would actually do.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Solve sequential games from the end backward. Doing so keeps only the moves players would truly make, and throws out threats that no one would carry through.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="backward-induction"
+  id="q1"
+  badge="apply"
+  question="Why does the incumbent accommodate rather than fight, once the entrant has entered?"
+  options={[
+    { text: "Because at that point accommodating pays 1 and fighting pays 0, so fighting is worse for the incumbent", correct: true, feedback: "Backward induction evaluates the incumbent's move where it is actually made. There, accommodating (1) beats fighting (0), so the fight never happens." },
+    { text: "Because the incumbent is not allowed to fight", feedback: "It is allowed to; fighting is a legal move. It simply pays less than accommodating once entry has occurred, so a rational incumbent avoids it." },
+    { text: "Because fighting is against the incumbent's long-run interest only", feedback: "In this one-shot tree, fighting is worse even immediately: 0 versus 1. No long-run story is needed." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="backward-induction"
+  id="q2"
+  badge="analyse"
+  question="The incumbent announces it will fight any entrant. Should a rational entrant believe it?"
+  options={[
+    { text: "No, because once entry happens, fighting is worse for the incumbent, so the threat would not be carried out", correct: true, feedback: "A threat is credible only if the threatener would actually prefer to execute it when the moment comes. Here it would not, so the announcement is empty and the entrant enters." },
+    { text: "Yes, an announced intention is binding", feedback: "Words do not bind. Backward induction asks what the incumbent would truly do at its node, and there fighting loses. The threat is not credible." },
+    { text: "Yes, because fighting deters entry", feedback: "Deterrence would help the incumbent only if the entrant believed it, and a rational entrant sees the incumbent would not follow through. So it does not deter." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="backward-induction"
+  id="q3"
+  badge="brings back: nash equilibrium"
+  question="The normal form of this game has a Nash equilibrium where the entrant stays out and the incumbent would fight. Why is backward induction stricter?"
+  options={[
+    { text: "Because it requires the incumbent's move to be optimal at its own node, ruling out the non-credible fight", correct: true, feedback: "Stay-out-and-fight is a Nash equilibrium in the normal form, but the fight is never tested there. Backward induction checks every decision node and discards the threat, keeping only enter-and-accommodate." },
+    { text: "Because backward induction ignores Nash equilibria", feedback: "It does not ignore them; it selects among them. The backward-induction outcome is a Nash equilibrium, just not the one built on an empty threat." },
+    { text: "Because the normal form has no Nash equilibrium", feedback: "It has two. Backward induction picks the credible one and drops the other." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["selten1965", "rosenthal1981"]} />

@@ -1,0 +1,139 @@
+---
+title: "Cooperation and punishment"
+tier: expert
+unit: 17
+unitName: "Behavioral and experimental"
+order: 60
+kind: lesson
+summary: "Contributions to a shared good decay on their own, but the option to punish revives them."
+tags: ["behavioral", "public-goods", "punishment"]
+estMinutes: 6
+mvp: true
+prereqs: ["public-goods"]
+concepts: ["public-goods", "punishment", "conditional-cooperation"]
+refs: ["fehrGachter2000"]
+anchorEmoji: "👥"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import PublicGoodsPunishment from '@/components/interactive/PublicGoodsPunishment.svelte';
+
+<div class="anchor"><span class="em">👥</span><p>Put people in a repeated public-goods game and contributions start high, then slide toward zero as the cooperative give up on the free-riders. Give them a way to punish, even at a cost to themselves, and cooperation springs back to life.</p></div>
+
+# Cooperation and punishment
+
+<p class="lead">The commons lesson predicted zero contribution. Real groups start out generous, then unravel, exactly as free-riding erodes trust. The twist experiments reveal: let players pay to punish free-riders, and cooperation not only survives but climbs, even though punishing is individually costly.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In the public-goods game, the selfish contribution is...", options: ["Everything", "Zero", "Half"], answer: 1 },
+    { q: "A conditional cooperator contributes...", options: ["Always fully", "If others do too", "Never"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Four players contribute to a shared pot. One is a persistent free-rider. Play rounds with punishment off, then turn it on and watch contributions respond.
+
+<PublicGoodsPunishment
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Repeated public goods, with and without costly punishment"
+  predict={{
+    question: 'What happens to contributions when players can pay to punish free-riders?',
+    options: [{ key: 'decay', label: 'They keep decaying' }, { key: 'rebound', label: 'They rebound and hold' }],
+    reveal: 'They rebound. Without punishment, contributions decay toward zero as cooperators tire of carrying free-riders. With costly punishment available, the threat disciplines free-riders and contributions climb back up, even though punishing costs the punisher.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Most people are conditional cooperators: they give if others do. A few free-ride, and each round the cooperators see themselves exploited and lower their giving to match, so contributions spiral down. Punishment breaks the spiral. Even though paying to dock a free-rider costs you and helps everyone (a second-order public good), enough people do it out of a taste for fairness that free-riding stops paying. Contributions recover, sustained by a threat that standard self-interest says no one should carry out.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+The stage game is the usual linear public good: with $n = 4$, endowment $20$, and multiplier $1.6$, the marginal per-capita return is $0.4 < 1$, so contributing $\$1$ returns only $\$0.40$ to you. The dominant contribution is $0$, yet all contributing fully would give each $\$32$ versus $\$20$ from hoarding, since the total return on each dollar, $4 \times 0.4 = 1.6$, exceeds $1$.
+
+<DefinitionAside label="conditional cooperation and punishment">
+Experimentally, contributions start around 40 to 60 percent of the endowment and decay over repeated rounds without punishment, as conditional cooperators withdraw in response to free-riders. Adding a costly punishment stage (pay $1$ to reduce a free-rider's payoff by $3$) reverses the decay: contributions rise and stay high. Punishing is itself a public good (it benefits everyone but costs the punisher), so pure self-interest predicts no punishment; that people punish anyway is the behavioral finding.
+</DefinitionAside>
+
+The standard theory has two failures here: it predicts zero contribution from the start (real groups begin generous) and no punishment (real people punish). Both gaps are explained by social preferences: conditional cooperation and a willingness to sacrifice to enforce fairness.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Why punishment sustains giving">
+Contributing $\$1$ returns $0.4 \times 4 / 4 = \$0.40$ to you, a private loss of $\$0.60$, so the money-maximizing choice is $\$0$. Without enforcement, conditional cooperators watch the free-rider keep everything and cut their own giving to avoid being suckers, and contributions decay toward zero.
+
+Now let each player pay $\$1$ to cut a free-rider's payoff by $\$3$. A free-rider who kept $\$20$ but draws several punishments can end up below what a contributor earns, so free-riding no longer pays. Anticipating punishment, the free-rider contributes, and the cooperators, no longer exploited, keep giving. The punishment is costly and rarely needed on the equilibrium path, but its availability is what holds cooperation up.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Without enforcement, cooperation in a public good decays as free-riders erode trust. Costly punishment, which self-interest says no one should undertake, revives and sustains contributions in real groups.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="cooperation-and-punishment"
+  id="q1"
+  badge="apply"
+  question="Without punishment, contributions in a repeated public-goods game tend to..."
+  options={[
+    { text: "Start moderately high and decay toward zero", correct: true, feedback: "Real groups begin around half the endowment (not zero), but conditional cooperators withdraw as free-riders persist, so contributions slide down over rounds." },
+    { text: "Start at zero and stay there", feedback: "The standard theory predicts zero, but experiments show contributions start moderately high and then decay. The starting generosity is itself a departure from pure self-interest." },
+    { text: "Rise steadily on their own", feedback: "Without a punishment mechanism they fall, not rise. Only adding punishment reverses the decline." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="cooperation-and-punishment"
+  id="q2"
+  badge="analyse"
+  question="Why does standard self-interest predict that no one will punish free-riders?"
+  options={[
+    { text: "Punishing is costly to the punisher but benefits everyone, making it a second-order public good that a selfish player would free-ride on", correct: true, feedback: "You bear the cost of punishing while the improved cooperation helps the whole group. A purely self-interested player would let others do the punishing, so the theory predicts none happens, yet people punish anyway." },
+    { text: "Because punishment is against the rules", feedback: "Punishment is an allowed action in the experiment. Self-interest predicts it will not be used because it is personally costly, not because it is forbidden." },
+    { text: "Because free-riders cannot be identified", feedback: "Free-riders are observable in these experiments. The prediction of no punishment comes from its private cost, not from anonymity." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="cooperation-and-punishment"
+  id="q3"
+  badge="brings back: public goods"
+  question="How does this refine the commons prediction of zero contribution?"
+  options={[
+    { text: "Zero is the self-interest benchmark, but real groups start generous and, with punishment, sustain high contributions", correct: true, feedback: "The commons lesson gave the dominant-strategy prediction of zero. Behavior departs from it in two ways: initial generosity and, crucially, the ability of costly punishment to hold cooperation up." },
+    { text: "It confirms contributions are always zero", feedback: "It shows the opposite: contributions start well above zero and, with punishment, stay high, contradicting the pure self-interest prediction." },
+    { text: "It shows punishment makes everyone worse off", feedback: "Punishment can raise overall welfare by sustaining cooperation, though its cost can offset some gains. It does not simply make everyone worse off." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["fehrGachter2000"]} />

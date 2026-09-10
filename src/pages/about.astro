@@ -1,0 +1,77 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { resolveRefs } from '@/content/references';
+
+const total = (await getCollection('lessons')).length;
+const coreRefs = resolveRefs([
+  'vonNeumannMorgenstern1944',
+  'nash1950',
+  'schelling1960',
+  'axelrod1984',
+  'osborneRubinstein1994',
+  'gibbons1992',
+]);
+---
+<BaseLayout active="about" totalLessons={total} title="About">
+  <div class="about">
+    <div class="eyebrow">About</div>
+    <h1>Play first, then formalise</h1>
+    <p>Game theory has a habit of being counterintuitive. Betrayal can be the rational move. Being predictable gets you beaten. A small preference can segregate a whole city. You believe these once you have felt them, so every lesson lets you act before it explains, then hands you the definition and the argument.</p>
+
+    <div class="princ"><span class="n">1</span><div>You commit a guess or a move first. The gap between your guess and what happens is where the learning is.</div></div>
+    <div class="princ"><span class="n">2</span><div>The concrete game comes before the notation. Symbols arrive once the idea is already in your hands.</div></div>
+    <div class="princ"><span class="n">3</span><div>Earlier ideas keep coming back in later quizzes, so they stick instead of fading.</div></div>
+
+    <section class="sec">
+      <h2>References</h2>
+      <ol class="refs">{coreRefs.map((html) => <li set:html={html} />)}</ol>
+    </section>
+
+    <section class="sec">
+      <h2>Your data</h2>
+      <p>Your progress is stored only in this browser. Nothing is sent anywhere. You can take it with you or wipe it any time.</p>
+      <div style="display:flex;gap:9px;flex-wrap:wrap">
+        <button class="btn ghost" id="exportBtn">Export progress</button>
+        <button class="btn ghost" id="resetBtn">Reset progress</button>
+      </div>
+    </section>
+
+    <div class="note">This is an early build. The first lessons are live; the full course runs to 63 lessons plus a set of real-world cases, from the Prisoner's Dilemma to mechanism design.</div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { reset, exportJSON } from '@/lib/progress';
+
+  function toast(msg: string) {
+    const t = document.getElementById('toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  document.getElementById('resetBtn')?.addEventListener('click', () => {
+    if (confirm('Reset all progress on this device? This cannot be undone.')) {
+      reset();
+      toast('Progress reset');
+    }
+  });
+
+  document.getElementById('exportBtn')?.addEventListener('click', () => {
+    try {
+      const blob = new Blob([exportJSON()], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'game-theory-progress.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch {
+      toast('Export not available here');
+    }
+  });
+</script>

@@ -1,0 +1,99 @@
+---
+title: "Pure-strategy Nash equilibrium"
+tier: basic
+unit: 2
+unitName: "Static solution concepts"
+order: 6
+kind: lesson
+summary: "The point where no one wants to move on their own."
+tags: ["solution-concepts", "nash"]
+estMinutes: 5
+mvp: true
+prereqs: ["rationalizability"]
+concepts: ["nash-equilibrium", "best-response"]
+refs: ["nash1950", "osborne2004"]
+anchorEmoji: "🎯"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import PayoffMatrix from '@/components/interactive/PayoffMatrix.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+
+<div class="anchor"><span class="em">🎯</span><p>A couple wants to spend the evening together but disagree on where. Two outcomes are stable: both at the opera, or both at the football. Either one, once reached, holds.</p></div>
+
+# Pure-strategy Nash equilibrium
+
+<p class="lead">A <span class="in-acc">Nash equilibrium</span> is a set of choices where no player can do better by changing their own move alone. Find it by looking for cells that are a best response for everyone at once.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A strategy that is never a best response should be...", options: ["Kept", "Deleted", "Played first"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="find">
+## Find the stable cells
+
+Tap a cell you think is stable, then reveal each player's best responses. A cell glows when it is a best response for both, and that is a Nash equilibrium.
+
+<PayoffMatrix
+  client:visible
+  mode="nash"
+  exhibit="Exhibit 1"
+  caption="Battle of the sexes (you, them)"
+  rows={[{ key: 'O', label: 'You: opera' }, { key: 'F', label: 'You: football' }]}
+  cols={[{ key: 'O', label: 'They: opera' }, { key: 'F', label: 'They: football' }]}
+  payoffs={{ O: { O: [2, 1], F: [0, 0] }, F: { O: [0, 0], F: [1, 2] } }}
+/>
+
+<DefinitionAside label="Nash equilibrium">
+A profile $s^*$ is a Nash equilibrium if, for every player $i$, $u_i(s_i^*, s_{-i}^*) \ge u_i(s_i, s_{-i}^*)$ for all $s_i$. In words: given what everyone else does, no one has a profitable unilateral move.
+</DefinitionAside>
+
+This game has two pure equilibria, both-opera and both-football. Both players prefer coordinating to missing each other, but they disagree about which cell to land on.
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">A Nash equilibrium is mutual best response, not group happiness. A game can have two, one, or none, and the stable outcome need not be the one everyone would pick together.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="pure-nash"
+  id="q1"
+  badge="apply"
+  question="How many pure-strategy Nash equilibria does the game above have?"
+  options={[
+    { text: "Two", correct: true, feedback: "Both-opera and both-football are each a best response for both players. Two stable cells." },
+    { text: "One", feedback: "Look again: there are two cells where neither player wants to deviate alone." },
+    { text: "None", feedback: "Some games have no pure Nash, but this coordination game has two." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="pure-nash"
+  id="q2"
+  badge="concept"
+  question="Is a Nash equilibrium always the best outcome for the group?"
+  options={[
+    { text: "No, it only means no one can improve by moving alone", correct: true, feedback: "Stability is about unilateral deviations, not group welfare. The next lesson shows an equilibrium that is bad for everyone." },
+    { text: "Yes, by definition", feedback: "Not so. Nash is about individual stability, which can sit well below the best group outcome." },
+    { text: "Only when there are two of them", feedback: "The number of equilibria has nothing to do with whether they are group-optimal." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["nash1950", "osborne2004"]} />

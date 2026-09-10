@@ -1,0 +1,166 @@
+---
+title: "Correlated equilibrium"
+tier: intermediate
+unit: 5
+unitName: "Correlation and complementarities"
+order: 16
+kind: lesson
+summary: "A shared signal can steer players to an outcome that beats every Nash equilibrium."
+tags: ["correlation", "equilibrium", "coordination"]
+estMinutes: 6
+mvp: true
+prereqs: ["mixed-strategies", "focal-points"]
+concepts: ["correlated-equilibrium", "nash-equilibrium", "mixed-strategy"]
+refs: ["aumann1974"]
+anchorEmoji: "🚦"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import PayoffMatrix from '@/components/interactive/PayoffMatrix.svelte';
+import CorrelatedEq from '@/components/interactive/CorrelatedEq.svelte';
+
+<div class="anchor"><span class="em">🚦</span><p>Two cars reach a crossing at the same moment. If both go, they crash; if both wait, they sit there. A traffic light solves this without changing anyone's incentives. It just tells each driver, privately, what to do, and both are happy to obey.</p></div>
+
+# Correlated equilibrium
+
+<p class="lead">Nash equilibrium lets players randomize on their own, independently. But a shared signal, a light, a mediator, a public event, can correlate their choices, and that opens outcomes no independent play can reach. In Chicken, a coin the players cannot control does better for both than any Nash equilibrium.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "You mix your own moves to...", options: ["Make the opponent indifferent", "Hedge your risk", "Signal your type"], answer: 0 },
+    { q: "A focal point selects among equilibria using...", options: ["A higher payoff", "Something outside the payoffs", "A coin flip"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="chicken">
+## The game: Chicken
+
+Two drivers race head-on. Each can Swerve or go Straight. If both go Straight they crash (worst for both). If one swerves and the other does not, the one who held their nerve wins. Find the pure equilibria.
+
+<PayoffMatrix
+  client:visible
+  mode="nash"
+  exhibit="Exhibit 1"
+  caption="Chicken, payoffs (you, them)"
+  rows={[{ key: 'Sw', label: 'You swerve', tone: 'coop' }, { key: 'St', label: 'You go straight', tone: 'def' }]}
+  cols={[{ key: 'Sw', label: 'They swerve', tone: 'coop' }, { key: 'St', label: 'They go straight', tone: 'def' }]}
+  payoffs={{ Sw: { Sw: [6, 6], St: [2, 7] }, St: { Sw: [7, 2], St: [0, 0] } }}
+/>
+
+Two pure equilibria, and each hands the win to one driver: not much help when you are the one told to swerve. There is a symmetric mixed equilibrium too, but it risks the crash and pays only about $4.67$ each.
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Now add a mediator. Each round it sends you a private recommendation, Swerve or Straight, drawn so that the pair never both go Straight. The other driver follows their own signal. Should you follow yours?
+
+<CorrelatedEq
+  client:visible
+  exhibit="Exhibit 2"
+  caption="Chicken with a traffic-light mediator"
+  predict={{
+    question: 'Can following a shared signal beat playing the best Nash equilibrium?',
+    options: [{ key: 'no', label: 'No, Nash is the ceiling' }, { key: 'yes', label: 'Yes, the signal can do better' }],
+    reveal: 'Yes. Obeying the light earns 5 on average, above the 4.67 of the mixed Nash, and nobody wants to disobey. The trick is that the recommendations are correlated: you never both get told Straight.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Independent mixing sometimes lands you both on Straight, which is the crash. A shared signal removes exactly that case: it recommends the three safe cells only, never the disaster. And you obey not because anyone forces you, but because, given what your recommendation tells you about the other driver, following it is your best reply. The correlation, not any enforcement, is what buys the extra payoff.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Mixed Nash first. Let each driver go Straight with probability $q$. The opponent is indifferent when $6 - 4q = 7 - 7q$, so $q = \tfrac13$, and the value is $6 - 4\cdot\tfrac13 = \tfrac{14}{3} \approx 4.67$ each.
+
+Now the mediator draws uniformly from the three cells that are not (Straight, Straight): $(\text{Sw},\text{Sw})$, $(\text{Sw},\text{St})$, $(\text{St},\text{Sw})$, and privately tells each player their part. Expected payoffs are
+
+$$
+\tfrac13(6) + \tfrac13(2) + \tfrac13(7) = 5 \quad\text{for each player},
+$$
+
+above the mixed Nash. For this to be an equilibrium, obeying must be a best response given what the recommendation reveals about the opponent.
+
+<DefinitionAside label="correlated equilibrium">
+A correlated equilibrium is a probability distribution over outcomes, run by a device that privately recommends a move to each player, such that no player can gain by deviating from their recommendation given the belief it induces about the others. Every Nash equilibrium is one (an uninformative device), but as here, some correlated equilibria beat every Nash equilibrium.
+</DefinitionAside>
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Check that obeying is a best response">
+Told **Swerve**: this happens in $(\text{Sw},\text{Sw})$ and $(\text{Sw},\text{St})$, so the opponent is equally likely to Swerve or go Straight. Obeying (Swerve) pays $\tfrac12(6) + \tfrac12(2) = 4$; deviating (Straight) pays $\tfrac12(7) + \tfrac12(0) = 3.5$. Obey.
+
+Told **Straight**: this happens only in $(\text{St},\text{Sw})$, so the opponent surely swerves. Obeying (Straight) pays $7$; deviating (Swerve) pays $6$. Obey.
+
+Both recommendations are self-enforcing, so the device is a correlated equilibrium, and it averages $(5,5)$, beating every Nash equilibrium of Chicken.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Let a shared signal correlate players' choices and you can reach outcomes independent randomization cannot. Obedience needs no enforcement, only that following the recommendation is each player's best reply.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="correlated-equilibrium"
+  id="q1"
+  badge="apply"
+  question="The mediator averages (5,5), above the mixed Nash 4.67. Where does the extra payoff come from?"
+  options={[
+    { text: "The signal never recommends the crash cell, and it correlates the two players so they avoid it together", correct: true, feedback: "Independent mixing occasionally puts both on Straight. The device rules that out by correlating the recommendations, capturing value no independent play can." },
+    { text: "The mediator forces players to cooperate", feedback: "Nothing is forced. Players obey only because, given the recommendation, obeying is their best reply. The gain comes from correlation, not compulsion." },
+    { text: "The payoffs are higher than in the original game", feedback: "The payoffs are unchanged. The device only changes the distribution over the same cells, avoiding the crash." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="correlated-equilibrium"
+  id="q2"
+  badge="analyse"
+  question="You are told Swerve. Why is obeying rational rather than grabbing Straight for the higher 7?"
+  options={[
+    { text: "Given the Swerve recommendation, the opponent is only half likely to swerve, so deviating averages 3.5 versus obeying's 4", correct: true, feedback: "The recommendation is informative. Told Swerve, the opponent Swerves or goes Straight with equal chance, so gambling on Straight risks the crash and pays less on average than obeying." },
+    { text: "Because the mediator penalizes disobedience", feedback: "There is no penalty. Obeying is simply the higher-expected-payoff move given what the recommendation implies about the opponent." },
+    { text: "Because Straight is never the better move in Chicken", feedback: "Straight is better when you know the opponent swerves, which is exactly why you take it when told Straight. Told Swerve, the odds do not favour it." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="correlated-equilibrium"
+  id="q3"
+  badge="brings back: mixed strategies"
+  question="How does a correlated equilibrium relate to the mixed-strategy Nash equilibria you already know?"
+  options={[
+    { text: "Every Nash equilibrium is a correlated equilibrium with an uninformative signal, but some correlated equilibria beat all of them", correct: true, feedback: "Nash equilibria are the special case where the device tells players nothing useful, so they mix independently. Allowing informative, correlated signals is strictly more powerful, as Chicken shows." },
+    { text: "They are the same thing under a different name", feedback: "They are not. A correlated equilibrium can achieve payoffs, like (5,5) here, that no Nash equilibrium of the game reaches." },
+    { text: "A correlated equilibrium is always worse than the best Nash equilibrium", feedback: "The reverse can hold: here the device averages 5 per player, above the 4.67 of the mixed Nash and better on average than the lopsided pure equilibria." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["aumann1974"]} />

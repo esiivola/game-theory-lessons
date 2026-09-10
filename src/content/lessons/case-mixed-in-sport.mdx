@@ -1,0 +1,139 @@
+---
+title: "Mixed strategies in sport"
+tier: applied
+unit: 18
+unitName: "Game theory in the wild"
+order: 8
+label: "A8"
+kind: case
+placement: "after:zero-sum-minimax"
+summary: "Penalty kicks and tennis serves as minimax in the wild: mix at the frequencies that equalize success."
+tags: ["applied", "mixed-strategies", "minimax"]
+estMinutes: 6
+mvp: true
+prereqs: ["mixed-strategies", "penalty-kicks"]
+concepts: ["minimax", "unpredictability", "exploitability"]
+refs: ["chiappori2002", "palaciosHuerta2003"]
+anchorEmoji: "⚽"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import PenaltyShootout from '@/components/interactive/PenaltyShootout.svelte';
+
+<div class="anchor"><span class="em">⚽</span><p>A striker steps up for a penalty. Aim always for your strong side and the keeper learns it; aim purely at random and you waste your stronger foot. The right answer is a precise mix, and studies of thousands of real kicks show pros play remarkably close to it.</p></div>
+
+# Mixed strategies in sport
+
+<p class="lead">Minimax is not just a theorem; it is on the field. Penalty kicks, tennis serves, and pitch selection are zero-sum guessing games where any predictable pattern gets punished. The equilibrium is to mix at the frequencies that make the opponent indifferent, and that is usually not 50/50.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "In a zero-sum guessing game, the equilibrium mix makes the opponent...", options: ["Always wrong", "Indifferent between responses", "Always right"], answer: 1 },
+    { q: "A predictable pattern in your play is something an opponent can...", options: ["Ignore", "Exploit", "Reward"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Take penalties against a bot that learns your pattern. Any bias gets punished, and the exploitability meter shows how much a pattern costs you.
+
+<PenaltyShootout
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Penalties vs an adaptive keeper that reads your history"
+  predict={{
+    question: 'To be unpredictable at penalties, should you kick each side 50/50?',
+    options: [{ key: 'fifty', label: 'Yes, exactly 50/50' }, { key: 'freq', label: 'No, the equilibrium mix is usually not 50/50' }],
+    reveal: 'No. The equilibrium mix equalizes your scoring across sides given that they are not equally strong. With a stronger natural side the optimal mix leans that way but stays unpredictable. Pure 50/50 wastes your better side; always-strong-side gets read and punished.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The kicker wants to score; the keeper wants to save; one's gain is the other's loss, so this is zero-sum. If you favour your strong side too much, an adaptive keeper dives that way more often and cuts your success. If you kick purely 50/50, you underuse your more accurate side. The minimax mix sits exactly where your expected scoring is the same whichever way the keeper guesses, so the keeper has no way to raise the save rate. That frequency is not 50/50, because the two sides are not equally good; it tilts toward the stronger side but stays unpredictable. Empirical studies of professional kickers find their actual frequencies strikingly close to this prediction.
+</Callout>
+</Section>
+
+<Section id="math">
+## The real evidence
+
+<DefinitionAside label="minimax on the pitch">
+In the penalty game the kicker mixes over sides and the keeper mixes over dives; success rates differ by side (kicking to your natural side is more accurate, but the keeper knows that too). The equilibrium mix makes the kicker's scoring equal across the keeper's responses, so neither can improve unilaterally. Chiappori, Levitt and Groseclose (2002) and Palacios-Huerta (2003) tested this on thousands of real penalties and found professionals mix at close to the equilibrium frequencies, and serially independently (no detectable pattern), exactly as minimax requires.
+</DefinitionAside>
+
+The point is not "randomize blindly" but "randomize at the right rate". Because the natural side is more accurate, the equilibrium leans toward it, roughly a 36 to 64 split rather than 50/50 in the standard scoring, but every side must be played often enough that the keeper cannot profitably favour one dive. Any drift from the equilibrium frequency, or any exploitable pattern (alternating, streaks), lets an adaptive opponent raise their save rate. The remarkable empirical finding is how well top professionals approximate both the right frequencies and genuine serial independence.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Why the mix is not 50/50, and why patterns lose">
+Suppose kicking to your natural side scores more often when the keeper guesses wrong, but the keeper, knowing this, is tempted to dive that way. To keep the keeper indifferent, you play your natural side often enough that diving there is no better than diving the other way. Because the sides differ in accuracy, that indifference point is not 50/50; with the standard scoring the kicker goes to one side about 36% of the time. At that mix, the keeper cannot raise the save rate by favouring either dive.
+
+Now break the mix. Always take your strong side: the keeper simply commits to that dive and your scoring collapses. Alternate sides to feel random: alternation is a pattern, and an adaptive keeper reads it and anticipates each kick. Even a slight bias, played repeatedly, hands the keeper an edge. That is why the exploitability meter climbs whenever your play departs from equilibrium frequencies or serial independence, and why the striking empirical result is how close professionals stay to both.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">In zero-sum sport, the winning strategy is to mix at the exact frequencies that make your opponent indifferent, usually not 50/50, and with no detectable pattern. Real professionals play remarkably close to this minimax prediction; any bias or pattern is exploitable.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="case-mixed-in-sport"
+  id="q1"
+  badge="apply"
+  question="A striker says 'to be unpredictable I kick each side exactly 50/50.' What is wrong?"
+  options={[
+    { text: "The sides are not equally accurate, so the equilibrium mix is usually not 50/50; 50/50 wastes the stronger side", correct: true, feedback: "The minimax mix equalizes scoring given that one side is more accurate, so it leans toward the stronger side (about 36/64 in the standard scoring), not 50/50. Blind 50/50 leaves value on the table." },
+    { text: "Nothing, 50/50 is always optimal for unpredictability", feedback: "Unpredictability is necessary but not sufficient. The right frequencies depend on the payoffs, and they are generally not 50/50." },
+    { text: "You should always take your strongest side instead", feedback: "That is the most exploitable choice: an adaptive keeper simply dives that way. The answer is the right mix, not a pure strategy." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-mixed-in-sport"
+  id="q2"
+  badge="analyse"
+  question="Why does alternating sides fail to be a good randomization?"
+  options={[
+    { text: "Alternation is a detectable pattern, so an adaptive opponent can anticipate each kick and raise their save rate", correct: true, feedback: "Randomization means serial independence, not a rule. Alternating is predictable; a keeper who spots it knows where you go next. Equilibrium play must have no exploitable pattern." },
+    { text: "Because alternating is too close to 50/50", feedback: "The problem is not the frequency but the pattern: alternation is predictable regardless of the ratio, so it can be read and exploited." },
+    { text: "Because you should never change sides", feedback: "You must vary sides; the issue is doing so unpredictably, not in a fixed alternating sequence that an opponent can learn." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="case-mixed-in-sport"
+  id="q3"
+  badge="brings back: minimax"
+  question="What did empirical studies of real penalty kicks find about professional players?"
+  options={[
+    { text: "They mix at close to the equilibrium frequencies and with no detectable serial pattern, as minimax predicts", correct: true, feedback: "Chiappori-Levitt-Groseclose and Palacios-Huerta found pros play strikingly near the equilibrium mix and serially independently, one of the cleanest field confirmations of minimax." },
+    { text: "They kick 50/50 regardless of their strong side", feedback: "The data show frequencies tuned to the payoffs (not 50/50) and serial independence, matching the equilibrium mix rather than a naive 50/50." },
+    { text: "They always take their natural side", feedback: "That would be trivially exploitable and is not what the data show. Professionals mix near the equilibrium frequencies instead." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["chiappori2002", "palaciosHuerta2003"]} />

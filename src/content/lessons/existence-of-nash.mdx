@@ -1,0 +1,147 @@
+---
+title: "Existence of Nash equilibrium"
+tier: basic
+unit: 2
+unitName: "Static solution concepts"
+order: 10
+kind: lesson
+summary: "Every finite game has an equilibrium, even when no fixed move is safe."
+tags: ["solution-concepts", "nash", "existence"]
+estMinutes: 5
+mvp: true
+prereqs: ["mixed-strategies"]
+concepts: ["nash-equilibrium", "mixed-strategy", "existence"]
+refs: ["nash1950", "osborne2004"]
+anchorEmoji: "✊"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import RPSDuel from '@/components/interactive/RPSDuel.svelte';
+
+<div class="anchor"><span class="em">✊</span><p>Rock beats scissors, scissors beats paper, paper beats rock. No move is safe, and any pattern can be read and punished. So is there any way to play that a clever opponent cannot beat?</p></div>
+
+# Existence of Nash equilibrium
+
+<p class="lead">Matching Pennies had no equilibrium in fixed moves, but it had one in probabilities. Rock-Paper-Scissors makes you wonder whether the trick always works. It does. Nash proved that every finite game has at least one equilibrium, as long as you allow mixed strategies.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "You mix between two moves in order to...", options: ["Hedge your own risk", "Make the opponent indifferent", "Confuse the referee"], answer: 1 },
+    { q: "Matching Pennies has how many pure-strategy Nash equilibria?", options: ["One", "Two", "None"], answer: 2 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+The bot watches your history and shifts toward whatever you play most. Try to find a way to play that it cannot exploit over a long run.
+
+<RPSDuel
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Rock-Paper-Scissors against an adaptive bot"
+  predict={{
+    question: 'Is there any way of playing that a bot reading your every move still cannot beat?',
+    options: [{ key: 'yes', label: 'Yes, one exists' }, { key: 'no', label: 'No, it will always adapt' }],
+    reveal: 'There is: play each move one-third of the time, in no pattern. Then the bot has nothing to lean on, and over many rounds you break even. Lean on any move and it counters you.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+Any lopsided habit gives the bot a target. Play Rock too often and it plays Paper. The only frequency it cannot punish is exactly one-third each, with no pattern in the order, because then every counter it might try pays the same against you. That even mix is the mixed-strategy equilibrium of the game.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+Rock-Paper-Scissors is symmetric and zero-sum, and it has no pure-strategy equilibrium. Try the symmetric mix: each player plays every move with probability $\tfrac13$.
+
+Against that mix, any single move you make wins one-third of the time, loses one-third, and ties one-third, for an expected payoff of
+
+$$
+\tfrac13(1) + \tfrac13(-1) + \tfrac13(0) = 0.
+$$
+
+Every pure move earns $0$ against the uniform mix, so you are indifferent among all of them, and mixing $\tfrac13, \tfrac13, \tfrac13$ is a best response to itself. That is the equilibrium.
+
+<DefinitionAside label="Nash's existence theorem">
+Every finite game (finitely many players, each with finitely many pure strategies) has at least one Nash equilibrium in mixed strategies. The proof puts a continuous best-response map on the space of mixed profiles and applies a fixed-point theorem (Brouwer, via Kakutani): a fixed point of that map is a profile where everyone is already best-responding, which is exactly an equilibrium.
+</DefinitionAside>
+
+The theorem guarantees existence. It says nothing about how many equilibria there are, or which one gets played.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Verify the uniform mix is an equilibrium">
+Fix the opponent at $\tfrac13$ each. Compute your payoff to Rock: it beats Scissors ($+1$, probability $\tfrac13$), loses to Paper ($-1$, probability $\tfrac13$), ties Rock ($0$, probability $\tfrac13$), so the expected payoff is $0$. The same holds for Paper and for Scissors, by symmetry.
+
+Since all three pure moves pay $0$, any mix of them also pays $0$, so you cannot do better than the uniform mix. Neither can the opponent. Both playing $\tfrac13$ each is therefore a Nash equilibrium, and by symmetry it is the only one.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Allow mixed strategies and no finite game is ever unsolvable. There is always at least one equilibrium; the open question is which of them, if any, players actually reach.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="existence-of-nash"
+  id="q1"
+  badge="recognise"
+  question="A finite two-player game has no cell where both players are best-responding. What does Nash's theorem tell you?"
+  options={[
+    { text: "It still has an equilibrium, in mixed strategies", correct: true, feedback: "No pure equilibrium does not mean no equilibrium. Every finite game has at least one, once you allow players to randomize." },
+    { text: "The game is unsolvable", feedback: "Nothing finite is unsolvable in this sense. The equilibrium is just in probabilities rather than fixed moves." },
+    { text: "It has infinitely many equilibria", feedback: "Existence says at least one. The count could be one, several, or many, but the theorem does not promise infinitely many." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="existence-of-nash"
+  id="q2"
+  badge="apply"
+  question="At the 1/3-1/3-1/3 mix, what is each player's expected payoff in Rock-Paper-Scissors?"
+  options={[
+    { text: "Zero", correct: true, feedback: "Every move wins, loses, and ties equally often against the uniform mix, so the expected payoff is 0. The game is a wash, which is why neither side can be exploited." },
+    { text: "One-third", feedback: "Wins and losses cancel: a third chance of +1 and a third chance of -1 net to zero, plus a third chance of a tie." },
+    { text: "It depends on your first move", feedback: "Against a uniform opponent every move pays the same, 0, regardless of what you open with." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="existence-of-nash"
+  id="q3"
+  badge="brings back: nash equilibrium"
+  question="Nash's theorem guarantees an equilibrium exists. What does it not tell you?"
+  options={[
+    { text: "Which equilibrium gets played when there are several", correct: true, feedback: "Existence is silent on selection. When a game has multiple equilibria, picking among them needs extra ideas, like the focal points and refinements coming up." },
+    { text: "That the game is finite", feedback: "Finiteness is an assumption of the theorem, not a conclusion. You supply it; the theorem hands back existence." },
+    { text: "That mixed strategies are allowed", feedback: "Allowing mixed strategies is what makes the guarantee work. That is a premise, not the missing piece." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["nash1950", "osborne2004"]} />

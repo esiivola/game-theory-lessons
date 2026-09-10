@@ -1,0 +1,139 @@
+---
+title: "Learning in games"
+tier: expert
+unit: 15
+unitName: "Evolution and learning"
+order: 51
+kind: lesson
+summary: "Players who just best-respond to the past can converge on equilibrium without ever computing it."
+tags: ["learning", "fictitious-play", "no-regret"]
+estMinutes: 6
+mvp: true
+prereqs: ["mixed-strategies"]
+concepts: ["fictitious-play", "no-regret", "convergence"]
+refs: ["brown1951", "hartMasColell2000"]
+anchorEmoji: "📈"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import Learning from '@/components/interactive/Learning.svelte';
+
+<div class="anchor"><span class="em">📈</span><p>Nobody sits down and solves for a mixed equilibrium before playing. They watch what worked, adjust, and watch again. Remarkably, that simple habit can drag a whole population to the equilibrium a theorist would have computed, without anyone doing the math.</p></div>
+
+# Learning in games
+
+<p class="lead">Equilibrium is usually justified by assuming players are hyper-rational. Learning offers a humbler story: players track what opponents have done and best-respond to the record. In zero-sum and potential games, this fictitious play converges, and no-regret learning reaches equilibrium concepts more generally.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "The mixed equilibrium of Matching Pennies has each player choosing...", options: ["Always Heads", "50/50", "Whatever won last"], answer: 1 },
+    { q: "A best response is optimal given a belief about...", options: ["Your own payoff", "The opponent's play", "The referee"], answer: 1 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Play Matching Pennies against a bot that learns by fictitious play: it tracks how often you play Heads and best-responds to that record. Try to beat it.
+
+<Learning
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Matching Pennies against a fictitious-play learner"
+  predict={{
+    question: 'Over many rounds, what does the bot\'s belief about your Heads frequency converge to?',
+    options: [{ key: 'read', label: 'It reads and beats you' }, { key: 'half', label: 'Toward 50/50' }],
+    reveal: 'Toward 50/50. Any bias you show, the bot punishes, so your best long-run play is to mix evenly, and the bot\'s belief settles at your 50/50 frequency. Fictitious play converges to the mixed equilibrium here without anyone solving for it.',
+  }}
+/>
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+The bot is not clever, just observant: it counts your moves and flees the one you favour. So any lean you develop gets exploited, and the only play it cannot beat is an even mix. Meanwhile the bot's own moves respond to your history, and when both sides learn this way, their empirical frequencies chase each other around and settle, on average, at the 50/50 equilibrium. The equilibrium emerges from adaptation, not calculation.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+<DefinitionAside label="fictitious play and no-regret">
+In fictitious play, each player forms a belief equal to the empirical frequency of the opponent's past moves and best-responds to it. In zero-sum games and in potential games, the empirical frequencies of play converge to a Nash equilibrium. No-regret (or regret-matching) learning is more general: if each player's average regret for not having played any fixed action goes to zero, the empirical joint distribution converges to the set of coarse correlated equilibria.
+</DefinitionAside>
+
+In Matching Pennies the matcher wants to match, the mismatcher to differ. Each best-responds to the other's running Heads frequency. The per-round beliefs cycle, but the time-average of each player's own play converges to $(\tfrac12, \tfrac12)$, the mixed equilibrium. So a player who never heard of mixed strategies nonetheless plays one on average.
+
+Fictitious play does not converge in every game (it can cycle in some), but it does in the two big classes above. No-regret dynamics guarantee, in any game, average play within $O(\sqrt{\ln n / T})$ of the best fixed action, which pins the long-run behaviour to equilibrium sets even when full convergence fails.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Why an even mix is the only safe play">
+Suppose you have played Heads 6 times and Tails 4. The bot believes you play Heads with frequency $0.6$ and, as the mismatcher, plays Tails to avoid you, so you lose when you play Heads. Lean the other way and it flips to Heads. Any imbalance in your record hands the bot a profitable response.
+
+The only frequency it cannot exploit is $0.5$: at an even, patternless mix, its Heads and Tails responses both break even against you. So your best long-run play is $50/50$, and the bot's belief converges to that $50/50$ frequency. Both sides' empirical play settles at the mixed equilibrium, reached by adaptation rather than by solving the indifference equation directly.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">Simple learners who best-respond to the past can converge on equilibrium without computing it: fictitious play reaches Nash in zero-sum and potential games, and no-regret learning reaches correlated equilibria in general.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="learning-in-games"
+  id="q1"
+  badge="apply"
+  question="Against a fictitious-play bot in Matching Pennies, what is your best long-run strategy?"
+  options={[
+    { text: "Mix evenly and without a pattern, since any bias is detected and punished", correct: true, feedback: "The bot tracks your frequencies and best-responds, so a lean loses. Only an even, patternless mix is unexploitable, which is exactly the mixed equilibrium." },
+    { text: "Always play whichever move won last", feedback: "That is a detectable pattern the bot can anticipate. Predictability is what it punishes; you need a genuine even mix." },
+    { text: "Favour Heads to confuse it", feedback: "Favouring either side gives the bot a profitable response. Balance, not bias, is what holds it off." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="learning-in-games"
+  id="q2"
+  badge="analyse"
+  question="Does fictitious play converge to Nash equilibrium in every game?"
+  options={[
+    { text: "No: it converges in zero-sum and potential games, but can cycle in others", correct: true, feedback: "Convergence is guaranteed for those two classes (Matching Pennies is zero-sum, so it converges here), but fictitious play can fail to converge in general games." },
+    { text: "Yes, always", feedback: "It is not universal. It converges in zero-sum and potential games, but can cycle elsewhere." },
+    { text: "No, it never converges", feedback: "It does converge in important classes, including the zero-sum Matching Pennies of this lesson." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="learning-in-games"
+  id="q3"
+  badge="brings back: mixed strategies"
+  question="What is striking about the equilibrium the learners reach?"
+  options={[
+    { text: "They play the mixed equilibrium on average without ever solving the indifference condition for it", correct: true, feedback: "The mixed equilibrium normally comes from setting the opponent indifferent, a deliberate calculation. Here adaptive players reach the same 50/50 mix purely by responding to the past, no equilibrium reasoning required." },
+    { text: "They reach a pure-strategy equilibrium", feedback: "Matching Pennies has no pure equilibrium. The learners converge to the mixed one, on average." },
+    { text: "They never reach any equilibrium", feedback: "Their time-averaged play converges to the mixed equilibrium; that is the whole point of the learning result." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["brown1951", "hartMasColell2000"]} />

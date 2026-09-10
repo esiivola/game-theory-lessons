@@ -1,0 +1,12 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { withBase } from '@/config/site';
+---
+<BaseLayout title="Not found">
+  <section class="map-hero" style="padding-top:12vh">
+    <div class="eyebrow">404</div>
+    <h1>Off the equilibrium path</h1>
+    <p>That page does not exist. Every good game has a way back to the start.</p>
+    <p style="margin-top:20px"><a class="btn" href={withBase('')}>Back to the lessons</a></p>
+  </section>
+</BaseLayout>

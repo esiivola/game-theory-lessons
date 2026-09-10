@@ -1,0 +1,95 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { withBase } from '@/config/site';
+
+interface Props {
+  slug: string;
+  title: string;
+  totalLessons: number;
+  nextHref?: string;
+  nextTitle?: string;
+}
+const { slug, title, totalLessons, nextHref, nextTitle } = Astro.props;
+---
+<BaseLayout title={title} variant="lesson" lessonTitle={title} active="learn" totalLessons={totalLessons}>
+  <article class="lesson" data-lesson={slug}>
+    <slot />
+
+    <div class="done-panel" id="donePanel" hidden>
+      <div class="done-badge">
+        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <h2>Lesson complete</h2>
+      <p>{nextTitle ? `Next up: ${nextTitle}.` : 'You have finished this lesson.'}</p>
+      <div class="xp-chip">+30 XP</div>
+      <div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap">
+        {nextHref && <a class="btn" href={nextHref}>Next lesson</a>}
+        <a class="btn ghost" href={withBase('')}>Back to map</a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<script>
+  import confetti from 'canvas-confetti';
+  import { markSectionViewed, completeLesson, isComplete } from '@/lib/progress';
+
+  const article = document.querySelector<HTMLElement>('.lesson[data-lesson]');
+  const slug = article?.dataset.lesson;
+  if (article && slug) {
+    // Track sections as they scroll into view.
+    const sections = article.querySelectorAll<HTMLElement>('[data-section]');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              const id = (e.target as HTMLElement).dataset.section;
+              if (id) markSectionViewed(slug, id);
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { threshold: 0.4 }
+      );
+      sections.forEach((s) => io.observe(s));
+    } else {
+      sections.forEach((s) => s.dataset.section && markSectionViewed(slug, s.dataset.section));
+    }
+
+    // Completion: all quiz cards solved.
+    const total = article.querySelectorAll('[data-quiz]').length;
+    const solved = new Set<string>();
+    let finished = isComplete(slug);
+
+    function reveal(celebrate: boolean) {
+      const panel = document.getElementById('donePanel');
+      if (panel) panel.hidden = false;
+      if (celebrate) {
+        const rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!rm) {
+          try { confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } }); } catch {}
+        }
+        const t = document.getElementById('toast');
+        if (t) {
+          t.textContent = 'Lesson complete';
+          t.classList.add('show');
+          setTimeout(() => t.classList.remove('show'), 2600);
+        }
+        panel?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    if (finished) reveal(false);
+
+    window.addEventListener('gt:solved', (e) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.id) solved.add(detail.id);
+      if (!finished && total > 0 && solved.size >= total) {
+        finished = true;
+        completeLesson(slug);
+        reveal(true);
+      }
+    });
+  }
+</script>

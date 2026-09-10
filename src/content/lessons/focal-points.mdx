@@ -1,0 +1,145 @@
+---
+title: "Schelling and focal points"
+tier: basic
+unit: 3
+unitName: "Applications and equilibrium selection"
+order: 12
+kind: lesson
+summary: "When every equilibrium pays the same, something outside the payoffs picks one."
+tags: ["coordination", "equilibrium-selection", "schelling"]
+estMinutes: 5
+mvp: true
+prereqs: ["pure-nash"]
+concepts: ["focal-point", "coordination", "nash-equilibrium"]
+refs: ["schelling1960", "mehta1994"]
+anchorEmoji: "📍"
+---
+
+import Section from '@/components/ui/Section.astro';
+import Callout from '@/components/ui/Callout.astro';
+import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
+import SourcesList from '@/components/ui/SourcesList.astro';
+import WarmUp from '@/components/interactive/WarmUp.svelte';
+import QuizCard from '@/components/interactive/QuizCard.svelte';
+import FocalPoint from '@/components/interactive/FocalPoint.svelte';
+
+<div class="anchor"><span class="em">📍</span><p>You have to meet a stranger in New York tomorrow. No phones, no plan, no way to talk. You each have to pick a place and a time and simply show up. Where do you go?</p></div>
+
+# Schelling and focal points
+
+<p class="lead">A game can have several equilibria that pay exactly the same, and then the theory shrugs: it cannot say which one you will land on. Yet people coordinate anyway, and they do it well. The tie-breaker is not in the payoffs. It is in what stands out.</p>
+
+<Section id="warmup">
+<WarmUp
+  client:visible
+  questions={[
+    { q: "A Nash equilibrium is a profile where...", options: ["Everyone gets the most possible", "No one gains by moving alone", "Payoffs are equal"], answer: 1 },
+    { q: "Battle of the Sexes has how many pure Nash equilibria?", options: ["Zero", "One", "Two"], answer: 2 },
+  ]}
+/>
+</Section>
+
+<Section id="play">
+## Predict, then play
+
+Here is the game stripped bare. You and a stranger each call Heads or Tails, with no way to talk. You both score only if you match. The two of you have no reason to prefer one over the other, so what do you do?
+
+<FocalPoint
+  client:visible
+  exhibit="Exhibit 1"
+  caption="Pure coordination: you score only if you match"
+  prompt="Call it, to match a stranger you cannot talk to."
+  options={[{ key: 'H', label: 'Heads', freq: 0.86 }, { key: 'T', label: 'Tails', freq: 0.14 }]}
+  source="Mehta, Starmer and Sugden (1994)"
+/>
+
+Most people say Heads, so most people match. Nothing in the payoffs points there. The word just comes first.
+</Section>
+
+<Section id="why">
+## Why did that happen?
+
+<Callout kind="ask">
+You did not reason about payoffs, because the payoffs were a tie. You reasoned about the other person: what will look obvious to them? Heads comes before Tails, so it feels like the natural call, and because it feels that way to almost everyone, choosing it is the smart move. A shared sense of what stands out does the coordinating that the payoffs cannot.
+</Callout>
+</Section>
+
+<Section id="math">
+## The math
+
+A pure coordination game is a game where the players' interests line up perfectly, but there is more than one way to line up. In the 2x2 case both matching cells are Nash equilibria and both pay the same:
+
+$$
+u_1(H,H) = u_1(T,T) > u_1(H,T) = u_1(T,H),
+$$
+
+and the same for player 2. Nash equilibrium narrows the answer to the two matching cells. It cannot go further, because the two are identical in every payoff. Any theory that looks only at payoffs is stuck at a tie.
+
+<DefinitionAside label="focal point">
+A focal point (or Schelling point) is an equilibrium that players tend to select because something outside the payoffs, a label, a tradition, a roundness, a shared frame, makes it stand out as the obvious choice. It coordinates expectations without changing a single payoff.
+</DefinitionAside>
+
+The lesson generalizes. Meeting in New York, Schelling's respondents converged on Grand Central at noon. Asked to split \$100 by matching, people say 50/50. Asked to name a positive number, many say 1. In each case salience, not optimization, picks the equilibrium.
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Why theory cannot break the tie">
+Write the coordination game: matching pays $(1,1)$, mismatching pays $(0,0)$. Mark best responses. If the other player picks Heads, your best reply is Heads; if they pick Tails, yours is Tails. So $(H,H)$ and $(T,T)$ are both Nash equilibria.
+
+Now try to rank them. Every payoff in $(H,H)$ equals the matching payoff in $(T,T)$, so no efficiency or fairness argument distinguishes them. The selection has to come from outside the game: which label feels obvious. That is the focal point, and it is a rational response to needing to match, not a lapse in reasoning.
+</WorkedExample>
+</Section>
+
+<Section id="key">
+## Key idea
+
+<Callout kind="key-idea">When equilibria are tied on payoffs, players coordinate on whatever stands out. The focal point lives outside the math, but choosing it is the rational thing to do.</Callout>
+</Section>
+
+<Section id="quiz">
+## Check yourself
+
+<QuizCard
+  client:visible
+  slug="focal-points"
+  id="q1"
+  badge="apply"
+  question="Two drivers approach on a narrow road and must each pick a side. Both pass safely only if they choose opposite sides, and both sides are equally good. Why do they manage it?"
+  options={[
+    { text: "A shared convention, like driving on the right, is a focal point that both expect the other to follow", correct: true, feedback: "The payoffs do not favour either side; the convention does the coordinating. Both expect it, so both follow it, and they pass." },
+    { text: "One driver is assigned the better payoff", feedback: "The sides are equally good, so payoffs cannot break the tie. What breaks it is the shared rule about which side to take." },
+    { text: "There is no equilibrium, so they crash", feedback: "There are two equilibria (each picks a side). Convention selects one; it does not leave them stuck." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="focal-points"
+  id="q2"
+  badge="analyse"
+  question="A friend says focal points prove people are irrational, since they pick on hunches instead of payoffs. What is the flaw?"
+  options={[
+    { text: "The payoffs are tied, so following the obvious cue is the rational way to coordinate", correct: true, feedback: "When every equilibrium pays the same, optimizing over payoffs gives no answer. Choosing what the other person will also see as obvious is exactly the smart move." },
+    { text: "Nothing, focal points are indeed irrational", feedback: "They are not. With payoffs tied, matching on a salient cue is the rational response to the coordination problem." },
+    { text: "People actually do compute the payoffs", feedback: "They can compute all they like; the payoffs are equal, so computation cannot pick a side. Salience is what does." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="focal-points"
+  id="q3"
+  badge="brings back: nash equilibrium"
+  question="How many Nash equilibria does the pure Heads-or-Tails coordination game have, and what selects among them?"
+  options={[
+    { text: "Two matching equilibria; salience selects one", correct: true, feedback: "Both matching cells are equilibria and pay the same. Nash cannot choose between them, so the focal cue, here the word Heads coming first, does the selecting." },
+    { text: "One equilibrium, so there is nothing to select", feedback: "There are two: match on Heads or match on Tails. That is precisely why a selection device is needed." },
+    { text: "None, so players cannot coordinate", feedback: "There are two pure equilibria. The puzzle is not existence but which one, and focal points answer that." },
+  ]}
+/>
+</Section>
+
+<SourcesList refs={["schelling1960", "mehta1994"]} />
