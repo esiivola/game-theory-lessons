@@ -36,14 +36,14 @@ for (const l of lessons) {
   (layered.get(ly) as string[]).push(l.id);
 }
 
-const yTop = 34, R = 15, xGap = 48, rowGap = 44, layerGap = 40;
+const yTop = 32, R = 14, xGap = 44, rowGap = 40, layerGap = 34;
 const layerKeys = [...layered.keys()].sort((a, b) => a - b);
 const widest = Math.max(...layerKeys.map((ly) => (layered.get(ly) as string[]).length));
 // Keep the canvas narrow enough to read: cap the columns and wrap wide layers
 // onto extra rows instead of stretching them into one long line.
-const maxCols = 8;
+const maxCols = 6;
 const usedCols = Math.min(maxCols, widest);
-const VBW = Math.max(360, usedCols * xGap + xGap);
+const VBW = Math.max(280, usedCols * xGap + xGap);
 const cx = VBW / 2;
 
 // Place layers top-down. Within each layer, order nodes by the average x of
