@@ -72,14 +72,14 @@ Reinforcement updates only the action you actually chose, so you learn about the
 EWA maintains an attraction $A_j$ for each action, updated as $A_j(t) = \dfrac{\phi\,N(t-1)\,A_j(t-1) + [\delta + (1-\delta)\mathbf{1}\{j\text{ played}\}]\,\pi_j(t)}{N(t)}$, with $N(t) = \rho\,N(t-1) + 1$, and choice by logit over attractions. The dial $\delta$ is imagination: $\delta = 0$ updates only the played action (reinforcement), while $\delta = 1$ with $\phi = \rho$ updates every action by its foregone payoff (belief learning / fictitious play). The dial $\phi$ is memory.
 </DefinitionAside>
 
-Setting $\delta = 0$ recovers reinforcement learning: the attraction of an unchosen action is unchanged, so you only learn by doing. Setting $\delta = 1$ with $\phi = \rho$ recovers belief learning: every action is credited with its counterfactual payoff, exactly fictitious play. Estimates from experiments put $\phi \approx 0.8$ to $1$ and $\delta \approx 0.5$: people remember most of the past and weigh foregone payoffs about half as much as realized ones. One model, tuned by data, subsumes both traditions.
+Setting $\delta = 0$ recovers reinforcement learning: an unchosen action receives no payoff term at all, so you only ever learn about what you actually played. (Its attraction still drifts, because $N$ keeps growing and the attractions are experience-weighted averages, so an action you stop sampling fades rather than freezing. What it never gets is news about its own payoff.) Setting $\delta = 1$ with $\phi = \rho$ recovers belief learning: every action is credited with its counterfactual payoff, exactly fictitious play. Estimates from experiments put $\phi \approx 0.8$ to $1$ and $\delta \approx 0.5$: people remember most of the past and weigh foregone payoffs about half as much as realized ones. One model, tuned by data, subsumes both traditions.
 </Section>
 
 <Section id="worked">
 ## Work it out
 
 <WorkedExample title="Turn the imagination dial">
-Suppose action A pays $6$ and action B would have paid $4$ this round, and you played A. Under $\delta = 0$ (reinforcement), only A's attraction rises; B's is untouched, so you learn nothing about B unless you try it. Under $\delta = 1$ (belief learning), both attractions update: A by $6$, B by $4$, so you immediately compare the two and lean toward A.
+Suppose action A pays $6$ and action B would have paid $4$ this round, and you played A. Under $\delta = 0$ (reinforcement), only A's attraction takes in the payoff; B's carries no new information and simply fades as unsampled experience ages, so you learn nothing about B unless you try it. Under $\delta = 1$ (belief learning), both attractions update: A by $6$, B by $4$, so you immediately compare the two and lean toward A.
 
 The reinforcement learner may take many rounds to discover B is worse (or A is better than some third option), because it only updates what it samples. The belief learner corrects in one round. EWA's $\delta \approx 0.5$ estimate says people do learn from foregone payoffs, roughly half-weight, so they adapt faster than pure reinforcement but slower than full belief learning.
 </WorkedExample>
@@ -101,7 +101,7 @@ The reinforcement learner may take many rounds to discover B is worse (or A is b
   badge="apply"
   question="What does the imagination parameter delta = 0 correspond to?"
   options={[
-    { text: "Pure reinforcement learning: only the action actually played is updated", correct: true, feedback: "With delta = 0 the foregone actions get zero weight, so you learn only from experienced payoffs. That is exactly reinforcement learning." },
+    { text: "Pure reinforcement learning: only the action actually played takes in a payoff", correct: true, feedback: "With delta = 0 the foregone actions get zero weight on their payoffs, so you learn only from what you experienced. That is exactly reinforcement learning: an unsampled action's attraction fades with age, but it never gets news about its own payoff." },
     { text: "Fictitious play", feedback: "Fictitious play is the other extreme, delta = 1 with phi = rho, where every action is updated by its would-be payoff." },
     { text: "Random choice", feedback: "Delta = 0 still learns from played actions; it is not random. It is reinforcement learning, the slow-but-real extreme." },
   ]}
