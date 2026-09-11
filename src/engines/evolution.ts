@@ -38,12 +38,33 @@ function rpsMatrix(e: number): number[][] {
   ];
 }
 
-/** One replicator step for an RPS population x = [rock, paper, scissors]. */
-export function rpsStep(x: number[], e: number, dt: number): number[] {
+/** The replicator vector field at x: dx_i = x_i (f_i - average fitness). */
+function rpsDeriv(x: number[], e: number): number[] {
   const A = rpsMatrix(e);
   const f = x.map((_, i) => A[i][0] * x[0] + A[i][1] * x[1] + A[i][2] * x[2]);
   const avg = x[0] * f[0] + x[1] * f[1] + x[2] * f[2];
-  let next = x.map((xi, i) => Math.max(0, xi + dt * xi * (f[i] - avg)));
+  return x.map((xi, i) => xi * (f[i] - avg));
+}
+
+/**
+ * One replicator step for an RPS population x = [rock, paper, scissors], integrated with RK4.
+ *
+ * The integrator is not incidental. With fair ties (e = 0) the game is zero-sum and the continuous
+ * flow conserves the product x_R x_P x_S, so trajectories are closed orbits around the centre and
+ * the equilibrium is neutrally stable. A forward-Euler step does not conserve it: the error is
+ * one-signed, so the orbit visibly spirals outward and fair RPS ends up looking like the
+ * tie-rewarding case. RK4 holds the product fixed to eight decimals over a full widget run, so the
+ * drawn orbit closes and the sign of e, not the integration error, decides whether it spirals.
+ */
+export function rpsStep(x: number[], e: number, dt: number): number[] {
+  const step = (base: number[], k: number[], s: number) => base.map((v, i) => v + s * k[i]);
+  const k1 = rpsDeriv(x, e);
+  const k2 = rpsDeriv(step(x, k1, dt / 2), e);
+  const k3 = rpsDeriv(step(x, k2, dt / 2), e);
+  const k4 = rpsDeriv(step(x, k3, dt), e);
+  const next = x.map((xi, i) =>
+    Math.max(0, xi + (dt / 6) * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]))
+  );
   const total = next[0] + next[1] + next[2];
   return next.map((v) => v / total);
 }

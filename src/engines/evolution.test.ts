@@ -19,10 +19,35 @@ describe('Hawk-Dove ESS', () => {
 });
 
 describe('RPS replicator', () => {
+  // The conserved quantity of the continuous replicator flow on fair (zero-sum) RPS.
+  const H = (x: number[]) => x[0] * x[1] * x[2];
+  const dist = (x: number[]) => Math.hypot(x[0] - 1 / 3, x[1] - 1 / 3, x[2] - 1 / 3);
+
   it('keeps the center fixed under fair ties', () => {
     const c = [1 / 3, 1 / 3, 1 / 3];
     const next = rpsStep(c, 0, 0.1);
     expect(next[0]).toBeCloseTo(1 / 3, 6);
+  });
+
+  it('traces a closed orbit under fair ties, conserving x_R x_P x_S', () => {
+    // The lesson claims the fair-RPS orbit never converges and never diverges. That is a property
+    // of the flow, and an integrator with one-signed error destroys it: forward Euler spiralled
+    // outward by 22% over this same run, which is what the reader would have seen on screen.
+    const start = [0.5, 0.3, 0.2];
+    let x = [...start];
+    for (let i = 0; i < 3000; i++) x = rpsStep(x, 0, 0.02);
+    expect(H(x)).toBeCloseTo(H(start), 7);
+    // The orbit is a level curve, not a circle, so its distance from the centre oscillates
+    // within a band rather than staying constant. What must not happen is a one-way drift.
+    expect(dist(x)).toBeGreaterThan(0.15);
+    expect(dist(x)).toBeLessThan(0.3);
+  });
+
+  it('holds that orbit over a hundred times the widget run', () => {
+    const start = [0.5, 0.3, 0.2];
+    let x = [...start];
+    for (let i = 0; i < 300000; i++) x = rpsStep(x, 0, 0.02);
+    expect(H(x)).toBeCloseTo(H(start), 7);
   });
   it('penalizing ties spirals inward toward the center; rewarding them spirals outward', () => {
     const start = [0.5, 0.3, 0.2];
