@@ -72,16 +72,16 @@ Standard theory assumes the responder cares only about their own dollars, so any
 A responder who keeps $s$ (proposer keeps $\text{pie} - s$) has utility $s - \alpha\max(\text{other} - s, 0) - \beta\max(s - \text{other}, 0)$: the envy term $\alpha$ penalizes being behind, the guilt term $\beta$ (smaller) penalizes being ahead. Rejecting yields $0$, so the responder rejects any offer whose utility is negative. This turns fairness into part of the payoff, restoring rational choice.
 </DefinitionAside>
 
-When behind ($s < \text{pie}/2$), utility is $s - \alpha(\text{pie} - 2s)$, which is negative when $s < \dfrac{\alpha \cdot \text{pie}}{1 + 2\alpha}$. With $\alpha = 0.5$ and a pie of $10$, the threshold is $\dfrac{0.5 \cdot 10}{2} = 2.5$: the responder rejects offers below $\$2.50$, matching the empirical rejection spike. Dictator games (where the responder cannot reject) show smaller but still positive giving, and trust games show investors sending money that trustees partly return, all evidence that people value more than their own cash.
+When behind ($s < \text{pie}/2$), utility is $s - \alpha(\text{pie} - 2s)$, which is negative when $s < \dfrac{\alpha \cdot \text{pie}}{1 + 2\alpha}$. With $\alpha = 0.5$ and a pie of $10$, the threshold is $\dfrac{0.5 \cdot 10}{2} = 2.5$: the responder rejects offers below \$2.50, matching the empirical rejection spike. Dictator games (where the responder cannot reject) show smaller but still positive giving, and trust games show investors sending money that trustees partly return, all evidence that people value more than their own cash.
 </Section>
 
 <Section id="worked">
 ## Work it out
 
 <WorkedExample title="Find the rejection threshold">
-Suppose the responder is offered $s$ with envy weight $\alpha = 0.5$ on a $\$10$ pie. Being behind, their utility is $s - 0.5\,(\,(10 - s) - s\,) = s - 0.5(10 - 2s) = s - 5 + s = 2s - 5$.
+Suppose the responder is offered $s$ with envy weight $\alpha = 0.5$ on a \$10 pie. Being behind, their utility is $s - 0.5\,(\,(10 - s) - s\,) = s - 0.5(10 - 2s) = s - 5 + s = 2s - 5$.
 
-Set this to zero: $2s - 5 = 0$, so $s = 2.5$. Below $\$2.50$ the utility is negative, so the responder rejects, preferring the $0$ of walking away to the sting of a lopsided split. Above $\$2.50$ they accept. A stronger envy weight raises this threshold, and a proposer who understands it offers close to half to avoid rejection, exactly what the experiments show.
+Set this to zero: $2s - 5 = 0$, so $s = 2.5$. Below \$2.50 the utility is negative, so the responder rejects, preferring the $0$ of walking away to the sting of a lopsided split. Above \$2.50 they accept. A stronger envy weight raises this threshold, and a proposer who understands it offers close to half to avoid rejection, exactly what the experiments show.
 </WorkedExample>
 </Section>
 
