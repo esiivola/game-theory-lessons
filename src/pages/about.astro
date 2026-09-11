@@ -3,7 +3,10 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { resolveRefs } from '@/content/references';
 
-const total = (await getCollection('lessons')).length;
+const all = await getCollection('lessons');
+const total = all.length;
+const cases = all.filter((l) => l.data.kind === 'case').length;
+const core = total - cases;
 const coreRefs = resolveRefs([
   'vonNeumannMorgenstern1944',
   'nash1950',
@@ -37,7 +40,7 @@ const coreRefs = resolveRefs([
       </div>
     </section>
 
-    <div class="note">This is an early build. The first lessons are live; the full course runs to 63 lessons plus a set of real-world cases, from the Prisoner's Dilemma to mechanism design.</div>
+    <div class="note">The course runs to {core} lessons plus {cases} real-world cases, from the Prisoner's Dilemma to mechanism design, matching, and behavioral game theory.</div>
   </div>
 </BaseLayout>
 

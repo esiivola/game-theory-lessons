@@ -38,7 +38,6 @@ npm run preview   # serve the built site (test the real base path)
 
 ## What is built
 
-The MVP vertical slice: the lesson map with live progress, the Progress and About pages, and the
-first arc of Basic lessons (What is a game, Rationality, Expected utility, Dominance,
-Rationalizability, Nash equilibrium) plus the fully playable Prisoner's Dilemma. The full 63-lesson
-plus applied-case curriculum is specified in SPEC.md and docs/LESSONS.md.
+The lesson map with live progress, the Progress and About pages, and all 64 core lessons plus the
+12-case applied track, each with its own interactive. The curriculum is specified in SPEC.md and
+docs/LESSONS.md.

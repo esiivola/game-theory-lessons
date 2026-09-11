@@ -2,9 +2,14 @@
   interface WQ { q: string; options: string[]; answer: number; }
   let {
     title = 'From earlier lessons',
-    sub = 'Two quick ones before we start.',
+    sub = null,
     questions,
-  }: { title?: string; sub?: string; questions: WQ[] } = $props();
+  }: { title?: string; sub?: string | null; questions: WQ[] } = $props();
+
+  // Default subtitle has to agree with how many questions there actually are.
+  const subline = $derived(
+    sub ?? (questions.length === 1 ? 'One quick one before we start.' : `${questions.length === 2 ? 'Two' : questions.length} quick ones before we start.`)
+  );
 
   let solved = $state<number[]>(questions.map(() => -1));
   let wrong = $state<number[][]>(questions.map(() => []));
@@ -21,7 +26,7 @@
 
 <div class="warmup">
   <div class="lab">{title}</div>
-  <div class="sub">{sub}</div>
+  <div class="sub">{subline}</div>
   {#each questions as q, qi}
     <div class="wq">
       <p>{q.q}</p>
