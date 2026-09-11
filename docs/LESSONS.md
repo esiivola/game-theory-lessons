@@ -6,31 +6,57 @@ distractors, and a canonical source. This is the working brief for authoring eac
 with the high-level curriculum in [../SPEC.md](../SPEC.md) §5. House rules from SPEC apply: the
 §3.2 template, the §11 voice, and no em dashes.
 
-Numbering matches the adjusted curriculum: 63 core lessons (L1 to L63) across 17 units, plus a
-12-case applied track (A1 to A12). Changes from the first draft: focal points moved up to L11;
-the old screening lesson split into L29 (adverse selection and screening) and L30 (cheap talk),
-which sets up the communication arc L30 to L31.
+Numbering below is the plan's own: 63 core lessons (L1 to L63) across 17 units, plus a 12-case
+applied track (A1 to A12). Changes from the first draft: focal points moved up to L11; the old
+screening lesson split into L29 (adverse selection and screening) and L30 (cheap talk), which sets
+up the communication arc L30 to L31.
+
+**The shipped course has drifted from these numbers.** It runs to 64 core lessons plus the 12
+cases, so an L-number here is a pointer into the plan, not into the build. The cross-references in
+the two lists below therefore name lesson slugs, which are stable; everything after the first
+divider still uses plan numbering. `src/content/lessons/<slug>.mdx` is the source of record for what
+a lesson actually contains.
 
 ## Conventions reused across the course
 
-**Standard numbers** (recognition compounds when the same game recurs):
-- Prisoner's Dilemma: T=5, R=3, P=1, S=0 (used in L1, L4, L6, L7, L20 to L23, A6).
-- Entry game (entrant first): Out (0,2), In then Accommodate (2,1), In then Fight (-1,0) (L14, L15, L40, A4).
-- Cournot: inverse demand P = 120 - Q, marginal cost c = 0 (L12, L15).
-- Chicken / Hawk-Dove: (Swerve,Swerve)=(6,6), (Swerve,Straight)=(2,7), (Straight,Swerve)=(7,2), (Straight,Straight)=(0,0) (L7, L16, A3).
-- Seller plus two buyers: v(12)=v(13)=100, v(23)=0, v(123)=100 (L42 to L44).
+**Standard numbers** (recognition compounds when the same game recurs). Slugs are where each set
+is actually used in the build:
+- Prisoner's Dilemma: T=5, R=3, P=1, S=0. In `prisoners-dilemma`, `classic-2x2-games`,
+  `repeated-games`, `folk-theorems`, `case-cooperation`, and the `imperfect-monitoring` widget.
+- Entry game (entrant first): Out (0,2), In then Accommodate (2,1), In then Fight (-1,0). In
+  `backward-induction` and `subgame-perfection`; `reputation` reuses the entrant's side of it, and
+  `case-entry-deterrence` scales the same ordering to business numbers (0,100)/(40,50)/(-10,20).
+- Cournot: inverse demand P = 120 - Q, marginal cost c = 0. In `cournot-bertrand` and
+  `subgame-perfection`. `bayesian-games` deliberately shrinks it to P = 12 - Q so the type-by-type
+  arithmetic stays small.
+- Chicken: (Swerve,Swerve)=(6,6), (Swerve,Straight)=(2,7), (Straight,Swerve)=(7,2),
+  (Straight,Straight)=(0,0). In `classic-2x2-games`, `mixed-strategies` and
+  `correlated-equilibrium`. `case-brinkmanship` uses its own crisis payoffs, and the Hawk-Dove
+  lessons (`evolutionarily-stable-strategies`, `replicator-dynamics`) parameterise by V and C
+  instead.
+- Seller plus two buyers: v(12)=v(13)=100, v(23)=0, v(123)=100. In `coalitional-games` and
+  `shapley-value`; `nucleolus` switches to the three-player majority game, which has an empty core.
 
-**Reusable interactive engines** (build these once, reuse everywhere):
-1. Tappable payoff matrix (L1, L4, L6, L7, L16).
-2. Best-response / reaction-curve slider (L5, L8, L10, L12, L17).
-3. Foldable game tree (L14, L15, L23, A4).
-4. Discounted repeated-play engine with a δ slider and swappable bot strategies (L20 to L23, A6).
-5. Coordination "match the crowd" widget (L2, L11).
-6. Auction sandbox, one bidding UI with swappable rules FPA/SPA/common-value/reserve/GSP (L25, L26, L39, L41, A2).
-7. Belief / allocation manipulator (PBE checker L27, persuasion posterior-split L31, cooperative allocation checker L42 to L44).
-8. Economic game lab, one parameterised engine for ultimatum/dictator/trust/public-goods with swappable norms, punishment, and regeneration (L58 to L63, A9).
-9. Population sim with rare mutations (L48 to L50, A6, A9).
-10. Route-choice / congestion engine (L53, L54, L55).
+**Shared interactives**, as actually reused in the build. Anything not listed here is used by a
+single lesson; `src/engines/` holds the framework-free logic and its tests.
+1. `PayoffMatrix`: what-is-a-game, dominance, rationalizability, pure-nash, prisoners-dilemma,
+   mixed-strategies, subgame-perfection, correlated-equilibrium, case-brinkmanship.
+2. `ReactionCurve`: cournot-bertrand, subgame-perfection.
+3. `GameTree`: backward-induction, field-tests, case-entry-deterrence.
+4. `RepeatedPD`: repeated-games, case-cooperation.
+5. `MixedStrategy`: mixed-strategies, zero-sum-minimax.
+6. `BeautyContest`: rationality, level-k.
+7. `PositionAuction`: auctions-position, case-auctions.
+8. `Rubinstein`: strategic-bargaining, case-negotiation.
+9. `MoralHazard`: moral-hazard, case-contracts-law.
+10. `Ultimatum`: social-preferences, culture-and-context.
+11. `PublicGoodsPunishment`: cooperation-and-punishment, case-commons.
+12. `DeferredAcceptance`: stable-matching, matching-with-contracts, case-matching-markets.
+
+The plan below also imagined an auction sandbox with swappable rules and one parameterised
+economic-game lab. The build split those into separate widgets per lesson (`AuctionSandbox`,
+`WinnersCurse`, `OptimalReserve`, `VCG`, `PositionAuction`; `Ultimatum`, `PublicGoods`,
+`PublicGoodsPunishment`, `Reciprocity`), which is why the numbering here no longer matches.
 
 ---
 
