@@ -22,6 +22,7 @@
 
   const presets: { label: string; p: Pt }[] = [
     { label: '(3, 3)', p: [3, 3] },
+    { label: '(3.5, 2)', p: [3.5, 2] },
     { label: '(4, 1)', p: [4, 1] },
     { label: '(0.5, 0.5)', p: [0.5, 0.5] },
   ];
@@ -70,9 +71,9 @@
 
     <div class="readout" aria-live="polite">
       {#if verdict === 'supportable'}
-        <b class="ok">Supportable.</b> ({r1(u1)}, {r1(u2)}) is feasible and above the minmax of 1, so for a discount factor close to 1 it is a subgame-perfect equilibrium payoff.
+        <b class="ok">Supportable.</b> ({r1(u1)}, {r1(u2)}) is feasible and strictly above the minmax of 1, so for a discount factor close to 1 it is a subgame-perfect equilibrium payoff.
       {:else if verdict === 'below-minmax'}
-        <b class="no">Below minmax.</b> A player earning under 1 would deviate to guarantee 1 by defecting forever, so no equilibrium can hold them there.
+        <b class="no">Not above the minmax.</b> A player can guarantee 1 by defecting forever, so no equilibrium can hold them under it. The boundary is out too: pinning a player at exactly 1 takes permanent punishment, which leaves the other nothing to gain either.
       {:else}
         <b class="no">Infeasible.</b> ({r1(u1)}, {r1(u2)}) lies outside what the stage game can even produce, so no strategy reaches it.
       {/if}

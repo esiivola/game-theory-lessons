@@ -29,9 +29,14 @@ export function inFeasible(p: Pt, hull: Pt[] = PD_HULL): boolean {
   return true;
 }
 
-/** Both players at or above the minmax payoff: no one would rather be punished. */
+/**
+ * Both players STRICTLY above the minmax payoff. The strictness is not decoration: a player held
+ * to exactly its minmax can be held there only by permanent punishment, which leaves the punisher
+ * nothing to gain either, so boundary points like (4, 1) in the PD are not equilibrium payoffs.
+ * The folk theorem is stated for the interior of the individually rational region.
+ */
 export function isIndividuallyRational(p: Pt, minmax = MINMAX): boolean {
-  return p[0] >= minmax - 1e-9 && p[1] >= minmax - 1e-9;
+  return p[0] > minmax + 1e-9 && p[1] > minmax + 1e-9;
 }
 
 /** A payoff is supportable as an equilibrium (for delta near 1) iff feasible and IR. */
