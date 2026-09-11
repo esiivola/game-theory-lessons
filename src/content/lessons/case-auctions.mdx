@@ -63,7 +63,7 @@ Bid for two ad slots under the generalized second price, then toggle to VCG and 
 ## Why did that happen?
 
 <Callout kind="ask">
-The generalized second price looks like the truthful second-price auction, and for a single slot it is. But with several slots, the price you pay depends on the bids around you, and a bidder can sometimes do better by shading or even preferring a cheaper lower slot. So truthful bidding is not an equilibrium. What saves it is that its stable, envy-free equilibrium lands on the efficient assignment and the VCG prices, so the outcome is sound even though the rule is not strategy-proof. Spectrum auctions face harder problems still: goods that are complements, where bidding on pieces risks the exposure problem.
+The generalized second price looks like the truthful second-price auction, and for a single slot it is. But with several slots, the price on the top slot takes no account of what a lower slot would cost, so a bidder can sometimes do better by shading under the bid above it and buying a cheaper slot instead. When that trade pays, truthful bidding is not an equilibrium. What saves it is that its stable, envy-free equilibrium lands on the efficient assignment and the VCG prices, so the outcome is sound even though the rule is not strategy-proof. Spectrum auctions face harder problems still: goods that are complements, where bidding on pieces risks the exposure problem.
 </Callout>
 </Section>
 
@@ -81,7 +81,7 @@ Two practical wrinkles. Ad auctions run billions of times a day, so even small d
 ## Work it out
 
 <WorkedExample title="Why GSP is not truthful, yet works">
-Take two slots and advertisers valuing clicks at 10, 6, 4. VCG charges each the externality it imposes: the top advertiser pays 500, the second 200. Under GSP with truthful bids, the top slot's price is the next bid (6) over its 100 clicks, so 600, more than VCG's 500. So a truthful top bidder overpays, and would rather shade.
+Take two slots, worth 100 and 80 clicks, and advertisers valuing clicks at 10, 6, 4. VCG charges each the externality it imposes: the top advertiser pays 440, the second 320. Under GSP with truthful bids, the top slot's price is the next bid (6) over its 100 clicks, so 600, well above VCG's 440. Is that enough to make the top bidder move? Holding slot 1 nets 100(10 - 6) = 400; shading to just under 6 buys slot 2 at the third bid, netting 80(10 - 4) = 480. It is, so truthful bidding is not an equilibrium.
 
 Advertisers therefore adjust until no one envies another's slot-and-price. That envy-free equilibrium assigns slots efficiently and charges exactly the VCG amounts. So the search engine gets the efficient, well-priced outcome VCG would give, through a simpler-looking rule, even though bidding your value is not itself optimal. That gap is why advertisers optimize bids and why the theory matters in practice.
 </WorkedExample>
@@ -103,7 +103,7 @@ Advertisers therefore adjust until no one envies another's slot-and-price. That 
   badge="apply"
   question="A friend says GSP is just a second-price auction, so bid your value. What is wrong?"
   options={[
-    { text: "With multiple slots GSP is not truthful; the price depends on others' bids, so shading can pay", correct: true, feedback: "GSP equals the second-price auction only for a single slot. With several slots, truthful bidding is not an equilibrium, and advertisers shade toward the envy-free equilibrium." },
+    { text: "With multiple slots GSP is not truthful; a cheaper lower slot can be worth more than the top one", correct: true, feedback: "GSP equals the second-price auction only for a single slot. With several slots, shading under the bid above you can buy a cheaper slot that nets more, so truthful bidding is not an equilibrium and advertisers shade toward the envy-free one." },
     { text: "Nothing, GSP is always truthful", feedback: "It is truthful only in the single-slot case. Multiple slots break truthfulness, which is the whole subtlety of ad auctions." },
     { text: "GSP charges your own bid, so never bid high", feedback: "GSP charges the next bid down, not your own. Still, it is not truthful with multiple slots, so shading can help." },
   ]}

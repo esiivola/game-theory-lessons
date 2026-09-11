@@ -43,7 +43,7 @@ import PositionAuction from '@/components/interactive/PositionAuction.svelte';
 <Section id="play">
 ## Predict, then play
 
-Two slots, worth 100 and 50 clicks. Advertisers value clicks differently. Compare how VCG and the generalized second price (GSP) charge the winners.
+Two slots, worth 100 and 80 clicks. Advertisers value clicks differently. Compare how VCG and the generalized second price (GSP) charge the winners.
 
 <PositionAuction
   client:visible
@@ -52,7 +52,7 @@ Two slots, worth 100 and 50 clicks. Advertisers value clicks differently. Compar
   predict={{
     question: 'With advertisers valuing clicks at 10, 6, and 4, what does the top advertiser pay under GSP versus VCG?',
     options: [{ key: 'same', label: 'The same under both' }, { key: 'more', label: 'More under GSP' }],
-    reveal: 'More under GSP if everyone bids truthfully: GSP charges the top slot the next bid (6) times its 100 clicks, so 600, while VCG charges the externality, 500. That gap is why truthful bidding is not a GSP equilibrium; advertisers shade.',
+    reveal: 'More under GSP if everyone bids truthfully: GSP charges the top slot the next bid (6) times its 100 clicks, so 600, while VCG charges the externality, 440. That price is high enough that the top advertiser would rather shade into the cheaper slot 2, which is why truthful bidding is not a GSP equilibrium.',
   }}
 />
 </Section>
@@ -61,31 +61,33 @@ Two slots, worth 100 and 50 clicks. Advertisers value clicks differently. Compar
 ## Why did that happen?
 
 <Callout kind="ask">
-VCG charges you the harm you do to others, a number independent of your own bid, so you have no reason to lie. GSP charges you the bid just below yours, which depends on where everyone sits. Under truthful bids GSP overcharges the top slot compared with VCG, so a truthful advertiser would rather shade or even prefer a cheaper lower slot. Advertisers adjust until no one envies another's slot-and-price, and that envy-free resting point happens to reproduce the VCG payments, even though the rule itself is not truthful.
+VCG charges you the harm you do to others, a number independent of your own bid, so you have no reason to lie. GSP charges you the bid just below yours, which depends on where everyone sits. Because that price takes no account of what the lower slots cost, the top advertiser can sometimes do better by shading under the second bid and buying a cheaper slot instead: fewer clicks, but a much lower price on each one. When that trade is worth taking, truthful bidding is not an equilibrium. Advertisers adjust until no one envies another's slot-and-price, and that envy-free resting point happens to reproduce the VCG payments, even though the rule itself is not truthful.
 </Callout>
 </Section>
 
 <Section id="math">
 ## The math
 
-Slots deliver $100$ and $50$ clicks; advertisers $A$, $B$, $C$ value a click at $10$, $6$, $4$. The efficient assignment pairs the highest value with the most clicks: $A \to$ slot 1, $B \to$ slot 2, welfare $10(100) + 6(50) = 1300$.
+Slots deliver $100$ and $80$ clicks; advertisers $A$, $B$, $C$ value a click at $10$, $6$, $4$. The efficient assignment pairs the highest value with the most clicks: $A \to$ slot 1, $B \to$ slot 2, welfare $10(100) + 6(80) = 1480$.
 
-**VCG payments** charge each winner its externality. For $A$: without $A$, the others do best with $B \to 100$, $C \to 50$, welfare $800$; with $A$ present, the others get only $B \to 50 = 300$. So $A$ pays $800 - 300 = 500$ (5 per click). For $B$: without $B$, others get $A \to 100$, $C \to 50 = 1200$; with $B$, others get $A \to 100 = 1000$; $B$ pays $200$ (4 per click).
+**VCG payments** charge each winner its externality. For $A$: without $A$, the others do best with $B \to 100$, $C \to 80$, welfare $920$; with $A$ present, the others get only $B \to 80 = 480$. So $A$ pays $920 - 480 = 440$ (4.4 per click). For $B$: without $B$, others get $A \to 100$, $C \to 80 = 1320$; with $B$, others get $A \to 100 = 1000$; $B$ pays $320$ (4 per click).
 
 <DefinitionAside label="GSP versus VCG">
-The generalized second-price auction ranks advertisers by bid and charges each the next advertiser's bid per click. With one slot it is the ordinary second-price auction and is truthful. With several slots it is no longer truthful: a bidder can gain by shading, or by preferring a lower slot. Its lowest envy-free equilibrium, however, yields exactly the VCG payments, so the efficient assignment and VCG-level prices emerge despite the non-truthful rule.
+The generalized second-price auction ranks advertisers by bid and charges each the next advertiser's bid per click. With one slot it is the ordinary second-price auction and is truthful. With several slots it is no longer truthful: a bidder can gain by shading into a cheaper lower slot. Its lowest envy-free equilibrium, however, yields exactly the VCG payments, so the efficient assignment and VCG-level prices emerge despite the non-truthful rule.
 </DefinitionAside>
 
-Under truthful bids GSP charges $A$ the next bid $6$ over $100$ clicks, so $600 > 500$. That overcharge is why truth-telling is not an equilibrium under GSP.
+Under truthful bids GSP charges $A$ the next bid $6$ over $100$ clicks, so $600$, against VCG's $440$. Now check whether $A$ wants to stay. Holding slot 1 nets $100(10-6) = 400$; shading to just under $6$ hands slot 1 to $B$ and buys slot 2 at $C$'s bid, netting $80(10-4) = 480$. Since $480 > 400$, truth-telling is not an equilibrium here.
+
+The overcharge on its own does not settle it. Shrink slot 2 to $50$ clicks and GSP still charges $A$ above VCG, but dropping down then nets only $50(10-4) = 300 < 400$, so $A$ stays. What breaks truthfulness is a lower slot cheap enough to be worth the lost traffic, so the click gap matters as much as the bid gap.
 </Section>
 
 <Section id="worked">
 ## Work it out
 
 <WorkedExample title="VCG payments, then the GSP gap">
-Compute $A$'s VCG payment as displaced welfare. Others' best welfare without $A$: give slot 1 to $B$ (600) and slot 2 to $C$ (200), total $800$. Others' welfare when $A$ takes slot 1: only $B$ in slot 2, $300$. Payment $= 800 - 300 = 500$. Likewise $B$ pays $1200 - 1000 = 200$.
+Compute $A$'s VCG payment as displaced welfare. Others' best welfare without $A$: give slot 1 to $B$ (600) and slot 2 to $C$ (320), total $920$. Others' welfare when $A$ takes slot 1: only $B$ in slot 2, $480$. Payment $= 920 - 480 = 440$. Likewise $B$ pays $1320 - 1000 = 320$.
 
-Now GSP under truthful bids: slot 1's price is the next bid, $B = 6$, times slot 1's $100$ clicks, so $600$. That exceeds $A$'s VCG payment of $500$. Facing that, $A$ would shade its bid or reconsider the slot, so truthful bidding is not stable. The envy-free equilibrium of GSP settles at bids that make each advertiser content with its slot and price, reproducing the VCG numbers.
+Now GSP under truthful bids: slot 1's price is the next bid, $B = 6$, times slot 1's $100$ clicks, so $600$, which exceeds $A$'s VCG payment of $440$. Test the deviation. Staying at slot 1 nets $A$ its value less that price, $1000 - 600 = 400$. Shading to just under $6$ drops $A$ into slot 2, where it pays $C$'s bid: $80(10-4) = 480$. Since $480 > 400$, $A$ deviates, so truthful bidding is not stable. The envy-free equilibrium of GSP settles at bids that make each advertiser content with its slot and price, reproducing the VCG numbers.
 </WorkedExample>
 </Section>
 
@@ -105,9 +107,9 @@ Now GSP under truthful bids: slot 1's price is the next bid, $B = 6$, times slot
   badge="apply"
   question="Under GSP with truthful bids (values 10, 6, 4), why does the top advertiser end up paying more than under VCG?"
   options={[
-    { text: "GSP charges the next bid (6) over all 100 clicks, 600, while VCG charges the externality, 500", correct: true, feedback: "GSP's price for a slot is the bid just below, times the slot's clicks. That comes to 600 for slot 1, above the 500 externality VCG charges, which is why truthful bidding is not a GSP equilibrium." },
-    { text: "GSP charges the advertiser's own bid", feedback: "It charges the next bid down, not the winner's own. Still, that comes to 600 here, more than VCG's 500." },
-    { text: "They pay the same under both rules with truthful bids", feedback: "Not with truthful bids: GSP gives 600, VCG 500. They coincide only at GSP's envy-free equilibrium, where bids are shaded." },
+    { text: "GSP charges the next bid (6) over all 100 clicks, 600, while VCG charges the externality, 440", correct: true, feedback: "GSP's price for a slot is the bid just below, times the slot's clicks. That comes to 600 for slot 1, above the 440 externality VCG charges, and steep enough that A would rather shade into slot 2 (480 beats 400), so truthful bidding is not a GSP equilibrium." },
+    { text: "GSP charges the advertiser's own bid", feedback: "It charges the next bid down, not the winner's own. Still, that comes to 600 here, more than VCG's 440." },
+    { text: "They pay the same under both rules with truthful bids", feedback: "Not with truthful bids: GSP gives 600, VCG 440. They coincide only at GSP's envy-free equilibrium, where bids are shaded." },
   ]}
 />
 
@@ -118,7 +120,7 @@ Now GSP under truthful bids: slot 1's price is the next bid, $B = 6$, times slot
   badge="analyse"
   question="Is bidding your true per-click value a dominant strategy under GSP with multiple slots?"
   options={[
-    { text: "No: with several slots a bidder can do better by shading or by preferring a cheaper lower slot", correct: true, feedback: "GSP is truthful only for a single slot (where it is the second-price auction). With multiple slots the price depends on others' bids in a way that rewards shading, so truth-telling is not dominant." },
+    { text: "No: with several slots a bidder can do better by shading into a cheaper lower slot", correct: true, feedback: "GSP is truthful only for a single slot (where it is the second-price auction). With several slots the top slot's price takes no account of what the lower slots cost, so when a lower slot keeps enough traffic, shading into it pays and truth-telling is not even an equilibrium, let alone dominant." },
     { text: "Yes, GSP is always truthful", feedback: "GSP is truthful only in the single-slot case. With multiple slots it is not, which is the whole point of this lesson." },
     { text: "Only if there are more slots than bidders", feedback: "The number of slots versus bidders is not what restores truthfulness. GSP is non-truthful with multiple slots regardless." },
   ]}

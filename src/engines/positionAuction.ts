@@ -44,3 +44,21 @@ export function gspPayment(values: number[], clicks: number[], slot: number): nu
   const nextBid = sortedVals[slot + 1] ?? 0;
   return nextBid * sortedClicks[slot];
 }
+
+/**
+ * The top bidder's GSP payoff from holding slot 0 against shading down into slot 1, when everyone
+ * else bids truthfully. Staying pays the next bid per click; shading to just under the second bid
+ * wins slot 1 at the third bid per click. GSP is truthful for one slot but not for several, and
+ * whether the deviation actually pays depends on the click gap: it does exactly when the cheaper
+ * lower slot keeps enough traffic to beat the top slot's higher price.
+ */
+export function gspTopDeviation(
+  values: number[],
+  clicks: number[]
+): { stay: number; drop: number; profitable: boolean } {
+  const v = [...values].sort((a, b) => b - a);
+  const c = [...clicks].sort((a, b) => b - a);
+  const stay = (c[0] ?? 0) * (v[0] - (v[1] ?? 0));
+  const drop = (c[1] ?? 0) * (v[0] - (v[2] ?? 0));
+  return { stay, drop, profitable: drop > stay + 1e-9 };
+}

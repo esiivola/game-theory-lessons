@@ -1,17 +1,19 @@
 <script lang="ts">
-  import { solveVCG, gspPayment } from '@/engines/positionAuction';
+  import { solveVCG, gspPayment, gspTopDeviation } from '@/engines/positionAuction';
 
   interface Predict { question: string; options: { key: string; label: string }[]; reveal: string; }
   let { exhibit = '', caption = '', predict = null }:
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
-  const CLICKS = [100, 50];
+  const CLICKS = [100, 80];
   const NAMES = ['A', 'B', 'C'];
   let predicted = $state(predict === null);
   let rule = $state<'vcg' | 'gsp'>('vcg');
   let values = $state([10, 6, 4]); // per-click values, truthful
 
   const assign = $derived(solveVCG(values, CLICKS));
+  const dev = $derived(gspTopDeviation(values, CLICKS));
+  const topName = $derived(NAMES[[...values].map((v, i) => i).sort((a, b) => values[b] - values[a])[0]]);
   const rows = $derived(assign.map((a) => {
     const pay = rule === 'vcg' ? a.vcgPayment : gspPayment(values, CLICKS, a.slot);
     return { name: NAMES[a.index], slot: a.slot + 1, clicks: a.clicks, value: a.value, pay, profit: a.value * a.clicks - pay };
@@ -41,7 +43,7 @@
       </div>
     </div>
   {:else}
-    <p class="setup">Two ad slots: slot 1 gets 100 clicks, slot 2 gets 50. Three advertisers bid per click.</p>
+    <p class="setup">Two ad slots: slot 1 gets 100 clicks, slot 2 gets 80. Three advertisers bid per click.</p>
     <div class="bidders">
       {#each NAMES as nm, i}
         <div class="bidder">
@@ -68,7 +70,16 @@
       {#if rule === 'vcg'}
         VCG charges each winner the externality it imposes on the others, independent of its own bid, so bidding your true value is a dominant strategy.
       {:else}
-        GSP charges each slot the next advertiser's bid. Under truthful bids the top slot pays more than under VCG, so truthful bidding is not an equilibrium: advertisers shade toward the envy-free equilibrium, which reproduces the VCG prices.
+        GSP charges each slot the next advertiser's bid, so the top slot pays more here than under VCG.
+        Bidding truthfully, {topName} keeps {Math.round(dev.stay)}; shading just under the second bid
+        would win slot 2 at the third bid, worth {Math.round(dev.drop)}.
+        {#if dev.profitable}
+          Shading pays, so truthful bidding is not an equilibrium: advertisers shade toward the envy-free
+          equilibrium, which reproduces the VCG prices.
+        {:else}
+          Shading does not pay at these numbers, so truth survives here even though GSP overcharges. GSP is
+          still not truthful in general: change the values or the click split and the deviation turns profitable.
+        {/if}
       {/if}
     </div>
 
