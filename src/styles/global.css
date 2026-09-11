@@ -201,7 +201,7 @@ img{max-width:100%}
 /* predict block */
 .predict .q{font-weight:600;font-size:15.5px;margin-bottom:13px}
 .predict .opts{display:flex;gap:9px}
-.predict .opts button{flex:1;border:1.5px solid var(--border-strong);background:var(--surface);border-radius:9px;padding:12px 8px;font-weight:600;font-size:13.5px;cursor:pointer;color:var(--ink)}
+.predict .opts button{flex:1;min-height:44px;border:1.5px solid var(--border-strong);background:var(--surface);border-radius:9px;padding:12px 8px;font-weight:600;font-size:13.5px;cursor:pointer;color:var(--ink)}
 .predict .opts button:hover{border-color:var(--accent)}
 .predict .opts button:disabled{opacity:.55;cursor:default}
 .hidden{display:none}
