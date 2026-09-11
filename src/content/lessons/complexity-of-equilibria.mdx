@@ -11,7 +11,7 @@ estMinutes: 5
 mvp: true
 prereqs: ["existence-of-nash"]
 concepts: ["ppad", "sperner", "computational-complexity"]
-refs: ["daskalakis2009"]
+refs: ["daskalakis2009", "savaniVonStengel2006"]
 anchorEmoji: "🧭"
 ---
 
@@ -72,7 +72,7 @@ The boundary coloring forces a kind of parity: as you trace the edges, the color
 PPAD is a complexity class for problems whose solutions are guaranteed to exist by a parity argument (an "end of a directed line"), like Sperner's lemma and Brouwer fixed points. Computing a Nash equilibrium of a general game is PPAD-complete: as hard as any problem in the class. This is strong evidence that no efficient (polynomial-time) algorithm exists, even though a solution is guaranteed. The special case of two-player zero-sum games is easy, solvable as a linear program.
 </DefinitionAside>
 
-The Lemke-Howson algorithm finds a two-player Nash equilibrium by pivoting along a path of almost-equilibria, exactly the "follow the directed line to its end" structure of PPAD. Savani and von Stengel constructed games forcing this path to be exponentially long. So the guarantee that the path ends (a solution exists) does not bound how far you must walk.
+The Lemke-Howson algorithm finds a two-player Nash equilibrium by pivoting along a path of almost-equilibria, exactly the "follow the directed line to its end" structure of PPAD. Savani and von Stengel (2006) constructed games forcing this path to be exponentially long. So the guarantee that the path ends (a solution exists) does not bound how far you must walk.
 
 The contrast with zero-sum games is sharp: there, the minimax value is a linear program, computable quickly. Difficulty appears only in general (non-zero-sum) games.
 </Section>
@@ -136,4 +136,4 @@ Now scale up. In a finely subdivided triangle with millions of cells, the panchr
 />
 </Section>
 
-<SourcesList refs={["daskalakis2009"]} />
+<SourcesList refs={["daskalakis2009", "savaniVonStengel2006"]} />

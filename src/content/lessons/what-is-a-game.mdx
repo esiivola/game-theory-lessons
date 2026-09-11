@@ -57,6 +57,20 @@ A profile $s$ lists one strategy per player. Player $i$ evaluates it through $u_
 </DefinitionAside>
 </Section>
 
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Read a cell, then read a row">
+Start with one cell. Pick the row for your choice and the column for theirs, and read the pair. Row "you open early", column "they open late" gives $(3, 1)$: the first number is always yours, so you make $3$ and they make $1$.
+
+Now compare a whole row against the other, holding their choice fixed. Suppose they open late. Your early row pays $3$, your late row pays $2$, so against a late rival you want to open early. Fix their choice the other way, at early: now your early row pays $0$ and your late row pays $1$, so you would rather open late. Comparing down a column with their choice held fixed is the move you will use in every lesson from here.
+
+**Faded.** Do the same for them. If you open early, is their better reply early or late? Read their numbers (the second in each pair) along the "you open early" row: early pays them $0$, late pays them $1$, so they open late.
+
+**Solo.** There is no row that wins for you in both columns. Say in one sentence what that means for how you should choose.
+</WorkedExample>
+</Section>
+
 <Section id="key">
 ## Key idea
 

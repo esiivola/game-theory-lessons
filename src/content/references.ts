@@ -165,6 +165,10 @@ export const REFERENCES: Record<string, string> = {
     'Hart, S., and Mas-Colell, A. (2000). A simple adaptive procedure leading to correlated equilibrium. <i>Econometrica</i>, 68(5), 1127-1150.',
   daskalakis2009:
     'Daskalakis, C., Goldberg, P. W., and Papadimitriou, C. H. (2009). The complexity of computing a Nash equilibrium. <i>SIAM Journal on Computing</i>, 39(1), 195-259.',
+  savaniVonStengel2006:
+    'Savani, R., and von Stengel, B. (2006). Hard-to-solve bimatrix games. <i>Econometrica</i>, 74(2), 397-429.',
+  chatterjeeSamuelson1983:
+    'Chatterjee, K., and Samuelson, W. (1983). Bargaining under incomplete information. <i>Operations Research</i>, 31(5), 835-851.',
   rosenthal1973:
     'Rosenthal, R. W. (1973). A class of games possessing pure-strategy Nash equilibria. <i>International Journal of Game Theory</i>, 2(1), 65-67.',
   mondererShapley1996:
