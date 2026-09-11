@@ -17,6 +17,7 @@ anchorEmoji: "🔁"
 
 import Section from '@/components/ui/Section.astro';
 import Callout from '@/components/ui/Callout.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
 import SourcesList from '@/components/ui/SourcesList.astro';
 import WarmUp from '@/components/interactive/WarmUp.svelte';
 import QuizCard from '@/components/interactive/QuizCard.svelte';
@@ -72,6 +73,20 @@ For each belief about the other player, some move of yours pays most. That is a 
 <Callout kind="ask">
 Is rationalizable the same as Nash? No. Every Nash strategy is rationalizable, but the rationalizable set is usually larger. Rationalizability asks only that your belief be consistent with the others being rational; Nash adds that everyone's beliefs are actually correct.
 </Callout>
+</Section>
+
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Show that Mid is never a best reply">
+First check the easy test and watch it fail. Mid is not beaten by Top alone: against Right, Mid pays $1$ and Top pays $0$. It is not beaten by Bottom alone either: against Left, Mid pays $1$ and Bottom pays $0$. So no single row of yours dominates it, and a domination test that looks only at pure strategies keeps Mid.
+
+Now allow a mix. Play Top and Bottom with probability $\tfrac12$ each. Against Left it pays $\tfrac12(4) + \tfrac12(0) = 2$; against Centre, $\tfrac12(3) + \tfrac12(3) = 3$; against Right, $\tfrac12(0) + \tfrac12(4) = 2$. Every one of those beats Mid's flat $1$, so the mix strictly dominates Mid and no belief about the other player can make Mid a best reply. Delete it.
+
+**Faded.** Suppose Mid paid $2.5$ in all three columns instead of $1$. The same fifty-fifty mix now pays $2$, $3$, $2$: it no longer beats Mid everywhere. Look for a belief that makes Mid best: put probability $\tfrac12$ on Left and $\tfrac12$ on Right, and Top pays $2$, Bottom pays $2$, Mid pays $2.5$. Mid survives, because a strategy that is mediocre everywhere is the right hedge against a genuinely uncertain opponent.
+
+**Solo.** Back to the original numbers, and now run the same test on the other player. Their Centre column pays them $1$ whatever you do, exactly mirroring your Mid. A fifty-fifty mix of Left and Right pays them $2$ against Top and $2$ against Bottom, so Centre is never their best reply either and it goes too. What survives on both sides is Top and Bottom against Left and Right: the rationalizable set of this game.
+</WorkedExample>
 </Section>
 
 <Section id="key">

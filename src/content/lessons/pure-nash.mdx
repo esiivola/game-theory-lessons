@@ -18,6 +18,7 @@ anchorEmoji: "🎯"
 import Section from '@/components/ui/Section.astro';
 import Callout from '@/components/ui/Callout.astro';
 import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import WorkedExample from '@/components/ui/WorkedExample.astro';
 import SourcesList from '@/components/ui/SourcesList.astro';
 import WarmUp from '@/components/interactive/WarmUp.svelte';
 import PayoffMatrix from '@/components/interactive/PayoffMatrix.svelte';
@@ -60,6 +61,20 @@ A profile $s^*$ is a Nash equilibrium if, for every player $i$, $u_i(s_i^*, s_{-
 This game has two pure equilibria, both-opera and both-football. Both players prefer coordinating to missing each other, but they disagree about which cell to land on.
 </Section>
 
+<Section id="worked">
+## Work it out
+
+<WorkedExample title="Mark best responses, then read off the equilibria">
+Work one player at a time. **You** compare down each column. If they pick opera, your opera pays $2$ against your football's $0$, so mark opera. If they pick football, your football pays $1$ against $0$, so mark football. **They** compare across each row. If you pick opera, their opera pays $1$ against $0$; if you pick football, their football pays $2$ against $0$.
+
+Now look for cells carrying both marks. $(\text{opera}, \text{opera})$ has yours and theirs; so does $(\text{football}, \text{football})$. Those two are the pure Nash equilibria. The off-diagonal cells pay $(0,0)$ and carry no marks at all: from either one, both players want to move.
+
+**Faded.** Raise the mismatch payoff for missing each other from $0$ to $3$ in every off-diagonal cell, so the couple would rather be apart. Redo the marks: against their opera you now prefer football ($3 > 2$), and against their football you prefer opera ($3 > 1$). Their marks flip the same way, and the two equilibria move to the mismatched cells. The procedure did not change; only where the marks land.
+
+**Solo.** Try the matrix from the dominance lesson (advertise pays $3$ and $6$, staying quiet pays $1$ and $4$). Mark both players' best replies and you will find exactly one cell with both marks. The next lesson is about what makes that cell uncomfortable.
+</WorkedExample>
+</Section>
+
 <Section id="key">
 ## Key idea
 
@@ -92,6 +107,19 @@ This game has two pure equilibria, both-opera and both-football. Both players pr
     { text: "No, it only means no one can improve by moving alone", correct: true, feedback: "Stability is about unilateral deviations, not group welfare. The next lesson shows an equilibrium that is bad for everyone." },
     { text: "Yes, by definition", feedback: "Not so. Nash is about individual stability, which can sit well below the best group outcome." },
     { text: "Only when there are two of them", feedback: "The number of equilibria has nothing to do with whether they are group-optimal." },
+  ]}
+/>
+
+<QuizCard
+  client:visible
+  slug="pure-nash"
+  id="q3"
+  badge="brings back: dominance"
+  question="In the advertising game from the dominance lesson, both firms had a strictly dominant strategy. How many pure Nash equilibria does such a game have?"
+  options={[
+    { text: "Exactly one: the cell where both players use their dominant strategy", correct: true, feedback: "A strictly dominant strategy is the unique best reply to everything, so only that cell can carry both marks. Dominance, when it is available, settles the question that best-response marking answers in general." },
+    { text: "Two, like the coordination game above", feedback: "Two equilibria need each player's best reply to depend on the other. With a strictly dominant strategy it never does, so there is only one." },
+    { text: "None, because dominance and Nash are different ideas", feedback: "They agree: a strictly dominant strategy is a best reply to everything, so the dominant-strategy cell is a Nash equilibrium. Dominance is the easy special case." },
   ]}
 />
 </Section>
