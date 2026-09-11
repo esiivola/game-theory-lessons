@@ -109,7 +109,7 @@
 
 <style>
   .presets { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
-  .pchip { border: 1px solid var(--border-strong); background: var(--surface); border-radius: 999px; padding: 6px 11px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--ink-muted); }
+  .pchip { min-height: 44px; border: 1px solid var(--border-strong); background: var(--surface); border-radius: 999px; padding: 6px 11px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--ink-muted); }
   .pchip:hover { border-color: var(--accent); color: var(--ink); }
   .pchip.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
   .zgrid { display: grid; grid-template-columns: auto 1fr 1fr; gap: 6px; align-items: stretch; }
@@ -118,9 +118,13 @@
   .zh.corner { min-width: 18px; }
   .zcell { background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 8px 4px; }
   .zcell.nash { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold) inset; }
-  .pair { display: flex; flex-direction: column; gap: 6px; }
+  /* The two stepper rows sit 44px apart so their tap areas do not overlap. */
+  .pair { display: flex; flex-direction: column; gap: 22px; }
   .ctl { display: flex; align-items: center; justify-content: center; gap: 6px; }
-  .ctl button { width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); font-weight: 700; font-size: 13px; cursor: pointer; line-height: 1; }
+  .ctl button { position: relative; width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); font-weight: 700; font-size: 13px; cursor: pointer; line-height: 1; }
+  /* Painted at 22px, tapped at 44px. Within a cell the two steppers are 58px apart and the rows
+     44px, so the sixteen expanded areas tile the grid without any of them overlapping. */
+  .ctl button::after { content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 44px; height: 44px; }
   .ctl button:hover { border-color: var(--accent); color: var(--accent); }
   .ctl .you { color: var(--accent); font-weight: 700; min-width: 24px; text-align: center; }
   .ctl .them { color: var(--ink-muted); font-weight: 700; min-width: 24px; text-align: center; }

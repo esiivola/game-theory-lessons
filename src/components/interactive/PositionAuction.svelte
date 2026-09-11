@@ -89,16 +89,21 @@
 
 <style>
   .setup { font-size: 13px; color: var(--ink-muted); margin: 0 0 12px; line-height: 1.5; }
-  .bidders { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  /* Row gap carries the stepper hit areas: the bidders wrap to two rows at 375px, and a 44px
+     tap area on a 22px button needs the rows at least 44px apart or A's + steals C's taps. */
+  .bidders { display: flex; gap: 20px 10px; flex-wrap: wrap; margin-bottom: 14px; }
   .bidder { display: flex; align-items: center; gap: 6px; }
   .bname { font-weight: 700; font-family: var(--font-mono); }
   .ctl { display: inline-flex; align-items: center; gap: 5px; }
-  .ctl button { width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); font-weight: 700; cursor: pointer; }
+  .ctl button { position: relative; width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); font-weight: 700; cursor: pointer; }
+  /* The steppers stay 22px on screen and take taps over 44px. The row is [-][value][+] with a
+     5px gap and a 20px value, so the two expanded areas end 8px apart and never overlap. */
+  .ctl button::after { content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 44px; height: 44px; }
   .ctl button:hover { border-color: var(--accent); color: var(--accent); }
   .bv { min-width: 20px; text-align: center; font-weight: 700; }
   .bunit { font-size: 11px; color: var(--ink-muted); }
   .seg { display: flex; border: 1px solid var(--border-strong); border-radius: 9px; overflow: hidden; margin-bottom: 12px; }
-  .seg button { flex: 1; border: 0; background: var(--surface); color: var(--ink-muted); font-weight: 600; font-size: 12.5px; padding: 9px; cursor: pointer; }
+  .seg button { flex: 1; min-height: 44px; border: 0; background: var(--surface); color: var(--ink-muted); font-weight: 600; font-size: 12.5px; padding: 9px; cursor: pointer; }
   .seg button + button { border-left: 1px solid var(--border); }
   .seg button.on { background: var(--accent-soft); color: var(--accent); }
   .table { border: 1px solid var(--border); border-radius: 9px; overflow: hidden; margin-bottom: 12px; }

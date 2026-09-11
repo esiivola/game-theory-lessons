@@ -65,7 +65,7 @@
 
 <style>
   .seg { display: flex; border: 1px solid var(--border-strong); border-radius: 9px; overflow: hidden; margin-bottom: 14px; }
-  .seg button { flex: 1; border: 0; background: var(--surface); color: var(--ink-muted); font-weight: 600; font-size: 12.5px; padding: 9px 6px; cursor: pointer; }
+  .seg button { flex: 1; min-height: 44px; border: 0; background: var(--surface); color: var(--ink-muted); font-weight: 600; font-size: 12.5px; padding: 9px 6px; cursor: pointer; }
   .seg button + button { border-left: 1px solid var(--border); }
   .seg button.on { background: var(--accent-soft); color: var(--accent); }
   .matches { display: flex; flex-direction: column; gap: 7px; margin-bottom: 12px; }

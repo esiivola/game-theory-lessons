@@ -57,7 +57,7 @@
 <style>
   .setup { font-size: 13px; color: var(--ink-muted); margin: 0 0 12px; line-height: 1.5; }
   .seg { display: flex; border: 1px solid var(--border-strong); border-radius: 9px; overflow: hidden; margin-bottom: 14px; }
-  .seg button { flex: 1; border: 0; background: var(--surface); color: var(--ink-muted); font-weight: 600; font-size: 12px; padding: 9px 6px; cursor: pointer; }
+  .seg button { flex: 1; min-height: 44px; border: 0; background: var(--surface); color: var(--ink-muted); font-weight: 600; font-size: 12px; padding: 9px 6px; cursor: pointer; }
   .seg button + button { border-left: 1px solid var(--border); }
   .seg button.on { background: var(--accent-soft); color: var(--accent); }
   .meter { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "lab val" "bar bar"; gap: 4px 10px; margin-bottom: 12px; }

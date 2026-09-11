@@ -71,9 +71,11 @@ img{max-width:100%}
 .brandmark b{font-family:var(--font-display);font-weight:400;font-size:18px;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .topbar .spacer{flex:1}
 .prog-pill{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-muted);font-weight:600;border:1px solid var(--border);padding:5px 11px 5px 7px;border-radius:999px}
-.backbtn{border:1px solid var(--border);background:var(--surface);width:34px;height:34px;border-radius:9px;display:grid;place-items:center;cursor:pointer;color:var(--ink);flex:0 0 auto;text-decoration:none}
+.backbtn{position:relative;border:1px solid var(--border);background:var(--surface);width:34px;height:34px;border-radius:9px;display:grid;place-items:center;cursor:pointer;color:var(--ink);flex:0 0 auto;text-decoration:none}
+.backbtn::after{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:44px;height:44px}
 .topbar h1.lesson-title-top{font-family:var(--font-body);font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.theme-toggle{border:1px solid var(--border);background:var(--surface);color:var(--ink-muted);width:34px;height:34px;border-radius:9px;display:grid;place-items:center;cursor:pointer}
+.theme-toggle{position:relative;border:1px solid var(--border);background:var(--surface);color:var(--ink-muted);width:34px;height:34px;border-radius:9px;display:grid;place-items:center;cursor:pointer}
+.theme-toggle::after{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:44px;height:44px}
 .theme-toggle:hover{color:var(--ink)}
 
 .container{max-width:var(--measure); margin:0 auto; padding:22px 18px 40px}
@@ -196,7 +198,14 @@ img{max-width:100%}
 .score .v{font-family:var(--font-mono);font-weight:700;font-size:20px}
 .score .l{font-size:9.5px;color:var(--ink-muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
 .score.you .v{color:var(--accent)}
-.tinybtn{border:1px solid var(--border);background:var(--surface);color:var(--ink-muted);font-size:11px;font-weight:600;padding:6px 11px;border-radius:999px;cursor:pointer}
+.tinybtn{position:relative;border:1px solid var(--border);background:var(--surface);color:var(--ink-muted);font-size:11px;font-weight:600;padding:6px 11px;border-radius:999px;cursor:pointer}
+/* Tap target without the bulk: these pills stay 28px on screen but take taps over the full
+   44px the house rule asks for. Vertical only, since .play spaces them 9px apart and a
+   sideways expansion would let neighbours steal each other's taps. */
+.tinybtn::after{content:'';position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:44px}
+/* Sliders are the most-used control in the course and a bare range input is about 20px tall.
+   An element selector reaches inside the islands, where Svelte's scoping would block a class. */
+input[type="range"]{min-height:44px}
 
 /* predict block */
 .predict .q{font-weight:600;font-size:15.5px;margin-bottom:13px}
@@ -213,7 +222,7 @@ img{max-width:100%}
 .wq{margin-bottom:14px}.wq:last-child{margin-bottom:0}
 .wq p{font-size:14px;margin:0 0 8px;font-weight:500}
 .wopts{display:flex;gap:7px;flex-wrap:wrap}
-.wopts button{border:1px solid var(--border-strong);background:var(--bg);border-radius:8px;padding:8px 12px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink)}
+.wopts button{min-height:44px;border:1px solid var(--border-strong);background:var(--bg);border-radius:8px;padding:8px 12px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink)}
 .wopts button:hover{border-color:var(--accent)}
 .wopts button.ok{border-color:var(--cooperate);background:var(--cooperate-soft);color:var(--cooperate)}
 .wopts button.no{border-color:var(--defect);background:var(--defect-soft);color:var(--defect)}
