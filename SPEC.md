@@ -352,7 +352,7 @@ lets lessons be prose with `<PayoffMatrix/>`, `<Quiz/>`, and `$math$` inline.
 - Islands hydrate `client:visible` or `client:idle`; canvas engines are framework-free TS modules in `engines/`.
 - Tailwind wired to CSS-variable tokens; tokens declared once in global CSS.
 - One typed `progress` module owns all `localStorage` I/O; a store exposes reactive progress.
-- `astro.config.mjs`: `site: 'https://<USERNAME>.github.io'`, `base: '/game-theory'`; internal links via `import.meta.env.BASE_URL`; `.nojekyll`; deploy via `withastro/action` then `actions/deploy-pages`; friendly `404.astro`.
+- `astro.config.mjs`: `site: 'https://<USERNAME>.github.io'`, `base: '/game-theory-lessons'`; internal links via `import.meta.env.BASE_URL`; `.nojekyll`; deploy via `withastro/action` then `actions/deploy-pages`; friendly `404.astro`.
 - Minimal libraries: Tailwind; CSS-first motion (Motion One only if needed); inline SVG for matrices and trees; canvas plus rAF for sims; KaTeX; canvas-confetti; Lucide icons; Fontsource fonts.
 
 ### Repo structure (target)

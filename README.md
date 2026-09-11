@@ -15,7 +15,7 @@ Astro (static, MDX content collection), Svelte 5 islands for the interactives, K
 
 ```bash
 npm install
-npm run dev       # http://localhost:4321/game-theory/
+npm run dev       # http://localhost:4321/game-theory-lessons/
 npm run build     # static output to ./dist
 npm run preview   # serve the built site (test the real base path)
 ```
@@ -25,7 +25,7 @@ npm run preview   # serve the built site (test the real base path)
 1. In the repo settings, set Pages -> Build and deployment -> Source to **GitHub Actions**.
 2. Push to `main`. The workflow in `.github/workflows/deploy.yml` builds and deploys.
 3. If your GitHub account is not `esiivola`, update `site` in `astro.config.mjs`. The project is
-   served under the `/game-theory` base path; all internal links go through `withBase()` in
+   served under the `/game-theory-lessons` base path; all internal links go through `withBase()` in
    `src/config/site.ts`, so keep using that helper.
 
 ## Structure

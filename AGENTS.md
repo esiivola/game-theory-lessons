@@ -49,7 +49,7 @@ Node 20+. Package manager: npm (lockfile committed). Do not add a second package
 8. **One owner for storage.** Only `src/lib/progress.ts` reads and writes `localStorage`. Components use the store or the API, never `localStorage` directly.
 9. **Accessible by construction.** Real `<button>`/`<a>`, visible focus, keyboard-operable, ARIA on progress and feedback, respects `prefers-reduced-motion`. See §9.
 10. **Keep it small.** Reuse existing components and patterns before adding a dependency. Prefer CSS/SVG over a library. New deps need a one-line justification.
-11. **Mind the base path.** GitHub Pages serves under `/game-theory/`. Every internal link and asset goes through the base helper (§8). A hard-coded `/lessons/x` link 404s in production.
+11. **Mind the base path.** GitHub Pages serves under `/game-theory-lessons/`. Every internal link and asset goes through the base helper (§8). A hard-coded `/lessons/x` link 404s in production.
 12. **Verify before claiming done.** Run `npm run check` and `npm run build`; test the built site with `npm run preview` at mobile width. Report real results, including failures.
 
 ---
@@ -204,7 +204,7 @@ A profile $s^*$ is a Nash equilibrium if $u_i(s_i^*,s_{-i}^*) \ge u_i(s_i,s_{-i}
 
 ## 8. Routing, links, and the base path (the number-one footgun)
 
-- Production base is `/game-theory/`. Configure in `astro.config.mjs`: `site: 'https://<USERNAME>.github.io'`, `base: '/game-theory'`.
+- Production base is `/game-theory-lessons/`. Configure in `astro.config.mjs`: `site: 'https://<USERNAME>.github.io'`, `base: '/game-theory-lessons'`.
 - **Never hard-code internal URLs.** Use the helper:
   ```ts
   // src/config/site.ts
