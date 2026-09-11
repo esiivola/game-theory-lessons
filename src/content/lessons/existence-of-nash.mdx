@@ -91,7 +91,9 @@ The theorem guarantees existence. It says nothing about how many equilibria ther
 <WorkedExample title="Verify the uniform mix is an equilibrium">
 Fix the opponent at $\tfrac13$ each. Compute your payoff to Rock: it beats Scissors ($+1$, probability $\tfrac13$), loses to Paper ($-1$, probability $\tfrac13$), ties Rock ($0$, probability $\tfrac13$), so the expected payoff is $0$. The same holds for Paper and for Scissors, by symmetry.
 
-Since all three pure moves pay $0$, any mix of them also pays $0$, so you cannot do better than the uniform mix. Neither can the opponent. Both playing $\tfrac13$ each is therefore a Nash equilibrium, and by symmetry it is the only one.
+Since all three pure moves pay $0$, any mix of them also pays $0$, so you cannot do better than the uniform mix. Neither can the opponent. Both playing $\tfrac13$ each is therefore a Nash equilibrium.
+
+It is also the only one, and symmetry alone does not show that. Suppose you play Rock, Paper, Scissors with probabilities $r, p, s$. The opponent's payoff to Rock is $s - p$, to Paper is $r - s$, to Scissors is $p - r$. For your mix to be part of an equilibrium it must hold them to the game's value of $0$, so all three must be at most zero: $s \le p$, $r \le s$, $p \le r$. That chain closes on itself, forcing $r = p = s = \tfrac13$.
 </WorkedExample>
 </Section>
 

@@ -83,7 +83,7 @@ Because best responses depend only on neighbours, local update dynamics converge
 <WorkedExample title="Star versus cycle">
 On the star, suppose the hub provides. Every leaf has the hub as a neighbour, so each leaf is content to free-ride (a provider neighbour exists), and the hub, whose only neighbours are non-providing leaves, is content to provide. That is a maximal independent set of size $1$: the whole street served for a cost of $1$.
 
-On the six-cycle, try one provider: the node opposite it has no providing neighbour, so it would rather provide, breaking the profile. Add it and you have two opposite providers, an independent set (they are not adjacent) that is maximal (each of the four remaining nodes touches one). Cost $2$, and that is the cheapest equilibrium. Run best responses from an empty network instead and every node wants to provide at once, which settles on the alternating three, cost $3$. Either way the cycle costs more than the star, purely because it has no hub to cover everyone at once.
+On the six-cycle, try one provider: the node opposite it has no providing neighbour, so it would rather provide, breaking the profile. Add it and you have two opposite providers, an independent set (they are not adjacent) that is maximal (each of the four remaining nodes touches one). Cost $2$, and that is the cheapest equilibrium. Run best responses from an empty network instead and the nodes take turns: the first sees no provider and provides, its two neighbours then free-ride off it, the next uncovered node provides, and the sweep settles on the alternating three, cost $3$. Either way the cycle costs more than the star, purely because it has no hub to cover everyone at once.
 </WorkedExample>
 </Section>
 
@@ -131,7 +131,7 @@ On the six-cycle, try one provider: the node opposite it has no providing neighb
   options={[
     { text: "Here the good is best-shot (one provider per neighbourhood suffices) and structure decides who provides, rather than everyone free-riding to zero", correct: true, feedback: "The classic public-goods game had contributions collapse to zero. Best-shot on a network is different: exactly enough nodes provide to cover everyone, and which nodes depends on the graph, not on a race to the bottom." },
     { text: "It is the same game with the same all-zero outcome", feedback: "The outcomes differ: best-shot equilibria have a specific set of providers (a maximal independent set), not universal free-riding." },
-    { text: "Network position is irrelevant here", feedback: "Position is decisive: the star needs one provider and the cycle three, purely because of structure." },
+    { text: "Network position is irrelevant here", feedback: "Position is decisive: one hub covers a star, while a cycle needs at least two providers and best responses from empty land on three, purely because of structure." },
   ]}
 />
 </Section>

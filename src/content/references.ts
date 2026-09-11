@@ -103,6 +103,8 @@ export const REFERENCES: Record<string, string> = {
     'Grossman, S. J., and Hart, O. D. (1983). An analysis of the principal-agent problem. <i>Econometrica</i>, 51(1), 7-45.',
   aumann1976:
     'Aumann, R. J. (1976). Agreeing to disagree. <i>Annals of Statistics</i>, 4(6), 1236-1239.',
+  milgromStokey1982:
+    'Milgrom, P., and Stokey, N. (1982). Information, trade and common knowledge. <i>Journal of Economic Theory</i>, 26(1), 17-27.',
   rubinstein1989:
     'Rubinstein, A. (1989). The electronic mail game: strategic behavior under almost common knowledge. <i>American Economic Review</i>, 79(3), 385-391.',
   carlssonVanDamme1993:
