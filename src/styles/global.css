@@ -170,7 +170,9 @@ img{max-width:100%}
 .exhibit-cap span{color:var(--accent)}
 
 /* payoff matrix (shared by islands) */
-.matrix{display:grid;grid-template-columns:24px 1fr 1fr;gap:6px;align-items:stretch}
+/* Column count comes from the component, which knows how many strategies the game has.
+   This is only the 2x2 fallback: rationalizability's 3x3 used to wrap into nonsense here. */
+.matrix{display:grid;grid-template-columns:24px repeat(2, minmax(0, 1fr));gap:6px;align-items:stretch}
 .mh{display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;text-align:center;padding:3px;text-transform:uppercase}
 .mh.corner{font-size:9px;color:var(--ink-muted);font-weight:600;line-height:1.25;text-transform:none}
 .mh.coop{color:var(--cooperate)} .mh.def{color:var(--defect)}

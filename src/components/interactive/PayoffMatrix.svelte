@@ -130,7 +130,12 @@
       </div>
     </div>
   {:else}
-    <div class="matrix" role="group" aria-label="Payoff matrix">
+    <div
+      class="matrix"
+      style={`grid-template-columns:24px repeat(${cols.length}, minmax(0, 1fr))`}
+      role="group"
+      aria-label="Payoff matrix"
+    >
       <div class="mh corner">You&nbsp;&darr;<br />Them&nbsp;&rarr;</div>
       {#each cols as c}
         <div class={'mh ' + toneClass(c.tone)}>{c.label}</div>
