@@ -13,8 +13,13 @@
     { name: 'Matching Pennies', m: [[[1, -1], [-1, 1]], [[-1, 1], [1, -1]]] },
   ];
 
+  // Copy by hand rather than with structuredClone: m is a reactive proxy, and cloning a proxy
+  // throws DataCloneError, which silently killed every payoff button below.
+  const copy = (g: M2): M2 =>
+    [[[...g[0][0]], [...g[0][1]]], [[...g[1][0]], [...g[1][1]]]] as M2;
+
   let predicted = $state(predict === null);
-  let m = $state<M2>(structuredClone(PRESETS[0].m));
+  let m = $state<M2>(copy(PRESETS[0].m));
   let presetName = $state(PRESETS[0].name);
 
   const nash = $derived(pureNash(m));
@@ -22,9 +27,9 @@
   const isNash = (r: number, c: number) => nash.some((n) => n[0] === r && n[1] === c);
   const fmt = (n: number) => (n > 0 ? '+' + n : '' + n);
 
-  function load(p: { name: string; m: M2 }) { m = structuredClone(p.m); presetName = p.name; }
+  function load(p: { name: string; m: M2 }) { m = copy(p.m); presetName = p.name; }
   function bump(r: number, c: number, who: 0 | 1, d: number) {
-    const next = structuredClone(m);
+    const next = copy(m);
     next[r][c][who] = Math.max(-9, Math.min(9, next[r][c][who] + d));
     m = next;
     presetName = '';
@@ -78,12 +83,24 @@
     </div>
 
     <div class="readout" aria-live="polite">
-      {#if nash.length === 0}
-        No cell is stable: whoever you land on, someone wants to jump. There is no pure-strategy equilibrium, only a mixed one (the next lesson).
-      {:else if nash.length === 1}
-        One stable cell (gold). {family === 'prisoners-dilemma' ? 'Both players would prefer another cell, yet dominance drags them here: a dilemma.' : 'The game resolves to a single equilibrium.'}
+      {#if family === 'matching-pennies'}
+        No cell is stable, and the players want exactly opposite things: whoever you land on, someone wants to jump. There is no pure-strategy equilibrium, only a mixed one (the next lesson).
+      {:else if family === 'cycling'}
+        No cell is stable, so best responses chase each other in a circle. The players are not strictly opposed, though, so this is a cycling game rather than Matching Pennies. The equilibrium is mixed.
+      {:else if family === 'prisoners-dilemma'}
+        One stable cell (gold). Both players hold a dominant strategy and both would prefer another cell, yet dominance drags them here: a dilemma.
+      {:else if family === 'dominance-solvable'}
+        One stable cell (gold), reached by deleting dominated strategies: one player has a move that always pays more, and the other has a strict best reply to it.
+      {:else if family === 'stag-hunt'}
+        Two stable cells (gold), both where the players match. They agree which is better, but the other is safer: a coordination game.
+      {:else if family === 'battle-of-the-sexes'}
+        Two stable cells (gold), both where the players match, but each player prefers a different one: coordination with conflict.
+      {:else if family === 'pure-coordination'}
+        Two stable cells (gold) that pay exactly the same. Matching is all that matters and the payoffs cannot say which way, so something outside the game has to break the tie.
+      {:else if family === 'chicken'}
+        Two stable cells (gold), sitting off the diagonal: an anti-coordination game where each wants to do the opposite of the other.
       {:else}
-        Two stable cells (gold). {family === 'stag-hunt' ? 'Both prefer the same one, but the other is safer: a coordination game.' : family === 'battle-of-the-sexes' ? 'Each player prefers a different one: coordination with conflict.' : 'They sit off the diagonal: an anti-coordination game where each wants to do the opposite of the other.'}
+        {nash.length} stable {nash.length === 1 ? 'cell' : 'cells'} (gold), but the payoffs fit none of the five families: a player is indifferent somewhere, or the equilibria do not line up as coordination or anti-coordination.
       {/if}
     </div>
     <p class="znote">Nudge the payoffs and watch the family and the equilibria change as incentives cross thresholds.</p>
