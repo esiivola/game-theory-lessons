@@ -6,7 +6,7 @@ unitName: "Game theory in the wild"
 order: 9
 label: "A9"
 kind: case
-placement: "after:public-goods"
+placement: "after:cooperation-and-punishment"
 summary: "Hardin's tragedy, Ostrom's rescue, and why monitoring plus graduated sanctions beat privatization."
 tags: ["applied", "public-goods", "commons"]
 estMinutes: 6
@@ -45,12 +45,12 @@ import PublicGoodsPunishment from '@/components/interactive/PublicGoodsPunishmen
 <Section id="play">
 ## Predict, then play
 
-Harvest a shared, regenerating stock alongside bots. Overshoot the regeneration and it crashes. Toggle communication, monitoring, and graduated sanctions to see the resource recover.
+Restraint in a commons is the same choice as contributing to a shared pot: what you hold back benefits everyone, what you take is yours alone. Set your contribution and play rounds against three neighbours, one of them a persistent free-rider. Then switch on costly punishment, the enforcement Ostrom found in commons that lasted, and play again.
 
 <PublicGoodsPunishment
   client:visible
   exhibit="Exhibit 1"
-  caption="A shared stock with monitoring and graduated sanctions"
+  caption="A shared pot, with and without costly punishment of free-riders"
   predict={{
     question: 'How is a common resource best saved from collapse?',
     options: [{ key: 'privatize', label: 'Only by privatizing or nationalizing it' }, { key: 'ostrom', label: 'Often by self-governance: monitoring plus graduated sanctions' }],

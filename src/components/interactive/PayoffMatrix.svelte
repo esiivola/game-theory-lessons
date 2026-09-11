@@ -34,6 +34,7 @@
   let scoreThem = $state(0);
   let revealBR = $state(false);
   let nashMsg = $state('');
+  let rowCounts: Record<string, number> = {};
   const RM = () =>
     typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -72,8 +73,22 @@
     readout = `<b>${r.label}</b> and <b>${c.label}</b>: you <b class="mono">${fmt(p[0])}</b>, them <b class="mono">${fmt(p[1])}</b>.`;
   }
 
+  // The opponent is self-interested, not a coin flip: it best-responds to how you have played so
+  // far (a uniform prior over your rows before any history). In a dilemma that means it defects
+  // every round, which is exactly what the lesson claims will happen.
+  function opponentColumn(): Strat {
+    const weight = (rKey: string) => 1 + (rowCounts[rKey] ?? 0);
+    const total = rows.reduce((s, r) => s + weight(r.key), 0);
+    const ev = (cKey: string) =>
+      rows.reduce((s, r) => s + (weight(r.key) / total) * payoffs[r.key][cKey][1], 0);
+    const best = Math.max(...cols.map((c) => ev(c.key)));
+    const tied = cols.filter((c) => ev(c.key) >= best - 1e-9);
+    return tied[Math.floor(Math.random() * tied.length)];
+  }
+
   function choose(r: Strat) {
-    const c = cols[Math.floor(Math.random() * cols.length)];
+    const c = opponentColumn();
+    rowCounts[r.key] = (rowCounts[r.key] ?? 0) + 1;
     const p = payoffs[r.key][c.key];
     scoreYou += p[0];
     scoreThem += p[1];
@@ -86,6 +101,7 @@
   }
 
   function resetRounds() {
+    rowCounts = {};
     scoreYou = 0;
     scoreThem = 0;
     sel = null;

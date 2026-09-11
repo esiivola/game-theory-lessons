@@ -94,7 +94,13 @@ export function expectedDiscounted(
   return { a: discounted(m.payA, delta), b: discounted(m.payB, delta) };
 }
 
-/** Round-robin tournament: each strategy's average discounted score against all the others. */
+/**
+ * Round-robin tournament: each strategy's average discounted score against the whole field,
+ * itself included. Axelrod scored his entries against every entry plus a twin of themselves, and
+ * the twin match is what rewards a nice strategy: two tit-for-tats reach mutual cooperation, two
+ * always-defects grind at the punishment payoff. Drop the self-match and nothing in the pool ever
+ * charges a defector for being unable to cooperate with its own kind.
+ */
 export function tournament(
   strats: StratId[],
   delta: number,
@@ -104,13 +110,11 @@ export function tournament(
   const totals = new Map<StratId, number>(strats.map((s) => [s, 0]));
   for (const a of strats) {
     for (const b of strats) {
-      if (a === b) continue;
       const { a: sa } = expectedDiscounted(a, b, delta, pd, rounds);
       totals.set(a, (totals.get(a) as number) + sa);
     }
   }
-  const opponents = strats.length - 1;
   return strats
-    .map((id) => ({ id, score: (totals.get(id) as number) / Math.max(1, opponents) }))
+    .map((id) => ({ id, score: (totals.get(id) as number) / Math.max(1, strats.length) }))
     .sort((x, y) => y.score - x.score);
 }

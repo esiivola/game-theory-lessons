@@ -45,16 +45,16 @@ import MoralHazard from '@/components/interactive/MoralHazard.svelte';
 <Section id="play">
 ## Predict, then play
 
-As principal, set an incentive contract slope. The agent chooses effort, and the app shows the tradeoff between motivating effort and dumping risk on a risk-averse agent.
+As principal, split the pay between a base the agent gets either way and a bonus for high output. The agent here is risk-neutral but protected by limited liability, so watch where the incentive constraint binds and what the cheapest motivating contract leaves the agent.
 
 <MoralHazard
   client:visible
   exhibit="Exhibit 1"
-  caption="Setting an incentive slope under noisy output"
+  caption="Base pay against bonus, when effort is unobservable"
   predict={{
-    question: 'Should the agent bear all the risk (pure pay-for-output) to maximize effort?',
-    options: [{ key: 'all', label: 'Yes, full risk gives full incentives' }, { key: 'share', label: 'No, a risk-averse agent must be paid too much to bear all the noise' }],
-    reveal: 'No. Output is noisy, so loading all risk onto a risk-averse agent means paying a large risk premium for outcomes they cannot control. The optimal contract shares risk: enough slope to motivate effort, not so much that you overpay for noise.',
+    question: 'Which contract gets effort at the lowest cost to you?',
+    options: [{ key: 'base', label: 'A generous base with a small bonus' }, { key: 'bonus', label: 'No base at all, and the smallest bonus that still motivates' }],
+    reveal: 'No base, bonus 37.5. Only the gap between high- and low-output pay motivates effort, so every dollar of base is a dollar wasted. The cheapest motivating spread still hands the agent a rent of 15, which is the price of not being able to watch. A risk-averse agent would demand more still, and that premium is what the sections below add.',
   }}
 />
 </Section>
@@ -63,7 +63,7 @@ As principal, set an incentive contract slope. The agent chooses effort, and the
 ## Why did that happen?
 
 <Callout kind="ask">
-The principal cannot see effort, only noisy output, so pay must be tied to output to motivate. But output also depends on luck, and a risk-averse agent dislikes bearing that luck; to accept a high-powered contract they demand a risk premium. The optimal contract trades these off: steep enough to induce effort, flat enough to avoid overpaying for noise. Make the agent bear all risk and you over-punish them for bad luck and pay dearly for it; make pay flat and effort collapses. Litigation is the mirror image with private information: both sides usually prefer to settle and split the saved trial costs, but if each is too optimistic about winning, or holds private information the other lacks, their acceptable ranges stop overlapping and the case goes to trial.
+The principal cannot see effort, only noisy output, so pay must be tied to output to motivate, and with a risk-neutral agent the cheapest way to do that is all bonus and no base. Now make the agent risk-averse, as most employees are. Output still depends on luck, and an agent who dislikes bearing that luck demands a risk premium to accept a high-powered contract. The optimal contract trades these off: steep enough to induce effort, flat enough to avoid overpaying for noise. Make the agent bear all risk and you over-punish them for bad luck and pay dearly for it; make pay flat and effort collapses. Litigation is the mirror image with private information: both sides usually prefer to settle and split the saved trial costs, but if each is too optimistic about winning, or holds private information the other lacks, their acceptable ranges stop overlapping and the case goes to trial.
 </Callout>
 </Section>
 

@@ -45,16 +45,17 @@ import RepeatedPD from '@/components/interactive/RepeatedPD.svelte';
 <Section id="play">
 ## Predict, then play
 
-Run an Axelrod-style setup: pick your strategy against a grim-trigger bot, tune patience, and see the round-robin tournament rank the strategies.
+Run an Axelrod-style setup: pick your strategy against a grim-trigger bot, then read the round-robin table, where every strategy meets the whole field and a copy of itself. It opens at a patient $\delta = 0.9$; drag patience down and watch the ranking turn over.
 
 <RepeatedPD
   client:visible
   exhibit="Exhibit 1"
   caption="Repeated PD tournament, T5 R3 P1 S0"
+  startDelta={0.9}
   predict={{
     question: 'In Axelrod\'s repeated-PD tournament, which kind of strategy won?',
     options: [{ key: 'nasty', label: 'A clever, exploitative one' }, { key: 'nice', label: 'A simple, nice, retaliatory one (tit-for-tat)' }],
-    reveal: 'Tit-for-tat: cooperate first, then mirror the opponent. It never defects first (nice), punishes defection at once (retaliatory), forgives when the other returns (forgiving), and is easy to read. Nasty strategies won early rounds but lost the war.',
+    reveal: 'Tit-for-tat: cooperate first, then mirror the opponent. It never defects first (nice), punishes defection at once (retaliatory), forgives when the other returns (forgiving), and is easy to read. Nasty strategies won early exchanges but lost the war, as long as the war was long enough: drop patience below about 78% in the table and Always defect wins instead.',
   }}
 />
 </Section>

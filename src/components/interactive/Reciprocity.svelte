@@ -50,7 +50,7 @@
         When a blind wheel produced the same $2 offer, rejections drop sharply: there is no one to punish, so the unequal outcome is largely accepted.
       {/if}
     </div>
-    <p class="note">Identical outcomes, very different responses. Intentions matter: reciprocity weighs how the other player behaved, not only the final payoffs. Outcome-based inequity aversion alone cannot explain the gap.</p>
+    <p class="note">Identical outcomes, very different responses. Intentions matter: reciprocity weighs how the other player behaved, not only the final payoffs. Outcome-based inequity aversion alone cannot explain the gap. The two rates are illustrative, sized to the gap Blount (1995) measured between deliberate and randomly generated offers, not exact published figures.</p>
   {/if}
 </div>
 

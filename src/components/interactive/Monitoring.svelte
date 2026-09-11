@@ -54,7 +54,10 @@
     {#if run.length > 0}
       <div class="tape" aria-hidden="false">
         {#each run as r}
-          <span class={'cell ' + r.phase} title={r.signal}></span>
+          <span
+            class={'cell ' + r.phase}
+            title={r.phase === 'war' ? 'price war round' : r.signal === 'bad' ? 'bad signal: a war starts, though nobody cheated' : 'good signal: cooperation continues'}
+          ></span>
         {/each}
       </div>
       <div class="tapekey"><span><i class="coop"></i>cooperating</span><span><i class="war"></i>price war</span></div>

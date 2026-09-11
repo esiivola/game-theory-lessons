@@ -27,12 +27,10 @@
   const myProfit = $derived(profit(a, c, q1, q2));
   const theirProfit = $derived(profit(a, c, q2, q1));
 
-  // Bertrand: your price p1; the rival undercuts by 1 down to marginal cost.
+  // Bertrand: your price p1; the rival undercuts by 1, but never below marginal cost.
   let p1 = $state(Math.round((a) / 2));
   const rivalPrice = $derived(Math.max(c, p1 - 1));
-  const iAmCheapest = $derived(p1 < rivalPrice);
-  // Homogeneous good, demand D(p) = a - p at the market price; the cheaper firm serves all of it.
-  const myBertrand = $derived(iAmCheapest ? (p1 - c) * Math.max(0, a - p1) : 0);
+  const undercut = $derived(rivalPrice < p1); // at p1 = c there is nothing left to undercut
 
   const round = (n: number) => Math.round(n * 10) / 10;
 
@@ -121,9 +119,15 @@
         <input type="range" min={c} max={a} step="1" bind:value={p1} aria-label="Your price" />
       </label>
       <div class="readout" aria-live="polite">
-        You post p<sub>1</sub> = <b class="mono">{p1}</b>. The rival undercuts to <b class="mono">{rivalPrice}</b> and takes the whole market,
-        so you sell nothing and earn <b class="mono">0</b>.
-        {#if p1 <= c}At p = {c} (marginal cost) there is nothing left to undercut. That is the only Bertrand equilibrium, and profit is zero.{:else}Whatever margin you post, one cent below it wins everything. The price war ends at cost.{/if}
+        {#if undercut}
+          You post p<sub>1</sub> = <b class="mono">{p1}</b>. The rival undercuts to <b class="mono">{rivalPrice}</b> and takes the whole market,
+          so you sell nothing and earn <b class="mono">0</b>.
+          Whatever margin you post, one cent below it wins everything. The price war ends at cost.
+        {:else}
+          You post p<sub>1</sub> = <b class="mono">{p1}</b>, which is marginal cost. The rival can only match it, so you split the market
+          and both earn <b class="mono">0</b>. That is the only Bertrand equilibrium: no one can cut further, and no one can raise
+          their price without losing every customer.
+        {/if}
       </div>
       <div class="play"><button class="tinybtn" onclick={reset}>Reset</button></div>
     {/if}

@@ -45,7 +45,7 @@ import MedianVoter from '@/components/interactive/MedianVoter.svelte';
 <Section id="play">
 ## Predict, then play
 
-Drag two candidates along a spectrum with a visible voter distribution. Vote shares update, and any off-median position gets beaten. Add an extremism turnout penalty to break the convergence.
+Drag two candidates along a spectrum of seven voters. Vote shares update as you move, and any off-median position can be beaten by a rival who slides inside it. Try to find a pair of positions where neither candidate wants to move.
 
 <MedianVoter
   client:visible
@@ -74,14 +74,14 @@ Candidates want votes, and on a single left-right dimension each voter picks the
 Downs (1957), building on Hotelling, showed that with single-peaked preferences on one dimension, two office-seeking candidates both converge to the median voter's position; that is the unique Nash equilibrium. The result is fragile: it fails with three or more candidates, in multiple policy dimensions (no median in general), and when extremist abstention penalizes centrism. Lobbying is modeled as an all-pay auction (Baye, Kovenock and de Vries, 1993): contestants spend to win a prize, but all spending is forfeit, so total resources burned can approach the prize's value, and rational ignorance means most voters do not monitor it.
 </DefinitionAside>
 
-Take voters at positions $\{0.1, 0.2, 0.5, 0.8, 0.9\}$; the median is $0.5$. If A stands at $0.4$ and B at $0.6$, B can slide to $0.5$ and win the median plus everyone to the right, a majority, so A is beaten anywhere but the median, and vice versa. Both-at-median is the only Nash equilibrium. Add a rule that voters far from both candidates abstain, and a candidate who hugs the center loses their own flank, so equilibrium platforms spread apart. Lobbying overlays an all-pay contest: firms and groups spend on influence, and because losers do not get their money back, aggregate spending can dissipate much of the prize, while rationally ignorant voters rarely police it.
+Take the seven voters in the exhibit, at positions $\{0.1, 0.2, 0.35, 0.5, 0.65, 0.8, 0.9\}$; the median is $0.5$. If A stands at $0.35$ and B at $0.65$, B can slide to $0.5$ and win the median plus everyone to the right, a majority, so A is beaten anywhere but the median, and vice versa. Both-at-median is the only Nash equilibrium. Add a rule that voters far from both candidates abstain, and a candidate who hugs the center loses their own flank, so equilibrium platforms spread apart. Lobbying overlays an all-pay contest: firms and groups spend on influence, and because losers do not get their money back, aggregate spending can dissipate much of the prize, while rationally ignorant voters rarely police it.
 </Section>
 
 <Section id="worked">
 ## Work it out
 
 <WorkedExample title="Convergence, and when it breaks">
-With voters at $\{0.1, 0.2, 0.5, 0.8, 0.9\}$, the median is $0.5$. Suppose A is at $0.4$ and B at $0.6$. B moves to $0.5$: now B is nearer to the median voter and to everyone at $0.8$ and $0.9$, winning at least three of five, a majority. A can only respond by moving to $0.5$ too. Once both sit at $0.5$, neither can profitably deviate, since any move loses the median to the other. That is the unique Nash equilibrium, and it explains platform convergence.
+With voters at $\{0.1, 0.2, 0.35, 0.5, 0.65, 0.8, 0.9\}$, the median is $0.5$. Suppose A is at $0.35$ and B at $0.65$. B moves to $0.5$: now B is nearer to the median voter and to everyone at $0.65$, $0.8$ and $0.9$, winning four of seven, a majority. A can only respond by moving to $0.5$ too. Once both sit at $0.5$, neither can profitably deviate, since any move loses the median to the other. That is the unique Nash equilibrium, and it explains platform convergence.
 
 Now let voters abstain if the nearest candidate is too far from them. A candidate at dead center now loses their own extreme supporters to abstention, so shifting slightly toward one's base can gain more turnout than it loses at the middle. The equilibrium platforms pull apart, and full convergence fails, matching real elections where candidates court their base as well as the center. With three candidates the logic collapses entirely: a third entrant near the median can leapfrog, and no stable median position exists. Meanwhile lobbying runs as an all-pay auction, where each side's spending is sunk, so competition can burn resources up to the value of the favour sought.
 </WorkedExample>

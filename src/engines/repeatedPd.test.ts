@@ -72,11 +72,28 @@ describe('the discounting threshold decides cooperation', () => {
 });
 
 describe('tournament', () => {
+  const field = ['allc', 'tft', 'grim', 'alld'] as const;
   it('returns every strategy, scored and sorted descending', () => {
-    const table = tournament(['allc', 'tft', 'grim', 'alld'], 0.9);
+    const table = tournament([...field], 0.9);
     expect(table.map((r) => r.id).sort()).toEqual(['allc', 'alld', 'grim', 'tft']);
     for (let i = 1; i < table.length; i++) {
       expect(table[i - 1].score).toBeGreaterThanOrEqual(table[i].score);
     }
+  });
+  it('lets the nice retaliators win once the future is heavy enough', () => {
+    const table = tournament([...field], 0.9);
+    expect(table[0].id).toBe('tft');
+    expect(table.find((r) => r.id === 'tft')!.score).toBeGreaterThan(
+      table.find((r) => r.id === 'alld')!.score
+    );
+  });
+  it('but hands the field to always-defect when players are impatient', () => {
+    const table = tournament([...field], 0.6);
+    expect(table[0].id).toBe('alld');
+  });
+  it('scores a twin match, so two tit-for-tats earn the cooperative payoff', () => {
+    // Without the self-match, tit-for-tat could never be rewarded for cooperating with its own kind.
+    const solo = tournament(['tft'], 0.9);
+    expect(solo[0].score).toBeCloseTo(3 / (1 - 0.9), 1);
   });
 });

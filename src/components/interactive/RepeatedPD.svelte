@@ -5,11 +5,11 @@
   } from '@/engines/repeatedPd';
 
   interface Predict { question: string; options: { key: string; label: string }[]; reveal: string; }
-  let { exhibit = '', caption = '', predict = null }:
-    { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
+  let { exhibit = '', caption = '', predict = null, startDelta = 0.6 }:
+    { exhibit?: string; caption?: string; predict?: Predict | null; startDelta?: number } = $props();
 
   let predicted = $state(predict === null);
-  let delta = $state(0.6);
+  let delta = $state(startDelta);
   let strat = $state<StratId>('tft');
   let ran = $state(false);
 
@@ -26,7 +26,7 @@
   const cooperates = $derived(strat === 'allc' || strat === 'tft' || strat === 'grim');
 
   function onPredict() { predicted = true; }
-  function reset() { delta = 0.6; strat = 'tft'; ran = false; }
+  function reset() { delta = startDelta; strat = 'tft'; ran = false; }
 </script>
 
 <div class="widget">
@@ -82,6 +82,10 @@
 
     <div class="tourney">
       <div class="tlab">Round-robin at &delta; = {Math.round(delta * 100)}%, average discounted score</div>
+      <p class="tnote">
+        Every strategy meets the whole field, including a copy of itself.
+        {#if table[0].id === 'alld'}With the future this light, Always defect tops the table: it grabs the temptation payoff before anyone can retaliate. Raise &delta; past about 78% and the nice retaliators overtake it.{:else}Tit-for-tat and Grim trigger lead, because each reaches mutual cooperation with every nice strategy and with its own twin. Drag &delta; below about 78% and Always defect takes the table back.{/if}
+      </p>
       {#each table as row}
         <div class="trow">
           <span class="tname">{STRAT_NAMES[row.id]}</span>
@@ -114,6 +118,7 @@
   .tapemore { color: var(--ink-muted); font-weight: 700; padding-left: 2px; }
   .tapekey { display: flex; gap: 14px; font-size: 10.5px; font-weight: 600; color: var(--ink-muted); margin-bottom: 4px; }
   .tourney { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .tnote { font-size: 11.5px; color: var(--ink-muted); margin: 0 0 10px; line-height: 1.5; }
   .tlab { font-size: 10.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 10px; }
   .trow { display: grid; grid-template-columns: 108px 1fr 40px; align-items: center; gap: 10px; margin-bottom: 8px; }
   .tname { font-size: 12px; font-weight: 600; color: var(--ink); }
