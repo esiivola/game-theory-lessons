@@ -139,7 +139,7 @@ Under independent private values, any auction that (in equilibrium) always gives
   badge="brings back: bayes-nash"
   question="Why is the first-price shading rule b(v) = (n-1)/n times v a Bayes-Nash equilibrium?"
   options={[
-    { text: "Each bidder best-responds to the distribution of rivals' values, and shading to (n-1)/n balances a higher margin against a lower chance of winning", correct: true, feedback: "You cannot see rivals' values, so you optimize against their distribution. The shading factor is exactly the best response when everyone else shades the same way, which makes it a Bayes-Nash equilibrium." },
+    { text: "Each bidder best-responds to the distribution of rivals' values, and shading to (n-1)/n balances a higher margin against a lower chance of winning", correct: true, feedback: "Take the rivals as using the same rule. A bid of <span class='mono'>b</span> then wins with probability proportional to <span class='mono'>b^(n-1)</span>, so your expected surplus is <span class='mono'>(v - b) * b^(n-1)</span> up to a constant. Setting its derivative to zero gives <span class='mono'>(n-1)(v - b) = b</span>, so <span class='mono'>b = (n-1)v/n</span>. The rule is its own best reply, which is what Bayes-Nash means." },
     { text: "Because bidding your value is dominant in first-price auctions too", feedback: "It is not: bidding your value would leave zero surplus. First-price bidding requires shading, tuned to the number of rivals." },
     { text: "Because the seller sets the shading rule", feedback: "The seller does not choose bidders' strategies. The shading emerges as each bidder's best response to the others under incomplete information." },
   ]}

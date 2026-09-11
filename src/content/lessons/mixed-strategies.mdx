@@ -143,7 +143,7 @@ Equilibrium says mix to a precise fraction. Real people do not. In first plays o
   badge="apply"
   question="At the mixed-strategy equilibrium of Matching Pennies, what is your expected payoff?"
   options={[
-    { text: "Zero, you are indifferent between Heads and Tails", correct: true, feedback: "Both moves pay the same at the equilibrium mix, and by symmetry that common value is 0. You mix to hold the opponent in check, not to raise your own payoff." },
+    { text: "Zero, you are indifferent between Heads and Tails", correct: true, feedback: "Your Heads pays <span class='mono'>2q - 1</span> and your Tails <span class='mono'>1 - 2q</span>. At the equilibrium <span class='mono'>q = 1/2</span> both come to 0, so you are indifferent and the value is 0. You mix to hold the opponent in check, not to raise your own payoff." },
     { text: "Positive, because mixing beats the opponent", feedback: "Mixing does not win you the game. It denies the opponent a way to win. In this symmetric game the value is 0 for both." },
     { text: "It depends on which face you lean toward", feedback: "At the equilibrium you lean toward neither. Leaning is exactly what a sharp opponent would punish." },
   ]}

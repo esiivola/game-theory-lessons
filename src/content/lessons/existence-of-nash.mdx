@@ -126,7 +126,7 @@ It is also the only one, and symmetry alone does not show that. Suppose you play
   badge="apply"
   question="At the 1/3-1/3-1/3 mix, what is each player's expected payoff in Rock-Paper-Scissors?"
   options={[
-    { text: "Zero", correct: true, feedback: "Every move wins, loses, and ties equally often against the uniform mix, so the expected payoff is 0. The game is a wash, which is why neither side can be exploited." },
+    { text: "Zero", correct: true, feedback: "Against the uniform mix every move wins, loses and ties a third of the time, so it pays <span class='mono'>(1/3)(+1) + (1/3)(-1) + (1/3)(0) = 0</span>. The game is a wash, which is why neither side can be exploited." },
     { text: "One-third", feedback: "Wins and losses cancel: a third chance of +1 and a third chance of -1 net to zero, plus a third chance of a tie." },
     { text: "It depends on your first move", feedback: "Against a uniform opponent every move pays the same, 0, regardless of what you open with." },
   ]}

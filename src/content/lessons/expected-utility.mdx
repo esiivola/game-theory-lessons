@@ -94,7 +94,7 @@ Take $u(x)=\sqrt{x}$ and the gamble (50% of \$0, 50% of \$100). Its expected uti
   badge="concept"
   question="A person with a concave (risk-averse) utility is offered a fair bet: pay 50 for a 50-50 shot at 0 or 100. What do they do?"
   options={[
-    { text: "Decline, and may pay to avoid it", correct: true, feedback: "Concave utility means the downside hurts more than the equal upside helps, so a fair bet is unattractive." },
+    { text: "Decline, and may pay to avoid it", correct: true, feedback: "Put the lesson's <span class='mono'>u(x) = &radic;x</span> to work. The gamble is worth <span class='mono'>0.5&middot;&radic;0 + 0.5&middot;&radic;100 = 5</span>, while the 50 already in hand is worth <span class='mono'>&radic;50 &asymp; 7.07</span>. Fair in money, a loss in utility: that gap is the curve." },
     { text: "Always accept, since it is fair", feedback: "Fair in money is not fair in utility for a risk-averse player." },
     { text: "It depends on the referee", feedback: "There is no referee. It depends only on the shape of their utility." },
   ]}
@@ -107,9 +107,9 @@ Take $u(x)=\sqrt{x}$ and the gamble (50% of \$0, 50% of \$100). Its expected uti
   badge="concept"
   question="You multiply every payoff in a game by 10 and add 5. Do the players' best choices change?"
   options={[
-    { text: "No, a positive affine transform leaves decisions unchanged", correct: true, feedback: "Expected-utility preferences are invariant to a positive affine rescaling, so nothing about the choices changes." },
-    { text: "Yes, bigger numbers change behaviour", feedback: "Only the ranking and relative gaps matter, and an affine transform preserves both." },
-    { text: "Only if the numbers become negative", feedback: "Sign alone does not matter here; the transform preserves the preference order." },
+    { text: "No, a positive affine transform leaves decisions unchanged", correct: true, feedback: "Expected utility is linear, so any gamble's new value is <span class='mono'>E[10u + 5] = 10&middot;E[u] + 5</span>. Compare two options and the <span class='mono'>+5</span> cancels while the <span class='mono'>&times;10</span> is positive, so <span class='mono'>10&middot;E[u(A)] + 5 &gt; 10&middot;E[u(B)] + 5</span> exactly when <span class='mono'>E[u(A)] &gt; E[u(B)]</span>. Every best reply survives, and so does every mixing probability. The payoff numbers move; the decisions do not." },
+    { text: "Yes, bigger numbers change behaviour", feedback: "The numbers do get bigger, but they all get bigger in the same way, so no comparison flips. Utilities carry meaning only through their ranking and the ratios between payoff gaps, and a positive affine map leaves both alone." },
+    { text: "Only if the numbers become negative", feedback: "Negative payoffs are harmless. What would break it is a negative <em>multiplier</em>: at <span class='mono'>&times;(-1)</span> every comparison reverses, the worst outcome becomes the best, and players switch to the opposite moves. The word <b>positive</b> in positive affine is the part doing the work." },
   ]}
 />
 

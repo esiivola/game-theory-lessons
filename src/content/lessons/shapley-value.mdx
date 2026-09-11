@@ -120,7 +120,7 @@ Average: $(0 + 0 + 100 + 100 + 100 + 100)/6 = 400/6 = 200/3 \approx 66.7$. The t
   badge="analyse"
   question="The Shapley value here is (66.7, 16.7, 16.7). What does it mean that this is outside the core?"
   options={[
-    { text: "A coalition (seller plus one buyer, worth 100) is offered only 83.3, so it could block this fair division", correct: true, feedback: "Fairness and stability part ways: the Shapley allocation gives the seller-plus-buyer coalition less than it can secure, so it is not immune to blocking. The game is not convex, so the Shapley value escapes the core." },
+    { text: "A coalition (seller plus one buyer, worth 100) is offered only 83.3, so it could block this fair division", correct: true, feedback: "The seller and one buyer can secure 100 alone but are handed <span class='mono'>200/3 + 50/3 = 250/3 &asymp; 83.3</span>, so they break away. Fairness and stability part ways here because the game is not convex, which is exactly when the Shapley value can fall outside the core." },
     { text: "It means the Shapley value was computed incorrectly", feedback: "It is correct; it simply is not a core allocation. In non-convex games the Shapley value can lie outside the core." },
     { text: "It means the core is empty", feedback: "The core here is the single point (100,0,0), not empty. The Shapley value just differs from it." },
   ]}

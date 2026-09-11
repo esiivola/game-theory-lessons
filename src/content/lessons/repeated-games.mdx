@@ -127,7 +127,7 @@ Rearranging, $R - T \ge -\delta(T - P)$, so $\delta \ge (T-R)/(T-P)$. For $T=5, 
   badge="apply"
   question="With T=5, R=3, P=1, the grim-trigger threshold is delta = 1/2. At delta = 0.4, what happens?"
   options={[
-    { text: "Cooperation cannot be sustained; both defect", correct: true, feedback: "Below the threshold the one-time gain from defecting outweighs the lost future cooperation, so defection is the best response even under grim trigger. The equilibrium is mutual defection." },
+    { text: "Cooperation cannot be sustained; both defect", correct: true, feedback: "Run the two streams at delta = 0.4. Cooperating forever is worth <span class='mono'>R/(1-delta) = 3/0.6 = 5</span>; defecting once and then taking the punishment is worth <span class='mono'>T + delta*P/(1-delta) = 5 + 0.4/0.6 = 5.67</span>. Cheating wins, so even grim trigger cannot hold and the equilibrium is mutual defection." },
     { text: "Cooperation is sustained, since the game repeats", correct: false, feedback: "Repetition alone is not enough. At delta = 0.4 the future is discounted too heavily, and 0.4 is below the 0.5 threshold, so cooperation breaks." },
     { text: "The players alternate cooperating and defecting", feedback: "Grim trigger does not alternate. Below the threshold it collapses straight to permanent mutual defection." },
   ]}

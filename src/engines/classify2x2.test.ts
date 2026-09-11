@@ -96,3 +96,33 @@ describe('classify tells the truth on games that only look like a classic', () =
     expect(classify(flat)).toBe('general');
   });
 });
+
+// The expected-utility lesson tells the reader that rescaling every payoff by a positive affine
+// map changes no one's choice, and that the word "positive" is doing real work. Both halves are
+// cheap to check on the games the course actually teaches.
+describe('positive affine invariance of the equilibrium set', () => {
+  const affine = (m: M2, a: number, b: number): M2 =>
+    m.map((row) => row.map((c) => [a * c[0] + b, a * c[1] + b])) as M2;
+
+  const games: Record<string, M2> = {
+    "prisoner's dilemma": [[[3, 3], [0, 5]], [[5, 0], [1, 1]]],
+    'stag hunt': [[[4, 4], [0, 3]], [[3, 0], [3, 3]]],
+    'battle of the sexes': [[[2, 1], [0, 0]], [[0, 0], [1, 2]]],
+    chicken: [[[6, 6], [2, 7]], [[7, 2], [0, 0]]],
+    'matching pennies': [[[1, -1], [-1, 1]], [[-1, 1], [1, -1]]],
+  };
+
+  for (const [name, m] of Object.entries(games)) {
+    it(`leaves the equilibria and the family of ${name} untouched under 10u + 5`, () => {
+      const t = affine(m, 10, 5);
+      expect(pureNash(t)).toEqual(pureNash(m));
+      expect(classify(t)).toBe(classify(m));
+    });
+  }
+
+  it('flips the dilemma under a negative multiplier, so "positive" is load-bearing', () => {
+    const pd = games["prisoner's dilemma"];
+    expect(pureNash(pd)).toEqual([[1, 1]]);          // both defect
+    expect(pureNash(affine(pd, -1, 0))).toEqual([[0, 0]]); // both cooperate
+  });
+});
