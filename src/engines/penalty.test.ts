@@ -2,11 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { equilibriumKickLeft, equilibriumValue, keeperDive, predictLeft, concededRate, type Side } from './penalty';
 
 describe('equilibrium', () => {
-  it('the kicker shoots Left about 36% of the time', () => {
-    expect(equilibriumKickLeft()).toBeCloseTo(4 / 11, 4); // 0.3636...
+  it('the kicker shoots Left about 38% of the time, as Palacios-Huerta estimated', () => {
+    expect(equilibriumKickLeft()).toBeCloseTo(23 / 60, 4); // 0.3833...
   });
-  it('an unreadable kicker scores about 79%', () => {
-    expect(equilibriumValue()).toBeCloseTo(0.791, 2);
+  it('an unreadable kicker scores about 80%', () => {
+    expect(equilibriumValue()).toBeCloseTo(0.796, 2);
   });
 });
 
@@ -19,7 +19,7 @@ describe('keeperDive', () => {
   });
   it('is indifferent exactly at the equilibrium mix', () => {
     const p = equilibriumKickLeft();
-    const ifL = p * 0.6 + (1 - p) * 0.9;
+    const ifL = p * 0.58 + (1 - p) * 0.93;
     const ifR = p * 0.95 + (1 - p) * 0.7;
     expect(ifL).toBeCloseTo(ifR, 6);
   });
@@ -41,10 +41,10 @@ describe('predictLeft', () => {
 });
 
 describe('exploitation lowers scoring below the equilibrium value', () => {
-  it('a readable kicker concedes rate below 79%', () => {
-    expect(concededRate(1)).toBeLessThan(equilibriumValue());   // always Left -> keeper dives Left -> 0.60
+  it('a readable kicker concedes a rate below 80%', () => {
+    expect(concededRate(1)).toBeLessThan(equilibriumValue());   // always Left -> keeper dives Left -> 0.58
     expect(concededRate(0)).toBeLessThan(equilibriumValue());   // always Right -> keeper dives Right -> 0.70
-    expect(concededRate(1)).toBeCloseTo(0.60, 6);
+    expect(concededRate(1)).toBeCloseTo(0.58, 6);
   });
   it('the equilibrium mix concedes exactly the equilibrium value', () => {
     expect(concededRate(equilibriumKickLeft())).toBeCloseTo(equilibriumValue(), 6);

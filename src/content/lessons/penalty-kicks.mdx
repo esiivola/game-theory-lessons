@@ -55,7 +55,7 @@ You take penalties against a keeper that watches your history and dives where it
   predict={{
     question: 'To keep the keeper guessing, how should you split your shots?',
     options: [{ key: 'half', label: 'Exactly 50/50' }, { key: 'tilt', label: 'Tilted, at the equilibrium rate' }],
-    reveal: 'Not 50/50. Because the two sides score at different rates, the mix that makes the keeper indifferent is about 36% Left. Hit that, in no pattern, and you score about 79% whatever the keeper does. Lean too hard either way and it reads you.',
+    reveal: 'Not 50/50. Because the two sides score at different rates, the mix that makes the keeper indifferent is about 38% Left. Hit that, in no pattern, and you score about 80% whatever the keeper does. Lean too hard either way and it reads you.',
   }}
 />
 </Section>
@@ -77,16 +77,16 @@ Take the scoring rates estimated from professional kicks (Palacios-Huerta). Each
 
 | Kick \ Keeper dives | Left | Right |
 |---|---|---|
-| **Left** | 0.60 | 0.95 |
-| **Right** | 0.90 | 0.70 |
+| **Left** | 0.58 | 0.95 |
+| **Right** | 0.93 | 0.70 |
 
 This is (almost) zero-sum: what the kicker gains in scoring, the keeper loses in save rate. Let the kicker shoot Left with probability $p$. The keeper compares diving Left against diving Right, and the kicker picks $p$ to make the keeper indifferent:
 
 $$
-\underbrace{0.60\,p + 0.90(1-p)}_{\text{keeper dives Left}} = \underbrace{0.95\,p + 0.70(1-p)}_{\text{keeper dives Right}}.
+\underbrace{0.58\,p + 0.93(1-p)}_{\text{keeper dives Left}} = \underbrace{0.95\,p + 0.70(1-p)}_{\text{keeper dives Right}}.
 $$
 
-Solving, $0.90 - 0.30p = 0.70 + 0.25p$, so $p = \tfrac{0.20}{0.55} = \tfrac{4}{11} \approx 0.36$. At that mix the scoring rate is about $0.79$, and the keeper cannot raise its save rate by leaning either way. Shoot Left far more or far less than $36\%$ of the time and a sharp keeper cuts you below $0.79$.
+Solving, $0.93 - 0.35p = 0.70 + 0.25p$, so $p = \tfrac{0.23}{0.60} \approx 0.38$. At that mix the scoring rate is about $0.80$, and the keeper cannot raise its save rate by leaning either way. Shoot Left far more or far less than $38\%$ of the time and a sharp keeper cuts you below $0.80$.
 
 <DefinitionAside label="the exploitable pattern">
 Unpredictable does not mean even. It means no strategy the opponent can adopt beats their equilibrium response. A fixed bias is exploitable, and so is any deterministic rule (alternating, copying your last make), because a rule can be learned. Only a mix at the right frequencies, drawn fresh each time, is safe.
@@ -97,9 +97,9 @@ Unpredictable does not mean even. It means no strategy the opponent can adopt be
 ## Work it out
 
 <WorkedExample title="Find the mix, then see the cost of a habit">
-Set the keeper's two options equal: $0.60p + 0.90(1-p) = 0.95p + 0.70(1-p)$. The left side falls in $p$ (favoring Left helps the Left-diving keeper), the right side rises. They meet at $p = 4/11 \approx 0.36$, where scoring is $0.60(0.36) + 0.90(0.64) \approx 0.79$.
+Set the keeper's two options equal: $0.58p + 0.93(1-p) = 0.95p + 0.70(1-p)$. The left side falls in $p$ (favoring Left helps the Left-diving keeper), the right side rises. They meet at $p \approx 0.38$, where scoring is $0.58(0.38) + 0.93(0.62) \approx 0.80$.
 
-Now suppose you always take your natural side (say Right). The keeper learns this and always dives Right, holding you to $0.70$ instead of $0.79$. The predictable habit costs you nine goals in a hundred. Randomizing at the right rate is worth more than picking your best-looking shot every time.
+Now suppose you always take your natural side (say Right). The keeper learns this and always dives Right, holding you to $0.70$ instead of $0.80$. The predictable habit costs you ten goals in a hundred. Randomizing at the right rate is worth more than picking your best-looking shot every time.
 </WorkedExample>
 </Section>
 
@@ -127,7 +127,7 @@ The theory holds up outside the classroom. Studying professional penalties, Chia
   badge="apply"
   question="Your two sides score at different rates. Why is the unexploitable mix not 50/50?"
   options={[
-    { text: "Because the mix must equalize the keeper's two options, and with unequal scoring rates that balance point is tilted", correct: true, feedback: "The equilibrium sets the keeper indifferent between diving each way. When the sides are not equally dangerous, that indifference point is off-centre, here about 36% Left." },
+    { text: "Because the mix must equalize the keeper's two options, and with unequal scoring rates that balance point is tilted", correct: true, feedback: "The equilibrium sets the keeper indifferent between diving each way. When the sides are not equally dangerous, that indifference point is off-centre, here about 38% Left." },
     { text: "Because you should always favour your stronger side", feedback: "Favouring it too much gets it covered. The mix leans, but only as far as keeps the keeper indifferent, not all the way to your strong side." },
     { text: "Because 50/50 is never an equilibrium in any game", feedback: "It is the equilibrium in symmetric games like Matching Pennies. Here the asymmetric scoring rates shift it away from 50/50." },
   ]}
@@ -151,10 +151,10 @@ The theory holds up outside the classroom. Studying professional penalties, Chia
   slug="penalty-kicks"
   id="q3"
   badge="brings back: minimax"
-  question="At the equilibrium mix the kicker scores about 79%. What does the minimax logic say this number is?"
+  question="At the equilibrium mix the kicker scores about 80%. What does the minimax logic say this number is?"
   options={[
-    { text: "The scoring rate the kicker can guarantee regardless of how the keeper plays", correct: true, feedback: "It is the value of the game: at the equilibrium mix the keeper cannot push scoring below 79% by any dive, and the kicker cannot do better against a keeper that also plays optimally." },
-    { text: "The most the kicker can score if the keeper guesses wrong", feedback: "That would be a best case, not a guarantee. The 79% is what holds up against any keeper response, which is the minimax value." },
+    { text: "The scoring rate the kicker can guarantee regardless of how the keeper plays", correct: true, feedback: "It is the value of the game: at the equilibrium mix the keeper cannot push scoring below 80% by any dive, and the kicker cannot do better against a keeper that also plays optimally." },
+    { text: "The most the kicker can score if the keeper guesses wrong", feedback: "That would be a best case, not a guarantee. The 80% is what holds up against any keeper response, which is the minimax value." },
     { text: "The average of the four scoring rates in the table", feedback: "It is not a raw average. It is the value produced by the equilibrium mix, where the keeper is left indifferent." },
   ]}
 />

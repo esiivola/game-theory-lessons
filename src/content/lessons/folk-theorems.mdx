@@ -71,7 +71,7 @@ The engine is the threat. Any deviation can be met with punishment that drives t
 The feasible payoffs are the convex hull of the stage-game outcomes: for the PD with $T=5, R=3, P=1, S=0$, the hull of $(3,3), (5,0), (0,5), (1,1)$. A player's **minmax** is the lowest payoff the others can force on them while the player best-responds; in the PD that is $P = 1$ (defect against a defector).
 
 <DefinitionAside label="folk theorem">
-For an infinitely repeated game, take any feasible payoff profile in which every player earns strictly more than their minmax value. Then for discount factors close enough to 1, there is a subgame-perfect equilibrium of the repeated game whose average payoff is exactly that profile. The set of equilibrium payoffs fills the entire feasible, individually rational region.
+For an infinitely repeated game, take any feasible payoff profile in which every player earns strictly more than their minmax value. Then for discount factors close enough to 1, there is a subgame-perfect equilibrium of the repeated game whose average payoff is exactly that profile. The set of equilibrium payoffs fills the entire feasible, individually rational region. (With two players that is the whole statement; with three or more, Fudenberg and Maskin also need the payoff set to be full-dimensional, so that a deviator can be punished without punishing the punishers.)
 </DefinitionAside>
 
 So $(3,3)$ is an equilibrium, but so is $(3.5,2)$, and so are countless asymmetric splits. Two flavors: the Nash-threat version (Friedman) punishes with a stage-game Nash equilibrium; the stronger minmax version (Fudenberg-Maskin) punishes down to the minmax, which enlarges the supportable set.

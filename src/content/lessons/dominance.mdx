@@ -54,14 +54,14 @@ import QuizCard from '@/components/interactive/QuizCard.svelte';
 Read down your two rows. If they advertise, you get 3 from advertising versus 1 from not. If they do not, you get 6 versus 4. Advertising wins in both columns.
 
 <WorkedExample title="Eliminate the dominated move">
-For you, advertising beats not-advertising in every column ($3>1$ and $6>4$), so "do not advertise" is strictly dominated and can be crossed out. By symmetry the same holds for them. What remains is a single cell, $(\text{advertise}, \text{advertise})$, paying $(3,3)$, even though both would prefer the $(4,4)$ they reach by staying quiet. Sound familiar? That tension returns in the next unit.
+For you, advertising beats not-advertising in every column ($3>1$ and $6>4$), so "do not advertise" is strictly dominated and can be crossed out. By symmetry the same holds for them. What remains is a single cell, $(\text{advertise}, \text{advertise})$, paying $(3,3)$, even though both would prefer the $(4,4)$ they reach by staying quiet. Sound familiar? That tension is the Prisoner's Dilemma, three lessons from here.
 </WorkedExample>
 </Section>
 
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">If one of your moves is at least as good against everything and strictly better against something, take it and never look back. If a move is dominated, delete it.</Callout>
+<Callout kind="key-idea">If one of your moves pays more than the alternatives against every choice the other player could make, take it and never look back. If a move loses to another against everything, it is dominated: delete it.</Callout>
 </Section>
 
 <Section id="quiz">

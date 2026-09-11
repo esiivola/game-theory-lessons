@@ -74,7 +74,7 @@ People bring the norms of their daily lives into the lab. Societies with lots of
 ## The math
 
 <DefinitionAside label="WEIRD subjects and market integration">
-Most experimental results come from WEIRD populations (Western, Educated, Industrialized, Rich, Democratic), which turn out to be unusual. Henrich and colleagues ran the ultimatum game in fifteen small-scale societies: mean offers ranged from about 26 percent (the Machiguenga) to 57 percent (the Lamalera whale hunters), and rejection behaviour varied with the group's degree of market integration and cooperation in daily life. Fairness norms are learned from institutions, not fixed by biology.
+Most experimental results come from WEIRD populations (Western, Educated, Industrialized, Rich, Democratic), which turn out to be unusual. Henrich and colleagues ran the ultimatum game in fifteen small-scale societies: mean offers ranged from about 26 percent (the Machiguenga) to 58 percent (the Lamalera whale hunters), and rejection behaviour varied with the group's degree of market integration and cooperation in daily life. Fairness norms are learned from institutions, not fixed by biology.
 </DefinitionAside>
 
 In inequity-aversion terms, the envy weight $\alpha$ that governs when a responder rejects differs across cultures: higher in market-integrated groups (they punish unfairness), lower in insular ones (they accept low offers). A designer who plugs in a single $\alpha$, typically the WEIRD value, will mispredict behaviour elsewhere. The practical upshot connects back to market design: the pre-1998 medical match and Boston's old school mechanism failed partly because they assumed behaviour their participants did not exhibit. Good mechanisms are built for the players you actually have.
@@ -84,7 +84,7 @@ In inequity-aversion terms, the envy weight $\alpha$ that governs when a respond
 ## Work it out
 
 <WorkedExample title="One game, three thresholds">
-Take the same $\$10$ ultimatum and vary the responder's envy weight $\alpha$. A market-integrated responder with high $\alpha$ rejects sizable offers below an even split, so a proposer must offer close to half. A WEIRD responder ($\alpha$ around $0.5$) rejects below roughly a quarter. A small-scale-society responder with low $\alpha$ accepts almost any positive offer, so a proposer can offer little and still succeed.
+Take the same \$10 ultimatum and vary the responder's envy weight $\alpha$. A market-integrated responder ($\alpha = 0.7$) rejects anything below about \$2.90, close to a third of the pie. A WEIRD responder ($\alpha$ around $0.5$) rejects below \$2.50, roughly a quarter. A small-scale-society responder ($\alpha = 0.15$) rejects only below about \$1.15, so a proposer can offer little and still succeed.
 
 A designer optimizing offers, or building a market that relies on fair play, gets very different answers depending on which $\alpha$ holds. Assume the WEIRD value everywhere and you will over- or under-shoot elsewhere. The lesson: measure the population's actual norms, and design the mechanism for them, not for an idealized universal player.
 </WorkedExample>
@@ -106,7 +106,7 @@ A designer optimizing offers, or building a market that relies on fair play, get
   badge="apply"
   question="Cross-cultural ultimatum experiments found that mean offers..."
   options={[
-    { text: "Varied widely, from around a quarter to over half of the pie", correct: true, feedback: "Henrich et al. found offers ranging from about 26% (Machiguenga) to 57% (Lamalera), with rejection behaviour tied to market integration. There is no single universal offer." },
+    { text: "Varied widely, from around a quarter to well over half of the pie", correct: true, feedback: "Henrich et al. found offers ranging from about 26% (Machiguenga) to 58% (Lamalera), with rejection behaviour tied to market integration. There is no single universal offer." },
     { text: "Were always close to 50/50 everywhere", feedback: "That is roughly the WEIRD pattern, but other societies differed markedly, some far lower, some higher. Fairness is not universal in magnitude." },
     { text: "Were always near zero", feedback: "Offers were substantial in many societies and even hyper-generous in some. They varied, rather than clustering at zero." },
   ]}

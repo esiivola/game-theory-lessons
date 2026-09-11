@@ -43,7 +43,7 @@ import RepeatedPD from '@/components/interactive/RepeatedPD.svelte';
 <Section id="play">
 ## Predict, then play
 
-Each round is the Prisoner's Dilemma, the same dilemma as the gas stations, written here with the standard payoffs $T=5$ (defect on a cooperator), $R=3$ (both cooperate), $P=1$ (both defect), $S=0$ (cooperate against a defector). Only the ranking $T>R>P>S$ matters, not the units. The slider is $\delta$, the chance the relationship continues to another round, which is also how much you value next round versus this one. Pick your strategy against a grim-trigger bot and run it.
+Each round is the Prisoner's Dilemma, the same game and the same payoffs as the gas stations: $T=5$ (defect on a cooperator), $R=3$ (both cooperate), $P=1$ (both defect), $S=0$ (cooperate against a defector). Only the ranking $T>R>P>S$ matters, not the units. The slider is $\delta$, the chance the relationship continues to another round, which is also how much you value next round versus this one. Pick your strategy against a grim-trigger bot and run it.
 
 <RepeatedPD
   client:visible

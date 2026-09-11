@@ -71,7 +71,7 @@ For two or more children the announcement states nothing anyone could not see: e
 Argue by induction on the number of muddy children $k$. If $k=1$, the one muddy child sees no other muddy face, so the announcement ("at least one") tells it directly, and it leaves on night $1$. Suppose $k$ muddy children would leave on night $k$. With $k+1$, each muddy child sees $k$ muddy others and reasons: "if I were clean, there would be $k$ muddy children, who by the inductive step leave on night $k$." When night $k$ passes with no departure, each muddy child concludes it is muddy too, and all $k+1$ leave on night $k+1$.
 
 <DefinitionAside label="common knowledge and no-trade">
-A fact is common knowledge if everyone knows it, everyone knows that everyone knows it, and so on to every order. The public announcement creates exactly this for "at least one is muddy". Aumann's agreement theorem uses the same idea: two people with a common prior who commonly know each other's posteriors cannot disagree. A corollary is the no-trade theorem: rational traders with common priors will not take opposite sides of a purely speculative bet, because the willingness to trade would itself reveal information that erases the disagreement.
+A fact is common knowledge if everyone knows it, everyone knows that everyone knows it, and so on to every order. The public announcement creates exactly this for "at least one is muddy". Aumann's agreement theorem uses the same idea: two people with a common prior who commonly know each other's posteriors cannot disagree. Milgrom and Stokey (1982) drew the no-trade corollary: rational traders with common priors will not take opposite sides of a purely speculative bet, because the willingness to trade would itself reveal information that erases the disagreement.
 </DefinitionAside>
 </Section>
 
@@ -125,7 +125,7 @@ Why does the seemingly redundant announcement matter? With $k \ge 2$, everyone a
   slug="epistemic-foundations"
   id="q3"
   badge="brings back: common knowledge"
-  question="Aumann's no-trade result says two rational traders with a common prior will not take opposite sides of a speculative bet. Why?"
+  question="The no-trade theorem says two rational traders with a common prior will not take opposite sides of a speculative bet. Why?"
   options={[
     { text: "Your eagerness to trade reveals your information; once posteriors are commonly known, the disagreement that motivated the bet disappears", correct: true, feedback: "With a common prior, commonly known posteriors cannot differ (agreement theorem). The very willingness to bet is a signal that, once accounted for, removes the disagreement, so purely speculative trade unravels." },
     { text: "Because trading is against the rules", feedback: "Trading is allowed; it just cannot be purely speculative between rational common-prior agents, because the disagreement needed to motivate it cannot be common knowledge." },

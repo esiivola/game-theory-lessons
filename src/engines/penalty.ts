@@ -5,8 +5,8 @@
 export type Side = 0 | 1; // 0 = Left, 1 = Right
 
 export const SCORE: number[][] = [
-  [0.60, 0.95], // kick Left:  keeper dives Left / dives Right
-  [0.90, 0.70], // kick Right: keeper dives Left / dives Right
+  [0.58, 0.95], // kick Left:  keeper dives Left / dives Right
+  [0.93, 0.70], // kick Right: keeper dives Left / dives Right
 ];
 
 /** Kicker's equilibrium probability of shooting Left (the mix that equalizes the keeper's options). */

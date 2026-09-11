@@ -6,7 +6,7 @@ unitName: "Game theory in the wild"
 order: 2
 label: "A2"
 kind: case
-placement: "after:auctions-common-value"
+placement: "after:auctions-position"
 summary: "Spectrum sales and online ad auctions put auction theory to work, GSP and all."
 tags: ["applied", "auctions", "spectrum"]
 estMinutes: 6
@@ -71,7 +71,7 @@ The generalized second price looks like the truthful second-price auction, and f
 ## The real episodes
 
 <DefinitionAside label="spectrum and ad auctions">
-The FCC has auctioned spectrum since 1994 using simultaneous multiple-round designs; the 2016-17 incentive auction repurposed broadcast spectrum, paying broadcasters to give it up and reselling it, netting the treasury tens of billions. Online advertising uses the generalized second price: advertisers are ranked by bid and each pays the next bid down per click. It is not truthful with multiple slots, but its lowest envy-free equilibrium reproduces the efficient VCG outcome.
+The FCC has auctioned spectrum since 1994 using simultaneous multiple-round designs; the 2016-17 incentive auction repurposed broadcast spectrum, paying broadcasters to give it up and reselling it: $19.8 billion raised, $10.05 billion paid to broadcasters, and more than $7 billion to the Treasury. Online advertising uses the generalized second price: advertisers are ranked by bid and each pays the next bid down per click. It is not truthful with multiple slots, but its lowest envy-free equilibrium reproduces the efficient VCG outcome.
 </DefinitionAside>
 
 Two practical wrinkles. Ad auctions run billions of times a day, so even small design choices (reserves, quality scores) move enormous revenue, and the GSP's non-truthfulness means bidders and platforms both invest in bid optimization. Spectrum auctions add combinatorial structure: licenses are worth more together, so bidding on a subset exposes a firm to winning a useless fragment (the exposure problem), which package-bidding designs (Ausubel-Milgrom) address.
