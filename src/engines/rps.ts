@@ -1,4 +1,4 @@
-// Rock-paper-scissors, with an adaptive bot that punishes any move you overplay.
+// Rock-paper-scissors, with a bot that best-responds to the mix a player commits to.
 // Moves: 0 rock, 1 paper, 2 scissors.
 
 export type Move = 0 | 1 | 2;
@@ -16,15 +16,20 @@ export function score(a: Move, b: Move): -1 | 0 | 1 {
   return beats(b) === a ? 1 : -1;
 }
 
-/**
- * The bot's move: it counters whatever you have played most so far, so any lopsided mix loses.
- * With no history, or a perfect 1/3-1/3-1/3 record, it plays at random and cannot gain.
- */
-export function botMove(counts: [number, number, number], rng: () => number = Math.random): Move {
-  const total = counts[0] + counts[1] + counts[2];
-  if (total === 0) return Math.floor(rng() * 3) as Move;
-  const max = Math.max(counts[0], counts[1], counts[2]);
-  const favourites = MOVES.filter((i) => counts[i] === max);
+export type Mix = [number, number, number];
+
+/** Draw a move from a declared probability mix. */
+export function drawMove(mix: Mix, rng: () => number = Math.random): Move {
+  const draw = rng();
+  if (draw < mix[0]) return 0;
+  if (draw < mix[0] + mix[1]) return 1;
+  return 2;
+}
+
+/** The bot chooses a best response after observing the player's declared mix. */
+export function bestResponseToMix(mix: Mix, rng: () => number = Math.random): Move {
+  const max = Math.max(...mix);
+  const favourites = MOVES.filter((i) => mix[i] === max);
   const fav = favourites[Math.floor(rng() * favourites.length)];
   return beats(fav);
 }

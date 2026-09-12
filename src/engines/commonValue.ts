@@ -16,12 +16,3 @@ export function roundOutcome(V: number, bids: number[], format: Format, reserve 
   const o = resolve(bids, format, reserve);
   return { ...o, winnerProfit: o.sold ? V - o.price : 0 };
 }
-
-/**
- * How much to shade for the curse: conditional on winning against n-1 rivals, your signal is the
- * highest of n draws, so it overstates V. A rough correction subtracts a share of the noise that
- * grows with the number of rivals, which is why more rivals means bidding lower, not higher.
- */
-export function shadeFor(n: number, spread: number): number {
-  return spread * ((n - 1) / (n + 1));
-}

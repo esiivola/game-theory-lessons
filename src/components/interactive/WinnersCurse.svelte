@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { drawSignals, roundOutcome, shadeFor } from '@/engines/commonValue';
+  import { drawSignals, roundOutcome } from '@/engines/commonValue';
 
   interface Predict { question: string; options: { key: string; label: string }[]; reveal: string; }
   let { exhibit = '', caption = '', predict = null }:
@@ -17,8 +17,6 @@
   let wins = $state(0);
   let rounds = $state(0);
 
-  const n = $derived(rivals + 1);
-  const suggestedBid = $derived(Math.round(mySignal - shadeFor(n, SPREAD)));
   const r1 = (x: number) => Math.round(x);
 
   function deal() {
@@ -72,7 +70,7 @@
       <span class="slab">Rival bidders: <b class="mono">{rivals}</b></span>
       <input type="range" min="1" max="7" step="1" bind:value={rivals} onchange={deal} aria-label="Number of rivals" />
     </label>
-    <p class="hint">Rivals bid their own signals. A signal-shading correction here would bid about <b class="mono">{suggestedBid}</b>: lower with more rivals, because winning means your signal was the highest of many.</p>
+    <p class="hint">Rivals bid their raw signals. Start by seeing what happens when you do too, then try a lower bid. There is no universal correction: the right bid depends on the signal model and the auction rules.</p>
 
     <div class="play"><button class="choice" onclick={submit}>Submit bid</button><button class="tinybtn" onclick={deal}>New item</button><button class="tinybtn" onclick={reset}>Reset</button></div>
 
@@ -83,7 +81,7 @@
       <div class="score"><span class="v mono">{wins}/{rounds}</span><span class="l">Won</span></div>
     </div>
     {#if rounds >= 4 && profit < 0}
-      <p class="curse">That running loss is the winner's curse: bidding near your signal wins exactly the items you overvalued.</p>
+      <p class="curse">That running loss is the winner's curse: a bid near your signal can win items you overvalued.</p>
     {/if}
   {/if}
 </div>

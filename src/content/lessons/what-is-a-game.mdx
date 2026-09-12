@@ -50,7 +50,7 @@ Tap any cell. The first number is always yours, the second is theirs. Now read d
 
 A game in normal (strategic) form is a tuple $G = (N, (S_i)_{i \in N}, (u_i)_{i \in N})$: a set of players $N$, a set of strategies $S_i$ for each player, and a payoff function $u_i$ that assigns a number to every combination of choices.
 
-A choice by everyone at once is a strategy profile $s = (s_i, s_{-i})$, where $s_{-i}$ is shorthand for what everyone except $i$ does. Payoffs are utilities, not dollars: they rank outcomes, and only the order matters.
+A choice by everyone at once is a strategy profile $s = (s_i, s_{-i})$, where $s_{-i}$ is shorthand for what everyone except $i$ does. Payoffs are utilities, not necessarily dollars: they encode how a player ranks outcomes. With no uncertainty, their order is enough. Once chance or mixing enters, the differences between utility numbers matter too, up to positive affine rescaling.
 
 <DefinitionAside label="strategy profile">
 A profile $s$ lists one strategy per player. Player $i$ evaluates it through $u_i(s)$, holding fixed what the others, $s_{-i}$, chose.

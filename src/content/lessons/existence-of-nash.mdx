@@ -43,7 +43,7 @@ import RPSDuel from '@/components/interactive/RPSDuel.svelte';
 <Section id="play">
 ## Predict, then play
 
-The bot watches your history and shifts toward whatever you play most. Try to find a way to play that it cannot exploit over a long run.
+Declare a mix, then the bot sees the odds and chooses its best reply before your move is drawn. Try to find a mix that leaves it nothing to exploit.
 
 <RPSDuel
   client:visible
@@ -52,7 +52,7 @@ The bot watches your history and shifts toward whatever you play most. Try to fi
   predict={{
     question: 'Is there any way of playing that a bot reading your every move still cannot beat?',
     options: [{ key: 'yes', label: 'Yes, one exists' }, { key: 'no', label: 'No, it will always adapt' }],
-    reveal: 'There is: play each move one-third of the time, in no pattern. Then the bot has nothing to lean on, and over many rounds you break even. Lean on any move and it counters you.',
+    reveal: 'There is: play each move one-third of the time. Then every bot move earns the same expected payoff, so it has no better reply, and over many rounds you break even. Lean on any move and it can counter that probability.',
   }}
 />
 </Section>
@@ -61,7 +61,7 @@ The bot watches your history and shifts toward whatever you play most. Try to fi
 ## Why did that happen?
 
 <Callout kind="ask">
-Any lopsided habit gives the bot a target. Play Rock too often and it plays Paper. The only frequency it cannot punish is exactly one-third each, with no pattern in the order, because then every counter it might try pays the same against you. That even mix is the mixed-strategy equilibrium of the game.
+Any lopsided mix gives the bot a target. Put too much probability on Rock and it chooses Paper. The only mix that gives it no preferred counter is exactly one-third each, because then every pure response has the same expected payoff. That even mix is the mixed-strategy equilibrium of the game.
 </Callout>
 </Section>
 

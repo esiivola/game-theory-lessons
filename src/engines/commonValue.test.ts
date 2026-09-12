@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { drawSignals, roundOutcome, shadeFor } from './commonValue';
+import { drawSignals, roundOutcome } from './commonValue';
 
 describe('drawSignals', () => {
   it('centres signals on V with noise up to the spread', () => {
@@ -23,13 +23,5 @@ describe('roundOutcome (the winner\'s curse)', () => {
     expect(o.winner).toBe(0);
     expect(o.price).toBe(60);
     expect(o.winnerProfit).toBe(-10); // the curse
-  });
-});
-
-describe('shadeFor', () => {
-  it('is larger with more rivals: more competition means bid lower', () => {
-    expect(shadeFor(2, 10)).toBeCloseTo(10 * (1 / 3));
-    expect(shadeFor(6, 10)).toBeCloseTo(10 * (5 / 7));
-    expect(shadeFor(6, 10)).toBeGreaterThan(shadeFor(2, 10));
   });
 });

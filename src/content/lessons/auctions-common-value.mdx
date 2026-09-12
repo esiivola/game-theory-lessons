@@ -50,9 +50,9 @@ The item has one true value, unknown to everyone. You see a noisy signal of it, 
   exhibit="Exhibit 1"
   caption="A common-value auction; everyone sees a noisy signal"
   predict={{
-    question: 'The more rivals you face, the more aggressive you should be. True or false?',
-    options: [{ key: 'higher', label: 'True: bid higher with more rivals' }, { key: 'lower', label: 'False: bid lower with more rivals' }],
-    reveal: 'False. More rivals means that winning requires beating more signals, so your winning signal is even more likely to be the highest, and the most inflated. You should bid lower, not higher, as the field grows.',
+    question: 'Can your signal and the number of rivals alone tell you the exact right bid?',
+    options: [{ key: 'yes', label: 'Yes: use one fixed correction' }, { key: 'no', label: 'No: the model and auction rule matter' }],
+    reveal: 'No. Winning is bad news about the value, so bidding your raw signal is unsafe. But the exact correction depends on how signals relate to value, the prior, the auction format, and how rivals bid. There is no universal signal-minus-a-constant rule.',
   }}
 />
 </Section>
@@ -61,7 +61,7 @@ The item has one true value, unknown to everyone. You see a noisy signal of it, 
 ## Why did that happen?
 
 <Callout kind="ask">
-Your signal is unbiased before you bid: on average it equals the true value. But condition on winning. You win when your signal is the highest of everyone's, and the highest of several unbiased signals sits above the truth. So among the times you actually win, your signal systematically overstated the value, and bidding it means overpaying. The cure is to bid as if you already know you have the highest signal, which means shading below it, and shading more the more rivals you face.
+Your signal can be unbiased before you bid: on average it equals the true value. But condition on winning. You win when your signal is the highest of everyone's, and the highest of several unbiased signals tends to sit above the truth. So among the times you actually win, your signal can systematically overstate the value, and bidding it can mean overpaying. The cure is to calculate value as if you already know you won, then bid from that conditional estimate.
 </Callout>
 </Section>
 
@@ -69,23 +69,23 @@ Your signal is unbiased before you bid: on average it equals the true value. But
 ## The math
 
 <DefinitionAside label="common-value auction and the winner's curse">
-All bidders share the same unknown value; each sees a private signal correlated with it. A naive bidder who bids their unbiased signal overpays, because winning is correlated with having the highest, most optimistic signal. Correcting for this, bidders shade below their signal, and shade more as the number of rivals grows.
+All bidders share the same unknown value; each sees a private signal correlated with it. A naive bidder who treats an interim signal estimate as a final value can overpay, because winning is correlated with having the most optimistic signal. Correcting for this means conditioning the value estimate on winning.
 </DefinitionAside>
 
-Take a common value $V$ with $n$ bidders, each seeing a signal $s_i = V + e_i$ whose noise $e_i$ is symmetric around zero. Your signal is unbiased, so before you bid $\mathbb{E}[V \mid s_i] = s_i$. Now condition on winning. You win when your signal is the highest of the $n$, so your noise is the largest of $n$ draws, which is positive on average. With noise spread evenly over $[-a, a]$, the expected largest of $n$ draws is $a\,\tfrac{n-1}{n+1}$, so
+Take a common value $V$ with $n$ bidders, each seeing a signal $X_i$ correlated with $V$. Before the auction, a bidder forms an interim estimate $\mathbb{E}[V \mid X_i=x]$. But a bid is paid only when it wins. In a symmetric first-price model with an increasing bidding rule, the marginal winning event is that the highest rival signal equals yours, $Y_i = \max_{j\ne i}X_j=x$. The equilibrium bid is therefore
 
 $$
-\mathbb{E}[V \mid \text{win}] = s_i - a\,\frac{n-1}{n+1},
+b(x) = \mathbb{E}[V \mid X_i=x,\;Y_i=x].
 $$
 
-below your signal. So bid your signal minus that correction: shade below the signal, and shade more as $n$ grows, since $\tfrac{n-1}{n+1}$ climbs toward $1$.
+The second condition is the winner's-curse correction. It is usually bad news that every rival's signal was no higher than yours, so this conditional expectation is below the interim estimate. Its numerical size is not universal: it depends on the prior, signal distribution, number of bidders, and auction format.
 </Section>
 
 <Section id="reality">
 ## A note from the real world
 
 <Callout kind="reality-check">
-The curse is not just a theorem; people fall for it. In classroom jar-of-coins auctions the winning bid routinely exceeds the true value, and inexperienced bidders in oil-lease and spectrum auctions have famously overpaid. Experienced bidders learn to shade, and to shade harder in a crowded field. The Behavioral unit returns to how bidders learn (or fail to learn) to escape the curse.
+The curse is not just a theorem; people fall for it. In classroom jar-of-coins auctions, winning bids can exceed the true value, and oil-lease auctions motivated the original analysis. Experienced bidders learn to account for the information in winning. The Behavioral unit returns to how bidders learn (or fail to learn) to escape the curse.
 </Callout>
 </Section>
 
@@ -93,16 +93,16 @@ The curse is not just a theorem; people fall for it. In classroom jar-of-coins a
 ## Work it out
 
 <WorkedExample title="Condition on winning">
-You see signal $s$, with noise spread $\pm a$ around the true value. Naively bidding $s$ treats your signal as the value. But you win only when $s$ is the highest of the $n$ signals, and the highest signal carries the largest noise, positive on average. The expected largest of $n$ symmetric draws on $[-a, a]$ is $a\,\tfrac{n-1}{n+1}$, so conditional on winning the value is about $s - a\,\tfrac{n-1}{n+1}$.
+You see a signal $x$. Naively bidding $x$ treats your interim estimate as if it were the value. But your bid is paid only if it wins. In a symmetric first-price auction, a marginal win means the best rival signal is about $x$ too. The relevant estimate is therefore $\mathbb{E}[V \mid X_i=x, Y_i=x]$, not $\mathbb{E}[V \mid X_i=x]$.
 
-Put in $a = 10$. Against one rival ($n = 2$) you shade by $10 \cdot \tfrac13 \approx 3.3$ and bid about $s - 3.3$. Against seven rivals ($n = 8$) you shade by $10 \cdot \tfrac79 \approx 7.8$ and bid about $s - 7.8$: the same signal, a lower bid, the larger the field. Bidding your raw signal wins exactly the items you overvalued, which is the curse.
+That second estimate needs the model. A prior over $V$, a distribution of signal noise, the number of bidders, and the auction format all enter it. The common lesson is precise even when a number is not: calculate value conditional on winning, then bid from that estimate. Bidding a raw signal ignores information contained in the win itself.
 </WorkedExample>
 </Section>
 
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">When bidders share a common value, winning is bad news: your signal was the highest, so it overstated the prize. Shade below your signal, and shade more the more rivals you face.</Callout>
+<Callout kind="key-idea">When bidders share a common value, winning is bad news: your signal may overstate the prize. Bid from your estimate conditional on winning, not from the raw signal. The size of that correction comes from the model.</Callout>
 </Section>
 
 <Section id="quiz">
@@ -126,11 +126,11 @@ Put in $a = 10$. Against one rival ($n = 2$) you shade by $10 \cdot \tfrac13 \ap
   slug="auctions-common-value"
   id="q2"
   badge="analyse"
-  question="You move from 2 bidders to 8. What should happen to your bid, holding your signal fixed?"
+  question="You move from 2 bidders to 8. Can the right numerical bid be inferred from that fact and your signal alone?"
   options={[
-    { text: "It should fall, because winning against more rivals implies an even more inflated signal", correct: true, feedback: "With more rivals, winning means your signal beat more draws, so it is even more likely the highest and most optimistic. The curse deepens, so you shade more and bid lower." },
-    { text: "It should rise, to beat the extra competition", correct: false, feedback: "Bidding higher walks straight into the curse. More rivals make winning worse news about the value, so the correct response is to bid lower." },
-    { text: "It should not change; your signal is the same", feedback: "The signal is the same, but its meaning conditional on winning changes with the field size. More rivals call for more shading." },
+    { text: "No. You also need the prior, signal distribution, auction format, and rivals' bidding rule", correct: true, feedback: "More rivals change what winning tells you, but that does not imply one universal numerical adjustment. The equilibrium bid is a conditional expectation whose value depends on the whole model." },
+    { text: "Yes. Always subtract the same fixed amount for each extra rival", feedback: "There is no fixed per-rival correction. The number depends on how signals are generated, the prior over value, the auction format, and strategic bidding by rivals." },
+    { text: "Yes. The bid must always rise to beat the extra competition", feedback: "Competition matters, but this conclusion is not generally valid. In a common-value auction you must also account for the adverse information in winning." },
   ]}
 />
 
@@ -141,9 +141,9 @@ Put in $a = 10$. Against one rival ($n = 2$) you shade by $10 \cdot \tfrac13 \ap
   badge="brings back: auctions"
   question="How does optimal bidding here differ from the private-value second-price auction you saw before?"
   options={[
-    { text: "With private values, bidding your value is dominant; with a common value, you must shade below your signal to correct for the curse", correct: true, feedback: "The private-value logic (bid your value, since it does not affect the price you pay) breaks when winning itself carries information about the value. Common values require conditioning on winning and shading." },
-    { text: "Both cases call for bidding your signal or value truthfully", feedback: "Only the private-value second-price auction rewards truthful bidding. A common value makes winning informative, so you shade." },
-    { text: "Common-value auctions have no equilibrium", feedback: "They do have one; it just involves shading below your signal to correct for the curse, rather than bidding the signal itself." },
+    { text: "With private values, bidding your value is dominant; with a common value, bid from the value conditional on winning", correct: true, feedback: "The private-value logic (bid your value, since it does not affect the price you pay) breaks when winning itself carries information about the value. Common values require conditioning on winning." },
+    { text: "Both cases call for bidding your signal or value truthfully", feedback: "Only the private-value second-price auction rewards truthful bidding. A common value makes winning informative, so a raw signal is not enough." },
+    { text: "Common-value auctions have no equilibrium", feedback: "They do have equilibria. In a standard symmetric first-price model, the bid is the expected value conditional on the marginal event of winning." },
   ]}
 />
 </Section>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { botMove, score, beats, MOVE_NAMES, type Move } from '@/engines/rps';
+  import { bestResponseToMix, drawMove, score, MOVE_NAMES, type Mix } from '@/engines/rps';
 
   interface Predict { question: string; options: { key: string; label: string }[]; reveal: string; }
   let { exhibit = '', caption = '', predict = null }:
@@ -17,20 +17,20 @@
   const pctText = (i: number) => (total === 0 ? '0%' : Math.round(freq(i) * 100) + '%');
   const net = $derived(wins - losses);
 
-  function play(m: Move) {
-    // The bot counters your most-played move so far, then you commit this move.
-    const bot = botMove(counts, Math.random);
+  function play(mix: Mix, label: string) {
+    const bot = bestResponseToMix(mix, Math.random);
+    const m = drawMove(mix, Math.random);
     const s = score(m, bot);
     counts[m] += 1;
     if (s === 1) wins += 1;
     else if (s === -1) losses += 1;
     else ties += 1;
-    last = `You played ${MOVE_NAMES[m]}, the bot played ${MOVE_NAMES[bot]}. ` +
+    last = `You declared ${label}. You drew ${MOVE_NAMES[m]}; the bot played ${MOVE_NAMES[bot]}. ` +
       (s === 1 ? 'You win the round.' : s === -1 ? 'You lose the round.' : 'A tie.');
   }
   function reset() {
     counts = [0, 0, 0]; wins = 0; losses = 0; ties = 0;
-    last = 'Reset. The bot reads your history, so keep it even.';
+    last = 'Reset. Declare a mix, then the bot best-responds to its odds before your move is drawn.';
   }
   function onPredict() { predicted = true; }
 </script>
@@ -51,13 +51,14 @@
     </div>
   {:else}
     <div class="play">
-      {#each MOVE_NAMES as name, i}
-        <button class="choice" onclick={() => play(i as Move)}>{name}</button>
-      {/each}
+      <button class="choice" onclick={() => play([1 / 3, 1 / 3, 1 / 3], 'an even mix')}>Mix evenly</button>
+      <button class="choice" onclick={() => play([0.6, 0.2, 0.2], 'a Rock-heavy mix')}>Favor Rock</button>
+      <button class="choice" onclick={() => play([0.2, 0.6, 0.2], 'a Paper-heavy mix')}>Favor Paper</button>
+      <button class="choice" onclick={() => play([0.2, 0.2, 0.6], 'a Scissors-heavy mix')}>Favor Scissors</button>
     </div>
 
     <div class="readout" aria-live="polite">
-      {last || 'Pick a move. The bot shifts toward whatever you overplay.'}
+      {last || 'Declare odds. The bot sees the mix, chooses its best reply, then your move is drawn from those odds.'}
     </div>
 
     <div class="freqs" aria-hidden="false">
@@ -68,7 +69,7 @@
           <span class="fval mono">{pctText(i)}</span>
         </div>
       {/each}
-      <p class="fnote">The dotted mark is 1/3. Stay near it on all three and the bot has nothing to punish.</p>
+      <p class="fnote">The dotted mark is 1/3. An even mix gives the bot no better reply; a favored move gives it a target.</p>
     </div>
 
     <div class="scoreline">
