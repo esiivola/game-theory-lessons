@@ -60,11 +60,11 @@
     </label>
 
     <div class="readout" aria-live="polite">
-      The unique threshold is &theta;* = 1 - c = <b class="mono">{r2(tStar)}</b>. This economy ({r2(theta)}) {falls ? 'is below it, so the attack succeeds and the regime falls.' : 'is above it, so the peg holds and an attack fails.'}
+      In this benchmark limiting model, the threshold is &theta;* = 1 - c = <b class="mono">{r2(tStar)}</b>. This economy ({r2(theta)}) {falls ? 'is below it, so the attack succeeds and the regime falls.' : 'is above it, so the peg holds and an attack fails.'}
       Across all fundamentals, the crisis rate is <b class="mono">{pct(pCrisis)}</b>.
       {#if c < 0.4}Cheap attacks push the threshold up, so more economies collapse.{/if}
     </div>
-    <p class="note">Noisy private signals pin down one threshold where complete information would allow many self-fulfilling outcomes. Uniqueness comes from the noise, not despite it.</p>
+    <p class="note">This is the Morris-Shin limiting benchmark. Its noisy private signals pin down one threshold where complete information would allow many self-fulfilling outcomes.</p>
 
     <div class="play"><button class="tinybtn" onclick={reset}>Reset</button></div>
   {/if}

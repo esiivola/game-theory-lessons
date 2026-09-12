@@ -64,7 +64,7 @@
         Not stable: some driver would switch, and any improving switch strictly lowers the potential. Keep going.
       {/if}
     </div>
-    <p class="note">Every improving move decreases the same potential function, so best-response dynamics cannot cycle and must reach a pure Nash equilibrium. That is the defining property of a potential game.</p>
+    <p class="note">Every improving move decreases the same potential function, so strict better-response dynamics cannot cycle and must reach a pure Nash equilibrium. A player can still switch among tied best responses unless the process specifies a tie rule.</p>
   {/if}
 </div>
 

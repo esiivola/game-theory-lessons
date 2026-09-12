@@ -71,14 +71,14 @@ In $(B,R)$ both players choose an action that only pays off in cells that never 
 In the game, $(B,R)$ is a Nash equilibrium only weakly: given the other plays Right, Bottom and Top both pay $0$, so Bottom is a best response but not a strict one, and it is weakly dominated by Top (which pays $1$ against Left and $0$ against Right). Introduce a tremble: the column player intends Right but plays Left with probability $\varepsilon$. Then Row earns $\varepsilon\cdot 1 = \varepsilon$ from Top and $0$ from Bottom, so for any $\varepsilon > 0$ Row strictly prefers Top, and $(B,R)$ is not robust.
 
 <DefinitionAside label="trembling-hand and sequential equilibrium">
-A trembling-hand perfect equilibrium is a limit, as the trembles vanish, of equilibria of perturbed games in which every action is played with strictly positive probability. Sequential equilibrium requires a strategy profile and beliefs that are the limit of totally-mixed (fully trembling) behavior, so beliefs are consistent even off the path. The refinements nest: every Nash equilibrium need not be subgame perfect, every subgame-perfect one need not be sequential, and
+A trembling-hand perfect equilibrium is a limit, as trembles vanish, of equilibria of perturbed games in which every action has strictly positive probability. Sequential equilibrium requires a strategy profile and beliefs that are the limit of totally mixed behavior, so beliefs are consistent even off the path. For finite extensive-form games with perfect recall, the standard refinements nest as follows:
 
 $$
-\text{Nash} \supseteq \text{subgame-perfect} \supseteq \text{sequential} \supseteq \text{trembling-hand} \supseteq \text{proper}.
+\text{Nash} \supseteq \text{subgame-perfect} \supseteq \text{sequential} \supseteq \text{extensive-form trembling-hand perfect}.
 $$
 </DefinitionAside>
 
-Sequential equilibrium and PBE usually agree, but not always: sequential equilibrium's consistency requirement on off-path beliefs is stronger, ruling out belief systems PBE would permit (Selten's Horse is the classic separating example).
+Proper equilibrium is a further normal-form refinement of trembling-hand perfection, but direct comparisons with sequential equilibrium depend on the chosen representation. PBE is not one single formal definition. Under the usual requirements of sequential rationality and Bayes' rule on path, every sequential equilibrium is a PBE. Sequential equilibrium adds a particular consistency requirement on off-path beliefs, so the reverse can fail for weaker PBE definitions (Selten's Horse is the classic separating example).
 </Section>
 
 <Section id="worked">

@@ -68,14 +68,14 @@
 
     <div class="readout" aria-live="polite">
       {#if rule === 'vcg'}
-        VCG charges each winner the externality it imposes on the others, independent of its own bid, so bidding your true value is a dominant strategy.
+        VCG charges each winner the externality it imposes on the others. A bid can change the allocation and payment, but truthful bidding makes VCG maximize that bidder's true value plus others' reported value, so it is weakly dominant.
       {:else}
         GSP charges each slot the next advertiser's bid, so the top slot pays more here than under VCG.
         Bidding truthfully, {topName} keeps {Math.round(dev.stay)}; shading just under the second bid
         would win slot 2 at the third bid, worth {Math.round(dev.drop)}.
         {#if dev.profitable}
-          Shading pays, so truthful bidding is not an equilibrium: advertisers shade toward the envy-free
-          equilibrium, which reproduces the VCG prices.
+          Shading pays, so truthful bidding is not an equilibrium. Under the standard model, the lowest
+          locally envy-free GSP equilibrium reproduces the VCG prices.
         {:else}
           Shading does not pay at these numbers, so truth survives here even though GSP overcharges. GSP is
           still not truthful in general: change the values or the click split and the deviation turns profitable.

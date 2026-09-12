@@ -71,9 +71,11 @@
 
     <div class="readout" aria-live="polite">
       {#if verdict === 'supportable'}
-        <b class="ok">Supportable.</b> ({r1(u1)}, {r1(u2)}) is feasible and strictly above the minmax of 1, so for a discount factor close to 1 it is a subgame-perfect equilibrium payoff.
+        <b class="ok">Guaranteed by the folk theorem.</b> ({r1(u1)}, {r1(u2)}) is feasible and strictly above the minmax of 1, so for a discount factor close to 1 it is a subgame-perfect equilibrium payoff.
+      {:else if verdict === 'on-minmax'}
+        <b class="no">On the minmax boundary.</b> The strict folk theorem does not decide this point. Some boundary points are equilibria, including mutual defection at (1, 1); this target needs a separate strategy check.
       {:else if verdict === 'below-minmax'}
-        <b class="no">Not above the minmax.</b> A player can guarantee 1 by defecting forever, so no equilibrium can hold them under it. The boundary is out too: pinning a player at exactly 1 takes permanent punishment, which leaves the other nothing to gain either.
+        <b class="no">Below the minmax.</b> A player can guarantee 1 by defecting forever, so no equilibrium can hold them under it.
       {:else}
         <b class="no">Infeasible.</b> ({r1(u1)}, {r1(u2)}) lies outside what the stage game can even produce, so no strategy reaches it.
       {/if}

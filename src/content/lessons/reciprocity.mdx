@@ -68,11 +68,11 @@ If all that mattered were the final split, both versions would be rejected equal
 <Section id="math">
 ## The math
 
-<DefinitionAside label="reciprocity (Rabin, Charness-Rabin)">
-Reciprocity models make utility depend on beliefs about the other player's kindness, not just on the payoff distribution. In Rabin's fairness equilibrium, being treated kindly raises your willingness to help, and being treated unkindly raises your willingness to hurt, even at a personal cost, a psychological game where payoffs depend on intentions. The Charness-Rabin model blends a distributional concern with a reciprocity term that flips sign with the other player's behaviour.
+<DefinitionAside label="reciprocity (Rabin)">
+Reciprocity models make utility depend on beliefs about the other player's kindness, not just on the payoff distribution. Rabin's fairness model is a psychological game. Let $f_B$ be the kindness B chooses to show A and $\tilde f_A$ be B's belief about A's kindness toward B. One version of the utility is $U_B = \pi_B + \tilde f_A(1 + f_B)$, where $\pi_B$ is B's material payoff. Kindness is defined from the feasible payoffs, so these beliefs and intended actions enter the equilibrium. Charness-Rabin adds evidence on reciprocity alongside distributional social preferences.
 </DefinitionAside>
 
-Write player B's utility as $U_B = (1 - \theta q)\,x_B + \theta q\,x_A$, where $x_A, x_B$ are payoffs and $q$ captures how kindly A behaved. When A acted unkindly, $q < 0$, so B puts negative weight on A's payoff and is willing to pay to lower it (punishment). When the outcome was accidental, $q \approx 0$, and B is nearly self-interested, so the same stingy split is accepted. Identical $x$'s, opposite responses, driven entirely by the intention term $q$.
+If B believes A acted unkindly, then $\tilde f_A < 0$, so a response that is unkind to A raises B's reciprocity term even when it costs material payoff. Rejecting can therefore beat accepting a low offer. If a wheel generated the split, there is no player intention to judge, so this reciprocal motive is absent. Identical material payoffs can then produce different choices because the beliefs about kindness differ.
 </Section>
 
 <Section id="worked">
@@ -81,7 +81,7 @@ Write player B's utility as $U_B = (1 - \theta q)\,x_B + \theta q\,x_A$, where $
 <WorkedExample title="Why intent flips the response">
 Consider the $2-for-B, $8-for-A split. Under pure inequity aversion, B's decision depends only on the numbers, so it would reject (or accept) the same way regardless of source. That predicts equal rejection rates, which is not what happens.
 
-Add reciprocity. If A deliberately chose the split, B judges A unkind, so $q < 0$: B's utility puts negative weight on A's \$8, and rejecting (giving both $0$) removes A's payoff, which B now values doing. If a wheel produced the split, $q \approx 0$: B has no one to punish, weights only its own \$2, and accepts. Same $x_A, x_B$, but the intention term $q$ reverses the choice, exactly the pattern in the data.
+Add reciprocity. If A deliberately chose the split, B judges A unkind, so $\tilde f_A < 0$. Rejecting is an unkind response, because it removes A's \$8 as well as B's \$2, and the reciprocal utility term can make that worthwhile. If a wheel produced the split, there is no player's kindness to judge or punish, so the material \$2 has more weight and B accepts. Same $x_A, x_B$, but different beliefs about intention reverse the choice, exactly the pattern in the data.
 </WorkedExample>
 </Section>
 

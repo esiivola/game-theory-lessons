@@ -30,7 +30,7 @@ import PositionAuction from '@/components/interactive/PositionAuction.svelte';
 
 # Auctions in the wild
 
-<p class="lead">Auction theory earns its keep in two of the biggest markets built by economists: government spectrum sales and online advertising. Both show the theory in tension with practice, especially the generalized second price, which every major search engine uses despite it not being truthful.</p>
+<p class="lead">Auction theory earns its keep in two of the biggest markets built by economists: government spectrum sales and online advertising. Both show the theory in tension with practice. Generalized-second-price-style rules are common in search advertising, despite not making truthful bids optimal with multiple slots.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -54,7 +54,7 @@ Bid for two ad slots under the generalized second price, then toggle to VCG and 
   predict={{
     question: 'Search engines use the generalized second price. Is bidding your true value optimal under it?',
     options: [{ key: 'yes', label: 'Yes, like a second-price auction' }, { key: 'no', label: 'No, advertisers shade' }],
-    reveal: 'No. With multiple slots the generalized second price is not truthful, so advertisers shade toward an envy-free equilibrium. That equilibrium happens to reproduce the VCG prices, which is why the format survives despite not being truthful.',
+    reveal: 'No. With multiple slots the generalized second price is not truthful. In the standard separable-click model, its lowest locally envy-free equilibrium reproduces the VCG prices, but that is an equilibrium result, not a property of every bid profile.',
   }}
 />
 </Section>
@@ -63,7 +63,7 @@ Bid for two ad slots under the generalized second price, then toggle to VCG and 
 ## Why did that happen?
 
 <Callout kind="ask">
-The generalized second price looks like the truthful second-price auction, and for a single slot it is. But with several slots, the price on the top slot takes no account of what a lower slot would cost, so a bidder can sometimes do better by shading under the bid above it and buying a cheaper slot instead. When that trade pays, truthful bidding is not an equilibrium. What saves it is that its stable, envy-free equilibrium lands on the efficient assignment and the VCG prices, so the outcome is sound even though the rule is not strategy-proof. Spectrum auctions face harder problems still: goods that are complements, where bidding on pieces risks the exposure problem.
+The generalized second price looks like the truthful second-price auction, and for a single slot it is. But with several slots, the price on the top slot takes no account of what a lower slot would cost, so a bidder can sometimes do better by shading under the bid above it and buying a cheaper slot instead. When that trade pays, truthful bidding is not an equilibrium. In the standard separable-click model, a lowest locally envy-free GSP equilibrium lands on the efficient assignment and VCG prices. Other GSP bid profiles need not. Spectrum auctions face harder problems still: goods that are complements, where bidding on pieces risks the exposure problem.
 </Callout>
 </Section>
 
@@ -71,7 +71,7 @@ The generalized second price looks like the truthful second-price auction, and f
 ## The real episodes
 
 <DefinitionAside label="spectrum and ad auctions">
-The FCC has auctioned spectrum since 1994 using simultaneous multiple-round designs; the 2016-17 incentive auction repurposed broadcast spectrum, paying broadcasters to give it up and reselling it: $19.8 billion raised, $10.05 billion paid to broadcasters, and more than $7 billion to the Treasury. Online advertising uses the generalized second price: advertisers are ranked by bid and each pays the next bid down per click. It is not truthful with multiple slots, but its lowest envy-free equilibrium reproduces the efficient VCG outcome.
+The FCC has auctioned spectrum since 1994 using simultaneous multiple-round designs; the 2016-17 incentive auction repurposed broadcast spectrum, paying broadcasters to give it up and reselling it: $19.8 billion raised, $10.05 billion paid to broadcasters, and more than $7 billion to the Treasury. In the textbook GSP model, advertisers are ranked by bid and each pays the next bid down per click. It is not truthful with multiple slots, but its lowest locally envy-free equilibrium reproduces the efficient VCG outcome under the model's separable-click assumptions.
 </DefinitionAside>
 
 Two practical wrinkles. Ad auctions run billions of times a day, so even small design choices (reserves, quality scores) move enormous revenue, and the GSP's non-truthfulness means bidders and platforms both invest in bid optimization. Spectrum auctions add combinatorial structure: licenses are worth more together, so bidding on a subset exposes a firm to winning a useless fragment (the exposure problem), which package-bidding designs (Ausubel-Milgrom) address.
@@ -83,14 +83,14 @@ Two practical wrinkles. Ad auctions run billions of times a day, so even small d
 <WorkedExample title="Why GSP is not truthful, yet works">
 Take two slots, worth 100 and 80 clicks, and advertisers valuing clicks at 10, 6, 4. VCG charges each the externality it imposes: the top advertiser pays 440, the second 320. Under GSP with truthful bids, the top slot's price is the next bid (6) over its 100 clicks, so 600, well above VCG's 440. Is that enough to make the top bidder move? Holding slot 1 nets 100(10 - 6) = 400; shading to just under 6 buys slot 2 at the third bid, netting 80(10 - 4) = 480. It is, so truthful bidding is not an equilibrium.
 
-Advertisers therefore adjust until no one envies another's slot-and-price. That envy-free equilibrium assigns slots efficiently and charges exactly the VCG amounts. So the search engine gets the efficient, well-priced outcome VCG would give, through a simpler-looking rule, even though bidding your value is not itself optimal. That gap is why advertisers optimize bids and why the theory matters in practice.
+Under the standard model, a lowest locally envy-free equilibrium assigns slots efficiently and charges the VCG amounts. So that equilibrium gives the search engine the efficient, well-priced outcome VCG would give, through a simpler-looking rule, even though bidding your value is not itself optimal. Arbitrary GSP bids do not carry this guarantee. That gap is why advertisers optimize bids and why the theory matters in practice.
 </WorkedExample>
 </Section>
 
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">Spectrum and ad auctions are auction theory at industrial scale. The generalized second price is not truthful with multiple slots, but its envy-free equilibrium reproduces the efficient VCG outcome, which is why it endures.</Callout>
+<Callout kind="key-idea">Spectrum and ad auctions are auction theory at industrial scale. Generalized second price is not truthful with multiple slots. Under standard assumptions, its lowest locally envy-free equilibrium reproduces the efficient VCG outcome, but arbitrary bids do not.</Callout>
 </Section>
 
 <Section id="quiz">
@@ -103,7 +103,7 @@ Advertisers therefore adjust until no one envies another's slot-and-price. That 
   badge="apply"
   question="A friend says GSP is just a second-price auction, so bid your value. What is wrong?"
   options={[
-    { text: "With multiple slots GSP is not truthful; a cheaper lower slot can be worth more than the top one", correct: true, feedback: "GSP equals the second-price auction only for a single slot. With several slots, shading under the bid above you can buy a cheaper slot that nets more, so truthful bidding is not an equilibrium and advertisers shade toward the envy-free one." },
+    { text: "With multiple slots GSP is not truthful; a cheaper lower slot can be worth more than the top one", correct: true, feedback: "GSP equals the second-price auction only for a single slot. With several slots, shading under the bid above you can buy a cheaper slot that nets more, so truthful bidding is not an equilibrium. In the standard model, a lowest locally envy-free equilibrium has VCG prices." },
     { text: "Nothing, GSP is always truthful", feedback: "It is truthful only in the single-slot case. Multiple slots break truthfulness, which is the whole subtlety of ad auctions." },
     { text: "GSP charges your own bid, so never bid high", feedback: "GSP charges the next bid down, not your own. Still, it is not truthful with multiple slots, so shading can help." },
   ]}
@@ -127,11 +127,11 @@ Advertisers therefore adjust until no one envies another's slot-and-price. That 
   slug="case-auctions"
   id="q3"
   badge="brings back: VCG"
-  question="Why do economists accept GSP despite it not being strategy-proof?"
+  question="What does GSP's lowest locally envy-free equilibrium achieve in the standard model?"
   options={[
-    { text: "Its lowest envy-free equilibrium reproduces the efficient allocation and the VCG prices", correct: true, feedback: "Even though truthful bidding is not optimal, the equilibrium advertisers settle into matches the efficient, externality-priced VCG outcome. The good properties re-emerge through equilibrium play." },
+    { text: "It reproduces the efficient allocation and the VCG prices", correct: true, feedback: "Under the standard separable-click assumptions, that particular equilibrium matches the efficient, externality-priced VCG outcome. Other GSP bid profiles need not." },
     { text: "Because GSP raises strictly more revenue than everything else", feedback: "Its appeal is efficiency and matching VCG in equilibrium, not a revenue-dominance claim." },
-    { text: "Because non-truthful auctions are always efficient", feedback: "Non-truthfulness does not imply efficiency in general. GSP is acceptable specifically because its envy-free equilibrium coincides with VCG." },
+    { text: "Because non-truthful auctions are always efficient", feedback: "Non-truthfulness does not imply efficiency. The VCG result applies only to a particular GSP equilibrium under stated assumptions." },
   ]}
 />
 </Section>

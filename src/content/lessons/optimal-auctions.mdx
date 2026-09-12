@@ -5,7 +5,7 @@ unit: 12
 unitName: "Mechanism design and social choice"
 order: 40
 kind: lesson
-summary: "To maximize revenue, run a second-price auction with a reserve, and it never moves with n."
+summary: "With iid uniform values, the revenue-maximizing reserve is 1/2 for any number of bidders."
 tags: ["auctions", "mechanism-design", "revenue"]
 estMinutes: 6
 mvp: true
@@ -24,11 +24,11 @@ import WarmUp from '@/components/interactive/WarmUp.svelte';
 import QuizCard from '@/components/interactive/QuizCard.svelte';
 import OptimalReserve from '@/components/interactive/OptimalReserve.svelte';
 
-<div class="anchor"><span class="em">🏷️</span><p>eBay lets sellers set a reserve, a secret minimum below which the item does not sell. Set it too high and you scare off bidders; too low and you leave money on the table. There is one right answer, and it does not depend on how many bidders show up.</p></div>
+<div class="anchor"><span class="em">🏷️</span><p>eBay lets sellers set a reserve, a secret minimum below which the item does not sell. Set it too high and you scare off bidders; too low and you leave money on the table. In the uniform-value benchmark, the right reserve does not depend on how many bidders show up.</p></div>
 
 # Optimal auctions
 
-<p class="lead">Revenue equivalence said the format does not matter for revenue. But it took the rules as given. Myerson asked the harder question: across all mechanisms, which raises the most? The answer is clean. Run a second-price auction with a reserve set where the bidder's virtual value turns positive.</p>
+<p class="lead">Revenue equivalence said the format does not matter for revenue. But it took the rules as given. Myerson asked the harder question: across all mechanisms, which raises the most? With independent, risk-neutral bidders whose values come from a known regular distribution, allocate to the highest positive virtual value. For iid uniform values, that is a second-price auction with a reserve of $1/2$.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -50,9 +50,9 @@ Bidders' values are uniform on $[0,1]$. Set the reserve and the number of bidder
   exhibit="Exhibit 1"
   caption="Expected revenue versus reserve, values uniform on [0,1]"
   predict={{
-    question: 'With more bidders competing, should the seller raise the reserve?',
+    question: 'With more bidders competing in this iid-uniform model, should the seller raise the reserve?',
     options: [{ key: 'raise', label: 'Yes, raise it' }, { key: 'same', label: 'No, keep it at 1/2' }],
-    reveal: 'Keep it at 1/2. The optimal reserve is where the virtual value hits zero, which for uniform values is 1/2 regardless of how many bidders there are. More competition raises revenue, but not the reserve.',
+    reveal: 'Keep it at 1/2. In this iid-uniform model, the optimal reserve is where the virtual value hits zero: 1/2 regardless of how many bidders there are. More competition raises revenue, but not the reserve.',
   }}
 />
 </Section>
@@ -61,7 +61,7 @@ Bidders' values are uniform on $[0,1]$. Set the reserve and the number of bidder
 ## Why did that happen?
 
 <Callout kind="ask">
-The reserve is really a price you post to the winning bidder, and the right price to post to a single buyer with a uniform value is $1/2$, maximizing $p(1-p)$. Adding more bidders makes it more likely someone clears that bar and pushes up the price they actually pay through competition, so revenue rises. But the threshold itself, the point below which selling is not worth it, is a property of one bidder's value distribution, not of how many bidders there are. So the reserve stays put at $1/2$.
+In this iid-uniform model, the reserve is really a price you post to the winning bidder, and the right price to post to a single buyer is $1/2$, maximizing $p(1-p)$. Adding more bidders makes it more likely someone clears that bar and pushes up the price they actually pay through competition, so revenue rises. But the threshold itself is a property of one bidder's value distribution, not of how many bidders there are. So the reserve stays put at $1/2$. Change the distribution or the model, and the conclusion need not hold.
 </Callout>
 </Section>
 
@@ -69,7 +69,7 @@ The reserve is really a price you post to the winning bidder, and the right pric
 ## The math
 
 <DefinitionAside label="virtual value and the optimal auction">
-For a bidder with value $v$ and distribution $F$, the virtual value is $\psi(v) = v - \frac{1 - F(v)}{f(v)}$. Myerson's theorem: the revenue-maximizing auction allocates the item to the bidder with the highest virtual value, provided it is nonnegative, and charges accordingly. For regular distributions this is a second-price auction with a reserve $r$ solving $\psi(r) = 0$.
+For a risk-neutral bidder with value $v$ and distribution $F$, the virtual value is $\psi(v) = v - \frac{1 - F(v)}{f(v)}$. In the independent-private-values model, Myerson's theorem allocates the item to the bidder with the highest nonnegative virtual value. For iid regular distributions, this is a second-price auction with a reserve $r$ solving $\psi(r) = 0$.
 </DefinitionAside>
 
 For the uniform distribution, $\psi(v) = 2v - 1$, so the reserve solves $2r - 1 = 0$, giving $r^* = \tfrac12$, independent of $n$. Intuitively, revenue is expected virtual surplus, and you only want to sell to a bidder whose virtual value is positive, that is, whose value clears $\tfrac12$.
@@ -80,17 +80,17 @@ With a single buyer, this is just posting a price $p$ to maximize $p(1-p)$, whic
 <Section id="worked">
 ## Work it out
 
-<WorkedExample title="Find the reserve, and see it ignore n">
+<WorkedExample title="Find the iid-uniform reserve">
 The uniform virtual value is $\psi(v) = 2v - 1$. Set it to zero: $2r - 1 = 0$, so $r^* = \tfrac12$. This uses only one bidder's distribution, so it holds for any number of bidders.
 
-Check the single-buyer case directly: posting price $p$ sells with probability $1-p$ for revenue $p(1-p)$, maximized at $p = \tfrac12$, revenue $\tfrac14$. Now add bidders. Competition raises the price the winner pays (toward the second-highest value), so expected revenue climbs with $n$, but the reserve that maximizes it stays at $\tfrac12$. Raising the reserve when bidders are plentiful would only forgo sales without helping, since the threshold is a fact about a single value draw.
+Check the single-buyer case directly: posting price $p$ sells with probability $1-p$ for revenue $p(1-p)$, maximized at $p = \tfrac12$, revenue $\tfrac14$. Now add bidders. Competition raises the price the winner pays (toward the second-highest value), so expected revenue climbs with $n$, but the reserve that maximizes it stays at $\tfrac12$ in this iid-uniform model. A different value distribution can imply a different reserve.
 </WorkedExample>
 </Section>
 
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">The revenue-maximizing auction is a second-price auction with a reserve where the virtual value turns positive. For uniform values that reserve is 1/2, whatever the number of bidders, and it deliberately trades some efficiency for revenue.</Callout>
+<Callout kind="key-idea">For iid, risk-neutral bidders with regular values, the revenue-maximizing auction allocates to the highest positive virtual value. For uniform values, this is a second-price auction with a reserve of 1/2, whatever the number of bidders, and it deliberately trades some efficiency for revenue.</Callout>
 </Section>
 
 <Section id="quiz">
@@ -101,11 +101,11 @@ Check the single-buyer case directly: posting price $p$ sells with probability $
   slug="optimal-auctions"
   id="q1"
   badge="apply"
-  question="Values are uniform on [0,1]. What is the optimal reserve, and how does it change with more bidders?"
+  question="Bidders' values are iid uniform on [0,1]. What is the optimal reserve, and how does it change with more bidders?"
   options={[
-    { text: "1/2, and it does not change with the number of bidders", correct: true, feedback: "The reserve solves the virtual value 2r - 1 = 0, giving 1/2, which depends only on one bidder's distribution, not on n. More bidders raise revenue but not the reserve." },
-    { text: "It rises toward 1 as bidders increase", feedback: "The reserve is independent of n for iid values. Competition lifts revenue, but the optimal threshold stays at 1/2." },
-    { text: "It falls toward 0 as bidders increase", feedback: "It does not fall either; it is fixed at 1/2 regardless of how many bidders compete." },
+    { text: "1/2, and it does not change with the number of bidders", correct: true, feedback: "For iid uniform values, the reserve solves 2r - 1 = 0, giving 1/2. More bidders raise revenue but not this reserve." },
+    { text: "It rises toward 1 as bidders increase", feedback: "Not in this iid-uniform model. Competition lifts revenue, but the optimal threshold stays at 1/2." },
+    { text: "It falls toward 0 as bidders increase", feedback: "Not in this iid-uniform model. It stays at 1/2 regardless of how many bidders compete." },
   ]}
 />
 

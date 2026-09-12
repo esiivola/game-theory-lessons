@@ -28,7 +28,7 @@ import Condorcet from '@/components/interactive/Condorcet.svelte';
 
 # Social choice: Arrow and Gibbard-Satterthwaite
 
-<p class="lead">Turning individual rankings into a group ranking sounds like bookkeeping. It is not. Majority rule can cycle, and two theorems show the trouble is fundamental: no reasonable rule aggregates preferences without a dictator (Arrow), and none is immune to strategic voting (Gibbard-Satterthwaite).</p>
+<p class="lead">Turning individual rankings into a group ranking sounds like bookkeeping. It is not. Majority rule can cycle, and two theorems show the trouble is fundamental: no rule aggregates unrestricted rankings without giving up one of Arrow's conditions, and no deterministic rule that selects among three or more options is both non-dictatorial and fully strategy-proof.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -71,7 +71,7 @@ Each individual has a perfectly sensible, transitive ranking. But majorities are
 Take rankings $A\!>\!B\!>\!C$, $B\!>\!C\!>\!A$, $C\!>\!A\!>\!B$. Pairwise: $A$ beats $B$ (voters 1 and 3), $B$ beats $C$ (voters 1 and 2), $C$ beats $A$ (voters 2 and 3). The social preference cycles, so there is no Condorcet winner.
 
 <DefinitionAside label="Arrow and Gibbard-Satterthwaite">
-Arrow's theorem: with three or more alternatives, no rule turning individual rankings into a social ranking can satisfy all of unrestricted domain, unanimity (Pareto), independence of irrelevant alternatives, and non-dictatorship at once. Gibbard-Satterthwaite: any onto voting rule over three or more alternatives that is strategy-proof (no voter ever gains by misreporting) must be a dictatorship. Together they say perfect aggregation and full strategy-proofness are impossible.
+Arrow's theorem: with three or more alternatives, no rule turning individual rankings into a complete, transitive social ranking can satisfy unrestricted domain, unanimity (Pareto), independence of irrelevant alternatives, and non-dictatorship at once. Gibbard-Satterthwaite: with unrestricted strict rankings and three or more alternatives, any deterministic, onto rule that is strategy-proof (no voter ever gains by misreporting) must be a dictatorship. Together they show why the stated conditions cannot all hold at once.
 </DefinitionAside>
 
 Strategic voting follows. Suppose plurality with $45\%$ for $A$, $30\%$ for $B$, $25\%$ for $C$, where the $C$-voters prefer $B$ to $A$. Voting sincerely elects $A$. But if the $C$-voters switch to $B$, then $B$ wins with $55\%$, an outcome they prefer. The rule is manipulable, exactly as Gibbard-Satterthwaite predicts.
@@ -90,7 +90,7 @@ Strategic voting follows. Suppose plurality with $45\%$ for $A$, $30\%$ for $B$,
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">Aggregating preferences is not neutral bookkeeping. Majority rule can cycle, no rule escapes Arrow's conditions without a dictator, and none over three or more options is fully strategy-proof.</Callout>
+<Callout kind="key-idea">Aggregating preferences is not neutral bookkeeping. Majority rule can cycle, no rule escapes Arrow's conditions without a dictator, and no deterministic, onto rule over three or more options is fully strategy-proof on unrestricted rankings.</Callout>
 </Section>
 
 <Section id="quiz">
@@ -129,9 +129,9 @@ Strategic voting follows. Suppose plurality with $45\%$ for $A$, $30\%$ for $B$,
   badge="brings back: dominance"
   question="Under plurality, C-voters who prefer B to A abandon C and vote B to change the winner. In strategic terms, what are they doing?"
   options={[
-    { text: "Playing a best response: sincere voting is dominated for them, so they switch to the report that yields a better outcome", correct: true, feedback: "Their sincere ballot leads to A; a strategic ballot for B leads to B, which they prefer. Misreporting is their best response, which is exactly the manipulability Gibbard-Satterthwaite guarantees for non-dictatorial rules." },
-    { text: "Voting sincerely, since they rank C first", feedback: "Ranking C first is their sincere preference, but voting C leads to their worst outcome A. Switching to B is the strategic best response." },
-    { text: "Nothing strategic; plurality is strategy-proof", feedback: "Plurality is manipulable, as this shows. Only a dictatorship among onto rules is strategy-proof with three or more options." },
+    { text: "Making a strategic misreport that is a better response to these stated vote shares", correct: true, feedback: "Their sincere ballot leads to A; reporting B leads to B, which they prefer. That is a profitable deviation for this profile. It does not mean a sincere ballot is strictly dominated in every possible election." },
+    { text: "Voting sincerely, since they rank C first", feedback: "Ranking C first is their sincere preference, but voting C leads to their worst outcome A at these vote shares. Reporting B is the strategic best response here." },
+    { text: "Nothing strategic; plurality is strategy-proof", feedback: "Plurality is manipulable, as this profile shows. Gibbard-Satterthwaite concerns deterministic, onto rules over three or more options with unrestricted rankings." },
   ]}
 />
 </Section>

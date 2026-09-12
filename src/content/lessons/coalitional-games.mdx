@@ -72,7 +72,7 @@ The two buyers are substitutes: the seller needs only one of them. So the buyers
 A coalitional (transferable-utility) game gives each coalition $S$ a value $v(S)$, the total its members can guarantee together. An allocation $x$ divides the grand-coalition value $v(N)$ among the players. The core is the set of allocations that are efficient ($\sum_i x_i = v(N)$) and unblocked: for every coalition $S$, $\sum_{i \in S} x_i \ge v(S)$. If some coalition could get more on its own, it blocks, and the allocation is not in the core.
 </DefinitionAside>
 
-Here $v(\{s,b_1\}) = v(\{s,b_2\}) = 100$, $v(\{b_1,b_2\}) = 0$, and $v(N) = 100$. A core allocation $(x_s, x_1, x_2)$ must satisfy $x_s + x_1 \ge 100$ (else the seller and buyer 1 block) and $x_s + x_2 \ge 100$. Adding to efficiency $x_s + x_1 + x_2 = 100$, the first inequality forces $x_2 \le 0$, so $x_2 = 0$; the second forces $x_1 = 0$; hence $x_s = 100$. The core is the single point $(100, 0, 0)$.
+Here $v(\{s\}) = v(\{b_1\}) = v(\{b_2\}) = v(\{b_1,b_2\}) = 0$, $v(\{s,b_1\}) = v(\{s,b_2\}) = 100$, and $v(N) = 100$. A core allocation $(x_s, x_1, x_2)$ must satisfy $x_s + x_1 \ge 100$ (else the seller and buyer 1 block) and $x_s + x_2 \ge 100$. Together with efficiency, $x_s + x_1 + x_2 = 100$, the first inequality gives $x_2 \le 0$. But the singleton coalition $\{b_2\}$ can guarantee $0$, so core membership also requires $x_2 \ge 0$. Thus $x_2=0$; symmetrically $x_1=0$; hence $x_s=100$. The core is the single point $(100, 0, 0)$.
 
 The core can also be empty (the three-player majority game has no unblocked allocation), which motivates other solution concepts in the next lessons.
 </Section>
@@ -83,7 +83,7 @@ The core can also be empty (the three-player majority game has no unblocked allo
 <WorkedExample title="Pin down the core">
 Write the blocking conditions. The coalition of the seller and buyer 1 can secure $100$, so any stable split must give them at least that: $x_s + x_1 \ge 100$. Symmetrically $x_s + x_2 \ge 100$. Efficiency requires $x_s + x_1 + x_2 = 100$.
 
-From $x_s + x_1 \ge 100$ and the total being $100$, we get $x_2 \le 0$, so $x_2 = 0$. The same argument gives $x_1 = 0$. Therefore $x_s = 100$: the unique core allocation is $(100, 0, 0)$. No matter how the buyers coordinate, competition between them leaves the seller with everything.
+From $x_s + x_1 \ge 100$ and the total being $100$, we get $x_2 \le 0$. The singleton coalition $\{b_2\}$ is worth $0$, so core membership also gives $x_2 \ge 0$. Hence $x_2 = 0$. The same argument gives $x_1 = 0$. Therefore $x_s = 100$: the unique core allocation is $(100, 0, 0)$. No matter how the buyers coordinate, competition between them leaves the seller with everything.
 </WorkedExample>
 </Section>
 

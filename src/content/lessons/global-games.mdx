@@ -5,7 +5,7 @@ unit: 11
 unitName: "Refinements and epistemics"
 order: 36
 kind: lesson
-summary: "A little private noise turns a game with many self-fulfilling outcomes into one with a single threshold."
+summary: "In a benchmark currency-attack model, private noise selects one threshold from many self-fulfilling outcomes."
 tags: ["global-games", "coordination", "crises"]
 estMinutes: 6
 mvp: true
@@ -24,11 +24,11 @@ import WarmUp from '@/components/interactive/WarmUp.svelte';
 import QuizCard from '@/components/interactive/QuizCard.svelte';
 import GlobalGames from '@/components/interactive/GlobalGames.svelte';
 
-<div class="anchor"><span class="em">💱</span><p>A currency peg holds if few speculators attack and collapses if enough do. With everyone sure of the fundamentals, either outcome can be self-fulfilling. Give each trader a slightly noisy read of the economy and the ambiguity vanishes: there is one threshold, and everyone knows which side of it they are on.</p></div>
+<div class="anchor"><span class="em">💱</span><p>A currency peg holds if few speculators attack and collapses if enough do. With everyone sure of the fundamentals, either outcome can be self-fulfilling. In the benchmark model, give each trader a slightly noisy read of the economy and the ambiguity gives way to one threshold.</p></div>
 
 # Global games
 
-<p class="lead">Coordination games have many equilibria, and stories about crises often lean on that: the attack succeeds because everyone expects it to. Global games puncture the mystery. Add a small amount of private noise to each player's information and the multiplicity collapses to a single equilibrium pinned by the fundamentals, not by mood.</p>
+<p class="lead">Coordination games can have many equilibria, and stories about crises often lean on that: the attack succeeds because everyone expects it to. The Morris-Shin currency-attack benchmark shows how private noise can select one threshold equilibrium, pinned by fundamentals and the model's payoff and information structure.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -71,7 +71,7 @@ With everyone perfectly informed of the same fundamental, there is a middle rang
 The regime collapses if the mass of attackers reaches the fundamental $\theta$; attacking costs $c$ and pays off only if the regime falls. Under complete information, for intermediate $\theta$ there are two equilibria (everyone attacks, or no one does). Now let each speculator $i$ see a private signal $x_i = \theta + \text{noise}$.
 
 <DefinitionAside label="global game">
-A global game is a coordination game where each player observes the payoff-relevant state with a small idiosyncratic error. As the noise shrinks, the game has a unique equilibrium in threshold strategies: attack iff your signal is below a cutoff. The uniqueness comes from the noise, which prevents beliefs about others from being common knowledge and forces iterated reasoning to a single outcome.
+A global game is a coordination game where each player observes a payoff-relevant state with idiosyncratic error. In the canonical currency-attack model, under its monotonicity and signal assumptions, small private noise yields a unique equilibrium in threshold strategies: attack iff your signal is below a cutoff. The noise prevents players' information from being common knowledge, which pins down higher-order beliefs. Other global games need not have this exact threshold or uniqueness result.
 </DefinitionAside>
 
 At the switching signal, the marginal speculator's belief about the fraction of others attacking is uniform on $[0,1]$ (the Laplacian property), so it puts probability $1 - \theta^*$ on the regime falling. Setting that equal to the cost $c$ gives the fundamental threshold
@@ -96,7 +96,7 @@ Attacking pays $1$ if the regime falls and costs $c$ either way, so the marginal
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">Small private noise selects a unique threshold equilibrium out of a coordination game's many equilibria. Crises are not pure sunspots: the regime falls exactly when fundamentals drop below 1 minus the cost of attacking.</Callout>
+<Callout kind="key-idea">In this benchmark currency-attack model, small private noise selects one threshold equilibrium from a coordination game's many complete-information equilibria. The regime falls when fundamentals drop below 1 minus the cost of attacking.</Callout>
 </Section>
 
 <Section id="quiz">
@@ -120,11 +120,11 @@ Attacking pays $1$ if the regime falls and costs $c$ either way, so the marginal
   slug="global-games"
   id="q2"
   badge="analyse"
-  question="What does adding small private noise do to the set of equilibria?"
+  question="In the benchmark currency-attack model, what does adding small private noise do to the set of equilibria?"
   options={[
-    { text: "It collapses the multiplicity to a single threshold equilibrium", correct: true, feedback: "Complete information leaves multiple self-fulfilling equilibria in a middle range. Noise removes common knowledge of others' information and selects one unique cutoff, so the outcome is pinned by fundamentals." },
-    { text: "It leaves the multiple equilibria unchanged", feedback: "Even tiny noise changes things qualitatively: it selects a unique equilibrium, which is the central result of global games." },
-    { text: "It destroys all equilibria", feedback: "It does not remove equilibrium; it selects a unique one in threshold strategies." },
+    { text: "It collapses the multiplicity to a single threshold equilibrium", correct: true, feedback: "Complete information leaves multiple self-fulfilling equilibria in a middle range. In this model, noise removes common knowledge of others' information and selects one cutoff." },
+    { text: "It leaves the multiple equilibria unchanged", feedback: "In this benchmark, even tiny noise changes things qualitatively and selects one threshold. Other information structures need separate analysis." },
+    { text: "It destroys all equilibria", feedback: "It does not remove equilibrium. In this model it selects one equilibrium in threshold strategies." },
   ]}
 />
 

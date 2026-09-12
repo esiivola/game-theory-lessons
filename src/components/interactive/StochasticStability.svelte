@@ -19,14 +19,15 @@
     let s = Math.round(stagShare * N);
     const hist = [...history];
     for (let t = 0; t < k; t++) {
-      // Each agent best-responds to the current Stag share, plus rare mutation flips.
+      // KMR-style update: agents best-respond to the previous population, except for independent mutations.
       const q = s / N;
-      const br = bestResponse(q); // whole population tends toward the best response
-      let target = br === 'stag' ? N : 0;
-      // Move part way, then apply mutations.
-      s = Math.round(s + (target - s) * 0.5);
-      for (let i = 0; i < N; i++) if (Math.random() < mutation / 5) s += (Math.random() < 0.5 ? 1 : -1);
-      s = Math.max(0, Math.min(N, s));
+      const br = bestResponse(q);
+      let next = 0;
+      for (let i = 0; i < N; i++) {
+        const action = Math.random() < mutation ? (Math.random() < 0.5 ? 'stag' : 'hare') : br;
+        if (action === 'stag') next += 1;
+      }
+      s = next;
       hist.push(s / N);
     }
     stagShare = s / N; history = hist.slice(-60); rounds += k;
@@ -56,7 +57,7 @@
     </div>
     <p class="barnote">Stag is a best response only if you expect at least {pct(0.75)} of others to hunt Stag, so its basin is small.</p>
 
-    <label class="slider"><span class="slab">Mutation rate: <b class="mono">{Math.round(mutation * 100)}%</b></span><input type="range" min="0.02" max="0.4" step="0.01" bind:value={mutation} aria-label="Mutation rate" /></label>
+    <label class="slider"><span class="slab">Mutation rate: <b class="mono">{Math.round(mutation * 100)}%</b></span><input type="range" min="0.01" max="0.1" step="0.01" bind:value={mutation} aria-label="Mutation rate" /></label>
 
     {#if history.length > 0}
       <div class="tape">
@@ -68,7 +69,7 @@
     {/if}
 
     <div class="readout" aria-live="polite">
-      The population spends almost all its time at all-Hare, the risk-dominant convention, even though all-Stag pays more (4 versus 3). Lowering the mutation rate does not change the winner, only how long the population lingers before drifting back.
+      In this KMR-style update, the population spends almost all its time at all-Hare, the risk-dominant convention, even though all-Stag pays more (4 versus 3). Lowering the mutation rate does not change the winner, only how long the population lingers before drifting back.
     </div>
 
     <div class="play"><button class="choice" onclick={() => stepMany(20)}>Run 20 rounds</button><button class="tinybtn" onclick={reset}>Reset</button></div>

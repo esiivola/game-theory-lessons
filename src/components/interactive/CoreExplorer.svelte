@@ -38,7 +38,7 @@
       </div>
     </div>
   {:else}
-    <p class="setup">One seller, two buyers. A sale needs the seller plus one buyer, worth 100. The two buyers together can make nothing. Split the 100.</p>
+    <p class="setup">One seller, two buyers. A sale needs the seller plus one buyer, worth 100. Alone, or as the two buyers, they can make nothing. Split the 100.</p>
 
     <label class="slider"><span class="slab">Seller gets: <b class="mono">{x1}</b></span><input type="range" min="0" max="100" step="1" bind:value={x1} aria-label="Seller share" /></label>
     <label class="slider"><span class="slab">Buyer 1 gets: <b class="mono">{x2}</b></span><input type="range" min="0" max="100" step="1" bind:value={x2} aria-label="Buyer 1 share" /></label>

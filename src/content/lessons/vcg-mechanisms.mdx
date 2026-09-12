@@ -5,7 +5,7 @@ unit: 12
 unitName: "Mechanism design and social choice"
 order: 39
 kind: lesson
-summary: "Charge each winner the harm it does to others, and truth-telling becomes dominant."
+summary: "Charge each winner the harm it does to others, and truth-telling is weakly dominant."
 tags: ["mechanism-design", "vcg", "auctions"]
 estMinutes: 6
 mvp: true
@@ -28,7 +28,7 @@ import VCG from '@/components/interactive/VCG.svelte';
 
 # VCG mechanisms
 
-<p class="lead">Vickrey-Clarke-Groves takes the second-price idea to any allocation problem. Choose the allocation that maximizes total value, then charge each participant the externality it creates: the welfare others lose because it took part. Under that rule, honest bidding is a dominant strategy, whatever anyone else does.</p>
+<p class="lead">Vickrey-Clarke-Groves takes the second-price idea to any allocation problem. Choose the allocation that maximizes total value, then charge each participant the externality it creates: the welfare others lose because it took part. Under that rule, honest bidding is a weakly dominant strategy, whatever anyone else does.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -61,7 +61,7 @@ Two identical units are for sale. Bidder A wants the pair; B and C each want a s
 ## Why did that happen?
 
 <Callout kind="ask">
-Paying your own bid would make you shade it, as in a first-price auction. VCG instead charges you the externality: how much worse off everyone else is because you took a unit. That amount does not depend on your own report, so changing your bid cannot lower your payment, it can only cost you a unit you wanted. With nothing to gain from lying, you report your true value. The second-price auction is just this rule for a single item, where the externality you impose is the value of the runner-up you displaced.
+Paying your own bid would make you shade it, as in a first-price auction. VCG instead charges you the externality: how much worse off everyone else is because you took a unit. Your report can change which allocation is chosen and therefore the payment. But, once others' reports are fixed, the welfare they could achieve without you is a constant. VCG makes your payoff equal to the reported total welfare of the chosen allocation, with your true value substituted for your report, minus that constant. So reporting your true value makes the mechanism choose the allocation that is best for you. The second-price auction is just this rule for a single item, where the externality you impose is the value of the runner-up you displaced.
 </Callout>
 </Section>
 
@@ -71,10 +71,16 @@ Paying your own bid would make you shade it, as in a first-price auction. VCG in
 Bidder $A$ values the pair at $a$ (a single unit is worthless to $A$); $B$ and $C$ value one unit at $b$ and $c$. The efficient allocation maximizes total value: give both to $A$ (welfare $a$) or one each to $B$ and $C$ (welfare $b+c$). With $a=10, b=8, c=6$, splitting wins: $b+c = 14 > 10$.
 
 <DefinitionAside label="VCG (Vickrey-Clarke-Groves)">
-Choose the allocation maximizing total reported value. Each participant pays the externality it imposes: the maximum welfare the others could achieve without it, minus the welfare the others actually get in the chosen allocation. Because that charge is independent of the participant's own report, truthful bidding is a dominant strategy, and the outcome is efficient. A single-item VCG is exactly the second-price auction.
+Choose the allocation maximizing total reported value. Each participant pays the externality it imposes: the maximum welfare the others could achieve without it, minus the welfare the others actually get in the chosen allocation. For quasilinear utility, fix the other reports and write their best welfare without $i$ as $H_{-i}$. If report $b_i$ induces allocation $x(b_i,b_{-i})$, then
+
+$$
+u_i=v_i(x(b_i,b_{-i})) + \sum_{j \ne i} b_j(x(b_i,b_{-i})) - H_{-i}.
+$$
+
+The final term is fixed. Reporting $b_i=v_i$ therefore makes VCG maximize the rest of the expression, so truth-telling is weakly dominant. A single-item VCG is exactly the second-price auction.
 </DefinitionAside>
 
-$B$'s payment: without $B$, the best for others is $A$ takes the pair, welfare $10$; with $B$ present, others get $C$'s $6$. So $B$ pays $10 - 6 = 4$. Symmetrically $C$ pays $10 - 8 = 2$. Each pays below its value, keeping surplus, and neither can do better by misreporting. Note VCG can run a deficit and is vulnerable to collusion and shill bids; dominant-strategy truthfulness is its strength, not budget balance.
+$B$'s payment: without $B$, the best for others is $A$ takes the pair, welfare $10$; with $B$ present, others get $C$'s $6$. So $B$ pays $10 - 6 = 4$. Symmetrically $C$ pays $10 - 8 = 2$. In this example each payment is below the winner's value, so each keeps surplus. Note VCG can run a deficit and is vulnerable to collusion and shill bids; weakly dominant truthfulness is its strength, not budget balance.
 </Section>
 
 <Section id="worked">
@@ -83,14 +89,14 @@ $B$'s payment: without $B$, the best for others is $A$ takes the pair, welfare $
 <WorkedExample title="Compute the pivot payments">
 Total value is maximized by giving one unit each to $B$ and $C$: welfare $8 + 6 = 14$, beating $A$'s pair value of $10$. So $B$ and $C$ win.
 
-$B$'s VCG payment is the externality it imposes. Remove $B$: the others ($A$ and $C$) do best if $A$ takes the pair, worth $10$. Keep $B$ in the efficient allocation: the others get only $C$'s $6$ (since $A$ is shut out). The difference, $10 - 6 = 4$, is $B$'s payment. For $C$: without $C$, others get $A$'s $10$; with $C$, others get $B$'s $8$; payment $10 - 8 = 2$. Each pays under its value ($4 < 8$, $2 < 6$), and since neither payment depends on its own bid, honesty is dominant.
+$B$'s VCG payment is the externality it imposes. Remove $B$: the others ($A$ and $C$) do best if $A$ takes the pair, worth $10$. Keep $B$ in the efficient allocation: the others get only $C$'s $6$ (since $A$ is shut out). The difference, $10 - 6 = 4$, is $B$'s payment. For $C$: without $C$, others get $A$'s $10$; with $C$, others get $B$'s $8$; payment $10 - 8 = 2$. A report from $B$ can change the allocation and its payment, but its utility is its true value plus the others' reported welfare in that allocation, less the fixed $10$ absence welfare. Reporting $8$ makes VCG maximize exactly that quantity, so honesty is dominant.
 </WorkedExample>
 </Section>
 
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">VCG allocates efficiently and charges each winner the externality it imposes on others, which makes truthful bidding a dominant strategy. It generalizes the second-price auction to many goods, at the cost of possible deficits and vulnerability to collusion.</Callout>
+<Callout kind="key-idea">VCG allocates efficiently and charges each winner the externality it imposes on others, which makes truthful bidding weakly dominant. It generalizes the second-price auction to many goods, at the cost of possible deficits and vulnerability to collusion.</Callout>
 </Section>
 
 <Section id="quiz">
@@ -103,8 +109,8 @@ $B$'s VCG payment is the externality it imposes. Remove $B$: the others ($A$ and
   badge="apply"
   question="In VCG, what does a winner actually pay?"
   options={[
-    { text: "The externality it imposes: the welfare others lose because it participated", correct: true, feedback: "The payment is others' best welfare without you, minus their welfare with you. It does not depend on your own bid, which is what makes truth-telling dominant." },
-    { text: "Its own bid", feedback: "Paying your own bid invites shading. VCG charges the externality instead, which is independent of your report." },
+    { text: "The externality it imposes: the welfare others lose because it participated", correct: true, feedback: "The payment is others' best welfare without you, minus their welfare in the allocation VCG chooses. Your report can change that allocation, but truthful reporting still maximizes your payoff." },
+    { text: "Its own bid", feedback: "Paying your own bid invites shading. VCG charges the externality instead, then chooses the allocation maximizing reported value." },
     { text: "The average of all bids", feedback: "There is no averaging. Each winner pays the specific welfare loss it causes the others." },
   ]}
 />
@@ -114,11 +120,11 @@ $B$'s VCG payment is the externality it imposes. Remove $B$: the others ($A$ and
   slug="vcg-mechanisms"
   id="q2"
   badge="analyse"
-  question="Why is truthful bidding a dominant strategy under VCG?"
+  question="Why is truthful bidding a weakly dominant strategy under VCG?"
   options={[
-    { text: "Your payment depends only on others' reports, not yours, so misreporting can only cost you a unit you valued, never lower your price", correct: true, feedback: "Since the externality charge is independent of your own bid, lying cannot reduce what you pay. It can only lose you an allocation you wanted, so reporting your true value is optimal regardless of others." },
-    { text: "Because the designer rewards honesty with a discount", feedback: "There is no honesty bonus. Truthfulness is optimal because the payment does not respond to your own report, removing any gain from lying." },
-    { text: "Because all bidders are assumed truthful", feedback: "Dominant-strategy truthfulness holds whatever others do; it is not an assumption but a consequence of externality pricing." },
+    { text: "With others' reports fixed, truthful reporting makes VCG choose the allocation that maximizes your true value plus others' reported value", correct: true, feedback: "The absence welfare in your VCG payment is fixed once others report. Your payoff is therefore true value plus others' reported welfare in the chosen allocation, minus that fixed amount. Reporting truthfully makes VCG maximize it, though a different report can tie." },
+    { text: "Because the designer rewards honesty with a discount", feedback: "There is no honesty bonus. Truthfulness follows from how externality pricing makes your payoff track total welfare evaluated using your true value." },
+    { text: "Because all bidders are assumed truthful", feedback: "Weakly dominant truthfulness holds whatever others do; it is not an assumption but a consequence of externality pricing." },
   ]}
 />
 

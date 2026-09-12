@@ -47,7 +47,7 @@
 
     <p class="setup">You are the proposer splitting ${PIE}. Offer the responder a share; they accept or reject, and rejection leaves both with nothing.</p>
 
-    <label class="slider"><span class="slab">Offer to responder: <b class="mono">${offer}</b> (you keep ${yourKeep})</span><input type="range" min="0" max={PIE} step="1" bind:value={offer} aria-label="Offer to responder" /></label>
+    <label class="slider"><span class="slab">Offer to responder: <b class="mono">${offer}</b> (you keep ${yourKeep})</span><input type="range" min="0" max={PIE} step="0.5" bind:value={offer} aria-label="Offer to responder" /></label>
 
     <div class="pie" aria-hidden="true">
       <span class="them" style={`width:${(offer / PIE) * 100}%`}>them ${offer}</span>

@@ -53,7 +53,7 @@
     </div>
 
     <div class="readout" aria-live="polite">
-      Each winner pays the externality it imposes: the welfare the other bidders lose by its presence, not its own bid. That charge is below its value, so reporting truthfully is a dominant strategy, and no misreport lowers what you pay while still winning.
+      Each winner pays the externality it imposes: the welfare the other bidders lose by its presence, not its own bid. A report can change the allocation and payment, but truthful reporting makes VCG choose the allocation that maximizes the bidder's true value plus the others' reported value. That is why truth-telling is weakly dominant.
     </div>
     <p class="note">With a single item this rule is exactly the second-price auction. VCG generalises "pay the runner-up's value" to many goods.</p>
 

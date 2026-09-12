@@ -42,7 +42,7 @@
     </div>
   {:else}
     <div class="plot-wrap">
-      <svg viewBox={`0 0 ${W} ${H}`} class="plot" role="img" aria-label="Expected seller revenue as the reserve price changes, peaking at one half.">
+      <svg viewBox={`0 0 ${W} ${H}`} class="plot" role="img" aria-label="Expected seller revenue in the iid-uniform model as the reserve price changes, peaking at one half.">
         <line x1={PADL} y1={PADT} x2={PADL} y2={H - PADB} class="ax" />
         <line x1={PADL} y1={H - PADB} x2={W - PADR} y2={H - PADB} class="ax" />
         <line x1={sx(rStar)} y1={PADT} x2={sx(rStar)} y2={H - PADB} class="opt" />
@@ -58,9 +58,9 @@
     <label class="slider"><span class="slab">Number of bidders: <b class="mono">{n}</b></span><input type="range" min="1" max="8" step="1" bind:value={n} aria-label="Number of bidders" /></label>
 
     <div class="readout" aria-live="polite">
-      Expected revenue at this reserve: <b class="mono">{r3(rev)}</b>. The peak sits at <b class="mono">{rStar}</b>, the reserve where the virtual value hits zero.
+      Expected revenue at this reserve: <b class="mono">{r3(rev)}</b>. In this iid-uniform model, the peak sits at <b class="mono">{rStar}</b>, the reserve where the virtual value hits zero.
       {#if Math.abs(r - rStar) < 0.02}This is the optimal reserve.{/if}
-      Change the number of bidders: the peak does not move. The optimal reserve is 1/2 whatever n is.
+      Change the number of bidders: the peak does not move. The optimal reserve is 1/2 whatever n is. Different value distributions can imply a different reserve.
     </div>
 
     <div class="play"><button class="tinybtn" onclick={() => (r = rStar)}>Optimal reserve</button><button class="tinybtn" onclick={reset}>Reset</button></div>

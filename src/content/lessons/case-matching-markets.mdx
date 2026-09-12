@@ -7,7 +7,7 @@ order: 1
 label: "A1"
 kind: case
 placement: "after:top-trading-cycles"
-summary: "How deferred acceptance rescued the medical match, school choice, and kidney exchange."
+summary: "How deferred acceptance reshaped medical matching and school choice, while exchange cycles enabled kidney exchange."
 tags: ["applied", "matching", "market-design"]
 estMinutes: 6
 mvp: true
@@ -30,7 +30,7 @@ import DeferredAcceptance from '@/components/interactive/DeferredAcceptance.svel
 
 # Matching markets in the wild
 
-<p class="lead">Deferred acceptance is not a toy. The National Resident Matching Program, Boston and New York school choice, and kidney exchange all run on it or its cousins. This case shows the theory doing real work: producing stable assignments that markets left to themselves could not.</p>
+<p class="lead">Deferred acceptance is not a toy. The National Resident Matching Program and school-choice systems use it or close variants. Kidney exchange instead uses cycles and chains. This case shows the theory doing real work: matching rules can supply properties that decentralized markets do not.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -87,14 +87,14 @@ Two design lessons recur. First, stability prevents the unraveling that plagued 
 <WorkedExample title="Stability is what markets could not self-provide">
 Run the match: doctors propose, hospitals hold their favourite so far and reject the rest, rejected doctors try their next choice, and the process settles at a stable assignment with no blocking pair. Every doctor is as well off as any stable matching allows, and no hospital-doctor pair would both rather defect.
 
-Now imagine no clearinghouse. A hospital that fears losing a top doctor makes an exploding offer months early; doctors accept out of fear; the market moves earlier each year until it breaks. This is exactly the instability that a stable matching rules out. The medical match, school choice, and kidney exchange all work because a central algorithm supplies the stability, and the strategy-proofness, that decentralized dealing cannot.
+Now imagine no clearinghouse. A hospital that fears losing a top doctor makes an exploding offer months early; doctors accept out of fear; the market moves earlier each year until it breaks. This is exactly the instability that a stable matching rules out. In medical matching and school choice, deferred acceptance supplies stability and safe truthful ranking for the proposing side. Kidney exchange uses a different cycle-and-chain design to find compatible transplants.
 </WorkedExample>
 </Section>
 
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">Real matching markets unravel without a clearinghouse. Deferred acceptance and top trading cycles supply stable, strategy-proof assignments, which is why they run the medical match, school choice, and kidney exchange.</Callout>
+<Callout kind="key-idea">Real matching markets can unravel without a clearinghouse. Deferred acceptance supplies stable assignments and safe truthful ranking for the proposing side. Top-trading-cycles ideas supply efficient exchanges of owned goods, and kidney exchange adapts cycles and chains to medical compatibility.</Callout>
 </Section>
 
 <Section id="quiz">

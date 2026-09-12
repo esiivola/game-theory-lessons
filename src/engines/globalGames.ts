@@ -1,7 +1,7 @@
-// Global games: a currency attack (Morris-Shin). Under complete information there is a range of
-// fundamentals with multiple equilibria, but noisy private signals select a unique threshold: the
-// regime falls exactly when the fundamental theta is below theta* = 1 - c, where c is the cost of
-// attacking. With theta uniform on [0,1], theta* is also the fraction of fundamentals that collapse.
+// Global games: the limiting Morris-Shin currency-attack benchmark. Under its information and
+// payoff assumptions, noisy private signals select a threshold: the regime falls when the
+// fundamental theta is below theta* = 1 - c, where c is the cost of attacking. With theta uniform
+// on [0,1], theta* is also the fraction of fundamentals that collapse.
 // Framework-free and unit-testable.
 
 /** The unique fundamentals threshold: the regime falls iff theta < 1 - c. */

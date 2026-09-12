@@ -4,6 +4,7 @@ import { responderUtility, rejects, rejectionThreshold } from './behavioralGames
 describe('ultimatum with Fehr-Schmidt', () => {
   it('rejects lowball offers, accepts fair ones', () => {
     expect(rejects(2)).toBe(true);   // below 2.5
+    expect(rejects(2.5)).toBe(false); // exactly at the threshold
     expect(rejects(3)).toBe(false);  // above 2.5
     expect(rejects(5)).toBe(false);  // fair
   });

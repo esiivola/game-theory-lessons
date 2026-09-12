@@ -21,9 +21,7 @@ describe('individual rationality', () => {
     expect(isIndividuallyRational([3.5, 2])).toBe(true);
     expect(isIndividuallyRational([4, 0.5])).toBe(false);
   });
-  it('rejects the boundary, where a player sits exactly at its minmax', () => {
-    // Holding player 2 to exactly 1 in the PD means permanent mutual defection, which caps
-    // player 1 at 1 as well, so (4, 1) and (1, 1) are not equilibrium payoffs.
+  it('does not treat the boundary as covered by the strict folk theorem', () => {
     expect(isIndividuallyRational([4, 1])).toBe(false);
     expect(isIndividuallyRational([1, 1])).toBe(false);
   });
@@ -38,9 +36,12 @@ describe('classify / supportable', () => {
     expect(inFeasible([3.5, 2])).toBe(true);
     expect(classify([3.5, 2])).toBe('supportable');
   });
-  it('(4,1) is feasible but sits on the minmax boundary, so it is not supportable', () => {
+  it('(4,1) is feasible but sits on the minmax boundary, so it needs separate analysis', () => {
     expect(inFeasible([4, 1])).toBe(true);
-    expect(classify([4, 1])).toBe('below-minmax');
+    expect(classify([4, 1])).toBe('on-minmax');
+  });
+  it('(1,1) is a boundary payoff and remains the stage-game Nash equilibrium', () => {
+    expect(classify([1, 1])).toBe('on-minmax');
   });
   it('(0.5,0.5) is below minmax and infeasible', () => {
     // It is also outside the hull, so "infeasible" is reported first.

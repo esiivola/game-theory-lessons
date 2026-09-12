@@ -1,5 +1,5 @@
 // Congestion / potential game: N drivers choose road A (cost equals the number of users) or road B
-// (flat cost). Best-response dynamics always reach a pure Nash equilibrium because an exact
+// (flat cost). Strict better-response dynamics reach a pure Nash equilibrium because an exact
 // potential strictly decreases at every improving switch. Framework-free and unit-testable.
 
 export const N = 4;
@@ -26,7 +26,7 @@ export function isEquilibrium(x: number, n = N, bCost = B_COST): boolean {
   return true;
 }
 
-/** Best-response path: starting from x on A, let one unhappy driver switch at a time. */
+/** Strict better-response path: starting from x on A, let one unhappy driver switch at a time. */
 export function bestResponsePath(x0: number, n = N, bCost = B_COST): number[] {
   const path = [x0];
   let x = x0;

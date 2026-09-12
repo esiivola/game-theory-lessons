@@ -5,7 +5,7 @@ unit: 16
 unitName: "Algorithmic game theory"
 order: 54
 kind: lesson
-summary: "When players share congestible resources, best-response dynamics always settle down."
+summary: "When players share congestible resources, strict better-response dynamics always settle down."
 tags: ["algorithmic", "congestion", "potential"]
 estMinutes: 6
 mvp: true
@@ -28,7 +28,7 @@ import Congestion from '@/components/interactive/Congestion.svelte';
 
 # Congestion and potential games
 
-<p class="lead">In a congestion game, each player picks resources and pays a cost that rises with how many others share them. These games always have a pure Nash equilibrium, and simple best-response dynamics reach it, because every improving move decreases a single potential function that cannot fall forever.</p>
+<p class="lead">In a congestion game, each player picks resources and pays a cost that rises with how many others share them. These games always have a pure Nash equilibrium, and strict better-response dynamics reach one, because every improving move decreases a single potential function that cannot fall forever.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -50,7 +50,7 @@ Four drivers choose road A, whose cost equals its number of users, or road B, a 
   exhibit="Exhibit 1"
   caption="Four drivers, two roads, one potential function"
   predict={{
-    question: 'Starting with everyone on road B, where do best-response dynamics settle?',
+    question: 'Starting with everyone on road B, where do strict better-response dynamics settle?',
     options: [{ key: 'cycle', label: 'They cycle forever' }, { key: 'nash', label: 'At a pure equilibrium, 2 on A' }],
     reveal: 'At a pure equilibrium: 2 on road A (each paying 2) and 2 on road B (paying 3). A third driver joining A would pay 3, no better than B, so no improving move remains. Every improving switch lowers the same potential, so the dynamics cannot cycle and must stop at a Nash equilibrium.',
   }}
@@ -69,7 +69,7 @@ Each time a driver switches to a cheaper road, they lower their own cost, and it
 ## The math
 
 <DefinitionAside label="congestion and potential games">
-In a congestion game, each resource has a cost that depends only on how many players use it, and a player's cost is the sum over the resources it picks. Rosenthal showed every such game admits an exact potential $\Phi$: whenever one player switches, the change in $\Phi$ equals the change in that player's cost. Because $\Phi$ strictly decreases at every improving move and takes finitely many values, best-response dynamics converge to a pure Nash equilibrium. Monderer and Shapley showed congestion games and finite potential games are essentially the same class.
+In a congestion game, each resource has a cost that depends only on how many players use it, and a player's cost is the sum over the resources it picks. Rosenthal showed every such game admits an exact potential $\Phi$: whenever one player switches, the change in $\Phi$ equals the change in that player's cost. Because $\Phi$ strictly decreases at every improving move and takes finitely many values, strict better-response dynamics converge to a pure Nash equilibrium. Monderer and Shapley showed congestion games and finite potential games are essentially the same class.
 </DefinitionAside>
 
 Here $\Phi(x) = \sum_{k=1}^{x} k + 3(4 - x) = \tfrac{x(x+1)}{2} + 3(4-x)$ when $x$ drivers use road A. Evaluating: $\Phi(0) = 12$, $\Phi(1) = 10$, $\Phi(2) = 9$, $\Phi(3) = 9$, $\Phi(4) = 10$. The potential bottoms out at $x = 2$ and $x = 3$, and both are pure Nash equilibria. Starting from everyone on B, best-response dynamics walk $\Phi$ downhill and stop at $x = 2$: the move to $x = 3$ takes the switcher from $3$ on B to $3$ on A, no gain, and leaves $\Phi$ unchanged at $9$. A tie is where improving moves run out.
@@ -88,7 +88,7 @@ Another driver finds A now costs $2$ if they join (two users), strictly better t
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">Congestion games always have a pure Nash equilibrium and always reach it by best response, because an exact potential function decreases at every improving move and cannot fall forever.</Callout>
+<Callout kind="key-idea">Congestion games always have a pure Nash equilibrium and strict better-response dynamics always reach one, because an exact potential function decreases at every improving move and cannot fall forever.</Callout>
 </Section>
 
 <Section id="quiz">
@@ -112,7 +112,7 @@ Another driver finds A now costs $2$ if they join (two users), strictly better t
   slug="congestion-games"
   id="q2"
   badge="analyse"
-  question="Why can best-response dynamics in a potential game never cycle?"
+  question="Why can strict better-response dynamics in a potential game never cycle?"
   options={[
     { text: "Every improving switch strictly lowers the potential, which is bounded below and takes finitely many values", correct: true, feedback: "A cycle would require returning to a state, but the potential only ever falls with improving moves, so it can never come back up. With finitely many states, the dynamics must halt at a minimum, a Nash equilibrium." },
     { text: "Because players are not allowed to revisit a state", feedback: "Nothing forbids revisiting in general; the potential does the work. It strictly decreases, so a repeat is impossible." },
@@ -127,7 +127,7 @@ Another driver finds A now costs $2$ if they join (two users), strictly better t
   badge="brings back: pure Nash"
   question="What do congestion games guarantee that general games do not?"
   options={[
-    { text: "A pure-strategy Nash equilibrium always exists and is reached by best response", correct: true, feedback: "General finite games guarantee only a possibly-mixed equilibrium, and best-response dynamics can cycle. Congestion (potential) games guarantee a pure equilibrium and convergence to it." },
+    { text: "A pure-strategy Nash equilibrium always exists and is reached by strict better responses", correct: true, feedback: "General finite games guarantee only a possibly-mixed equilibrium, and strict better-response dynamics can cycle. Congestion (potential) games guarantee a pure equilibrium and convergence under strict improvements." },
     { text: "That the equilibrium is socially optimal", feedback: "Equilibria of congestion games can be inefficient (the next lesson, price of anarchy). What is guaranteed is existence of a pure equilibrium and convergence, not optimality." },
     { text: "That there is a unique equilibrium", feedback: "There can be several. The guarantee is that a pure one exists and best response finds one, not uniqueness." },
   ]}

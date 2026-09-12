@@ -63,7 +63,7 @@
           <line x1={pos[n][0]} y1={pos[n][1]} x2={pos[m][0]} y2={pos[m][1]} class="edge" />
         {/each}
         {#each nodes as n}
-          <circle cx={pos[n][0]} cy={pos[n][1]} r="14" class={'node' + (provides.has(n) ? ' on' : '') + (provides.has(n) !== bestResponse(n, provides, graph) ? ' unhappy' : '')} onclick={() => toggle(n)} role="button" tabindex="0" onkeydown={(e) => (e.key === 'Enter' ? toggle(n) : null)} />
+          <circle cx={pos[n][0]} cy={pos[n][1]} r="14" class={'node' + (provides.has(n) ? ' on' : '') + (provides.has(n) !== bestResponse(n, provides, graph) ? ' unhappy' : '')} onclick={() => toggle(n)} role="button" tabindex="0" aria-label={`Toggle ${n}, currently ${provides.has(n) ? 'providing' : 'free-riding'}`} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(n); } }} />
         {/each}
       </svg>
     </div>
