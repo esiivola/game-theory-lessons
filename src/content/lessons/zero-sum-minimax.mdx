@@ -18,6 +18,7 @@ anchorEmoji: "⚔️"
 import Section from '@/components/ui/Section.astro';
 import Callout from '@/components/ui/Callout.astro';
 import DefinitionAside from '@/components/ui/DefinitionAside.astro';
+import ExhibitCaption from '@/components/ui/ExhibitCaption.astro';
 import WorkedExample from '@/components/ui/WorkedExample.astro';
 import SourcesList from '@/components/ui/SourcesList.astro';
 import WarmUp from '@/components/interactive/WarmUp.svelte';
@@ -78,11 +79,26 @@ If you commit to one flank, the defender guards it and you lose. If you mix, the
 A two-player game is zero-sum (more generally, constant-sum) if the payoffs in every cell add to the same constant, so one player's gain is exactly the other's loss. We can write it with a single payoff matrix to the row player; the column player earns its negative.
 </DefinitionAside>
 
-Let the raider play the strong flank with probability $p$. The guaranteed payoff against each defense is
+Here are the raid's four payoffs, written to the raider. The defender earns the negative of each, so every cell sums to zero.
+
+<ExhibitCaption n={2} text="Payoff to the raider" />
+
+| You raid \ Defender guards | Strong | Weak |
+|---|---|---|
+| **Strong flank** | -1 | +2 |
+| **Weak flank** | +1 | -1 |
+
+Read it as a raider. Hit a flank they are guarding and you lose a point. Hit an open one and you gain: $+1$ through the weak flank, $+2$ through the strong one, because there is more behind it.
+
+Now mix. Play the strong flank with probability $p$ and the weak flank with probability $1-p$. The defender has to commit to one flank, so fix their choice and average down that column of the table:
 
 $$
-\text{vs guard-strong: } 1 - 2p, \qquad \text{vs guard-weak: } 3p - 1.
+\underbrace{p(-1) + (1-p)(+1)}_{\text{they guard strong}} = 1 - 2p,
+\qquad
+\underbrace{p(+2) + (1-p)(-1)}_{\text{they guard weak}} = 3p - 1.
 $$
+
+That is where the two lines come from: each is your own pair of payoffs in that column, weighted by how often you go each way. Sanity-check the ends. At $p=0$ you always take the weak flank, so you score $+1$ when they guard strong and $-1$ when they guard weak, which is what the two expressions give. At $p=1$ they read $-1$ and $+2$, the strong-flank row.
 
 The defender will pick whichever is worse for you, so your floor is $\min(1-2p,\,3p-1)$. That minimum is highest where the two lines meet:
 
