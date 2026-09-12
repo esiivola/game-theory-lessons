@@ -43,16 +43,16 @@ import GameZoo from '@/components/interactive/GameZoo.svelte';
 <Section id="play">
 ## Predict, then play
 
-Here is one 2x2 you can retune. Load each classic game, then nudge the payoffs and watch the family label and the equilibria (gold cells) shift as incentives cross their thresholds.
+Here is one 2x2 you can retune. Every cell holds two payoffs: yours on top, theirs below. Load each classic game in turn, then nudge the payoffs and watch the family label and the equilibria (gold cells) shift as incentives cross their thresholds.
 
 <GameZoo
   client:visible
   exhibit="Exhibit 1"
   caption="One 2x2, five families; gold cells are pure Nash"
   predict={{
-    question: 'How many pure Nash equilibria do these games have: the Prisoner\'s Dilemma, Stag Hunt, and Matching Pennies?',
-    options: [{ key: 'same', label: 'All the same number' }, { key: 'vary', label: 'They differ: one, two, and none' }],
-    reveal: 'They differ. The Prisoner\'s Dilemma has one, Stag Hunt has two, and Matching Pennies has none in pure strategies. The number and location of the equilibria are what separate the families.',
+    question: 'The Prisoner\'s Dilemma you just met has exactly one stable cell. Keep the same 2x2 shape and change only the payoffs. How many stable cells can you end up with?',
+    options: [{ key: 'same', label: 'Always one: the shape fixes it' }, { key: 'vary', label: 'Anywhere from none to two' }],
+    reveal: 'Anywhere from none to two, and the payoff pairs decide which. Load the presets to meet the rest of the family: Stag Hunt and Chicken have two stable cells, Matching Pennies has none at all, and the Prisoner\'s Dilemma keeps its one.',
   }}
 />
 </Section>

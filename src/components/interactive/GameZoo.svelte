@@ -62,15 +62,15 @@
     </div>
 
     <div class="zgrid">
-      <div class="zh corner"></div>
+      <div class="zh corner">You&nbsp;&darr;<br />Them&nbsp;&rarr;</div>
       {#each colLabels as cl}<div class="zh">They {cl}</div>{/each}
       {#each rowLabels as rl, r}
         <div class="zh rowlab">You {rl}</div>
         {#each colLabels as _, c}
           <div class={'zcell' + (isNash(r, c) ? ' nash' : '')}>
             <div class="pair">
-              <div class="ctl"><button aria-label="decrease your payoff" onclick={() => bump(r, c, 0, -1)}>-</button><span class="you mono">{fmt(m[r][c][0])}</span><button aria-label="increase your payoff" onclick={() => bump(r, c, 0, 1)}>+</button></div>
-              <div class="ctl"><button aria-label="decrease their payoff" onclick={() => bump(r, c, 1, -1)}>-</button><span class="them mono">{fmt(m[r][c][1])}</span><button aria-label="increase their payoff" onclick={() => bump(r, c, 1, 1)}>+</button></div>
+              <div class="ctl"><span class="who you">You</span><button aria-label="decrease your payoff" onclick={() => bump(r, c, 0, -1)}>-</button><span class="you mono">{fmt(m[r][c][0])}</span><button aria-label="increase your payoff" onclick={() => bump(r, c, 0, 1)}>+</button></div>
+              <div class="ctl"><span class="who them">Them</span><button aria-label="decrease their payoff" onclick={() => bump(r, c, 1, -1)}>-</button><span class="them mono">{fmt(m[r][c][1])}</span><button aria-label="increase their payoff" onclick={() => bump(r, c, 1, 1)}>+</button></div>
             </div>
           </div>
         {/each}
@@ -115,12 +115,17 @@
   .zgrid { display: grid; grid-template-columns: auto 1fr 1fr; gap: 6px; align-items: stretch; }
   .zh { display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--ink-muted); text-align: center; padding: 2px; }
   .zh.rowlab { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 9.5px; }
-  .zh.corner { min-width: 18px; }
-  .zcell { background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 8px 4px; }
+  .zh.corner { min-width: 18px; font-size: 8.5px; font-weight: 600; line-height: 1.25; text-transform: none; }
+  /* Names the payoff on each line, so a cell reads on its own rather than relying on the
+     reader remembering that the teal number on top is theirs. */
+  .who { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
+  .who.you { color: var(--accent); }
+  .who.them { color: var(--ink-muted); }
+  .zcell { background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 8px 3px; }
   .zcell.nash { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold) inset; }
   /* The two stepper rows sit 44px apart so their tap areas do not overlap. */
   .pair { display: flex; flex-direction: column; gap: 22px; }
-  .ctl { display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .ctl { display: flex; align-items: center; justify-content: center; gap: 4px; }
   .ctl button { position: relative; width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--ink); font-weight: 700; font-size: 13px; cursor: pointer; line-height: 1; }
   /* Painted at 22px, tapped at 44px. Within a cell the two steppers are 58px apart and the rows
      44px, so the sixteen expanded areas tile the grid without any of them overlapping. */
