@@ -23,3 +23,44 @@ export function optimalCoverageTwo(v0: number, v1: number): number {
   // (1 - c0) v0 = (1 - (1 - c0)) v1  ->  c0 = v0 / (v0 + v1)
   return v0 / (v0 + v1);
 }
+
+/** Logit QRE attack probabilities, based on each target's uncovered value. */
+export function attackProbabilities(
+  coverage: number[],
+  values: number[],
+  precision: number,
+): number[] {
+  const utilities = values.map((value, i) => (1 - coverage[i]) * value);
+  const peak = Math.max(...utilities);
+  const weights = utilities.map((utility) => Math.exp(precision * (utility - peak)));
+  const total = weights.reduce((sum, weight) => sum + weight, 0);
+  return weights.map((weight) => weight / total);
+}
+
+/** Defender loss when a logit QRE attacker may choose either target. */
+export function behavioralExpectedLoss(
+  coverage: number[],
+  values: number[],
+  precision: number,
+): number {
+  const probabilities = attackProbabilities(coverage, values, precision);
+  return probabilities.reduce(
+    (loss, probability, i) => loss + probability * (1 - coverage[i]) * values[i],
+    0,
+  );
+}
+
+/** Best two-target allocation against a logit QRE attacker, to the nearest 0.001. */
+export function optimalBehavioralCoverageTwo(v0: number, v1: number, precision: number): number {
+  let bestCoverage = 0;
+  let bestLoss = Infinity;
+  for (let step = 0; step <= 1000; step++) {
+    const coverage = step / 1000;
+    const loss = behavioralExpectedLoss([coverage, 1 - coverage], [v0, v1], precision);
+    if (loss < bestLoss) {
+      bestCoverage = coverage;
+      bestLoss = loss;
+    }
+  }
+  return bestCoverage;
+}

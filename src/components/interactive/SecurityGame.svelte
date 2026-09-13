@@ -1,5 +1,12 @@
 <script lang="ts">
-  import { attackerTarget, expectedLoss, optimalCoverageTwo } from '@/engines/securityGame';
+  import {
+    attackProbabilities,
+    attackerTarget,
+    behavioralExpectedLoss,
+    expectedLoss,
+    optimalBehavioralCoverageTwo,
+    optimalCoverageTwo,
+  } from '@/engines/securityGame';
 
   interface Predict { question: string; options: { key: string; label: string }[]; reveal: string; }
   let { exhibit = '', caption = '', predict = null }:
@@ -9,11 +16,18 @@
   let predicted = $state(predict === null);
   let predictionLabel = $state('');
   let c0 = $state(0.5); // coverage of the $10 target; the $5 target gets 1 - c0
+  let model = $state<'perfect' | 'qre'>('perfect');
+  let precision = $state(0.5);
 
   const coverage = $derived([c0, 1 - c0]);
   const target = $derived(attackerTarget(coverage, VALUES));
-  const loss = $derived(expectedLoss(coverage, VALUES));
-  const opt = optimalCoverageTwo(VALUES[0], VALUES[1]);
+  const probabilities = $derived(attackProbabilities(coverage, VALUES, precision));
+  const loss = $derived(model === 'perfect'
+    ? expectedLoss(coverage, VALUES)
+    : behavioralExpectedLoss(coverage, VALUES, precision));
+  const opt = $derived(model === 'perfect'
+    ? optimalCoverageTwo(VALUES[0], VALUES[1])
+    : optimalBehavioralCoverageTwo(VALUES[0], VALUES[1], precision));
   const r2 = (x: number) => Math.round(x * 100) / 100;
   const pct = (x: number) => Math.round(x * 100) + '%';
 
@@ -40,18 +54,32 @@
     {/if}
     <p class="setup">You have one patrol to split between two targets, worth 10 and 5. You commit to coverage probabilities first; the attacker then strikes the target that maximizes its expected value.</p>
 
+    <div class="models" aria-label="Attacker model">
+      <button class="tinybtn" class:chosen={model === 'perfect'} aria-pressed={model === 'perfect'} onclick={() => (model = 'perfect')}>Perfect best response</button>
+      <button class="tinybtn" class:chosen={model === 'qre'} aria-pressed={model === 'qre'} onclick={() => (model = 'qre')}>Noisy QRE attacker</button>
+    </div>
+
+    {#if model === 'qre'}
+      <label class="slider"><span class="slab">Response precision: <b class="mono">{precision.toFixed(1)}</b> (higher means closer to a perfect best response)</span><input type="range" min="0" max="2" step="0.1" bind:value={precision} aria-label="Attacker response precision" /></label>
+    {/if}
+
     <label class="slider"><span class="slab">Coverage of the $10 target: <b class="mono">{pct(c0)}</b> (the $5 target gets {pct(1 - c0)})</span><input type="range" min="0" max="1" step="0.01" bind:value={c0} aria-label="Coverage of the high-value target" /></label>
 
     <div class="targets">
-      <div class={'tgt' + (target === 0 ? ' hit' : '')}><span class="tv">$10 target</span><span class="tc">covered {pct(c0)}</span>{#if target === 0}<span class="atk">attacked</span>{/if}</div>
-      <div class={'tgt' + (target === 1 ? ' hit' : '')}><span class="tv">$5 target</span><span class="tc">covered {pct(1 - c0)}</span>{#if target === 1}<span class="atk">attacked</span>{/if}</div>
+      <div class={'tgt' + (model === 'perfect' && target === 0 ? ' hit' : '')}><span class="tv">$10 target</span><span class="tc">covered {pct(c0)}</span>{#if model === 'perfect' && target === 0}<span class="atk">attacked</span>{:else if model === 'qre'}<span class="atk">{pct(probabilities[0])} attack chance</span>{/if}</div>
+      <div class={'tgt' + (model === 'perfect' && target === 1 ? ' hit' : '')}><span class="tv">$5 target</span><span class="tc">covered {pct(1 - c0)}</span>{#if model === 'perfect' && target === 1}<span class="atk">attacked</span>{:else if model === 'qre'}<span class="atk">{pct(probabilities[1])} attack chance</span>{/if}</div>
     </div>
 
     <div class="readout" aria-live="polite">
-      The attacker hits the <b>${VALUES[target]}</b> target, so your expected loss is <b class="mono">{r2(loss)}</b>.
-      {#if Math.abs(c0 - opt) < 0.02}This is optimal: the attacker is indifferent between targets, and your worst-case loss is minimized at about {r2(10 / 3)}.{:else if c0 >= 0.99}Guarding only the $10 target invites an attack on the undefended $5 one for a loss of 5, worse than the {r2(10 / 3)} you could guarantee.{:else}Slide toward {pct(opt)} coverage of the big target to equalize the attacker's options and lower your worst-case loss.{/if}
+      {#if model === 'perfect'}
+        The attacker hits the <b>${VALUES[target]}</b> target, so your expected loss is <b class="mono">{r2(loss)}</b>.
+        {#if Math.abs(c0 - opt) < 0.02}This is optimal: the attacker is indifferent between targets, and your worst-case loss is minimized at about {r2(10 / 3)}.{:else if c0 >= 0.99}Guarding only the $10 target invites an attack on the undefended $5 one for a loss of 5, worse than the {r2(10 / 3)} you could guarantee.{:else}Slide toward {pct(opt)} coverage of the big target to equalize the attacker's options and lower your worst-case loss.{/if}
+      {:else}
+        The noisy attacker spreads its choices across both targets, so your expected loss is <b class="mono">{r2(loss)}</b>.
+        {#if Math.abs(c0 - opt) < 0.02}This is the best coverage against the selected response precision.{:else}For this noisy response, the lowest-loss coverage is about <b>{pct(opt)}</b> on the $10 target.{/if}
+      {/if}
     </div>
-    <p class="note">Committing to a randomized patrol (Stackelberg) beats any deterministic guard, since surveillance makes a fixed pattern exploitable. Deployed systems like ARMOR and PROTECT use exactly this.</p>
+    <p class="note">A QRE attacker chooses higher-payoff targets more often, but can still make mistakes. Change its precision to see why behavioral assumptions retune the patrol mix.</p>
 
     <div class="play"><button class="tinybtn" onclick={() => (c0 = opt)}>Optimal coverage</button><button class="tinybtn" onclick={reset}>Reset</button></div>
   {/if}
@@ -59,6 +87,8 @@
 
 <style>
   .setup { font-size: 13px; color: var(--ink-muted); margin: 0 0 12px; line-height: 1.5; }
+  .models { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .models .chosen { border-color: var(--accent); color: var(--accent); }
   .slider { display: block; margin: 2px 0 12px; }
   .slab { font-size: 12.5px; color: var(--ink-muted); display: block; margin-bottom: 7px; }
   .slab b { color: var(--ink); }
