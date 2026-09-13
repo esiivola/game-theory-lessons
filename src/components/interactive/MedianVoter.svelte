@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { median, voteShare } from '@/engines/medianVoter';
+  import { median, turnoutOutcome, voteShare } from '@/engines/medianVoter';
 
   interface Predict { question: string; options: { key: string; label: string }[]; reveal: string; }
   let { exhibit = '', caption = '', predict = null }:
@@ -10,9 +10,11 @@
   let predictionLabel = $state('');
   let x1 = $state(0.35);
   let x2 = $state(0.65);
+  let abstention = $state(false);
 
   const med = median(VOTERS);
-  const s1 = $derived(voteShare(x1, x2, VOTERS));
+  const outcome = $derived(turnoutOutcome(x1, x2, VOTERS, abstention ? 0.25 : 2));
+  const s1 = $derived(abstention ? outcome.shareA : voteShare(x1, x2, VOTERS));
   const pct = (x: number) => Math.round(x * 100) + '%';
 
   const W = 300, H = 70, PAD = 16;
@@ -39,10 +41,14 @@
     {#if predictionLabel && predict}
       <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
     {/if}
+    <div class="seg" role="group" aria-label="Voter participation rule">
+      <button class={!abstention ? 'on' : ''} onclick={() => (abstention = false)}>Everyone votes</button>
+      <button class={abstention ? 'on' : ''} onclick={() => (abstention = true)}>Distant voters abstain</button>
+    </div>
     <div class="plot-wrap">
       <svg viewBox={`0 0 ${W} ${H}`} class="plot" role="img" aria-label="Voters on a left-right line with two candidate positions.">
         <line x1={PAD} y1="40" x2={W - PAD} y2="40" class="axis" />
-        {#each VOTERS as v}<circle cx={sx(v)} cy="40" r="4" class="voter" />{/each}
+        {#each VOTERS as v}<circle cx={sx(v)} cy="40" r="4" class:inactive={abstention && Math.min(Math.abs(v - x1), Math.abs(v - x2)) > 0.25} class="voter" />{/each}
         <line x1={sx(med)} y1="26" x2={sx(med)} y2="54" class="med" />
         <circle cx={sx(x1)} cy="18" r="6" class="c1" /><text x={sx(x1)} y="14" class="clab" text-anchor="middle">A</text>
         <circle cx={sx(x2)} cy="18" r="6" class="c2" /><text x={sx(x2)} y="14" class="clab" text-anchor="middle">B</text>
@@ -60,13 +66,15 @@
     </div>
 
     <div class="readout" aria-live="polite">
-      {#if Math.abs(x1 - med) < 0.03 && Math.abs(x2 - med) < 0.03}
+      {#if abstention}
+        Turnout is <b class="mono">{outcome.turnout} of {VOTERS.length}</b>. Moving to the center can lose distant supporters entirely, so the base model's convergence logic no longer settles the problem by itself.
+      {:else if Math.abs(x1 - med) < 0.03 && Math.abs(x2 - med) < 0.03}
         Both candidates sit at the median: neither can gain by moving. This is the only equilibrium.
       {:else}
         The candidate closer to the median wins more votes. Whoever is off-median can grab the majority by sliding toward the middle, so both are pulled to the median voter.
       {/if}
     </div>
-    <p class="note">The median voter theorem: with one dimension and two candidates, both converge on the median. It fails with three candidates or multiple issue dimensions.</p>
+    <p class="note">The theorem needs two candidates, one issue dimension, and voters who participate regardless of distance. The abstention rule marks voters inactive when both candidates are more than 0.25 away.</p>
 
     <div class="play"><button class="tinybtn" onclick={() => { x1 = med; x2 = med; }}>Both to the median</button><button class="tinybtn" onclick={reset}>Reset</button></div>
   {/if}
@@ -74,9 +82,14 @@
 
 <style>
   .plot-wrap { overflow-x: auto; }
+  .seg { display: flex; border: 1px solid var(--border-strong); border-radius: .55rem; overflow: hidden; margin-bottom: .65rem; }
+  .seg button { flex: 1; min-height: 2.75rem; border: 0; background: var(--surface); color: var(--ink-muted); font-weight: 600; cursor: pointer; }
+  .seg button + button { border-left: 1px solid var(--border); }
+  .seg button.on { background: var(--accent-soft); color: var(--accent); }
   .plot { width: 100%; height: auto; display: block; }
   .axis { stroke: var(--border-strong); stroke-width: 1.5; }
   .voter { fill: var(--ink-muted); }
+  .voter.inactive { opacity: .2; }
   .med { stroke: var(--gold); stroke-width: 2; stroke-dasharray: 3 2; }
   .c1 { fill: var(--accent); } .c2 { fill: var(--defect); }
   .clab { font-size: 8px; font-weight: 700; fill: var(--ink-muted); }

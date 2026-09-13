@@ -16,3 +16,19 @@ export function voteShare(x1: number, x2: number, voters: number[]): number {
   }
   return s / voters.length;
 }
+
+export function turnoutOutcome(x1: number, x2: number, voters: number[], maxDistance: number) {
+  let votesA = 0;
+  let votesB = 0;
+  let turnout = 0;
+  for (const voter of voters) {
+    const d1 = Math.abs(voter - x1);
+    const d2 = Math.abs(voter - x2);
+    if (Math.min(d1, d2) > maxDistance) continue;
+    turnout += 1;
+    if (d1 < d2) votesA += 1;
+    else if (d2 < d1) votesB += 1;
+    else { votesA += 0.5; votesB += 0.5; }
+  }
+  return { votesA, votesB, turnout, shareA: turnout ? votesA / turnout : 0.5 };
+}

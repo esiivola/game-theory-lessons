@@ -45,7 +45,7 @@ import MedianVoter from '@/components/interactive/MedianVoter.svelte';
 <Section id="play">
 ## Predict, then play
 
-Drag two candidates along a spectrum of seven voters. Vote shares update as you move, and any off-median position can be beaten by a rival who slides inside it. Try to find a pair of positions where neither candidate wants to move.
+Drag two candidates along a spectrum of seven voters. First keep everyone voting and find the median convergence. Then let voters abstain when both candidates are too far away and watch the clean result break.
 
 <MedianVoter
   client:visible
