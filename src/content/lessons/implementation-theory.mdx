@@ -77,7 +77,7 @@ $$
 So every efficient trade with $0 \le v_b - v_s < \tfrac14$ is missed. The linear mechanism realizes surplus $\tfrac{9}{64} \approx 0.141$, below the first-best $\tfrac16 \approx 0.167$.
 
 <DefinitionAside label="Myerson-Satterthwaite and Maskin monotonicity">
-Myerson-Satterthwaite: for bilateral trade with independent private values that overlap, no mechanism is simultaneously efficient, incentive compatible, individually rational, and budget balanced. Something must give. On the positive side, Maskin's theorem characterizes which social goals can be Nash-implemented: a rule is implementable only if it is Maskin monotonic (roughly, if an outcome is chosen and it rises in everyone's ranking, it is still chosen), plus a no-veto condition.
+Myerson-Satterthwaite: for bilateral trade with independent private values drawn from overlapping intervals, no Bayesian incentive-compatible, interim individually rational, budget-balanced mechanism is ex-post efficient. On the positive side, Maskin implementation asks whether a social-choice rule can be made the outcome of every Nash equilibrium of some mechanism. Maskin monotonicity is necessary, and with at least three agents it is sufficient together with no veto power.
 </DefinitionAside>
 </Section>
 
@@ -120,7 +120,7 @@ Now the surplus. First-best trades whenever $v_b \ge v_s$, giving expected gains
   badge="analyse"
   question="What exactly does the Myerson-Satterthwaite theorem rule out?"
   options={[
-    { text: "A mechanism that is at once efficient, incentive compatible, individually rational, and budget balanced under two-sided private values", correct: true, feedback: "All four cannot hold together. You can keep any three, but not all; the efficient trades in the shading gap cannot be captured without subsidy or coercion." },
+    { text: "With overlapping independent values, a mechanism that is ex-post efficient, Bayesian incentive compatible, interim individually rational, and budget balanced", correct: true, feedback: "The theorem rules out that exact conjunction under its distributional assumptions. It does not claim that every arbitrary subset of three properties is feasible." },
     { text: "Any trade at all between privately informed parties", feedback: "Trade still happens, just not every efficient one. The theorem is about the impossibility of getting all four properties, not about blocking trade entirely." },
     { text: "The existence of gains from trade", feedback: "Gains from trade exist whenever the buyer values the good above the seller's cost. The theorem says not all such gains can be realized." },
   ]}

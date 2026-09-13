@@ -1,18 +1,20 @@
 <script lang="ts">
-  import { fpaBidTwo, winProb, interimPayment, interimSurplus } from '@/engines/revelation';
+  import { directSurplus, fpaBidTwo, winProb, interimPayment, interimSurplus } from '@/engines/revelation';
 
   interface Predict { question: string; options: { key: string; label: string }[]; reveal: string; }
   let { exhibit = '', caption = '', predict = null }:
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let v = $state(0.6);
+  let report = $state(0.6);
   let direct = $state(false); // toggle to the direct truthful mechanism
 
   const r2 = (x: number) => Math.round(x * 100) / 100;
 
-  function onPredict() { predicted = true; }
-  function reset() { v = 0.6; direct = false; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
+  function reset() { v = 0.6; report = 0.6; direct = false; }
 </script>
 
 <div class="widget">
@@ -25,11 +27,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="seg" role="group" aria-label="Mechanism">
       <button class={!direct ? 'on' : ''} onclick={() => (direct = false)}>First-price auction</button>
       <button class={direct ? 'on' : ''} onclick={() => (direct = true)}>Direct: just report</button>
@@ -39,17 +45,23 @@
       <span class="slab">Your value: <b class="mono">{r2(v)}</b></span>
       <input type="range" min="0" max="1" step="0.01" bind:value={v} aria-label="Your value" />
     </label>
+    {#if direct}
+      <label class="slider">
+        <span class="slab">Your report: <b class="mono">{r2(report)}</b></span>
+        <input type="range" min="0" max="1" step="0.01" bind:value={report} aria-label="Reported value" />
+      </label>
+    {/if}
 
     <div class="rows">
-      <div class="mrow"><span class="mname">{direct ? 'You report' : 'You bid'}</span><span class="mval mono">{direct ? r2(v) + ' (your true value)' : r2(fpaBidTwo(v)) + ' (shade to v/2)'}</span></div>
-      <div class="mrow"><span class="mname">Win probability</span><span class="mval mono">{r2(winProb(v))}</span></div>
-      <div class="mrow"><span class="mname">Expected payment</span><span class="mval mono">{r2(interimPayment(v))}</span></div>
-      <div class="mrow"><span class="mname">Expected surplus</span><span class="mval mono">{r2(interimSurplus(v))}</span></div>
+      <div class="mrow"><span class="mname">{direct ? 'You report' : 'You bid'}</span><span class="mval mono">{direct ? r2(report) : r2(fpaBidTwo(v)) + ' (shade to v/2)'}</span></div>
+      <div class="mrow"><span class="mname">Win probability</span><span class="mval mono">{r2(winProb(direct ? report : v))}</span></div>
+      <div class="mrow"><span class="mname">Expected payment</span><span class="mval mono">{r2(interimPayment(direct ? report : v))}</span></div>
+      <div class="mrow"><span class="mname">Expected surplus</span><span class="mval mono">{r2(direct ? directSurplus(v, report) : interimSurplus(v))}</span></div>
     </div>
 
     <div class="readout" aria-live="polite">
       {#if direct}
-        In the direct mechanism you simply report your value; it wins if highest and charges the same expected payment the first-price auction produced. Truth-telling is optimal, and the outcome is identical.
+        The report controls both your chance of winning and expected payment. Set it equal to your value to maximize expected surplus. Reports above or below it do worse.
       {:else}
         In the first-price auction you shade your bid to v/2. The win probability, payment, and surplus are exactly what the truthful direct mechanism reproduces. Flip the toggle and compare.
       {/if}

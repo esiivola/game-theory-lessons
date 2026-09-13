@@ -75,10 +75,10 @@ Left alone, a matching market unravels: if any doctor-hospital pair prefer each 
 ## The real episodes
 
 <DefinitionAside label="matching in practice">
-The National Resident Matching Program adopted a deferred-acceptance algorithm (redesigned by Roth and Peranson in 1998) and matches tens of thousands of doctors yearly with almost no unraveling. Boston switched its school assignment to a strategy-proof deferred-acceptance mechanism in 2005, so families could rank honestly. Kidney exchange (Roth, Sonmez and Unver) uses top-trading-cycles ideas: patients with willing but incompatible donors swap donors around cycles and chains, unlocking transplants that no single pair could achieve.
+The National Resident Matching Program uses a deferred-acceptance-based algorithm. Its redesign also had to accommodate couples, whose joint preferences fall outside the simple one-doctor, one-hospital model and weaken some textbook guarantees. Boston switched its school assignment to student-proposing deferred acceptance in 2005, so truthful ranking is safe for students under the model's assumptions. Kidney exchange uses directed compatibility graphs, cycles, and chains. That shares the cycle-finding idea with top trading cycles, but it is not the same mechanism.
 </DefinitionAside>
 
-Two design lessons recur. First, stability prevents the unraveling that plagued unregulated markets. Second, strategy-proofness matters: the old Boston mechanism punished honest ranking, so sophisticated families gamed it and naive ones lost out. Deferred acceptance lets everyone report truthfully, which is fairer and simpler. Kidney exchange adds the twist that a non-directed donor can start a long chain, relaxing the mutual-compatibility bottleneck of a simple two-way swap.
+Two design lessons recur. First, stability reduces incentives for participants to arrange matches outside the clearinghouse. Second, strategy-proofness matters: the old Boston mechanism could punish honest ranking, so sophisticated families had reason to game it. In student-proposing deferred acceptance, truthful reporting is a dominant strategy for students, not for schools. Kidney exchange adds the twist that a non-directed donor can start a long chain, relaxing the mutual-compatibility bottleneck of a simple two-way swap.
 </Section>
 
 <Section id="worked">
@@ -94,7 +94,7 @@ Now imagine no clearinghouse. A hospital that fears losing a top doctor makes an
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">Real matching markets can unravel without a clearinghouse. Deferred acceptance supplies stable assignments and safe truthful ranking for the proposing side. Top-trading-cycles ideas supply efficient exchanges of owned goods, and kidney exchange adapts cycles and chains to medical compatibility.</Callout>
+<Callout kind="key-idea">Real matching markets can unravel without a clearinghouse. Deferred acceptance supplies stable assignments and safe truthful ranking for the proposing side in the basic model. Kidney exchange is a different graph problem that uses compatibility cycles and chains.</Callout>
 </Section>
 
 <Section id="quiz">
@@ -131,11 +131,11 @@ Now imagine no clearinghouse. A hospital that fears losing a top doctor makes an
   slug="case-matching-markets"
   id="q3"
   badge="brings back: top trading cycles"
-  question="How does kidney exchange use the top-trading-cycles idea?"
+  question="How is kidney exchange related to, but different from, top trading cycles?"
   options={[
-    { text: "Patients with incompatible donors swap donors around cycles (and chains), so each patient's donor gives to someone compatible", correct: true, feedback: "TTC's cycle-swapping is exactly the mechanism: rotate donors around a cycle so everyone ends up with a compatible one. A non-directed donor can start a chain, unlocking even more transplants." },
+    { text: "Both use directed cycles, but kidney exchange builds a medical compatibility graph and can also use chains started by non-directed donors", correct: true, feedback: "The shared idea is cycle finding. Kidney exchange is not literally TTC: its edges represent compatibility, and non-directed donors can create chains rather than closed ownership cycles." },
     { text: "It is a simple first-come waiting list", feedback: "It is not a waiting list; it actively finds cycles and chains of compatible swaps, which is the TTC idea applied to organs." },
-    { text: "It uses deferred acceptance, not cycles", feedback: "Kidney exchange is built on top-trading-cycles-style swapping, not deferred acceptance. Both are market-design tools, but the cycle structure is what matches donors here." },
+    { text: "It uses deferred acceptance, not cycles", feedback: "Kidney exchange uses compatibility cycles and chains, not deferred acceptance. The graph structure coordinates donors here." },
   ]}
 />
 </Section>

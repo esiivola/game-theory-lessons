@@ -157,7 +157,7 @@ Solve the incumbent's node: $\text{Accommodate} = 1 > \text{Fight} = 0$, so repl
   options={[
     { text: "Because it requires the incumbent's move to be optimal at its own node, ruling out the non-credible fight", correct: true, feedback: "Stay-out-and-fight is a Nash equilibrium in the normal form, but the fight is never tested there. Backward induction checks every decision node and discards the threat, keeping only enter-and-accommodate." },
     { text: "Because backward induction ignores Nash equilibria", feedback: "It does not ignore them; it selects among them. The backward-induction outcome is a Nash equilibrium, just not the one built on an empty threat." },
-    { text: "Because the normal form has no Nash equilibrium", feedback: "It has two. Backward induction picks the credible one and drops the other." },
+    { text: "Because the normal form has no Nash equilibrium", feedback: "It has two pure Nash equilibria, plus mixed equilibria created by the incumbent's indifference after Stay out. Backward induction selects strategies that remain optimal at every decision node." },
   ]}
 />
 </Section>

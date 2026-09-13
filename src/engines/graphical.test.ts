@@ -16,4 +16,7 @@ describe('best-shot public goods on a network', () => {
     expect(isEquilibrium(eq, CYCLE6)).toBe(true);
     expect(eq.size).toBe(3);
   });
+  it('also admits two opposite providers as an equilibrium', () => {
+    expect(isEquilibrium(new Set(['a', 'd']), CYCLE6)).toBe(true);
+  });
 });

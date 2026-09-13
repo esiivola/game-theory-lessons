@@ -1,12 +1,14 @@
 <script lang="ts">
-  import { coopFraction, avgPayoff, simulate, type Round } from '@/engines/monitoring';
+  import { coopFraction, avgPayoff, detersDeviation, simulate, type Round } from '@/engines/monitoring';
 
   interface Predict { question: string; options: { key: string; label: string }[]; reveal: string; }
   let { exhibit = '', caption = '', predict = null }:
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let noise = $state(0.1);   // chance of a bad signal while cooperating
+  let detected = $state(0.8); // chance of a bad signal after deviation
   let punish = $state(4);    // war length; the max value means grim (forever)
   let run = $state<Round[]>([]);
 
@@ -14,15 +16,17 @@
   const T = $derived(punish >= GRIM ? Infinity : punish);
   const grim = $derived(!isFinite(T));
   const ROUNDS = 40;
+  const delta = 0.9;
 
   const frac = $derived(coopFraction(noise, T));
   const pay = $derived(avgPayoff(noise, T, 3, 1));
+  const incentive = $derived(detersDeviation(noise, detected, T, delta, 5, 3, 1));
   const pct = (x: number) => Math.round(x * 100) + '%';
   const r2 = (x: number) => Math.round(x * 100) / 100;
 
   function go() { run = simulate(noise, T, ROUNDS, Math.random); }
-  function reset() { noise = 0.1; punish = 4; run = []; }
-  function onPredict() { predicted = true; }
+  function reset() { noise = 0.1; detected = 0.8; punish = 4; run = []; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -35,14 +39,22 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <label class="slider">
       <span class="slab">Monitoring noise (bad signal despite cooperation): <b class="mono">{pct(noise)}</b></span>
       <input type="range" min="0" max="0.4" step="0.01" bind:value={noise} aria-label="Monitoring noise" />
+    </label>
+    <label class="slider">
+      <span class="slab">Bad signal after a deviation: <b class="mono">{pct(detected)}</b></span>
+      <input type="range" min={noise} max="1" step="0.01" bind:value={detected} aria-label="Detection probability after deviation" />
     </label>
     <label class="slider">
       <span class="slab">Punishment length: <b class="mono">{grim ? 'forever (grim)' : punish + ' rounds'}</b></span>
@@ -69,6 +81,7 @@
       {:else}
         Expected time cooperating: <b class="mono">{pct(frac)}</b>, for an average payoff of <b class="mono">{r2(pay)}</b> per round. Wars still happen, triggered by noise rather than by real cheating, but the relationship recovers after {punish} rounds.
       {/if}
+      At the fixed patience &delta; = 0.9, this punishment {incentive ? 'deters' : 'does not deter'} a one-round deviation. Detection must rise enough above the false-alarm rate for punishment to create an incentive.
     </div>
 
     {#if !grim}

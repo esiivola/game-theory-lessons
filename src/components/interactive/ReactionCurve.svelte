@@ -16,6 +16,7 @@
   } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let game = $state<'cournot' | 'bertrand'>('cournot');
   const Q = a - c; // choke quantity, and price ceiling for Bertrand
   const nash = cournotNash(a, c);
@@ -49,7 +50,7 @@
     q1 = Math.round(x);
   }
   function reset() { q1 = Math.round((a - c) / 2); p1 = Math.round(a / 2); }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -62,11 +63,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     {#if allowToggle}
       <div class="seg" role="group" aria-label="Competition type">
         <button class={game === 'cournot' ? 'on' : ''} onclick={() => (game = 'cournot')}>Cournot (quantities)</button>

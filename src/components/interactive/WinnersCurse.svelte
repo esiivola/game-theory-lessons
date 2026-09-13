@@ -7,6 +7,7 @@
 
   const SPREAD = 15;
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let rivals = $state(3);          // number of rival bidders
   let mySignal = $state(50);
   let myBid = $state(50);
@@ -41,7 +42,7 @@
     }
   }
   function reset() { rivals = 3; profit = 0; wins = 0; rounds = 0; last = ''; deal(); }
-  function onPredict() { predicted = true; deal(); }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; deal(); }
   if (predicted) deal();
 </script>
 
@@ -55,11 +56,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="sig">Your signal of the item's value: <b class="mono">{mySignal}</b> <span class="dim">(noisy, could be high or low)</span></div>
 
     <label class="slider">

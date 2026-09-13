@@ -51,8 +51,8 @@ Here is one 2x2 you can retune. Every cell holds two payoffs: yours on top, thei
   caption="One 2x2, five families; gold cells are pure Nash"
   predict={{
     question: 'The Prisoner\'s Dilemma you just met has exactly one stable cell. Keep the same 2x2 shape and change only the payoffs. How many stable cells can you end up with?',
-    options: [{ key: 'same', label: 'Always one: the shape fixes it' }, { key: 'vary', label: 'Anywhere from none to two' }],
-    reveal: 'Anywhere from none to two, and the payoff pairs decide which. Load the presets to meet the rest of the family: Stag Hunt and Chicken have two stable cells, Matching Pennies has none at all, and the Prisoner\'s Dilemma keeps its one.',
+    options: [{ key: 'same', label: 'Always one: the shape fixes it' }, { key: 'vary', label: 'Usually none, one, or two' }],
+    reveal: 'With no payoff ties, a 2x2 game has zero, one, or two pure Nash equilibria. Ties can create three or four. Load the presets to meet the familiar no-tie cases.',
   }}
 />
 </Section>
@@ -72,7 +72,7 @@ Five games map the territory.
 
 <DefinitionAside label="the five families">
 **Prisoner's Dilemma** (R3, S0, T5, P1): defecting dominates, so the unique Nash is mutual defection, worse for both than cooperating.
-**Stag Hunt** ((4,4)/(0,3)/(3,0)/(3,3)): two Nash on the diagonal. All-Stag pays more (payoff-dominant), but Hare is safer against an uncertain partner (risk-dominant).
+**Stag Hunt** ((4,4)/(0,3)/(3,0)/(3,3)): two Nash on the diagonal. All-Stag pays more (payoff-dominant), while Hare guarantees $3$ and Stag can pay $0$ against Hare. For these payoffs, the basin-of-attraction calculation also selects all-Hare as risk-dominant.
 **Battle of the Sexes** ((2,1)/(0,0)/(0,0)/(1,2)): two Nash, but each player prefers a different one. Coordination with conflict.
 **Chicken** ((6,6)/(2,7)/(7,2)/(0,0)): two Nash off the diagonal. Each wants to do the opposite of the other, and the crash is worst for both.
 **Matching Pennies** ((1,-1)/(-1,1)/(-1,1)/(1,-1)): one wants to match, the other to differ. No pure Nash exists.
@@ -107,7 +107,7 @@ Three lessons hide in this list. Not every dilemma is a Prisoner's Dilemma: Stag
   badge="apply"
   question="Stag Hunt has two pure Nash equilibria, all-Stag and all-Hare. Why might a group land on all-Hare, the worse one?"
   options={[
-    { text: "Hare is safe: it pays 3 whatever the partner does, while Stag risks 0 if the partner defects", correct: true, feedback: "All-Stag pays more but requires trust. Hare is risk-dominant, so fear that the partner will not hunt can pull a group to the worse equilibrium." },
+    { text: "Hare is safe: it pays 3 whatever the partner does, while Stag risks 0 if the partner chooses Hare", correct: true, feedback: "All-Stag pays more but requires confidence in the partner. With these payoffs, Hare also has the larger basin of attraction and is risk-dominant." },
     { text: "All-Hare pays more than all-Stag", feedback: "It pays less (3 versus 4). The group can still land there because Hare is the safer choice under doubt." },
     { text: "All-Stag is not actually an equilibrium", feedback: "It is: if both hunt Stag, neither gains by switching. The difficulty is coordinating on it, not its stability." },
   ]}

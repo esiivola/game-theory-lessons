@@ -20,6 +20,22 @@ export function avgPayoff(q: number, T: number, R: number, P: number): number {
   return f * R + (1 - f) * P;
 }
 
+export function detersDeviation(
+  falseAlarm: number,
+  badAfterDeviation: number,
+  punishmentLength: number,
+  delta: number,
+  temptation: number,
+  reward: number,
+  punishment: number
+): boolean {
+  const rounds = isFinite(punishmentLength)
+    ? delta * (1 - delta ** punishmentLength) / (1 - delta)
+    : delta / (1 - delta);
+  const expectedLoss = (badAfterDeviation - falseAlarm) * (reward - punishment) * rounds;
+  return expectedLoss >= temptation - reward;
+}
+
 export type Phase = 'coop' | 'war';
 export interface Round { signal: 'good' | 'bad'; phase: Phase; }
 

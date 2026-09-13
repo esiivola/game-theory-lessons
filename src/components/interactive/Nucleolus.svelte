@@ -10,6 +10,7 @@
   const COAL = ['{1}', '{2}', '{1,2}', '{3}', '{1,3}', '{2,3}'];
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let x1 = $state(0.5);
   let x2 = $state(0.3);
 
@@ -21,7 +22,7 @@
   const shap = shapley(V, 3);
   const r2 = (x: number) => Math.round(x * 100) / 100;
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { x1 = 0.5; x2 = 0.3; }
 </script>
 
@@ -35,11 +36,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <p class="setup">A three-player majority game: any two players (or all three) can secure the whole prize of 1. The core is empty, so no split is unblockable. The nucleolus makes the biggest complaint as small as possible.</p>
 
     <label class="slider"><span class="slab">Player 1 gets: <b class="mono">{r2(x1)}</b></span><input type="range" min="0" max="1" step="0.01" bind:value={x1} aria-label="Player 1 share" /></label>

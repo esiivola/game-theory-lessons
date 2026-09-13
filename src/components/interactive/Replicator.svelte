@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let tie = $state(0); // tie payoff: <0 penalize (inward), >0 reward (outward)
   let startR = $state(0.5);
   let startP = $state(0.3);
@@ -28,7 +29,7 @@
   const path = $derived(trajectory.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' '));
   const r2 = (x: number) => Math.round(x * 100) / 100;
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { tie = 0; startR = 0.5; startP = 0.3; }
 </script>
 
@@ -42,11 +43,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="plot-wrap">
       <svg viewBox={`0 0 ${W} ${H}`} class="plot" role="img" aria-label="Population trajectory on the Rock-Paper-Scissors simplex.">
         <polygon points={`${A.x},${A.y} ${B.x},${B.y} ${Cc.x},${Cc.y}`} class="tri" />

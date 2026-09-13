@@ -52,7 +52,7 @@ Output is High (100) or Low (0). Effort costs the agent 15 and lifts the chance 
   predict={{
     question: 'What contract maximizes the principal\'s profit?',
     options: [{ key: 'flat', label: 'A generous flat salary' }, { key: 'bonus', label: 'Zero base, just enough bonus' }],
-    reveal: 'Zero base and a bonus of 37.5. A flat salary buys no effort. The smallest bonus that makes effort worthwhile is 37.5, which leaves the agent a rent of 15 and gives the principal profit 50, beating the 40 from not motivating effort.',
+    reveal: 'Zero base and a bonus just above 37.5. At exactly 37.5 the agent is indifferent, so the game uses 38 to motivate effort strictly. A flat salary buys no effort.',
   }}
 />
 </Section>
@@ -78,10 +78,10 @@ $$
 
 which simplifies to $w_H - w_L \ge 37.5$. The bonus, not the base, drives effort.
 
-**Cheapest incentive contract.** With limited liability set $w_L = 0$, so $w_H = 37.5$. The agent's expected utility is $0.8(37.5) - 15 = 15 > 0$, so participation (IR) is slack: the agent earns a **rent** of $15$. The principal's profit is $0.8(100) - 0.8(37.5) = 50$, above the $40$ from paying nothing and letting the agent shirk.
+**Strict incentive contract.** With limited liability set $w_L = 0$. The cutoff is $w_H=37.5$, where the agent is indifferent between effort and shirking. To avoid assuming a favourable tie-break, use $w_H=38$. The agent's expected utility is $0.8(38)-15=15.4$, and the principal's profit is $0.8(100)-0.8(38)=49.6$, above the $40$ from paying nothing and letting the agent shirk.
 
 <DefinitionAside label="moral hazard and the rent">
-When actions are hidden, pay must be tied to observable output to satisfy incentive compatibility, which exposes a risk-averse or limited-liability agent to outcome risk and generally leaves them a rent. With observable effort (the first best) the principal would pay just the effort cost $15$ and keep $65$. The hidden-action loss here is $65 - 50 = 15$, exactly the rent the agent captures.
+When actions are hidden, pay must be tied to observable output to satisfy incentive compatibility, which exposes a risk-averse or limited-liability agent to outcome risk and generally leaves them a rent. With observable effort (the first best) the principal would pay just the effort cost $15$ and keep $65$. Under the strict $38$ bonus, the hidden-action loss is $65-49.6=15.4$, equal to the agent's rent in this risk-neutral example.
 </DefinitionAside>
 </Section>
 
@@ -91,14 +91,14 @@ When actions are hidden, pay must be tied to observable output to satisfy incent
 <WorkedExample title="Find the profit-maximising contract">
 Start with incentive compatibility. Effort raises the chance of High by $0.8 - 0.4 = 0.4$, so the expected gain from effort is $0.4(w_H - w_L)$, and the agent works only if this covers the cost: $0.4(w_H - w_L) \ge 15$, i.e., $w_H - w_L \ge 37.5$.
 
-Make the spread as cheap as possible under limited liability: $w_L = 0$, $w_H = 37.5$. Check participation: expected pay is $0.8(37.5) = 30$, minus effort $15$, leaves $15 \ge 0$, so the agent accepts and pockets a rent of $15$. Principal profit is expected output minus expected wage, $80 - 30 = 50$. Inducing no effort would pay $0$ and earn $0.4(100) = 40$, so motivating effort is better. The best contract is $(0, 37.5)$, and the $15$ rent is the cost of the hidden action.
+Under limited liability, set $w_L=0$. The mathematical cutoff is $w_H=37.5$, but equality leaves the agent indifferent. On the game's half-unit grid, $w_H=38$ is the smallest strict incentive contract. Expected pay is $0.8(38)=30.4$, so the agent's payoff is $15.4$ and the principal's profit is $80-30.4=49.6$. That still beats the no-effort profit of $40$.
 </WorkedExample>
 </Section>
 
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">Hidden effort forces you to pay for output, not effort, which rewards luck and leaves the agent a rent. A flat salary kills incentives; the fix is the smallest bonus that makes working worthwhile, and its rent is the price of not being able to watch.</Callout>
+<Callout kind="key-idea">Hidden effort forces you to pay for output, not effort, which rewards luck and leaves the agent a rent. A flat salary kills incentives; a bonus strictly above the incentive cutoff makes effort worthwhile.</Callout>
 </Section>
 
 <Section id="quiz">

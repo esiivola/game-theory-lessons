@@ -8,6 +8,7 @@
   const CLICKS = [100, 80];
   const NAMES = ['A', 'B', 'C'];
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let rule = $state<'vcg' | 'gsp'>('vcg');
   let values = $state([10, 6, 4]); // per-click values, truthful
 
@@ -24,7 +25,7 @@
     next[i] = Math.max(0, Math.min(20, next[i] + d));
     values = next;
   }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { values = [10, 6, 4]; rule = 'vcg'; }
 </script>
 
@@ -38,11 +39,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <p class="setup">Two ad slots: slot 1 gets 100 clicks, slot 2 gets 80. Three advertisers bid per click.</p>
     <div class="bidders">
       {#each NAMES as nm, i}

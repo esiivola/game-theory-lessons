@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let m1 = $state(1), m2 = $state(2), m3 = $state(3);
 
   const pan = $derived(panchromatic(m1, m2, m3));
@@ -27,7 +28,7 @@
     if (which === 'm2') m2 = m2 === opts[0] ? opts[1] : opts[0];
     if (which === 'm3') m3 = m3 === opts[0] ? opts[1] : opts[0];
   }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -40,11 +41,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="plot-wrap">
       <svg viewBox="0 0 260 210" class="plot" role="img" aria-label="A triangle split into four, with corners colored 1, 2, 3 and midpoints you choose.">
         {#each tris as t}

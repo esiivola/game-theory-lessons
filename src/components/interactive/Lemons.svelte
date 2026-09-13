@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let p = $state(60);
 
   const avgQ = $derived(avgQualityOnMarket(p));
@@ -14,7 +15,7 @@
   const gap = $derived(p - wtp); // shortfall: price minus willingness to pay
   const r0 = (x: number) => Math.round(x);
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { p = 60; }
 </script>
 
@@ -28,11 +29,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="qbar" aria-hidden="true">
       <span class="listed" style={`width:${frac * 100}%`}></span>
       <span class="qlabel low">worst cars</span>

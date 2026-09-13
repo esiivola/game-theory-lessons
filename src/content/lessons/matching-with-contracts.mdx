@@ -1,5 +1,5 @@
 ---
-title: "Matching with contracts and design without money"
+title: "School choice and design without money"
 tier: expert
 unit: 14
 unitName: "Matching and market design"
@@ -26,9 +26,9 @@ import DeferredAcceptance from '@/components/interactive/DeferredAcceptance.svel
 
 <div class="anchor"><span class="em">🏫</span><p>Public schools cannot auction seats to the highest bidder. Families rank schools, schools have priorities, and a mechanism assigns seats. The old Boston system quietly punished families who ranked honestly. Deferred acceptance fixed that.</p></div>
 
-# Matching with contracts and design without money
+# School choice and design without money
 
-<p class="lead">Many important markets forbid prices: school seats, organ transplants, cadet postings. Deferred acceptance carries over from the marriage market to school choice, where it gives stable assignments and makes honest ranking a dominant strategy for families. The same machinery extends to matching with contract terms.</p>
+<p class="lead">Many important markets forbid prices: school seats, organ transplants, cadet postings. Deferred acceptance carries over from the marriage market to school choice, where it gives stable assignments and makes honest ranking a dominant strategy for families. This lesson stays with ordinary school choice; matching with wages, schedules, or other contract terms requires an extended model.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -73,8 +73,8 @@ Two students want school A, but A has one seat and a priority order, so it keeps
 <Section id="math">
 ## The math
 
-<DefinitionAside label="school choice and matching with contracts">
-Treat students as proposers and school priority orders as the receiving side's preferences. Student-proposing deferred acceptance yields a stable assignment (no student-school pair both prefer each other to their assignment) and is strategy-proof for students: truthful ranking is a dominant strategy. Matching with contracts (Hatfield-Milgrom) generalizes this: a "contract" bundles a partner with terms (a wage, a schedule), and under a substitutes condition a cumulative-offer process still produces a stable outcome, with auctions as a special case.
+<DefinitionAside label="school choice">
+Treat students as proposers and school priority orders as the receiving side's preferences. Student-proposing deferred acceptance yields a stable assignment (no student-school pair both prefer each other to their assignment) and is strategy-proof for students: truthful ranking is a dominant strategy. If agreements also specify wages, schedules, or other terms, each partner-term pair is a contract. Stability and cumulative-offer results in that richer setting require substitutable choice functions, which the school-seat game here does not model.
 </DefinitionAside>
 
 Run student-proposing DA. Round 1: $s_1 \to A$, $s_2 \to A$, $s_3 \to B$. School $A$ holds its higher priority $s_2$ and rejects $s_1$. Round 2: $s_1 \to B$; $B$ prefers $s_1$ to its current $s_3$, so it swaps, rejecting $s_3$. Round 3: $s_3 \to A$, rejected (A keeps $s_2$). Round 4: $s_3 \to C$, accepted. Final: $s_2 \to A$, $s_1 \to B$, $s_3 \to C$, a stable assignment.
@@ -95,7 +95,7 @@ $s_1$ now proposes to its second choice, $B$, which already holds $s_3$. Since $
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">Deferred acceptance turns school choice into a stable, strategy-proof assignment where families can safely rank honestly. It generalizes to matching with contract terms, and it trades off against efficiency-first mechanisms like top trading cycles.</Callout>
+<Callout kind="key-idea">Student-proposing deferred acceptance gives a stable school assignment and makes truthful ranking a dominant strategy for students. Adding contract terms requires extra assumptions and a richer cumulative-offer model.</Callout>
 </Section>
 
 <Section id="quiz">

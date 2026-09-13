@@ -9,6 +9,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null; startDelta?: number } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let delta = $state(startDelta);
   let strat = $state<StratId>('tft');
   let ran = $state(false);
@@ -25,7 +26,7 @@
   const stratIds: StratId[] = ['allc', 'tft', 'grim', 'alld'];
   const cooperates = $derived(strat === 'allc' || strat === 'tft' || strat === 'grim');
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { delta = startDelta; strat = 'tft'; ran = false; }
 </script>
 
@@ -39,11 +40,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <label class="slider">
       <span class="slab">Patience &delta; (chance the game continues): <b class="mono">{Math.round(delta * 100)}%</b></span>
       <input type="range" min="0.1" max="0.95" step="0.01" bind:value={delta} aria-label="Discount factor delta" />

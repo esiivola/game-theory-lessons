@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let rec = $state<Move | null>(null);   // your current recommendation
   let oppMove = $state<Move | null>(null);
   let total = $state(0);
@@ -34,7 +35,7 @@
     rec = null; oppMove = null;
   }
   function reset() { rec = null; oppMove = null; total = 0; rounds = 0; last = ''; }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -47,11 +48,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     {#if rec === null}
       <div class="light off" aria-hidden="true"></div>
       <div class="play"><button class="choice" onclick={draw}>{rounds === 0 ? 'Read the light' : 'Next round'}</button></div>

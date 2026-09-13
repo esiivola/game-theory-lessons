@@ -19,6 +19,7 @@
     [[[...g[0][0]], [...g[0][1]]], [[...g[1][0]], [...g[1][1]]]] as M2;
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let m = $state<M2>(copy(PRESETS[0].m));
   let presetName = $state(PRESETS[0].name);
 
@@ -34,7 +35,7 @@
     m = next;
     presetName = '';
   }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 
   const rowLabels = ['Top', 'Bottom'];
   const colLabels = ['Left', 'Right'];
@@ -50,11 +51,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="presets">
       {#each PRESETS as p}
         <button class={'pchip' + (presetName === p.name ? ' on' : '')} onclick={() => load(p)}>{p.name}</button>

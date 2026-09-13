@@ -50,9 +50,9 @@ Play Matching Pennies against a bot that learns by fictitious play: it tracks ho
   exhibit="Exhibit 1"
   caption="Matching Pennies against a fictitious-play learner"
   predict={{
-    question: 'Over many rounds, what does the bot\'s belief about your Heads frequency converge to?',
-    options: [{ key: 'read', label: 'It reads and beats you' }, { key: 'half', label: 'Toward 50/50' }],
-    reveal: 'Toward 50/50. Any bias you show, the bot punishes, so your best long-run play is to mix evenly, and the bot\'s belief settles at your 50/50 frequency. Fictitious play converges to the mixed equilibrium here without anyone solving for it.',
+    question: 'What does this bot use to predict your next move?',
+    options: [{ key: 'record', label: 'Your observed Heads frequency' }, { key: 'fixed', label: 'A fixed 50/50 belief' }],
+    reveal: 'Your observed frequency. The bot best-responds to the moves you actually make. Its belief approaches 50/50 only if your own long-run frequency does.',
   }}
 />
 </Section>
@@ -61,7 +61,7 @@ Play Matching Pennies against a bot that learns by fictitious play: it tracks ho
 ## Why did that happen?
 
 <Callout kind="ask">
-The bot is not clever, just observant: it counts your moves and flees the one you favour. So any lean you develop gets exploited, and the only play it cannot beat is an even mix. Meanwhile the bot's own moves respond to your history, and when both sides learn this way, their empirical frequencies chase each other around and settle, on average, at the 50/50 equilibrium. The equilibrium emerges from adaptation, not calculation.
+The bot is not clever, just observant: it counts your moves and flees the one you favour. So any lean you develop gets exploited, and the only long-run frequency it cannot exploit is an even mix. In this game only the bot is using fictitious play; your frequency depends on the choices you make. The two-player convergence result below concerns a separate model in which both players update this way.
 </Callout>
 </Section>
 
@@ -83,7 +83,7 @@ Fictitious play does not converge in every game (it can cycle in some), but it d
 <WorkedExample title="Why an even mix is the only safe play">
 Suppose you have played Heads 6 times and Tails 4. The bot believes you play Heads with frequency $0.6$ and, as the mismatcher, plays Tails to avoid you, so you lose when you play Heads. Lean the other way and it flips to Heads. Any imbalance in your record hands the bot a profitable response.
 
-The only frequency it cannot exploit is $0.5$: at an even, patternless mix, its Heads and Tails responses both break even against you. So your best long-run play is $50/50$, and the bot's belief converges to that $50/50$ frequency. Both sides' empirical play settles at the mixed equilibrium, reached by adaptation rather than by solving the indifference equation directly.
+The only frequency it cannot exploit is $0.5$: at an even, patternless mix, its Heads and Tails responses both break even against you. If you generate that mix, the bot's empirical belief converges to it. The interactive does not simulate both players learning, so it demonstrates the best-response pressure behind the theorem rather than the theorem's full two-sided dynamics.
 </WorkedExample>
 </Section>
 

@@ -21,3 +21,8 @@ export function interimPayment(v: number): number {
 export function interimSurplus(v: number): number {
   return winProb(v) * v - interimPayment(v); // v^2 - v^2/2 = v^2/2
 }
+
+/** Surplus for true value v when the bidder reports r to the direct mechanism. */
+export function directSurplus(v: number, r: number): number {
+  return v * winProb(r) - interimPayment(r);
+}

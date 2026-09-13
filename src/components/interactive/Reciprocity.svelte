@@ -6,13 +6,14 @@
   // The same unfair $8/$2 offer arrives either chosen by a person or drawn by a wheel.
   // Rejection rates are far higher when the stingy split was intended.
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let source = $state<'person' | 'wheel'>('person');
 
   // Illustrative rejection rates for a lowball offer, from the reciprocity literature (Blount).
   const rejectRate = $derived(source === 'person' ? 0.65 : 0.2);
   const pct = (x: number) => Math.round(x * 100) + '%';
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -25,11 +26,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <p class="setup">You are offered a lopsided split: $2 for you, $8 for them. The outcome is identical either way; only its cause differs.</p>
 
     <div class="seg" role="group" aria-label="Source of the offer">

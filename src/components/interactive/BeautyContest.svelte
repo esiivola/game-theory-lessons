@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let guess = $state(33);
   let played = $state(false);
   let botGuesses = $state<number[]>([]);
@@ -24,7 +25,7 @@
 
   function play() { botGuesses = makeBots(); played = true; }
   function reset() { played = false; botGuesses = []; guess = 33; }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -37,11 +38,16 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
+    <p class="lnote">The six bots use levels 0, 0, 1, 1, 2, and 3. Level-0 guesses are drawn from 30 to 70; the other levels use 33, 33, 22, and 15. Your guess is included in the average and therefore changes the target.</p>
     <label class="slider">
       <span class="slab">Your guess: <b class="mono">{guess}</b> <span class="dim">(0 to 100)</span></span>
       <input type="range" min="0" max="100" step="1" bind:value={guess} aria-label="Your guess" />

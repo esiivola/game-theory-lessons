@@ -85,7 +85,7 @@ Instead of a move, pick a probability. The slider sets how often you play Heads.
 ## Why did that happen?
 
 <Callout kind="ask">
-You do not mix to protect yourself directly. You mix to leave the opponent with no reason to prefer one move over the other. Once Heads and Tails pay them exactly the same, they cannot exploit you, whatever they do. That is the whole trick: choose the odds that make the other side indifferent.
+In a fully mixed 2x2 equilibrium, you choose odds that leave the opponent with no reason to prefer either move, and they choose odds that do the same to you. This indifference calculation pins down both probabilities. Outside a fully mixed 2x2 equilibrium, players need not make every opposing action indifferent.
 </Callout>
 </Section>
 
@@ -104,7 +104,7 @@ $$
 2q - 1 = 1 - 2q \quad\Rightarrow\quad q = \tfrac{1}{2}.
 $$
 
-By symmetry your own mix is $p = \tfrac{1}{2}$. Note what pinned it down: your opponent's indifference sets *your* probability, not your own payoff. You are indifferent at the equilibrium; the mix is there to discipline them.
+The calculation above uses the opponent's probability $q$ to make you indifferent. By symmetry, making the opponent indifferent sets your own probability $p = \tfrac{1}{2}$. Each player's probability is therefore determined by the other player's indifference condition.
 </Section>
 
 <Section id="worked">
@@ -130,7 +130,7 @@ Equilibrium says mix to a precise fraction. Real people do not. In first plays o
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">You mix to make the other player indifferent, not to hedge yourself. At the equilibrium mix you are indifferent, and that is exactly why you cannot be exploited.</Callout>
+<Callout kind="key-idea">In a fully mixed 2x2 equilibrium, each player's probability makes the other player indifferent. That is why neither side can gain by changing its own mix.</Callout>
 </Section>
 
 <Section id="quiz">

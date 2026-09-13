@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let eps = $state(0.1);
   let pick = $state<'TL' | 'BR'>('BR');
 
@@ -17,7 +18,7 @@
   const payDeviate = $derived(rowPayoffVsTremble(COORD, r === 0 ? 1 : 0, c, eps));
   const r2 = (x: number) => Math.round(x * 100) / 100;
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { eps = 0.1; pick = 'BR'; }
 </script>
 
@@ -31,11 +32,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="matrix" role="group" aria-label="Coordination game: only (Top, Left) pays anything">
       <div class="mh corner">you&nbsp;&darr;<br />them&nbsp;&rarr;</div>
       <div class="mh">Left</div><div class="mh">Right</div>

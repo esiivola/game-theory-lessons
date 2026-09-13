@@ -50,9 +50,9 @@ Switch the responder's cultural norm and see how the acceptable offer changes. T
   exhibit="Exhibit 1"
   caption="The ultimatum game across cultural norms"
   presets={[
-    { key: 'weird', label: 'WEIRD (fair-minded)', alpha: 0.5 },
-    { key: 'market', label: 'Market-integrated', alpha: 0.7 },
-    { key: 'small', label: 'Small-scale society', alpha: 0.15 },
+    { key: 'mid', label: 'Illustration: alpha 0.5', alpha: 0.5 },
+    { key: 'high', label: 'Illustration: alpha 0.7', alpha: 0.7 },
+    { key: 'low', label: 'Illustration: alpha 0.15', alpha: 0.15 },
   ]}
   predict={{
     question: 'Do all human societies reject unfair ultimatum offers at the same threshold?',
@@ -66,7 +66,7 @@ Switch the responder's cultural norm and see how the acceptable offer changes. T
 ## Why did that happen?
 
 <Callout kind="ask">
-People bring the norms of their daily lives into the lab. Societies with lots of anonymous market exchange have strong norms of fair dealing with strangers, so they offer close to half and punish stinginess. Groups that rarely trade with outsiders may see a stranger's money as a windfall, offer little, and rarely reject. A few societies with heavy gift-giving norms even make over-generous offers that get rejected because accepting would incur an obligation. The "fairness" a designer counts on is a local product, not a human universal.
+Ultimatum behaviour varies across populations, and observed offers and rejections are associated with market integration and local forms of cooperation. These comparisons do not by themselves prove that markets caused particular fairness norms. The safe conclusion is that a designer should not assume one laboratory population represents everyone.
 </Callout>
 </Section>
 
@@ -74,17 +74,17 @@ People bring the norms of their daily lives into the lab. Societies with lots of
 ## The math
 
 <DefinitionAside label="WEIRD subjects and market integration">
-Most experimental results come from WEIRD populations (Western, Educated, Industrialized, Rich, Democratic), which turn out to be unusual. Henrich and colleagues ran the ultimatum game in fifteen small-scale societies: mean offers ranged from about 26 percent (the Machiguenga) to 58 percent (the Lamalera whale hunters), and rejection behaviour varied with the group's degree of market integration and cooperation in daily life. Fairness norms are learned from institutions, not fixed by biology.
+Most experimental results come from WEIRD populations (Western, Educated, Industrialized, Rich, Democratic). Henrich and colleagues ran the ultimatum game in fifteen small-scale societies: mean offers ranged from about 26 percent (the Machiguenga) to 58 percent (the Lamalera whale hunters), and rejection behaviour was associated with market integration and cooperation in daily life. The study establishes substantial cross-population variation, not a single causal channel.
 </DefinitionAside>
 
-In inequity-aversion terms, the envy weight $\alpha$ that governs when a responder rejects differs across cultures: higher in market-integrated groups (they punish unfairness), lower in insular ones (they accept low offers). A designer who plugs in a single $\alpha$, typically the WEIRD value, will mispredict behaviour elsewhere. The practical upshot connects back to market design: the pre-1998 medical match and Boston's old school mechanism failed partly because they assumed behaviour their participants did not exhibit. Good mechanisms are built for the players you actually have.
+The interactive's $\alpha$ presets are illustrations of how different inequity-aversion parameters change a threshold. They are not estimates for the societies named by the buttons. And the historical problems in medical matching and Boston school choice arose from concrete incentives and market rules, not simply from assuming the wrong fairness parameter.
 </Section>
 
 <Section id="worked">
 ## Work it out
 
 <WorkedExample title="One game, three thresholds">
-Take the same \$10 ultimatum and vary the responder's envy weight $\alpha$. A market-integrated responder ($\alpha = 0.7$) rejects anything below about \$2.90, close to a third of the pie. A WEIRD responder ($\alpha$ around $0.5$) rejects below \$2.50, roughly a quarter. A small-scale-society responder ($\alpha = 0.15$) rejects only below about \$1.15, so a proposer can offer little and still succeed.
+Take the same \$10 ultimatum and vary the responder's illustrative envy weight $\alpha$. At $\alpha=0.7$, the threshold is about \$2.90. At $\alpha=0.5$, it is \$2.50. At $\alpha=0.15$, it is about \$1.15. These calculations show what the parameter does; they do not estimate any society's preferences.
 
 A designer optimizing offers, or building a market that relies on fair play, gets very different answers depending on which $\alpha$ holds. Assume the WEIRD value everywhere and you will over- or under-shoot elsewhere. The lesson: measure the population's actual norms, and design the mechanism for them, not for an idealized universal player.
 </WorkedExample>

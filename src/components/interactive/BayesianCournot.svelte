@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let mu = $state(0.5);   // prior that the rival is low-cost
   let q1 = $state(5);     // your output
 
@@ -24,7 +25,7 @@
   const sy = (p: number) => PADT + (1 - p / yMax) * (H - PADT - PADB);
   const path = $derived(qs.map((q, i) => `${i === 0 ? 'M' : 'L'} ${sx(q).toFixed(1)} ${sy(prof[i]).toFixed(1)}`).join(' '));
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { mu = 0.5; q1 = 5; }
 </script>
 
@@ -38,11 +39,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="plot-wrap">
       <svg viewBox={`0 0 ${W} ${H}`} class="plot" role="img" aria-label="Your expected profit as your output changes, with the equilibrium marked.">
         <line x1={PADL} y1={PADT} x2={PADL} y2={H - PADB} class="ax" />

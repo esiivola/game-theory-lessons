@@ -2,13 +2,22 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '@/config/site';
+import { orderLessons } from '@/lib/lessonOrder';
 
-const tierOrder: Record<string, number> = { basic: 0, intermediate: 1, expert: 2, applied: 3 };
 const all = await getCollection('lessons');
-const lessons = all.sort(
-  (a, b) => (tierOrder[a.data.tier] - tierOrder[b.data.tier]) || a.data.order - b.data.order
-);
+const lessons = orderLessons(all);
 const total = lessons.length;
+const byId = new Map(lessons.map((lesson) => [lesson.id, lesson]));
+
+function anchorFor(entry: (typeof lessons)[number]) {
+  const placement = entry.data.placement;
+  return entry.data.kind === 'case' && placement?.startsWith('after:')
+    ? byId.get(placement.slice(6))
+    : undefined;
+}
+
+const displayTier = (entry: (typeof lessons)[number]) => anchorFor(entry)?.data.tier ?? entry.data.tier;
+const displayUnit = (entry: (typeof lessons)[number]) => anchorFor(entry)?.data.unitName ?? entry.data.unitName;
 
 const TIERS = [
   { id: 'basic', name: 'Basic', note: 'The shared spine. Static games, equilibrium, sequential play.' },
@@ -23,12 +32,13 @@ interface Group { id: string; name: string; note: string; count: number; units: 
 
 const groups: Group[] = [];
 for (const t of TIERS) {
-  const tierLessons = lessons.filter((l) => l.data.tier === t.id);
+  const tierLessons = lessons.filter((l) => displayTier(l) === t.id);
   if (!tierLessons.length) continue;
   const units: Unit[] = [];
   for (const l of tierLessons) {
-    let u = units.find((x) => x.name === l.data.unitName);
-    if (!u) { u = { name: l.data.unitName, items: [] }; units.push(u); }
+    const unitName = displayUnit(l);
+    let u = units.find((x) => x.name === unitName);
+    if (!u) { u = { name: unitName, items: [] }; units.push(u); }
     u.items.push(l);
   }
   groups.push({ id: t.id, name: t.name, note: t.note, count: tierLessons.length, units });
@@ -60,7 +70,7 @@ for (const t of TIERS) {
             <div
               class={'node-row' + (i === 0 ? ' first' : '') + (i === u.items.length - 1 ? ' last' : '')}
               data-slug={l.id}
-              data-tier={l.data.tier}
+              data-tier={displayTier(l)}
             >
               <div class="node">{l.data.label ?? l.data.order}</div>
               <a class="lrow" href={withBase('lessons/' + l.id)}>

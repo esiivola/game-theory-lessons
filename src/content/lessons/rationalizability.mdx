@@ -27,7 +27,7 @@ import PayoffMatrix from '@/components/interactive/PayoffMatrix.svelte';
 
 # Rationalizability and best response
 
-<p class="lead">Your <span class="in-acc">best response</span> is the move that pays most given what you expect the other to do. A strategy is <span class="in-acc">rationalizable</span> if it survives repeatedly deleting every strategy that is never a best response to any reasonable belief.</p>
+<p class="lead">Your <span class="in-acc">best response</span> is the move that pays most given what you expect the other to do. A strategy is <span class="in-acc">rationalizable</span> if it survives repeatedly deleting every strategy that is never a best response to a belief supported on the other player's surviving strategies.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -68,7 +68,7 @@ Middle is not beaten by any single one of your other moves (against Right it bea
 <Section id="idea">
 ## Best responses, all the way down
 
-For each belief about the other player, some move of yours pays most. That is a best response. A move that is a best response to nothing gets deleted. Once it is gone, other moves may lose their justification too, so you iterate, exactly the reasoning ladder from the beauty contest.
+A belief assigns probabilities to the other player's possible strategies. For each such belief, some move of yours pays most in expectation. That is a best response. A move that is a best response to no belief gets deleted. Once it is gone, beliefs can put weight only on strategies still supported by rational play, so other moves may lose their justification too. Then you repeat.
 
 <Callout kind="ask">
 Is rationalizable the same as Nash? No. Every Nash strategy is rationalizable, but the rationalizable set is usually larger. Rationalizability asks only that your belief be consistent with the others being rational; Nash adds that everyone's beliefs are actually correct.

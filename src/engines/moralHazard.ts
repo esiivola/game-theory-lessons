@@ -13,7 +13,7 @@ export const minBonusForEffort = COST / (P_HIGH_EFFORT - P_HIGH_SHIRK); // 37.5
 
 /** The agent's best-response effort given the bonus (the spread w_H - w_L). */
 export function effortChoice(bonus: number): 0 | 1 {
-  return bonus * (P_HIGH_EFFORT - P_HIGH_SHIRK) >= COST ? 1 : 0;
+  return bonus * (P_HIGH_EFFORT - P_HIGH_SHIRK) > COST ? 1 : 0;
 }
 
 function pHigh(e: 0 | 1): number { return e === 1 ? P_HIGH_EFFORT : P_HIGH_SHIRK; }

@@ -7,6 +7,7 @@
 
   const N = 20; // population size
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let mutation = $state(0.1);
   let stagShare = $state(0.5);
   let history = $state<number[]>([]);
@@ -33,7 +34,7 @@
     stagShare = s / N; history = hist.slice(-60); rounds += k;
   }
   function reset() { mutation = 0.1; stagShare = 0.5; history = []; rounds = 0; }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -46,11 +47,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="basinbar" aria-hidden="true">
       <span class="hare" style={`width:${b.hare * 100}%`}>Hare basin {pct(b.hare)}</span>
       <span class="stag" style={`width:${b.stag * 100}%`}>Stag {pct(b.stag)}</span>

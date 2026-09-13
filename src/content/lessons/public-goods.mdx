@@ -28,7 +28,7 @@ import PublicGoods from '@/components/interactive/PublicGoods.svelte';
 
 # Public goods and the commons
 
-<p class="lead">A public good is one everyone shares whether or not they paid for it: clean air, a stocked fishery, a stable climate. That sharing is the problem. When the benefit of your contribution spreads to everyone, your own slice of it is too small to justify the cost, so the sensible move is to let others carry it.</p>
+<p class="lead">A public good is non-excludable and non-rival: people can benefit without paying, and one person's use does not leave less for another. A fishery is different. It is hard to exclude users, but one person's catch leaves fewer fish for others, making it a common-pool resource. Both can create free-riding, through different physical constraints.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -79,7 +79,7 @@ The **marginal per-capita return** is $0.4$: each dollar you contribute returns 
 Now the group. Total welfare is $\sum_i u_i = 40 + (1.6 - 1)\sum_j g_j = 40 + 0.6\sum_j g_j$, which rises in every contribution. So the social optimum is full contribution, \$10 each, and everyone ends with \$16 rather than \$10.
 
 <DefinitionAside label="public-goods game">
-A public good is non-excludable: its benefit reaches everyone regardless of who paid. When the private return to contributing (here $0.4$) is below $1$ but the social return (here $1.6$) is above $1$, self-interest gives zero and efficiency demands full contribution. That gap is the tragedy of the commons.
+In this public-goods game, the benefit of every contribution reaches the whole group. When the private return to contributing (here $0.4$) is below $1$ but the social return (here $1.6$) is above $1$, self-interest gives zero and efficiency demands full contribution. A common-pool resource can produce a related social dilemma through excessive withdrawal rather than insufficient contribution.
 </DefinitionAside>
 </Section>
 
@@ -130,7 +130,7 @@ Now suppose all four contribute \$1. The pot grows by \$6.40, and each person's 
   badge="analyse"
   question="A larger group shares the same multiplied pot among more people. What happens to the incentive to free-ride?"
   options={[
-    { text: "It strengthens, because each person's share of any contribution shrinks", correct: true, feedback: "Splitting the multiplied pot among more people lowers the per-capita return, so the private payoff to contributing falls and free-riding looks even better. Bigger commons are harder, not easier." },
+    { text: "It strengthens, because each person's share of any contribution shrinks", correct: true, feedback: "Splitting the multiplied pot among more people lowers the per-capita return, so the private payoff to contributing falls and free-riding looks even better in this public-goods game." },
     { text: "It weakens, because more people means more cooperation", feedback: "More people means each keeps a smaller slice of what they contribute, so the temptation to free-ride grows. Size works against cooperation here." },
     { text: "It is unchanged, since the multiplier is the same", feedback: "The multiplier is fixed, but it is divided among more people, so each person's return per dollar drops. The incentive to free-ride rises." },
   ]}

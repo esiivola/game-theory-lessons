@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let b = $state(0.125);
 
   const n = $derived(maxIntervals(b));
@@ -19,7 +20,7 @@
   const W = 300, H = 40, PAD = 8;
   const sx = (v: number) => PAD + v * (W - 2 * PAD);
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { b = 0.125; }
 </script>
 
@@ -33,11 +34,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="plot-wrap">
       <svg viewBox={`0 0 ${W} ${H}`} class="plot" role="img" aria-label="The state line from 0 to 1 partitioned into message intervals.">
         {#if informative}

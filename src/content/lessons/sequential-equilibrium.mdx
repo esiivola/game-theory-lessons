@@ -26,9 +26,9 @@ import Tremble from '@/components/interactive/Tremble.svelte';
 
 <div class="anchor"><span class="em">🫨</span><p>Some equilibria are stable only because everyone is sure no one will ever slip. Allow for the smallest chance of a mistake, a trembling hand, and those equilibria fall apart, leaving the ones that would survive a real world of fumbles.</p></div>
 
-# Sequential equilibrium and refinements
+# Trembling-hand perfection and sequential equilibrium
 
-<p class="lead">Nash equilibrium, and even subgame perfection, can bless outcomes propped up by weakly dominated play that is never tested on the equilibrium path. Refinements ask more: an equilibrium should survive if players tremble, making each action with tiny probability by mistake. That extra demand throws out the equilibria that were only ever bluff.</p>
+<p class="lead">Different refinements repair different gaps. Trembling-hand perfection tests whether a Nash equilibrium survives small mistakes. Sequential equilibrium applies to extensive-form games and requires sequentially rational strategies plus beliefs obtained as limits of completely mixed play. The game below demonstrates the trembling-hand test; the formal section then separates it from sequential equilibrium.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -70,7 +70,7 @@ In $(B,R)$ both players choose an action that only pays off in cells that never 
 
 In the game, $(B,R)$ is a Nash equilibrium only weakly: given the other plays Right, Bottom and Top both pay $0$, so Bottom is a best response but not a strict one, and it is weakly dominated by Top (which pays $1$ against Left and $0$ against Right). Introduce a tremble: the column player intends Right but plays Left with probability $\varepsilon$. Then Row earns $\varepsilon\cdot 1 = \varepsilon$ from Top and $0$ from Bottom, so for any $\varepsilon > 0$ Row strictly prefers Top, and $(B,R)$ is not robust.
 
-<DefinitionAside label="trembling-hand and sequential equilibrium">
+<DefinitionAside label="two distinct refinements">
 A trembling-hand perfect equilibrium is a limit, as trembles vanish, of equilibria of perturbed games in which every action has strictly positive probability. Sequential equilibrium requires a strategy profile and beliefs that are the limit of totally mixed behavior, so beliefs are consistent even off the path. For finite extensive-form games with perfect recall, the standard refinements nest as follows:
 
 $$
@@ -133,7 +133,7 @@ Now $(T,L)$. Given Left trembling to Right with probability $\varepsilon$, Top p
   badge="brings back: subgame perfection"
   question="Why is subgame perfection not enough to rule out (Bottom, Right) here?"
   options={[
-    { text: "This simultaneous game has no proper subgames beyond the whole game, so subgame perfection cannot bite; you need a belief- or tremble-based refinement", correct: true, feedback: "Subgame perfection only tests proper subgames, and a one-shot simultaneous game has none to test. Sequential and trembling-hand refinements reach inside with beliefs and trembles to discard the weak equilibrium." },
+    { text: "This simultaneous game has no proper subgames beyond the whole game, so subgame perfection cannot bite; trembling-hand perfection tests the weak equilibrium directly", correct: true, feedback: "Subgame perfection adds nothing in this one-shot simultaneous game. A trembling-hand perturbation puts positive probability on Left and makes Top strictly better, removing the weak equilibrium." },
     { text: "Subgame perfection already rules it out", feedback: "It does not: with no proper subgame to check, subgame perfection coincides with Nash here and keeps (Bottom, Right)." },
     { text: "Because subgame perfection ignores payoffs", feedback: "It uses payoffs, but only within proper subgames. Here there are none beyond the whole game, so it has no extra grip." },
   ]}

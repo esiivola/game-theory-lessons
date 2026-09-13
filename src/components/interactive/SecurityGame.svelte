@@ -7,6 +7,7 @@
 
   const VALUES = [10, 5];
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let c0 = $state(0.5); // coverage of the $10 target; the $5 target gets 1 - c0
 
   const coverage = $derived([c0, 1 - c0]);
@@ -16,7 +17,7 @@
   const r2 = (x: number) => Math.round(x * 100) / 100;
   const pct = (x: number) => Math.round(x * 100) + '%';
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { c0 = 0.5; }
 </script>
 
@@ -29,10 +30,14 @@
     <div class="predict">
       <div class="q">{predict.question}</div>
       <div class="opts">
-        {#each predict.options as o}<button onclick={onPredict}>{o.label}</button>{/each}
+        {#each predict.options as o}<button onclick={() => onPredict(o.label)}>{o.label}</button>{/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <p class="setup">You have one patrol to split between two targets, worth 10 and 5. You commit to coverage probabilities first; the attacker then strikes the target that maximizes its expected value.</p>
 
     <label class="slider"><span class="slab">Coverage of the $10 target: <b class="mono">{pct(c0)}</b> (the $5 target gets {pct(1 - c0)})</span><input type="range" min="0" max="1" step="0.01" bind:value={c0} aria-label="Coverage of the high-value target" /></label>

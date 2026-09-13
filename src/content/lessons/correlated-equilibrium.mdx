@@ -5,7 +5,7 @@ unit: 5
 unitName: "Correlation and complementarities"
 order: 17
 kind: lesson
-summary: "A shared signal can steer players to an outcome that beats every Nash equilibrium."
+summary: "A shared signal can coordinate players better than independent randomization."
 tags: ["correlation", "equilibrium", "coordination"]
 estMinutes: 6
 mvp: true
@@ -29,7 +29,7 @@ import CorrelatedEq from '@/components/interactive/CorrelatedEq.svelte';
 
 # Correlated equilibrium
 
-<p class="lead">Nash equilibrium lets players randomize on their own, independently. But a shared signal, a light, a mediator, a public event, can correlate their choices, and that opens outcomes no independent play can reach. In Chicken, a device that whispers a different instruction to each driver beats the symmetric mixed equilibrium for both, and beats every Nash equilibrium of the game on total payoff. A public coin flip would not: it only picks one of the two lopsided equilibria.</p>
+<p class="lead">Nash equilibrium lets players randomize on their own, independently. But a shared signal, a light, a mediator, a public event, can correlate their choices, and that opens outcomes no independent play can reach. In Chicken, a device that whispers a different instruction to each driver gives both a higher expected payoff than the symmetric mixed equilibrium. Its total payoff also exceeds either pure equilibrium, though it does not make the favoured player in a pure equilibrium better off.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -98,7 +98,7 @@ $$
 above the mixed Nash. For this to be an equilibrium, obeying must be a best response given what the recommendation reveals about the opponent.
 
 <DefinitionAside label="correlated equilibrium">
-A correlated equilibrium is a probability distribution over outcomes, run by a device that privately recommends a move to each player, such that no player can gain by deviating from their recommendation given the belief it induces about the others. Every Nash equilibrium is one (an uninformative device), but as here, some correlated equilibria beat every Nash equilibrium.
+A correlated equilibrium is a probability distribution over outcomes, run by a device that privately recommends a move to each player, such that no player can gain by deviating from their recommendation given the belief it induces about the others. Every Nash equilibrium is one (an uninformative device). Some correlated equilibria improve on a mixed Nash equilibrium or raise total welfare, but they need not Pareto-dominate every Nash equilibrium.
 </DefinitionAside>
 </Section>
 
@@ -156,7 +156,7 @@ Both recommendations are self-enforcing, so the device is a correlated equilibri
   badge="brings back: mixed strategies"
   question="How does a correlated equilibrium relate to the mixed-strategy Nash equilibria you already know?"
   options={[
-    { text: "Every Nash equilibrium is a correlated equilibrium with an uninformative signal, but some correlated equilibria beat all of them", correct: true, feedback: "Nash equilibria are the special case where the device tells players nothing useful, so they mix independently. Allowing informative, correlated signals is strictly more powerful, as Chicken shows." },
+    { text: "Every Nash equilibrium is a correlated equilibrium, while correlation can produce payoff distributions independent mixing cannot", correct: true, feedback: "Independent Nash play is a special case of correlated equilibrium. Informative recommendations can avoid the crash and improve on the symmetric mixed equilibrium without Pareto-dominating both pure equilibria." },
     { text: "They are the same thing under a different name", feedback: "They are not. A correlated equilibrium can achieve payoffs, like (5,5) here, that no Nash equilibrium of the game reaches." },
     { text: "A correlated equilibrium is always worse than the best Nash equilibrium", feedback: "The reverse can hold: here the device averages 5 per player, above the 4.67 of the mixed Nash and better on average than the lopsided pure equilibria." },
   ]}

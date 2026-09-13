@@ -87,7 +87,7 @@ Here is a centipede game. At each step a player can take the pot (ending it) or 
 ## Why did that happen?
 
 <Callout kind="ask">
-The field results do not line up neatly. Penalty kicks are a clean zero-sum game played by experts with huge stakes and endless practice, and there minimax holds: kickers and keepers mix at the right frequencies with no pattern anyone has found. Tennis serves pass the same frequency test but show a faint trace of the human habit of switching too often. The centipede is different: mutual passing makes both far better off, and players, trusting a little or valuing the larger pie, pass rather than grab. Backward induction's relentless unraveling assumes a level of mutual distrust that real, repeated human interaction does not have.
+The evidence does not line up neatly. Penalty kicks are a field setting with expert players, and there minimax performs well. Tennis serves pass the frequency test but show slight excess switching. Centipede evidence comes from laboratory experiments, where players often pass. Backward induction follows from the specified payoffs and common knowledge of rationality; departures may reflect social preferences, bounded reasoning, or uncertainty about how others reason, not an assumption of distrust.
 </Callout>
 </Section>
 
@@ -111,7 +111,7 @@ Fold the centipede backward: at the last node the mover takes ($5 > 4$ for Them)
 <WorkedExample title="Fold the centipede, then compare to the field">
 Solve backward. Last node (Them): Take gives Them $5$, Pass gives $4$, so Take, outcome $(3,5)$. Prior node (You): Take gives You $4$, passing leads to $(3,5)$ where You get $3$, so Take, outcome $(4,2)$. Next (Them): Take gives $3$, passing leads to $(4,2)$ giving Them $2$, so Take. First node (You): Take gives $2$, passing leads to Them taking for You's $1$, so Take. Backward induction: take immediately, $(2,0)$.
 
-Now the field. In the centipede, real pairs pass repeatedly, often reaching the cooperative end near $(6,4)$, far better for both than $(2,0)$. The theory mispredicts. But run the other field test, penalty kicks, and professionals mix at the minimax frequencies with no readable pattern, confirming the theory. Same discipline, opposite verdicts, which is exactly the boundary this lesson maps.
+Now compare the evidence. In the laboratory centipede, pairs often pass repeatedly and capture more of the growing surplus than the subgame-perfect prediction. In field data, professional penalty takers mix close to the minimax frequencies with little readable pattern. These are different environments, so the comparison maps where the models perform rather than delivering one verdict on all game theory.
 </WorkedExample>
 </Section>
 

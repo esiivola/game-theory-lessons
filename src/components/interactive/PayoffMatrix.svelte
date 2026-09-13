@@ -27,6 +27,7 @@
   const toneClass = (t?: Tone) => (t === 'coop' ? 'coop' : t === 'def' ? 'def' : '');
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let sel = $state<string | null>(null); // "rKey|cKey"
   let hit = $state<string | null>(null);
   let readout = $state('');
@@ -66,9 +67,9 @@
     sel = r.key + '|' + c.key;
     const p = payoffs[r.key][c.key];
     if (mode === 'nash') {
-      nashMsg = isNash(r.key, c.key)
-        ? `Stable. From (${r.label}, ${c.label}) neither player can do better by moving alone.`
-        : `Not stable. At least one player has a better reply, so someone would deviate.`;
+      nashMsg = revealBR
+        ? nashFeedback(r.key, c.key, r.label, c.label)
+        : 'Choice recorded. Reveal the best responses to check it.';
     }
     readout = `<b>${r.label}</b> and <b>${c.label}</b>: you <b class="mono">${fmt(p[0])}</b>, them <b class="mono">${fmt(p[1])}</b>.`;
   }
@@ -109,9 +110,26 @@
     readout = 'Rounds reset. Make your move.';
   }
 
-  function onPredict() {
+  function nashFeedback(rKey: string, cKey: string, rLabel: string, cLabel: string) {
+    return isNash(rKey, cKey)
+      ? `Stable. From (${rLabel}, ${cLabel}) neither player can do better by moving alone.`
+      : 'Not stable. At least one player has a better reply, so someone would deviate.';
+  }
+
+  function toggleResponses() {
+    revealBR = !revealBR;
+    if (!sel) return;
+    const [rKey, cKey] = sel.split('|');
+    const r = rows.find(({ key }) => key === rKey)!;
+    const c = cols.find(({ key }) => key === cKey)!;
+    nashMsg = revealBR
+      ? nashFeedback(rKey, cKey, r.label, c.label)
+      : 'Choice recorded. Reveal the best responses to check it.';
+  }
+
+  function onPredict(label: string) {
+    predictionLabel = label;
     predicted = true;
-    readout = predict ? predict.reveal : '';
   }
 </script>
 
@@ -125,11 +143,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div
       class="matrix"
       style={`grid-template-columns:24px repeat(${cols.length}, minmax(0, 1fr))`}
@@ -180,7 +202,7 @@
 
     {#if mode === 'nash'}
       <div class="play">
-        <button class="tinybtn" onclick={() => (revealBR = !revealBR)}>
+        <button class="tinybtn" onclick={toggleResponses}>
           {revealBR ? 'Hide best responses' : 'Show best responses'}
         </button>
       </div>

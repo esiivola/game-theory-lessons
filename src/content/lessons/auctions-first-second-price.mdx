@@ -61,7 +61,7 @@ Each round you get a private value and bid against two rivals with unknown value
 ## Why did that happen?
 
 <Callout kind="ask">
-In a second-price auction your bid decides only whether you win, not what you pay, so raising it above your value risks winning at a loss and lowering it only forfeits good wins. Bidding your true value is exactly right, whatever others do. In a first-price auction your bid also sets your price, so you shade below your value, trading a lower chance of winning for a better deal when you do. The two adjustments cancel: what you save by shading in the first-price auction, you give back in a higher chance of paying, and the seller nets the same.
+In a second-price auction your bid decides only whether you win, not what you pay, so raising it above your value risks winning at a loss and lowering it only forfeits good wins. Bidding your true value is exactly right, whatever others do. In a first-price auction your bid also sets your price, so you shade below your value. Under the revenue-equivalence assumptions, both formats use the same efficient allocation rule and give the lowest type zero expected surplus. The payment identity then makes their expected payments match.
 </Callout>
 </Section>
 
@@ -126,7 +126,7 @@ Under independent private values, any auction that (in equilibrium) always gives
   badge="analyse"
   question="First-price bidders shade below their values, yet the seller earns the same as under second-price. How can that be?"
   options={[
-    { text: "Shading lowers the price paid but the format collects it from the winner directly, and the two effects offset to the same expected revenue", correct: true, feedback: "Revenue equivalence: with private values and the item always going to the highest value, expected payments match. First-price bidders pay their own shaded bid; second-price bidders pay the runner-up's value; on average these coincide." },
+    { text: "Both formats allocate to the highest value and give the lowest type zero surplus, so the payment identity gives the same expected revenue", correct: true, feedback: "Those are the key revenue-equivalence conditions under independent private values and risk neutrality. The theorem concerns expectations over repeated value draws, not equality in every realized auction." },
     { text: "First-price auctions actually raise more, the claim is a myth", feedback: "Under independent private values they raise the same in equilibrium. That is the content of the revenue equivalence theorem." },
     { text: "Because bidders bid their values in both formats", feedback: "They do not: first-price bidders shade to (n-1)/n of value. Revenue still ties, which is the surprising part." },
   ]}

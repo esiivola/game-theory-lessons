@@ -1,25 +1,27 @@
 <script lang="ts">
-  import { proposerShare, responderShare, accepts } from '@/engines/rubinstein';
+  import { proposerShareTwoSided, responderShareTwoSided } from '@/engines/rubinstein';
 
   interface Predict { question: string; options: { key: string; label: string }[]; reveal: string; }
   let { exhibit = '', caption = '', predict = null }:
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
-  let delta = $state(0.8);
+  let predictionLabel = $state('');
+  let yourDelta = $state(0.8);
+  let theirDelta = $state(0.8);
   let myShare = $state(0.5); // what you propose to keep
   let result = $state<'none' | 'accept' | 'reject'>('none');
 
-  const spe = $derived(proposerShare(delta));       // your equilibrium share, 1/(1+delta)
-  const theirFloor = $derived(responderShare(delta)); // what they can guarantee by waiting
+  const spe = $derived(proposerShareTwoSided(yourDelta, theirDelta));
+  const theirFloor = $derived(responderShareTwoSided(yourDelta, theirDelta));
   const pct = (n: number) => Math.round(n * 100) + '%';
   const r3 = (n: number) => Math.round(n * 1000) / 1000;
 
   function offer() {
-    result = accepts(1 - myShare, delta) ? 'accept' : 'reject';
+    result = 1 - myShare >= theirFloor - 1e-12 ? 'accept' : 'reject';
   }
   function reset() { myShare = 0.5; result = 'none'; }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -32,14 +34,22 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <label class="slider">
-      <span class="slab">Patience &delta; (how little delay costs): <b class="mono">{r3(delta)}</b></span>
-      <input type="range" min="0.1" max="0.95" step="0.01" bind:value={delta} aria-label="Discount factor delta" />
+      <span class="slab">Your patience &delta;<sub>1</sub>: <b class="mono">{r3(yourDelta)}</b></span>
+      <input type="range" min="0.1" max="0.95" step="0.01" bind:value={yourDelta} aria-label="Your discount factor" />
+    </label>
+    <label class="slider">
+      <span class="slab">Their patience &delta;<sub>2</sub>: <b class="mono">{r3(theirDelta)}</b></span>
+      <input type="range" min="0.1" max="0.95" step="0.01" bind:value={theirDelta} aria-label="Their discount factor" />
     </label>
     <label class="slider">
       <span class="slab">You propose to keep: <b class="mono">{pct(myShare)}</b>, offering them <b class="mono">{pct(1 - myShare)}</b></span>
@@ -64,7 +74,7 @@
       {/if}
     </div>
 
-    <p class="note">Equilibrium: the proposer keeps 1/(1+&delta;) = <b class="mono">{pct(spe)}</b>, agreed immediately. As patience &delta; rises toward 1, that advantage fades to an even split.</p>
+    <p class="note">Equilibrium: the proposer keeps (1-&delta;<sub>2</sub>)/(1-&delta;<sub>1</sub>&delta;<sub>2</sub>) = <b class="mono">{pct(spe)}</b>, agreed immediately. When patience is equal this reduces to 1/(1+&delta;).</p>
   {/if}
 </div>
 

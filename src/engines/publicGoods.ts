@@ -17,3 +17,13 @@ export function payoff(
 export function mpcr(factor: number, n: number): number {
   return factor / n;
 }
+
+export function applyPunishment(
+  punisherPayoff: number,
+  targetPayoff: number,
+  points: number,
+  cost = 1,
+  effect = 3
+): { punisher: number; target: number } {
+  return { punisher: punisherPayoff - cost * points, target: targetPayoff - effect * points };
+}

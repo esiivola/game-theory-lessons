@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ewaUpdate, choiceProbs } from './ewa';
+import { ewaUpdate, choiceProbs, sampleChoice } from './ewa';
 
 describe('EWA update', () => {
   const start = { A: [0, 0], N: 1 };
@@ -21,5 +21,9 @@ describe('choiceProbs', () => {
     const p = choiceProbs([1, 0], 2);
     expect(p[0]).toBeGreaterThan(p[1]);
     expect(p[0] + p[1]).toBeCloseTo(1);
+  });
+  it('samples rather than resolving a tie to action zero', () => {
+    expect(sampleChoice([0.5, 0.5], () => 0.25)).toBe(0);
+    expect(sampleChoice([0.5, 0.5], () => 0.75)).toBe(1);
   });
 });

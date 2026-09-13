@@ -226,6 +226,11 @@ input[type="range"]{min-height:44px}
 .predict .opts button{flex:1;min-height:44px;border:1.5px solid var(--border-strong);background:var(--surface);border-radius:9px;padding:12px 8px;font-weight:600;font-size:13.5px;cursor:pointer;color:var(--ink)}
 .predict .opts button:hover{border-color:var(--accent)}
 .predict .opts button:disabled{opacity:.55;cursor:default}
+.prediction-memory{font-size:12.5px;color:var(--ink-muted);margin:0 0 12px;padding:9px 12px;border-left:2px solid var(--accent);background:var(--accent-soft)}
+.prediction-memory b{color:var(--ink)}
+.prediction-answer{font-size:12.5px;color:var(--ink-muted);margin:-4px 0 12px}
+.prediction-answer summary{color:var(--accent);font-weight:700;cursor:pointer;min-height:44px;display:flex;align-items:center}
+.prediction-answer p{margin:0 0 10px;line-height:1.55}
 .hidden{display:none}
 
 /* warm-up */

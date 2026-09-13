@@ -10,6 +10,7 @@
   } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let side = $state<'a' | 'b'>('a'); // which side proposes
 
   const proposers = $derived(side === 'a' ? Object.keys(aPrefs) : Object.keys(bPrefs));
@@ -24,7 +25,7 @@
     proposers.reduce((s, p) => s + rankOf(propPrefs[p], match[p]), 0) / proposers.length
   );
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -37,11 +38,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     {#if canSwap}
       <div class="seg" role="group" aria-label="Proposing side">
         <button class={side === 'a' ? 'on' : ''} onclick={() => (side = 'a')}>{aName} propose</button>

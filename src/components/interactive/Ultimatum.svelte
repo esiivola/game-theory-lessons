@@ -8,6 +8,7 @@
   }: { presets?: NormPreset[] | null; exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let offer = $state(3); // amount offered to the responder
   let alpha = $state(presets ? presets[0].alpha : 0.5);
   let presetKey = $state(presets ? presets[0].key : '');
@@ -19,7 +20,7 @@
   function propose() { result = rejects(offer, alpha) ? 'reject' : 'accept'; }
   function setPreset(p: NormPreset) { presetKey = p.key; alpha = p.alpha; result = 'none'; }
   function reset() { offer = 3; result = 'none'; if (presets) { alpha = presets[0].alpha; presetKey = presets[0].key; } }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -32,11 +33,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     {#if presets}
       <div class="presets">
         {#each presets as p}

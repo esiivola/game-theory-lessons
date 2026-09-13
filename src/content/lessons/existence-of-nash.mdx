@@ -76,10 +76,10 @@ $$
 \tfrac13(1) + \tfrac13(-1) + \tfrac13(0) = 0.
 $$
 
-Every pure move earns $0$ against the uniform mix, so you are indifferent among all of them, and mixing $\tfrac13, \tfrac13, \tfrac13$ is a best response to itself. That is the equilibrium.
+Every pure move earns $0$ against the opponent's uniform mix, so you are indifferent among all of them. Each player's uniform mix is a best response to the other player's uniform mix. That is the equilibrium.
 
 <DefinitionAside label="Nash's existence theorem">
-Every finite game (finitely many players, each with finitely many pure strategies) has at least one Nash equilibrium in mixed strategies. The proof looks for a fixed point of best response on the compact convex space of mixed profiles, because a profile that best-responds to itself is exactly an equilibrium. Best response is a correspondence, not a function (ties leave several best replies), so Nash's 1950 proof applies Kakutani's fixed-point theorem for correspondences; his 1951 proof instead builds a continuous map with the same fixed points and applies Brouwer's.
+Every finite game (finitely many players, each with finitely many pure strategies) has at least one Nash equilibrium in mixed strategies. The proof looks for a mixed profile in which each player's strategy is a best response to the other players' strategies. Best response is a correspondence, not a function (ties leave several best replies), so Nash's 1950 proof applies Kakutani's fixed-point theorem for correspondences; his 1951 proof instead builds a continuous map with the same fixed points and applies Brouwer's.
 </DefinitionAside>
 
 The theorem guarantees existence. It says nothing about how many equilibria there are, or which one gets played.
@@ -100,7 +100,7 @@ It is also the only one, and symmetry alone does not show that. Suppose you play
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">Allow mixed strategies and no finite game is ever unsolvable. There is always at least one equilibrium; the open question is which of them, if any, players actually reach.</Callout>
+<Callout kind="key-idea">Every finite game has at least one mixed-strategy equilibrium. Existence does not tell us whether it is easy to compute, unique, or likely to be played.</Callout>
 </Section>
 
 <Section id="quiz">
@@ -114,7 +114,7 @@ It is also the only one, and symmetry alone does not show that. Suppose you play
   question="A finite two-player game has no cell where both players are best-responding. What does Nash's theorem tell you?"
   options={[
     { text: "It still has an equilibrium, in mixed strategies", correct: true, feedback: "No pure equilibrium does not mean no equilibrium. Every finite game has at least one, once you allow players to randomize." },
-    { text: "The game is unsolvable", feedback: "Nothing finite is unsolvable in this sense. The equilibrium is just in probabilities rather than fixed moves." },
+    { text: "The game has no equilibrium", feedback: "It has no pure equilibrium, but the existence theorem guarantees at least one equilibrium in mixed strategies." },
     { text: "It has infinitely many equilibria", feedback: "Existence says at least one. The count could be one, several, or many, but the theorem does not promise infinitely many." },
   ]}
 />

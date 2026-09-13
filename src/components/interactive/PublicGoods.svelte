@@ -14,6 +14,7 @@
   const share = mpcr(factor, n);
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let give = $state(5);
   let round = $state(0);
   // Three bots: one free-rider, two conditional cooperators who match the others' last average.
@@ -38,7 +39,7 @@
   function reset() {
     give = 5; round = 0; bots = [0, 7, 7]; history = [];
   }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 
   const last = $derived(history[history.length - 1] ?? null);
   const r1 = (x: number) => Math.round(x * 10) / 10;
@@ -54,11 +55,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <label class="slider">
       <span class="slab">Your contribution: <b class="mono">${give}</b> of ${e}</span>
       <input type="range" min="0" max={e} step="1" bind:value={give} aria-label="Your contribution" />

@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let u1 = $state(3);
   let u2 = $state(3);
 
@@ -27,7 +28,7 @@
     { label: '(0.5, 0.5)', p: [0.5, 0.5] },
   ];
   function set(p: Pt) { u1 = p[0]; u2 = p[1]; }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -40,11 +41,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="plot-wrap">
       <svg viewBox={`0 0 ${W} ${H}`} class="plot" role="img" aria-label="Feasible payoff region with the individually rational area shaded and the target point marked.">
         <rect x={irX} y={irY} width={irW} height={irH} class="ir" />

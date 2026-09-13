@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { proposerShare, responderShare, proposerShareTwoSided, accepts } from './rubinstein';
+import { proposerShare, responderShare, proposerShareTwoSided, responderShareTwoSided, accepts } from './rubinstein';
 
 describe('proposerShare', () => {
   it('is 1/(1+delta): the proposer keeps more when the responder is impatient', () => {
@@ -22,6 +22,9 @@ describe('proposerShareTwoSided', () => {
   it('the more patient side does better', () => {
     // Player 1 patient, player 2 impatient -> player 1 keeps almost everything.
     expect(proposerShareTwoSided(0.95, 0.5)).toBeGreaterThan(0.9);
+  });
+  it('gives the responder its discounted continuation value', () => {
+    expect(proposerShareTwoSided(0.9, 0.6) + responderShareTwoSided(0.9, 0.6)).toBeCloseTo(1);
   });
 });
 

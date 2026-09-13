@@ -10,6 +10,7 @@
   const MASKNAME: Record<number, string> = { 1: 'Seller', 2: 'Buyer 1', 3: 'Seller + Buyer 1', 4: 'Buyer 2', 5: 'Seller + Buyer 2', 6: 'the two buyers' };
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let x1 = $state(60); // seller
   let x2 = $state(20); // buyer 1
 
@@ -19,7 +20,7 @@
   const blocks = $derived(feasible ? blocking(alloc, V, 3) : []);
   const core = $derived(feasible && isInCore(alloc, V, 3));
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { x1 = 60; x2 = 20; }
 </script>
 
@@ -33,11 +34,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <p class="setup">One seller, two buyers. A sale needs the seller plus one buyer, worth 100. Alone, or as the two buyers, they can make nothing. Split the 100.</p>
 
     <label class="slider"><span class="slab">Seller gets: <b class="mono">{x1}</b></span><input type="range" min="0" max="100" step="1" bind:value={x1} aria-label="Seller share" /></label>

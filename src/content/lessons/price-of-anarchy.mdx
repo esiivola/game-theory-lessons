@@ -69,7 +69,7 @@ Each driver chases their own fastest route, ignoring the delay they add to other
 ## The math
 
 <DefinitionAside label="price of anarchy">
-The price of anarchy is the ratio of the total cost at the worst Nash equilibrium to the cost of the socially optimal outcome. It measures the inefficiency of selfish behaviour. For routing with affine (linear) cost functions, Roughgarden and Tardos proved the price of anarchy is at most $4/3$: selfish routing is never more than a third worse than optimal.
+The price of anarchy is the ratio of the total cost at the worst Nash equilibrium to the cost of the socially optimal outcome. It measures the inefficiency of selfish behaviour. For nonatomic routing, where each traveller is infinitesimal, with nonnegative affine latency functions, the price of anarchy is at most $4/3$.
 </DefinitionAside>
 
 **Pigou.** One unit of traffic chooses between a fixed link (cost $1$) and a congestible link (cost equal to its load). Selfishly, everyone takes the congestible link (cost $1$, tied with the fixed one) for total cost $1$. The optimum splits traffic in half, giving total cost $\tfrac12(1) + \tfrac12(\tfrac12) = 0.75$. The price of anarchy is $1 / 0.75 = 4/3$.
@@ -90,7 +90,7 @@ The price of anarchy is the ratio of the total cost at the worst Nash equilibriu
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">Selfish routing is inefficient but boundedly so: with linear costs the price of anarchy is at most 4/3. Yet adding a road can make an equilibrium strictly worse for everyone, which is Braess's paradox.</Callout>
+<Callout kind="key-idea">In nonatomic routing with nonnegative affine latency, selfish routing costs at most 4/3 of the optimum. Yet adding a road can make the equilibrium strictly worse, which is Braess's paradox.</Callout>
 </Section>
 
 <Section id="quiz">

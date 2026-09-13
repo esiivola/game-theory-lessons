@@ -70,7 +70,7 @@ When both firms move together, each hedges against the other. When you commit fi
 <Section id="math">
 ## The math
 
-Run the entry game from the last lesson as a simultaneous table instead of a tree. It has two Nash equilibria. Show the best responses.
+Run the entry game from the last lesson in normal form instead of as a tree. It has two pure Nash equilibria. Because the incumbent is indifferent between its actions after Stay out, it also has mixed equilibria supported by a sufficiently high probability of Fight. Show the best responses to locate the pure equilibria.
 
 <PayoffMatrix
   client:visible
@@ -82,7 +82,7 @@ Run the entry game from the last lesson as a simultaneous table instead of a tre
   payoffs={{ In: { A: [2, 1], F: [-1, 0] }, Out: { A: [0, 2], F: [0, 2] } }}
 />
 
-Two gold cells: $(\text{In},\text{Accommodate})$ and $(\text{Out},\text{Fight})$. Both are Nash. But $(\text{Out},\text{Fight})$ survives only because the incumbent's threat to fight is never tested when the entrant stays out.
+Two gold cells: $(\text{In},\text{Accommodate})$ and $(\text{Out},\text{Fight})$. Both are pure Nash equilibria. But $(\text{Out},\text{Fight})$ survives only because the incumbent's threat to fight is never tested when the entrant stays out.
 
 <DefinitionAside label="subgame-perfect equilibrium">
 A strategy profile is subgame perfect if it is a Nash equilibrium in every subgame, not just in the game as a whole. Equivalently, it prescribes optimal play at every decision node, which is exactly what backward induction finds. Here only $(\text{In},\text{Accommodate})$ qualifies; the fight is not optimal in the subgame that follows entry.
@@ -129,7 +129,7 @@ Credibility has limits that are not on the blackboard. In the ultimatum game one
   slug="subgame-perfection"
   id="q1"
   badge="apply"
-  question="The entry game has two Nash equilibria in normal form. Which is subgame perfect, and why?"
+  question="The entry game has two pure Nash equilibria in normal form. Which is subgame perfect, and why?"
   options={[
     { text: "(Enter, Accommodate), because accommodating is optimal in the subgame after entry", correct: true, feedback: "Subgame perfection demands optimal play in every subgame. After entry, accommodating (1) beats fighting (0), so only (Enter, Accommodate) survives. (Stay out, Fight) leans on an untested threat." },
     { text: "(Stay out, Fight), because it deters entry", feedback: "It deters only if the entrant believes the fight, but fighting is not optimal after entry, so it is not subgame perfect. Deterrence here is not credible." },
@@ -157,7 +157,7 @@ Credibility has limits that are not on the blackboard. In the ultimatum game one
   badge="brings back: backward induction"
   question="How is finding a subgame-perfect equilibrium related to backward induction?"
   options={[
-    { text: "In a finite game of perfect information, backward induction produces exactly the subgame-perfect equilibrium", correct: true, feedback: "Both require optimal play at every node. Folding the tree from the end is the procedure; subgame perfection is the property that folding guarantees." },
+    { text: "In a finite game of perfect information with a unique best action at every node, backward induction produces the unique subgame-perfect equilibrium", correct: true, feedback: "With strict choices at every node, folding the tree from the end gives one strategy profile that is optimal in every subgame. Ties can instead produce several subgame-perfect equilibria." },
     { text: "They are unrelated methods that happen to agree", feedback: "They are the same idea. Backward induction is how you compute the subgame-perfect equilibrium in a perfect-information tree." },
     { text: "Backward induction finds all Nash equilibria, subgame perfection finds one", feedback: "Backward induction does not enumerate all Nash equilibria; it finds the subgame-perfect one by requiring optimality at each node." },
   ]}

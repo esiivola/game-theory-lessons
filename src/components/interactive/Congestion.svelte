@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let onA = $state(0); // drivers on road A
 
   const phi = $derived(potential(onA));
@@ -16,7 +17,7 @@
   function moveToA() { if (onA < N) onA += 1; }
   function moveToB() { if (onA > 0) onA -= 1; }
   function reset() { onA = 0; }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -29,11 +30,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <p class="setup">{N} drivers pick a road. Road A costs its number of users; road B is a flat {B_COST}. Move drivers and watch the potential.</p>
 
     <div class="roads">

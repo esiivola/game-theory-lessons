@@ -420,11 +420,11 @@ economic-game lab. The build split those into separate widgets per lesson (`Auct
 - **Misconceptions:** TTC gives everyone their first choice (scarcity forces compromises); TTC and DA coincide in school choice (TTC is efficient but can violate priorities); agents can gain by misreporting (it is strategy-proof).
 - **Source:** Shapley and Scarf (1974); Roth, Sönmez and Ünver (2004) for kidney exchange.
 
-### L47 Matching with contracts and design without money
-- **Example game:** Hatfield-Milgrom: contract terms (wage, hours) are part of each contract; under substitutes a cumulative offer process yields a stable allocation, and auctions are a special case. School-choice instance: students s1: A>B>C, s2: A>C>B, s3: B>A>C; priorities A: s2>s1>s3, B: s1>s3>s2, C: s3>s2>s1; student-proposing DA gives s2 to A, s1 to B, s3 to C. Real-world framing: Boston's 2005 switch to DA; kidney exchange without prices.
-- **Interactive:** "assign the seats": step student-proposing DA with school priorities and check stability; a Boston-mechanism toggle shows honest ranking getting punished; a contracts mode runs the cumulative offer process with a wage choice. Predict-then-reveal that DA is strategy-proof for students, Boston is not.
+### L47 School choice and design without money
+- **Example game:** students s1: A>B>C, s2: A>C>B, s3: B>A>C; priorities A: s2>s1>s3, B: s1>s3>s2, C: s3>s2>s1; student-proposing DA gives s2 to A, s1 to B, s3 to C. Real-world framing: Boston's 2005 switch to DA. Matching with contracts is introduced as a richer extension that needs contract terms and substitutable choice functions.
+- **Interactive:** "assign the seats": step student-proposing DA with school priorities and check stability; a Boston-mechanism toggle shows honest ranking getting punished. Predict-then-reveal that DA is strategy-proof for students, Boston is not.
 - **Worked example:** DA run: round 1 s1,s2 to A, s3 to B; A keeps s2, rejects s1; round 2 s1 to B, which prefers s1, rejects s3; round 3 s3 to A, rejected; round 4 s3 to C, accepted; result s2-A, s1-B, s3-C, stable.
-- **Misconceptions:** without money efficient fair assignment is impossible (DA/TTC achieve it); the Boston mechanism is best for families (it is manipulable); matching with contracts is unrelated to auctions (auctions are a special case).
+- **Misconceptions:** without money useful assignment guarantees are impossible; the Boston mechanism is best for families (it is manipulable); the school-choice model already proves results for matching with contracts (it does not).
 - **Source:** Hatfield and Milgrom (2005); Abdulkadiroğlu and Sönmez (2003).
 
 ## Unit 15, Evolution and learning
@@ -588,8 +588,8 @@ Milgrom; Ostrom; Tambe.
 ### A5 Co-opetition and platforms (inline after L11)
 - **Scenario:** Brandenburger-Nalebuff value net; complementors raise everyone's value (Wintel, consoles subsidizing hardware, two-sided card pricing, the ~30% app-store take); platform economics turns on cross-side network effects.
 - **Applies:** L7 (coordination), L11.
-- **Interactive:** run a two-sided platform, setting a price to each side; cross-side effects mean a low price on one side grows the other; total adoption and profit update live, showing why platforms subsidize one side.
-- **Worked example:** when each extra user makes the platform more valuable to developers and vice versa, the profit-maximising structure often prices one side below cost to ignite the network, then monetizes the other.
+- **Interactive:** run a symmetric two-sided platform, setting a price to each side; cross-side effects mean a low price on one side grows the other, while total adoption and profit show that a subsidy is not automatically optimal.
+- **Worked example:** the symmetric demonstration shows the cross-side spillover but makes a subsidy reduce profit. Subsidized pricing requires an asymmetry such as different demand, costs, or cross-side effects.
 - **Misconceptions:** competitors are only rivals (complementors expand the pie); each side should cover its own cost; bigger share always means more profit on a platform.
 - **Source:** Brandenburger and Nalebuff (1996); Rochet and Tirole (2003).
 
@@ -602,7 +602,7 @@ Milgrom; Ostrom; Tambe.
 - **Source:** Axelrod (1984).
 
 ### A7 Bargaining and negotiation (inline after L19) [strikes, BATNA]
-- **Scenario:** Rubinstein alternating offers over a shrinking pie; strikes and lockouts are the costly disagreement BATNA and Nash bargaining explain; a worse BATNA means a worse deal.
+- **Scenario:** Rubinstein alternating offers over a shrinking pie; strikes and lockouts create delay costs, while a BATNA is an outside option available if bargaining ends.
 - **Applies:** L18, L19.
 - **Interactive:** alternating-offers negotiation vs a bot with a shrinking pie (modeling a strike's cost); set offers and see how patience and the outside option move the split. Predict-then-reveal the equilibrium division.
 - **Worked example:** SPE gives the proposer 1/(1+δ), the responder δ/(1+δ); at δ=0.9, 0.526 vs 0.474; as δ to 1 it approaches 50/50; BATNAs truncate the range and shift the split toward the better alternative.
@@ -620,9 +620,9 @@ Milgrom; Ostrom; Tambe.
 ### A9 The commons (inline after L13) [Ostrom, climate]
 - **Scenario:** Hardin's tragedy vs Ostrom's Governing the Commons and her eight design principles; climate is a global public good with cross-national free-riding.
 - **Applies:** L13, L20.
-- **Interactive:** a shared fishery (or carbon budget) that the learner and bots harvest; overshoot the regeneration and the stock crashes; toggles for communication, monitoring, and graduated sanctions show Ostrom's principles rescue the resource (reuse the L60 engine with a regenerating stock).
-- **Worked example:** each fisher's private incentive is to take one more fish while the depletion cost is shared, so extraction overshoots the sustainable yield; adding monitoring plus graduated sanctions changes the payoff enough to restore cooperation, as Ostrom documented.
-- **Misconceptions:** the commons must be privatized or state-run (self-governance works); one big penalty deters best (graduated sanctions outperform); climate is unsolvable because it is a pure PD.
+- **Interactive:** a renewable fish stock that the learner and bots harvest; each round separately displays logistic growth, total harvest, and next stock. Monitoring plus graduated sanctions changes an explicitly disclosed bot behavior rule.
+- **Worked example:** with stock 60, capacity 100, and growth rate 0.8, growth is 19.2. Total catch above that reduces the stock; catch below it lets the stock recover. Sanctions can change incentives but do not guarantee sustainability.
+- **Misconceptions:** the commons must be privatized or state-run; a fishery is equivalent to a static public-goods pot; graduated sanctions guarantee restraint.
 - **Source:** Ostrom (1990); Hardin (1968).
 
 ### A10 Political economy (capstone) [median voter, lobbying]
@@ -644,7 +644,7 @@ Milgrom; Ostrom; Tambe.
 ### A12 Security games and multi-agent AI (capstone)
 - **Scenario:** Stackelberg security games (Tambe): the defender commits to a randomized patrol first, the attacker best-responds after surveillance; deployed as ARMOR (LAX), IRIS (air marshals), PROTECT (Coast Guard, with a QRE attacker); related AI: superhuman poker via counterfactual regret minimization.
 - **Applies:** L8, L15, L24, and L57 (QRE).
-- **Interactive:** allocate a limited patrol as coverage probabilities across targets; an attacker bot best-responds to the announced mix; a meter shows expected loss, and deterministic "guard the most valuable target" is exploitable while the right randomization minimizes worst-case loss; a QRE toggle for a noisy attacker.
+- **Interactive:** allocate a limited patrol as coverage probabilities across targets; an attacker bot best-responds to the announced mix; a meter shows expected loss, and deterministic "guard the most valuable target" is exploitable while the right randomization minimizes worst-case loss. QRE is discussed as a separate behavioral extension.
 - **Worked example:** two targets valued 10 and 5, one patrol unit (c1+c2=1); equalize attacker payoff (1-c1)·10 = (1-c2)·5 with c2=1-c1, giving c1=2/3, c2=1/3, expected loss ≈ 3.33; "always guard the $10 target" invites an attack on the $5 target for a loss of 5 > 3.33.
 - **Misconceptions:** always defend the highest-value target; predictable patrols are fine if frequent (surveillance makes any pattern exploitable); assume a perfectly rational attacker (QRE fits real adversaries).
 - **Source:** Tambe (2011).

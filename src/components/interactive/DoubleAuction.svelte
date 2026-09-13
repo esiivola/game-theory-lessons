@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let vb = $state(0.7); // buyer value
   let vs = $state(0.4); // seller cost
 
@@ -18,7 +19,7 @@
   const px = (v: number) => PAD + v * (S - 2 * PAD);
   const py = (v: number) => (S - PAD) - v * (S - 2 * PAD);
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { vb = 0.7; vs = 0.4; }
 </script>
 
@@ -32,11 +33,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="plot-wrap">
       <svg viewBox={`0 0 ${S} ${S}`} class="plot" role="img" aria-label="Buyer value against seller cost, with the trade region and the missed efficient band.">
         <!-- efficient (gains from trade) region: vb > vs, below the diagonal -->

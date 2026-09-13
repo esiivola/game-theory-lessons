@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let c = $state(0.5);      // cost of attacking
   let theta = $state(0.4);  // this economy's fundamental
 
@@ -18,7 +19,7 @@
   const W = 300, H = 46, PAD = 8;
   const sx = (v: number) => PAD + v * (W - 2 * PAD);
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { c = 0.5; theta = 0.4; }
 </script>
 
@@ -32,11 +33,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="plot-wrap">
       <svg viewBox={`0 0 ${W} ${H}`} class="plot" role="img" aria-label="The fundamentals line with the crisis threshold marked.">
         <rect x={sx(0)} y="10" width={sx(tStar) - sx(0)} height="18" rx="4" class="crisis" />

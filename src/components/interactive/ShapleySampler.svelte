@@ -10,6 +10,7 @@
   const exact = shapley(V, 3);
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let totals = $state<[number, number, number]>([0, 0, 0]);
   let samples = $state(0);
 
@@ -30,7 +31,7 @@
     totals = t; samples += k;
   }
   function reset() { totals = [0, 0, 0]; samples = 0; }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -43,11 +44,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <p class="setup">The Shapley value averages each player's marginal contribution over all the orders they could join. Sample random join orders and watch the averages settle.</p>
 
     <div class="bars">

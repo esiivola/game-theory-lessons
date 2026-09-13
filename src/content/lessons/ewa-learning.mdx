@@ -52,7 +52,7 @@ A learner with two dials: memory (how much past experience persists) and imagina
   predict={{
     question: 'Which learner homes in on the better action faster?',
     options: [{ key: 'reinforce', label: 'One that learns only from what it played' }, { key: 'belief', label: 'One that also weighs foregone payoffs' }],
-    reveal: 'The one that weighs foregone payoffs (belief learning, high imagination) converges fastest, since it learns about every action each round. Pure reinforcement (imagination near 0) is slower, waiting to stumble onto the better action. Real people fall in between.',
+    reveal: 'In this fixed-payoff example, the learner that weighs foregone payoffs identifies the better action quickly because it updates every option each round. That speed comparison is specific to the displayed environment, not a theorem for every game.',
   }}
 />
 </Section>
@@ -81,7 +81,7 @@ Setting $\delta = 0$ recovers reinforcement learning: an unchosen action receive
 <WorkedExample title="Turn the imagination dial">
 Suppose action A pays $6$ and action B would have paid $4$ this round, and you played A. Under $\delta = 0$ (reinforcement), only A's attraction takes in the payoff; B's carries no new information and simply fades as unsampled experience ages, so you learn nothing about B unless you try it. Under $\delta = 1$ (belief learning), both attractions update: A by $6$, B by $4$, so you immediately compare the two and lean toward A.
 
-The reinforcement learner may take many rounds to discover B is worse (or A is better than some third option), because it only updates what it samples. The belief learner corrects in one round. EWA's $\delta \approx 0.5$ estimate says people do learn from foregone payoffs, roughly half-weight, so they adapt faster than pure reinforcement but slower than full belief learning.
+In this fixed-payoff example, the reinforcement learner may take many rounds to discover B is worse because it only updates what it samples. The belief learner sees both counterfactual payoffs each round. In changing or strategic environments, higher $\delta$ need not always produce faster or better learning, so the graph demonstrates the mechanism rather than a general ranking.
 </WorkedExample>
 </Section>
 

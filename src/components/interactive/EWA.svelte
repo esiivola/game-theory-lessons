@@ -1,14 +1,15 @@
 <script lang="ts">
-  import { ewaUpdate, choiceProbs, type EwaState } from '@/engines/ewa';
+  import { ewaUpdate, choiceProbs, sampleChoice, type EwaState } from '@/engines/ewa';
 
   interface Predict { question: string; options: { key: string; label: string }[]; reveal: string; }
   let { exhibit = '', caption = '', predict = null }:
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let phi = $state(0.9);   // memory
   let delta = $state(0.5); // weight on foregone payoffs
-  const lambda = 1.5, rho = 0.9;
+  const lambda = 1.5;
   // Two actions; action 0 is the better one (payoff 6 vs 4 when chosen), but the model only
   // learns about the unchosen action to the extent delta allows.
   const PAYOFFS = [6, 4];
@@ -16,12 +17,16 @@
   // Simulate a learner over rounds: it plays action 0 with prob p, updates attractions.
   const trace = $derived.by(() => {
     let s: EwaState = { A: [0, 0], N: 1 };
+    let seed = 2463534242;
+    const rng = () => {
+      seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5;
+      return (seed >>> 0) / 4294967296;
+    };
     const probs: number[] = [];
     for (let t = 0; t < 30; t++) {
-      const p = choiceProbs(s.A, lambda)[0];
-      probs.push(p);
-      const played = p >= 0.5 ? 0 : 1; // deterministic play toward the better-looking action
-      s = ewaUpdate(s, played, PAYOFFS, phi, delta, rho);
+      const choices = choiceProbs(s.A, lambda);
+      probs.push(choices[0]);
+      s = ewaUpdate(s, sampleChoice(choices, rng), PAYOFFS, phi, delta, phi);
     }
     return probs;
   });
@@ -32,7 +37,7 @@
   const path = $derived(trace.map((p, i) => `${i === 0 ? 'M' : 'L'} ${sx(i).toFixed(1)} ${sy(p).toFixed(1)}`).join(' '));
   const r2 = (x: number) => Math.round(x * 100) / 100;
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { phi = 0.9; delta = 0.5; }
 </script>
 
@@ -46,11 +51,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="plot-wrap">
       <svg viewBox={`0 0 ${W} ${H}`} class="plot" role="img" aria-label="Probability of choosing the better action over rounds.">
         <line x1={PADL} y1={PADT} x2={PADL} y2={H - PADB} class="ax" />
@@ -67,9 +76,9 @@
 
     <div class="readout" aria-live="polite">
       {#if delta < 0.15}
-        At &delta; near 0 this is pure reinforcement learning: only the action actually played is updated, so learning is slow and depends on stumbling onto the better action.
+        At &delta; near 0 this is reinforcement learning: only the sampled action is updated. The fixed random sequence in this demonstration lets either action be tried rather than resolving every tie in favour of action 0.
       {:else if delta > 0.85}
-        At &delta; near 1 this is belief learning (fictitious play): every action is updated by the payoff it would have earned, so the learner homes in on the better action fast.
+        At &delta; near 1, with &phi; also used for experience decay, every action is updated by the payoff it would have earned. In this fixed-payoff example that reveals the better action quickly.
       {:else}
         In between, the learner weights foregone payoffs partly, about half. Estimated human values sit here: people learn from counterfactuals, but discount them relative to experienced outcomes.
       {/if}

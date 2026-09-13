@@ -90,7 +90,7 @@ Minimizing that maximum, subject to $x_1 + x_2 + x_3 = 1$, forces the shares equ
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">The nucleolus minimizes the largest complaint, then the next, giving a unique division even when the core is empty. It reconstructs the Talmud's bankruptcy rule, and coincides with the Shapley value only in symmetric games.</Callout>
+<Callout kind="key-idea">The nucleolus lexicographically minimizes coalition complaints, giving a unique division even when the core is empty. Symmetry forces it to agree with the Shapley value in this majority game, but symmetry alone does not make the two rules identical in every game.</Callout>
 </Section>
 
 <Section id="quiz">
@@ -129,7 +129,7 @@ Minimizing that maximum, subject to $x_1 + x_2 + x_3 = 1$, forces the shares equ
   badge="brings back: Shapley value"
   question="The nucleolus and the Shapley value both gave (1/3,1/3,1/3) here. Do they always agree?"
   options={[
-    { text: "No: they coincide in symmetric games but generally differ, as in the Talmud bankruptcy example", correct: true, feedback: "Symmetry forces both to the equal split here. In asymmetric games they diverge: the nucleolus minimizes complaints, the Shapley value averages marginal contributions, and these are different principles." },
+    { text: "No: symmetry forces agreement in this particular game, but the two rules can differ in other games", correct: true, feedback: "Here every player is interchangeable, so both rules give one third. In general the nucleolus minimizes complaints while the Shapley value averages marginal contributions, and neither rule determines the other." },
     { text: "Yes, they are always identical", feedback: "They are distinct solution concepts. Agreement here is due to symmetry, not a general rule." },
     { text: "No, they never agree", feedback: "They can agree, as this symmetric game shows. They just are not guaranteed to in general." },
   ]}

@@ -7,9 +7,10 @@
 
   const TOWNS = 6;
   const MU0 = 0.2;        // prior that the incumbent is tough
-  const FIGHT_PROB = 0.85; // a normal incumbent fights this often while defending its reputation
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
+  let fightProb = $state(0.85);
   let tough = $state(Math.random() < MU0); // hidden type, fixed for the run
   let revealed = $state(false);            // has the normal type been caught accommodating?
   let mu = $state(MU0);                    // entrant's posterior that the incumbent is tough
@@ -19,13 +20,13 @@
   let done = $state(false);
 
   const isLast = $derived(town === TOWNS);
-  const normalFightProb = $derived(isLast ? 0 : FIGHT_PROB); // no future to protect in the last town
+  const normalFightProb = $derived(isLast ? 0 : fightProb); // no future to protect in the last town
   const pct = (x: number) => Math.round(x * 100) + '%';
 
   function respond(): Response {
     if (tough) return 'fight';
     if (revealed || isLast) return 'accommodate';
-    return Math.random() < FIGHT_PROB ? 'fight' : 'accommodate';
+    return Math.random() < fightProb ? 'fight' : 'accommodate';
   }
   function advance() { if (town >= TOWNS) { done = true; } else { town += 1; } }
 
@@ -44,9 +45,9 @@
     advance();
   }
   function reset() {
-    tough = Math.random() < MU0; revealed = false; mu = MU0; town = 1; score = 0; log = []; done = false;
+    tough = Math.random() < MU0; fightProb = 0.85; revealed = false; mu = MU0; town = 1; score = 0; log = []; done = false;
   }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 
   const ev = $derived(entryValue(mu, normalFightProb));
 </script>
@@ -61,11 +62,16 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
+    <label class="slider"><span class="slab">Illustrative chance a normal incumbent fights before the last town: <b class="mono">{pct(fightProb)}</b></span><input type="range" min="0" max="1" step="0.05" bind:value={fightProb} disabled={log.length > 0} aria-label="Normal incumbent fight probability" /></label>
     <div class="rep">
       <span class="rlab">Chance the incumbent is tough</span>
       <span class="rbar"><i style={`width:${mu * 100}%`}></i></span>
@@ -108,6 +114,9 @@
 </div>
 
 <style>
+  .slider { display: block; margin: 2px 0 12px; }
+  .slab { display: block; margin-bottom: 6px; color: var(--ink-muted); font-size: 12px; }
+  .slider input { width: 100%; accent-color: var(--accent); }
   .rep { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "lab val" "bar bar"; gap: 4px 10px; margin-bottom: 14px; }
   .rlab { grid-area: lab; font-size: 11.5px; font-weight: 600; color: var(--ink-muted); }
   .rval { grid-area: val; font-size: 12px; }

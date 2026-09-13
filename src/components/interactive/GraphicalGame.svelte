@@ -17,6 +17,7 @@
   };
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let which = $state<'Star' | 'Six-cycle'>('Star');
   let provides = $state<Set<string>>(new Set());
 
@@ -34,7 +35,7 @@
   function toggle(n: string) { const s = new Set(provides); s.has(n) ? s.delete(n) : s.add(n); provides = s; }
   function run() { provides = settle(provides, graph); }
   function setGraph(w: 'Star' | 'Six-cycle') { which = w; provides = new Set(); }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -47,11 +48,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="seg" role="group" aria-label="Network">
       <button class={which === 'Star' ? 'on' : ''} onclick={() => setGraph('Star')}>Star</button>
       <button class={which === 'Six-cycle' ? 'on' : ''} onclick={() => setGraph('Six-cycle')}>Six-cycle</button>
@@ -73,7 +78,7 @@
 
     <div class={'verdict ' + (eq ? 'yes' : 'no')} aria-live="polite">
       {#if eq}
-        Equilibrium: providers form a maximal independent set. {provides.size} node{provides.size === 1 ? '' : 's'} provide, the rest free-ride off a neighbour. {which === 'Star' ? 'On the star, the hub provides for everyone, so society pays just 1.' : 'On the six-cycle, providers alternate, so three must provide: the same rule, triple the cost.'}
+        Equilibrium: providers form a maximal independent set. {provides.size} node{provides.size === 1 ? '' : 's'} provide, the rest free-ride off a neighbour. {which === 'Star' ? 'On the star, the hub provides for everyone, so society pays just 1.' : 'The six-cycle has equilibria with two opposite providers and with three alternating providers, so the starting state and update order matter.'}
       {:else}
         Not an equilibrium yet: some node is either providing next to another provider, or free-riding with no provider neighbour. Let them best-respond.
       {/if}

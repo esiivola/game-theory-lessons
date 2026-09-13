@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let x = $state(3 / 7); // rate at which an innocent defendant is flagged "guilty"
 
   const post = $derived(posteriorGuilty(x));
@@ -14,7 +15,7 @@
   const xStar = optimalFalsePositive();
   const pct = (v: number) => Math.round(v * 100) + '%';
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { x = 3 / 7; }
 </script>
 
@@ -28,11 +29,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="belief-bar" aria-hidden="true">
       <span class="fill" style={`width:${post * 100}%`} class:convict={convicts}></span>
       <span class="thresh" style={`left:${THRESH * 100}%`}></span>

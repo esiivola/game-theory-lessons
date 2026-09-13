@@ -68,7 +68,7 @@ With everyone perfectly informed of the same fundamental, there is a middle rang
 <Section id="math">
 ## The math
 
-The regime collapses if the mass of attackers reaches the fundamental $\theta$; attacking costs $c$ and pays off only if the regime falls. Under complete information, for intermediate $\theta$ there are two equilibria (everyone attacks, or no one does). Now let each speculator $i$ see a private signal $x_i = \theta + \text{noise}$.
+The regime collapses if the mass of attackers reaches the fundamental $\theta$; attacking costs $c$ and pays off only if the regime falls. Under complete information, for intermediate $\theta$ there are two equilibria (everyone attacks, or no one does). The benchmark assumes a diffuse uniform prior over $\theta$ and independent additive private noise that becomes arbitrarily small: each speculator observes $x_i=\theta+\varepsilon_i$. These assumptions generate the Laplacian belief used below.
 
 <DefinitionAside label="global game">
 A global game is a coordination game where each player observes a payoff-relevant state with idiosyncratic error. In the canonical currency-attack model, under its monotonicity and signal assumptions, small private noise yields a unique equilibrium in threshold strategies: attack iff your signal is below a cutoff. The noise prevents players' information from being common knowledge, which pins down higher-order beliefs. Other global games need not have this exact threshold or uniqueness result.
@@ -89,7 +89,7 @@ The regime falls exactly when $\theta < \theta^*$. With $c = \tfrac12$, $\theta^
 <WorkedExample title="Find the crisis threshold">
 Consider the marginal speculator, the one whose signal sits exactly at the switching cutoff. A key property of the global-games limit is that this agent's posterior over the fraction $\ell$ of others who attack is uniform on $[0,1]$. Its best estimate of the fundamental is its own signal, $\theta^*$, and the regime falls when $\ell \ge \theta^*$, an event of probability $1 - \theta^*$.
 
-Attacking pays $1$ if the regime falls and costs $c$ either way, so the marginal agent is indifferent when $1 - \theta^* = c$, giving the fundamental threshold $\theta^* = 1 - c$. At $c = \tfrac12$ this is $\tfrac12$: economies with $\theta < \tfrac12$ collapse, those above survive. Halve the cost to $c = \tfrac14$ and $\theta^* = \tfrac34$: now three-quarters of economies are vulnerable. Cheaper attacking makes crises more likely.
+Attacking pays $1$ if the regime falls and costs $c$ either way, so the marginal agent is indifferent when $1 - \theta^* = c$, giving the fundamental threshold $\theta^* = 1 - c$. At $c = \tfrac12$ this is $\tfrac12$. Halve the cost to $c = \tfrac14$ and the threshold becomes $\tfrac34$. Calling that “three-quarters of economies” additionally requires fundamentals to be uniformly distributed on $[0,1]$; the strategic result itself is the cutoff, not a population frequency.
 </WorkedExample>
 </Section>
 

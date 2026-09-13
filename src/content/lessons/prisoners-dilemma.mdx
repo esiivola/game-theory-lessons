@@ -73,11 +73,13 @@ Cutting pays more for you whatever the other owner does. If they hold, cutting w
 
 Write the game in normal form as $G=(N,(S_i),(u_i))$: players $N=\{1,2\}$, a strategy set $S_i=\{C,D\}$ for each (hold or cut), and a payoff $u_i$ for every pair of choices.
 
-Label the four payoffs with the usual names: $R$ for both holding (reward), $T$ for cutting against a holder (temptation), $P$ for both cutting (punishment), $S$ for holding against a cutter (sucker). Here $R=3,\ T=5,\ P=1,\ S=0$, which meet the two conditions that make it a Prisoner's Dilemma:
+Label the four payoffs with the usual names: $R$ for both holding (reward), $T$ for cutting against a holder (temptation), $P$ for both cutting (punishment), $S$ for holding against a cutter (sucker). The ranking that defines a Prisoner's Dilemma is
 
 $$
-T > R > P > S \quad\text{and}\quad 2R > T + S.
+T > R > P > S.
 $$
+
+Here $R=3,\ T=5,\ P=1,\ S=0$. Repeated-game versions often add $2R>T+S$. That extra condition says two rounds of mutual cooperation beat taking turns exploiting one another. It is useful for studying sustained cooperation, but it is not part of the one-shot definition.
 
 Cutting strictly dominates holding, since the cutter does better against either move ($5>3$ and $1>0$):
 

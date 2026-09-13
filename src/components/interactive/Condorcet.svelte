@@ -13,6 +13,7 @@
   const permIndex = (r: Rank) => PERMS.findIndex((p) => p.join() === r.join());
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   // Start on the classic cycle.
   let voters = $state<Rank[]>([['A', 'B', 'C'], ['B', 'C', 'A'], ['C', 'A', 'B']]);
 
@@ -26,7 +27,7 @@
     const next = PERMS[(cur + 1) % PERMS.length];
     voters = voters.map((v, j) => (j === i ? next : v));
   }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -39,11 +40,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="voters">
       {#each voters as v, i}
         <button class="voter" onclick={() => cycleVoter(i)} aria-label={`Voter ${i + 1} ranking, tap to change`}>

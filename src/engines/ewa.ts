@@ -24,3 +24,13 @@ export function choiceProbs(A: number[], lambda: number): number[] {
   const s = ex.reduce((p, q) => p + q, 0);
   return ex.map((e) => e / s);
 }
+
+export function sampleChoice(probs: number[], rng: () => number = Math.random): number {
+  const draw = rng();
+  let cumulative = 0;
+  for (let i = 0; i < probs.length; i++) {
+    cumulative += probs[i];
+    if (draw < cumulative) return i;
+  }
+  return probs.length - 1;
+}

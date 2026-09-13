@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let p = $state(0.6); // prior that the sender is a Friend
 
   // On the path of "both types give", Bayes fixes the belief after a gift at the prior p.
@@ -15,7 +16,7 @@
   const pct = (x: number) => Math.round(x * 100) + '%';
   const r2 = (x: number) => Math.round(x * 100) / 100;
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { p = 0.6; }
 </script>
 
@@ -29,11 +30,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <label class="slider">
       <span class="slab">Prior that the sender is a Friend: <b class="mono">{pct(p)}</b></span>
       <input type="range" min="0" max="1" step="0.01" bind:value={p} aria-label="Prior probability the sender is a Friend" />

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { coopFraction, avgPayoff, simulate } from './monitoring';
+import { coopFraction, avgPayoff, detersDeviation, simulate } from './monitoring';
 
 describe('coopFraction', () => {
   it('is 1/(1+qT) for finite punishment', () => {
@@ -21,6 +21,13 @@ describe('avgPayoff', () => {
   it('blends reward and punishment by the cooperative fraction', () => {
     // q=0.1, T=5 -> f=0.667; R=3, P=1 -> 0.667*3 + 0.333*1 = 2.333
     expect(avgPayoff(0.1, 5, 3, 1)).toBeCloseTo(2 / 3 * 3 + 1 / 3 * 1, 6);
+  });
+});
+
+describe('deviation incentives', () => {
+  it('uses the increase in bad-signal probability, not false alarms alone', () => {
+    expect(detersDeviation(0.1, 0.8, 4, 0.9, 5, 3, 1)).toBe(true);
+    expect(detersDeviation(0.1, 0.15, 4, 0.9, 5, 3, 1)).toBe(false);
   });
 });
 

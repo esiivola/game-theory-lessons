@@ -7,6 +7,7 @@
 
   const VOTERS = [0.1, 0.2, 0.35, 0.5, 0.65, 0.8, 0.9];
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let x1 = $state(0.35);
   let x2 = $state(0.65);
 
@@ -17,7 +18,7 @@
   const W = 300, H = 70, PAD = 16;
   const sx = (v: number) => PAD + v * (W - 2 * PAD);
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { x1 = 0.35; x2 = 0.65; }
 </script>
 
@@ -30,10 +31,14 @@
     <div class="predict">
       <div class="q">{predict.question}</div>
       <div class="opts">
-        {#each predict.options as o}<button onclick={onPredict}>{o.label}</button>{/each}
+        {#each predict.options as o}<button onclick={() => onPredict(o.label)}>{o.label}</button>{/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="plot-wrap">
       <svg viewBox={`0 0 ${W} ${H}`} class="plot" role="img" aria-label="Voters on a left-right line with two candidate positions.">
         <line x1={PAD} y1="40" x2={W - PAD} y2="40" class="axis" />

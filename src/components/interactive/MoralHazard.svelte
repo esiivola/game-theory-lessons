@@ -6,17 +6,19 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let base = $state(0);
   let bonus = $state(20);
+  const strictBonus = 38;
 
   const effort = $derived(effortChoice(bonus));
   const util = $derived(agentUtility(base, bonus));
   const profit = $derived(principalProfit(base, bonus));
-  const icMet = $derived(bonus >= minBonusForEffort);
+  const icMet = $derived(bonus > minBonusForEffort);
   const irMet = $derived(util >= 0);
   const r1 = (x: number) => Math.round(x * 10) / 10;
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { base = 0; bonus = 20; }
 </script>
 
@@ -30,11 +32,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <label class="slider">
       <span class="slab">Base pay (paid either way): <b class="mono">{r1(base)}</b></span>
       <input type="range" min="0" max="60" step="1" bind:value={base} aria-label="Base pay" />
@@ -57,14 +63,14 @@
     <div class="readout" aria-live="polite">
       {#if !icMet}
         The bonus is too small to motivate effort (it needs to reach {minBonusForEffort}). The agent shirks, high output is unlikely, and profit is only {r1(profit)}.
-      {:else if base === 0 && Math.abs(bonus - minBonusForEffort) < 0.5}
-        This is the profit-maximising contract: base 0, bonus {minBonusForEffort}. Profit is {r1(profit)}, above the {r1(principalProfit(0, 0))} you get by not motivating effort. The agent keeps a rent of {r1(util)}, which is exactly what moral hazard costs the principal.
+      {:else if base === 0 && bonus === strictBonus}
+        This contract strictly motivates effort: base 0, bonus {strictBonus}. Profit is {r1(profit)}, above the {r1(principalProfit(0, 0))} you get by not motivating effort. At exactly {minBonusForEffort} the agent is indifferent, so this example does not assume a favourable tie-break.
       {:else}
-        Effort is motivated, but you are overpaying. Extra base or bonus beyond the minimum just hands the agent more rent and cuts your profit. Trim toward base 0, bonus {minBonusForEffort}.
+        Effort is motivated, but you are paying more than the smallest slider value that strictly clears the threshold. Trim toward base 0, bonus {strictBonus}.
       {/if}
     </div>
 
-    <div class="play"><button class="tinybtn" onclick={() => { base = 0; bonus = minBonusForEffort; }}>Optimal contract</button><button class="tinybtn" onclick={reset}>Reset</button></div>
+    <div class="play"><button class="tinybtn" onclick={() => { base = 0; bonus = strictBonus; }}>Strict incentive contract</button><button class="tinybtn" onclick={reset}>Reset</button></div>
   {/if}
 </div>
 

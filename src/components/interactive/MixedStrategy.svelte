@@ -25,6 +25,7 @@
   } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let p = $state(0.5);
 
   const crossing = mode === 'security' ? securityP(matrix) : indifferenceP(matrix);
@@ -48,7 +49,7 @@
 
   const guaranteed = $derived(Math.min(now[0], now[1]));
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { p = 0.5; }
 </script>
 
@@ -62,11 +63,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="plot-wrap">
       <svg viewBox={`0 0 ${W} ${H}`} class="plot" role="img"
            aria-label={`Two lines over your probability of ${topLabel}. ${mode === 'security' ? 'Each line is the payoff you can guarantee against one of the column player\'s replies.' : 'Each line is the column player\'s expected payoff to one of its actions.'}`}>

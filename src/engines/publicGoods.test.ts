@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { payoff, mpcr } from './publicGoods';
+import { payoff, mpcr, applyPunishment } from './publicGoods';
 
 // Course numbers: n = 4, endowment 10, multiplier 1.6, so MPCR = 0.4.
 const e = 10, factor = 1.6, n = 4;
@@ -7,6 +7,12 @@ const e = 10, factor = 1.6, n = 4;
 describe('mpcr', () => {
   it('is factor / n', () => {
     expect(mpcr(factor, n)).toBeCloseTo(0.4);
+  });
+});
+
+describe('costly punishment', () => {
+  it('charges the punisher and reduces the target by the stated multiplier', () => {
+    expect(applyPunishment(18, 22, 2)).toEqual({ punisher: 16, target: 16 });
   });
 });
 

@@ -30,7 +30,7 @@ import SecurityGame from '@/components/interactive/SecurityGame.svelte';
 
 # Security games and multi-agent AI
 
-<p class="lead">A defender with too few resources must commit first to a patrol; an attacker surveils, then strikes the weak point. This is a Stackelberg security game, and its lesson is sharp: the right randomization minimizes worst-case loss, while defending only the most valuable target is exploitable. The same equilibrium reasoning powers superhuman poker AI.</p>
+<p class="lead">A defender with too few resources commits first to a patrol; an attacker observes the coverage policy, then chooses a target. This is a Stackelberg security game. The lesson's zero-sum example uses a minimax mix. Real security systems and poker agents require different models and different solution methods.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -71,7 +71,7 @@ Because the attacker moves second, after watching, any deterministic patrol is a
 ## The real deployments
 
 <DefinitionAside label="Stackelberg security games (Tambe)">
-Milind Tambe's group turned this into deployed systems: ARMOR schedules checkpoints and canine patrols at LAX, IRIS assigns federal air marshals to flights, and PROTECT sets US Coast Guard patrols using a quantal-response model of the attacker. All solve a Stackelberg game where the defender commits to a randomized coverage and the attacker best-responds after surveillance. The same equilibrium computation underlies superhuman poker: counterfactual regret minimization (CFR) approximates a Nash equilibrium of a huge imperfect-information game, which is why the bots are unexploitable rather than merely clever.
+Milind Tambe's group developed deployed systems including ARMOR for LAX, IRIS for federal air marshals, and PROTECT for Coast Guard patrols. These systems model a defender committing to randomized coverage before an attacker responds. Some behavioral security models use quantal response rather than a perfect best response. Poker is a separate application: counterfactual regret minimization (CFR) is an iterative regret-minimization algorithm for large extensive-form imperfect-information games. Low regret can approximate Nash play in two-player zero-sum settings. QRE and CFR are not the same solution concept or algorithm.
 </DefinitionAside>
 
 Two targets worth $10$ and $5$, one patrol unit split as coverage $c_1 + c_2 = 1$. Equalize the attacker's payoff across targets: an attack on target $i$ succeeds only when uncovered, so set $(1 - c_1)\cdot 10 = (1 - c_2)\cdot 5$. With $c_2 = 1 - c_1$ this gives $c_1 = 2/3$ and $c_2 = 1/3$, and the expected loss is $(1 - 2/3)\cdot 10 = 10/3 \approx 3.33$. Compare "always guard the $10$": the attacker hits the undefended $5$ for a certain loss of $5 > 3.33$. Randomizing to equalize the attacker's options is strictly better. If the attacker is noisy rather than perfectly rational, a QRE model spreads attack probability across targets and shifts the optimal coverage accordingly, which is what the fielded systems use.
@@ -90,7 +90,7 @@ Now equalize. Cover the $10$ with probability $c_1$ and the $5$ with $c_2 = 1 - 
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">When a defender commits first and an attacker surveils, the right randomized patrol equalizes the attacker's options and minimizes worst-case loss; always guarding the top target is exploitable. Deployed systems (LAX, air marshals) and superhuman poker both solve for these equilibria, using QRE and CFR for realistic, unexploitable play.</Callout>
+<Callout kind="key-idea">When a defender commits first and an attacker observes coverage, randomization removes a guaranteed soft target. In this zero-sum example, equalizing the attacker's options gives the minimax mix. Behavioral security models may use QRE; poker agents may use CFR. Those are distinct tools.</Callout>
 </Section>
 
 <Section id="quiz">

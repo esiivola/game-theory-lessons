@@ -45,7 +45,7 @@ import Rubinstein from '@/components/interactive/Rubinstein.svelte';
 <Section id="play">
 ## Predict, then play
 
-Negotiate against a bot over a pie that shrinks with every round of delay. Tune the discount factor, propose a split, and see what the bot will accept. Outside options enter below, in the worked example.
+Negotiate against a bot over a pie that shrinks with every round of delay. Tune both players' discount factors, propose a split, and see what the bot will accept. Outside options enter below, in the worked example.
 
 <Rubinstein
   client:visible
@@ -63,7 +63,7 @@ Negotiate against a bot over a pie that shrinks with every round of delay. Tune 
 ## Why did that happen?
 
 <Callout kind="ask">
-Each side can reject and counter, but rejecting costs a round of shrinkage. A patient player (delta near 1) barely minds waiting, so they can hold out for more; an impatient player (low delta) settles quickly and cheaply. The subgame-perfect split balances these exactly. Outside options set the floor: no one accepts less than their BATNA, so a better alternative pulls the split your way, and a worse one pushes it away. Strikes and lockouts are the BATNA made visible, the costly disagreement point that disciplines both sides. When information is symmetric, rational players settle immediately; strikes happen mostly because of asymmetric information about what the other side can bear.
+Each side can reject and counter, but rejecting costs a round of shrinkage. A patient player (delta near 1) barely minds waiting, so they can hold out for more; an impatient player (low delta) settles quickly and cheaply. The subgame-perfect split balances these exactly. Outside options set a floor only when they exceed the continuation value from bargaining. A strike or lockout is a costly period of disagreement, not itself an outside option. When information is complete in this model, the parties settle immediately. Delays require an added friction, such as private information.
 </Callout>
 </Section>
 
@@ -71,7 +71,7 @@ Each side can reject and counter, but rejecting costs a round of shrinkage. A pa
 ## The real strategy
 
 <DefinitionAside label="Rubinstein alternating offers, and Nash bargaining">
-In Rubinstein's model two players alternate offers over a pie of size 1, discounting the future by delta each round. The unique subgame-perfect equilibrium gives the proposer $1/(1+\delta)$ and the responder $\delta/(1+\delta)$, agreed in the first round. As $\delta \to 1$ this approaches the 50/50 Nash bargaining solution. Outside options (BATNAs) truncate the range: if a side can walk away for a known value, no deal below it is accepted, which shifts the equilibrium split toward whoever has the better alternative.
+In Rubinstein's model, player 1 discounts by $\delta_1$ and player 2 by $\delta_2$. The unique subgame-perfect equilibrium gives the first proposer $(1-\delta_2)/(1-\delta_1\delta_2)$ and the responder $\delta_2(1-\delta_1)/(1-\delta_1\delta_2)$, agreed in the first round. With equal patience $\delta_1=\delta_2=\delta$, these reduce to $1/(1+\delta)$ and $\delta/(1+\delta)$. An outside option changes the solution only when it exceeds the continuation payoff it replaces.
 </DefinitionAside>
 
 At $\delta = 0.9$ the proposer gets $1/1.9 \approx 0.526$ and the responder $0.9/1.9 \approx 0.474$. The first-mover advantage is real but small, and it shrinks to nothing as both sides grow patient. Change a BATNA and the whole split moves: improve your outside option and you capture more; worsen it and you concede. That is why negotiators spend more effort improving their alternatives than polishing their arguments. Strikes are not proof that bargaining is irrational; with full information the parties would settle at once. They arise when each side is unsure of the other's true reservation value and testing that costs a round of the shrinking pie.
@@ -83,14 +83,14 @@ At $\delta = 0.9$ the proposer gets $1/1.9 \approx 0.526$ and the responder $0.9
 <WorkedExample title="Patience, BATNA, and the split">
 Start with no outside options and $\delta = 0.9$. The proposer offers themselves $1/(1+\delta) = 0.526$ and the responder $0.474$, and the responder accepts, because rejecting and countering next round would give them only $0.526$ of a pie already shrunk by $0.9$, which is worse. As $\delta \to 1$, both approach $0.5$: patience erases the first-mover edge.
 
-Now give the responder a BATNA of $0.4$: an outside deal worth $0.4$ if talks collapse. Any split offering them less than $0.4$ is rejected, so the equilibrium share cannot fall below $0.4$; the responder's slice rises toward their alternative and the proposer concedes. Improve the responder's BATNA further and they capture still more. A strike is this outside option in action: by absorbing the cost of no agreement, a side signals what it can endure, and the settlement moves accordingly, most sharply when neither is sure of the other's limit.
+At equal $\delta=0.9$, the responder already receives about $0.474$, so a BATNA of $0.4$ does not bind and changes nothing. Give the responder a BATNA of $0.6$ instead: rejecting for that outside deal is better than continuation, so any acceptable agreement must give at least $0.6$. A strike is a period of disagreement with lost output and wages, not itself a BATNA. Another job offer or an alternative supplier is a BATNA; strike costs affect delay payoffs and may reveal private information about willingness to wait.
 </WorkedExample>
 </Section>
 
 <Section id="key">
 ## Key idea
 
-<Callout kind="key-idea">In alternating-offers bargaining the split is set by patience and by each side's BATNA, not by who moves first or argues hardest. The first-mover edge fades as both grow patient, a better outside option wins a better deal, and strikes come from asymmetric information, not irrationality.</Callout>
+<Callout kind="key-idea">In alternating-offers bargaining, patience, move order, and any binding outside option affect the split. The first-mover edge fades as both grow patient. Delay does not arise in the complete-information benchmark, so strikes require an added friction such as private information.</Callout>
 </Section>
 
 <Section id="quiz">

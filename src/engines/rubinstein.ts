@@ -17,6 +17,10 @@ export function proposerShareTwoSided(d1: number, d2: number): number {
   return (1 - d2) / (1 - d1 * d2);
 }
 
+export function responderShareTwoSided(d1: number, d2: number): number {
+  return 1 - proposerShareTwoSided(d1, d2);
+}
+
 /**
  * Whether the responder accepts an offer giving them `offerToResponder`, playing the SPE:
  * accept iff it is at least their continuation value from rejecting, delta/(1+delta).

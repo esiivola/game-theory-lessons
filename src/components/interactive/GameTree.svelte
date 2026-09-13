@@ -11,6 +11,7 @@
   }: { tree: Tree; players?: [string, string] | string[]; exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let path = $state<number[]>([]);
   let solved = $state(false);
 
@@ -98,7 +99,7 @@
 
   function choose(i: number) { if (!solved) path = [...path, i]; }
   function reset() { path = []; solved = false; }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   const fmt = (p: [number, number]) => `(${p[0]}, ${p[1]})`;
 </script>
 
@@ -112,11 +113,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="plot-wrap">
       <svg viewBox={`0 0 ${W} ${H}`} class="tree" role="img" aria-label="Game tree; use the buttons below to walk it or solve it backward.">
         {#each L.edges as e}

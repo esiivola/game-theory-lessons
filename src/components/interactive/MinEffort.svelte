@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let effort = $state(5);
   let bots = $state<number[]>([3, 5, 6]); // teammates; they herd to the last round's weakest link
   let round = $state(0);
@@ -24,7 +25,7 @@
     bots = bots.map(() => groupMin);
   }
   function reset() { effort = 5; bots = [3, 5, 6]; round = 0; history = []; }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -37,11 +38,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <label class="slider">
       <span class="slab">Your effort: <b class="mono">{effort}</b> <span class="dim">(1 to 7)</span></span>
       <input type="range" min="1" max="7" step="1" bind:value={effort} aria-label="Your effort level" />

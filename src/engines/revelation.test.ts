@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fpaBidTwo, winProb, interimPayment, interimSurplus } from './revelation';
+import { directSurplus, fpaBidTwo, winProb, interimPayment, interimSurplus } from './revelation';
 
 describe('first-price outcome and its direct equivalent', () => {
   it('bids v/2, wins with probability v', () => {
@@ -12,5 +12,10 @@ describe('first-price outcome and its direct equivalent', () => {
   });
   it('surplus is also v^2 / 2', () => {
     expect(interimSurplus(0.6)).toBeCloseTo(0.18);
+  });
+  it('makes truthful reporting optimal in the direct mechanism', () => {
+    expect(directSurplus(0.6, 0.6)).toBeCloseTo(0.18);
+    expect(directSurplus(0.6, 0.3)).toBeLessThan(directSurplus(0.6, 0.6));
+    expect(directSurplus(0.6, 0.9)).toBeLessThan(directSurplus(0.6, 0.6));
   });
 });

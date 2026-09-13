@@ -2,15 +2,11 @@
 import { getCollection, render } from 'astro:content';
 import LessonLayout from '@/layouts/LessonLayout.astro';
 import { withBase } from '@/config/site';
-
-const tierOrder: Record<string, number> = { basic: 0, intermediate: 1, expert: 2, applied: 3 };
+import { orderLessons } from '@/lib/lessonOrder';
 
 export async function getStaticPaths() {
-  const order: Record<string, number> = { basic: 0, intermediate: 1, expert: 2, applied: 3 };
   const all = await getCollection('lessons');
-  const sorted = all.sort(
-    (a, b) => (order[a.data.tier] - order[b.data.tier]) || a.data.order - b.data.order
-  );
+  const sorted = orderLessons(all);
   return sorted.map((entry, i) => ({
     params: { slug: entry.id },
     props: { entry, next: sorted[i + 1] ?? null, total: sorted.length },

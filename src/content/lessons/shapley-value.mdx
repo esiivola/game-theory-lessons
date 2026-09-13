@@ -133,7 +133,7 @@ Average: $(0 + 0 + 100 + 100 + 100 + 100)/6 = 400/6 = 200/3 \approx 66.7$. The t
   badge="brings back: the core"
   question="When would the Shapley value be guaranteed to lie inside the core?"
   options={[
-    { text: "When the game is convex (coalitions get more valuable as they grow)", correct: true, feedback: "For convex games the Shapley value is always in the core. This game is not convex, which is why fairness and stability diverge. Convexity is the condition that reconciles them." },
+    { text: "When the game is convex, so every player's marginal contribution weakly increases as the coalition they join grows", correct: true, feedback: "Convexity is increasing marginal contribution: for S contained in T and player i outside T, v(S∪{i})-v(S) is no greater than v(T∪{i})-v(T). In such games the Shapley value lies in the core." },
     { text: "Always; the Shapley value is a core allocation by definition", feedback: "Not always: as here, it can fall outside the core. Only convexity guarantees it lands inside." },
     { text: "Only when the core is empty", feedback: "If the core is empty the Shapley value cannot be in it at all. It is guaranteed inside precisely when the game is convex, which implies a nonempty core." },
   ]}

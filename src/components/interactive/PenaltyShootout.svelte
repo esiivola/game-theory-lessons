@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let history = $state<Side[]>([]);
   let goals = $state(0);
   let shots = $state(0);
@@ -33,7 +34,7 @@
     history = [...history, kick];
   }
   function reset() { history = []; goals = 0; shots = 0; last = ''; lastDive = null; }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 
   // Exploitability: how far your realized rate sits below what an unreadable kicker would earn.
   const gap = $derived(Math.max(0, eqValue - rate));
@@ -49,11 +50,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="play">
       <button class="choice coop" onclick={() => shoot(0)}>Shoot Left</button>
       <button class="choice def" onclick={() => shoot(1)}>Shoot Right</button>

@@ -43,7 +43,7 @@ import PbeChecker from '@/components/interactive/PbeChecker.svelte';
 <Section id="play">
 ## Predict, then play
 
-The Gift game. A sender is a Friend (good intentions) with probability $p$, or an Enemy otherwise, and chooses whether to give you a gift. Seeing a gift but not the type, you accept or reject. Accepting a Friend's gift is good, an Enemy's is bad. Set the prior and check whether "both types give" can hold up.
+The Gift game. A sender is a Friend with probability $p$, or an Enemy otherwise, and chooses whether to give you a gift. If you accept, you receive $+1$ from a Friend's gift and $-1$ from an Enemy's; rejecting gives you $0$. A sender whose gift is accepted receives $+1$, a rejected sender receives $-1$, and not giving yields $0$. Set the prior and check whether "both types give" can hold up.
 
 <PbeChecker
   client:visible
@@ -74,7 +74,7 @@ A perfect Bayesian equilibrium is a strategy profile together with a belief at e
 
 In the Gift game the receiver's belief after a gift is $b = \Pr(\text{Friend} \mid \text{gift})$. Accepting is worth $b\cdot 1 + (1-b)\cdot(-1) = 2b - 1$, and rejecting is worth $0$, so the receiver accepts iff $b \ge \tfrac12$.
 
-Consider both types giving. On the path Bayes sets $b = p$, the prior. If $p \ge \tfrac12$ the receiver accepts, and since both senders prefer a gift accepted (payoff 1) to not giving (0), pooling on Give is a PBE. If $p < \tfrac12$ the receiver rejects, both senders then earn $-1 < 0$ and deviate to Not, so pooling on Give fails; the PBE is pooling on Not, supported by an off-path belief that a gift would come from an Enemy.
+Consider both types giving. On the path Bayes sets $b = p$, the prior. If $p \ge \tfrac12$ the receiver accepts, and since both senders prefer a gift accepted (payoff 1) to not giving (0), pooling on Give is a PBE. If $p < \tfrac12$ the receiver rejects, both senders then earn $-1 < 0$ and deviate to Not, so pooling on Give fails. Pooling on Not can be a PBE when an off-path gift induces a sufficiently pessimistic belief. This is one of several equilibria the full signaling game may admit under different strategies and off-path beliefs.
 </Section>
 
 <Section id="worked">

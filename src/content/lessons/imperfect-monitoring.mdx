@@ -68,7 +68,7 @@ With noise, a bad signal does not prove anyone cheated. But if you never punish 
 <Section id="math">
 ## The math
 
-Suppose that in any cooperative round the public signal reads "bad" with probability $q$, even when both cooperated (a false alarm), and worse if someone defected. Under **grim trigger** (punish forever after one bad signal), the relationship survives only until the first false alarm. Since a false alarm arrives with probability $q$ each round, it is essentially certain eventually, so cooperation collapses to zero.
+Suppose the public signal reads "bad" with probability $q$ after cooperation and probability $d>q$ after a deviation. The gap $d-q$ measures how informative the signal is about cheating. Under **grim trigger** (punish forever after one bad signal), the relationship survives only until the first false alarm. Since a false alarm arrives with probability $q$ each round, it is essentially certain eventually, so cooperation collapses to zero.
 
 A **trigger-and-forgive** strategy punishes for $T$ rounds after a bad signal, then resets. The long-run fraction of time spent cooperating is
 
@@ -82,7 +82,13 @@ which is positive for finite $T$ and falls as noise $q$ or punishment length $T$
 Players observe only a public signal correlated with the profile of actions, not the actions themselves. On the equilibrium path, punishments must be triggered by signals, so they sometimes fire when no one deviated. Sustaining cooperation requires accepting these on-path punishment phases; the optimal ones are finite and forgiving, not permanent.
 </DefinitionAside>
 
-Observed price wars are therefore not proof of cheating. In the Green-Porter model, cartels endure recurring price wars that nobody chose, set off by low prices that only looked like betrayal.
+For a one-round deviation, the immediate gain is $T-R$. A bad signal adds probability $d-q$ of entering a punishment phase, whose discounted loss over $L$ rounds is $(R-P)\sum_{k=1}^{L}\delta^k$. The displayed strategy deters that deviation only if
+
+$$
+T-R \le (d-q)(R-P)\sum_{k=1}^{L}\delta^k.
+$$
+
+So finite punishment is not automatically optimal or sufficient. It must be long enough and the signal informative enough, while false alarms make longer punishment more costly on the equilibrium path.
 </Section>
 
 <Section id="worked">

@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let V = $state(2);
   let C = $state(6);
   let p = $state(0.8); // current Hawk fraction
@@ -19,7 +20,7 @@
     p = x;
   }
   function reset() { V = 2; C = 6; p = 0.8; }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -32,11 +33,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="popbar" aria-hidden="true">
       <span class="hawk" style={`width:${p * 100}%`}>Hawks</span>
       <span class="dove" style={`width:${(1 - p) * 100}%`}>Doves</span>

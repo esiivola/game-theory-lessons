@@ -74,7 +74,7 @@ A graphical game places players on a graph so that each player's payoff depends 
 
 Each node's best response: provide if and only if no neighbour provides. In equilibrium the providers form an independent set (none adjacent) that is maximal (every other node is adjacent to a provider). On a star, the hub alone is a maximal independent set, so one node provides and society's cost is $1$. On a six-cycle no node covers all the others, so every maximal independent set has at least two members: two opposite nodes suffice (cost $2$), while the alternating set of three is also maximal (cost $3$). Which one you land on depends on where the dynamics start, and from an empty network they reach the three.
 
-Because best responses depend only on neighbours, local update dynamics converge to such an equilibrium without a global computation, one reason graphical games are attractive for large networks.
+Local payoffs make the game compact to describe, but locality alone does not guarantee that arbitrary best-response dynamics converge. The button uses one fixed sequential update order and reports whether the resulting state is an equilibrium.
 </Section>
 
 <Section id="worked">

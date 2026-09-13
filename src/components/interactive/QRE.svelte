@@ -1,18 +1,18 @@
 <script lang="ts">
-  import { logitProb } from '@/engines/qre';
+  import { logitQre2x2 } from '@/engines/qre';
 
   interface Predict { question: string; options: { key: string; label: string }[]; reveal: string; }
   let { exhibit = '', caption = '', predict = null }:
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let lambda = $state(1);
-  // A game where action A has a 1-util expected advantage; Nash would pick A for sure.
-  const dEU = 1;
-  const pA = $derived(logitProb(dEU, lambda));
+  const game = { row: [[2, 0], [0, 1]], col: [[2, 0], [0, 1]] } as const;
+  const qre = $derived(logitQre2x2(game, lambda));
   const pct = (x: number) => Math.round(x * 100) + '%';
 
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   function reset() { lambda = 1; }
 </script>
 
@@ -26,23 +26,27 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <label class="slider">
       <span class="slab">Rationality &lambda;: <b class="mono">{Math.round(lambda * 100) / 100}</b> <span class="dim">(0 = random, high = Nash)</span></span>
       <input type="range" min="0" max="10" step="0.1" bind:value={lambda} aria-label="Rationality parameter lambda" />
     </label>
 
     <div class="probs">
-      <div class="prow"><span class="pn">Better action A</span><span class="pbar"><i style={`width:${pA * 100}%`}></i></span><span class="pv mono">{pct(pA)}</span></div>
-      <div class="prow"><span class="pn">Worse action B</span><span class="pbar"><i class="dim" style={`width:${(1 - pA) * 100}%`}></i></span><span class="pv mono">{pct(1 - pA)}</span></div>
+      <div class="prow"><span class="pn">You choose A</span><span class="pbar"><i style={`width:${qre.rowA * 100}%`}></i></span><span class="pv mono">{pct(qre.rowA)}</span></div>
+      <div class="prow"><span class="pn">They choose A</span><span class="pbar"><i style={`width:${qre.colA * 100}%`}></i></span><span class="pv mono">{pct(qre.colA)}</span></div>
     </div>
 
     <div class="readout" aria-live="polite">
-      Action A has a 1-util edge. At &lambda; = 0 the player picks 50/50, ignoring payoffs entirely. As &lambda; rises, the better action is played more, and at large &lambda; it converges on the pure best response (Nash).
+      This is a coordination game: matching on A pays 2, matching on B pays 1, and a mismatch pays 0. Each displayed probability is a logit response to the other displayed probability, so beliefs and choices are mutually consistent. At &lambda; = 0 both mix 50/50; higher &lambda; moves this branch toward (A, A).
       {#if lambda > 0.5 && lambda < 4}Real experimental data typically fit a moderate &lambda; like this: better actions are favoured, but not with certainty.{/if}
     </div>
     <p class="note">QRE keeps equilibrium beliefs (choice probabilities are consistent) but replaces perfect best response with noisy, payoff-sensitive choice. It explains overbidding, turnout, and graded play that sharp Nash misses.</p>

@@ -24,11 +24,11 @@ import WarmUp from '@/components/interactive/WarmUp.svelte';
 import QuizCard from '@/components/interactive/QuizCard.svelte';
 import Persuasion from '@/components/interactive/Persuasion.svelte';
 
-<div class="anchor"><span class="em">⚖️</span><p>A prosecutor wants convictions; the judge wants the truth. The prosecutor cannot lie, and only 30% of defendants are actually guilty. Yet by choosing how to investigate, and committing to it before seeing the case, the prosecutor can convict 60%. No lie is told.</p></div>
+<div class="anchor"><span class="em">⚖️</span><p>A prosecutor wants convictions; the judge wants accurate decisions. Only 30% of defendants are guilty. By committing in advance to a noisy evidence rule, the prosecutor can induce conviction after 60% of signals. Some of those signals are false positives, and the judge accounts for that.</p></div>
 
 # Information design and Bayesian persuasion
 
-<p class="lead">Cheap talk failed because the speaker could say anything after learning the truth. Flip that: let the sender commit to an information policy in advance, before the state is known, and honesty becomes powerful. By choosing what evidence to generate, a sender can shift a rational receiver's beliefs in its favour without ever misreporting.</p>
+<p class="lead">Cheap talk failed because the speaker could choose a message after learning the state. Flip that: let the sender commit to an information policy in advance, before the state is known. By choosing a possibly noisy mapping from states to signals, a sender can shift a rational receiver's beliefs without later changing the rule.</p>
 
 <Section id="warmup">
 <WarmUp
@@ -43,16 +43,16 @@ import Persuasion from '@/components/interactive/Persuasion.svelte';
 <Section id="play">
 ## Predict, then play
 
-Only 30% of defendants are guilty, and the judge convicts only when the posterior probability of guilt reaches 50%. The prosecutor commits to a signal: it always reports "guilty" when the defendant is guilty, and reports "guilty" for some fraction of innocent defendants too. Tune that fraction.
+Only 30% of defendants are guilty, and the judge convicts only when the posterior probability of guilt reaches 50%. The prosecutor commits to a signal: it always sends favourable-to-guilt evidence when the defendant is guilty, and sends the same signal for some fraction of innocent defendants too. Tune that false-positive rate.
 
 <Persuasion
   client:visible
   exhibit="Exhibit 1"
-  caption="Prosecutor-judge: an honest but designed signal"
+  caption="Prosecutor-judge: a committed noisy signal"
   predict={{
-    question: 'Can a signal that never lies convict more than the 30% who are actually guilty?',
-    options: [{ key: 'no', label: 'No, honesty caps it at 30%' }, { key: 'yes', label: 'Yes, partial disclosure convicts more' }],
-    reveal: 'Yes, up to 60%. By flagging innocents as "guilty" just often enough that a "guilty" report lands the posterior at exactly 50%, the prosecutor keeps every report convincing while sending as many as possible. No report is a lie; the design does the work.',
+    question: 'Can a pre-committed noisy signal induce conviction more often than the 30% guilt rate?',
+    options: [{ key: 'no', label: 'No, conviction is capped at 30%' }, { key: 'yes', label: 'Yes, a designed signal can reach 60%' }],
+    reveal: 'Yes, up to 60%. The rule sends the favourable signal for every guilty defendant and for 3/7 of innocent defendants. The posterior after that signal is exactly 50%, so the judge convicts while fully accounting for false positives.',
   }}
 />
 </Section>
@@ -61,7 +61,7 @@ Only 30% of defendants are guilty, and the judge convicts only when the posterio
 ## Why did that happen?
 
 <Callout kind="ask">
-The trick is committing before the fact. The prosecutor is not lying about any case: a "guilty" report genuinely raises the odds of guilt. But by mixing in just enough innocents, the prosecutor makes "guilty" reports common while keeping each one exactly convincing enough to convict. Report too many innocents and the judge stops believing the report; report too few and you waste convincing power you did not need. The optimum sits right at the judge's threshold.
+The trick is committing before the fact. The signal is informative but noisy: it raises the probability of guilt from 30% to 50%, even though some innocent defendants receive it. Increase the false-positive rate too far and the judge stops convicting; reduce it and the prosecutor wastes persuasive capacity. The optimum sits at the judge's threshold.
 </Callout>
 </Section>
 
@@ -74,13 +74,13 @@ $$
 \Pr(\text{guilty}\mid\text{"guilty"}) = \frac{0.3}{0.3 + 0.7\,x}.
 $$
 
-Set this to the threshold $\tfrac12$: $0.3 = 0.5(0.3 + 0.7x)$ gives $x = \tfrac{3}{7}$. Then the chance of a "guilty" report is $0.3 + 0.7\cdot\tfrac37 = 0.6$, and every one convicts. Conviction rate $60\%$ from a $30\%$ guilt rate, with no dishonest report.
+Set this to the threshold $\tfrac12$: $0.3 = 0.5(0.3 + 0.7x)$ gives $x = \tfrac{3}{7}$. Then the chance of a "guilty" signal is $0.3 + 0.7\cdot\tfrac37 = 0.6$, and every such signal induces conviction. The label is shorthand for evidence favourable to guilt, not a literal report that the state is guilty.
 
 <DefinitionAside label="Bayesian persuasion">
-The sender commits to a signal (a mapping from states to message probabilities) before the state is realized, and the receiver best-responds to the posterior each message induces. Any signal is feasible as long as the message-posteriors average back to the prior (Bayes plausibility). The sender's problem is to pick the best such distribution of posteriors, which is read off the concave closure of the sender's payoff. Commitment, absent in cheap talk, is what makes honest persuasion work.
+The sender commits to a signal structure (a mapping from states to message probabilities) before the state is realized, and the receiver best-responds to the posterior each message induces. Any signal structure is feasible as long as the message-posteriors average back to the prior (Bayes plausibility). The sender's problem is to pick the best such distribution of posteriors, which is read off the concave closure of the sender's payoff. Commitment, absent in cheap talk, is what gives the messages credibility.
 </DefinitionAside>
 
-The two extremes lose. Full disclosure convicts only the truly guilty, $30\%$. Secrecy leaves the posterior at the prior $0.3 < 0.5$, convicting no one. Honest partial disclosure beats both.
+The two extremes lose. Full disclosure convicts only the truly guilty, $30\%$. Secrecy leaves the posterior at the prior $0.3 < 0.5$, convicting no one. A committed noisy signal beats both for the prosecutor.
 </Section>
 
 <Section id="worked">
@@ -122,7 +122,7 @@ Solve $0.3/(0.3 + 0.7x) = 0.5$: multiply out to $0.3 = 0.15 + 0.35x$, so $x = 3/
   badge="analyse"
   question="Does Bayesian persuasion require the sender to lie?"
   options={[
-    { text: "No: every message is generated by an honest, pre-committed signal; a 'guilty' report genuinely raises the odds of guilt", correct: true, feedback: "The sender commits to a truthful signal structure in advance. It shapes which evidence is produced, not whether reports are honest, so a rational receiver still trusts each message." },
+    { text: "No: the sender commits to a state-dependent random signal before learning the state, and the receiver accounts for its false positives", correct: true, feedback: "The signal need not reveal the state truthfully. Credibility comes from committing to its error rates before the state is known." },
     { text: "Yes: the sender must sometimes misreport the state", feedback: "No misreporting occurs. The power comes from committing to the information policy beforehand, not from lying about any case." },
     { text: "Yes: it only works if the receiver is naive", feedback: "It works against a fully rational, Bayesian receiver. That is what makes it striking." },
   ]}
@@ -135,7 +135,7 @@ Solve $0.3/(0.3 + 0.7x) = 0.5$: multiply out to $0.3 = 0.15 + 0.35x$, so $x = 3/
   badge="brings back: cheap talk"
   question="Why can persuasion move beliefs so much more than cheap talk?"
   options={[
-    { text: "The sender commits to the signal before learning the state, so its messages are credible; cheap talk lets the sender choose messages after the fact, which limits credibility", correct: true, feedback: "Commitment is the difference. A pre-committed honest signal is believed, so it can be designed to shift beliefs to the threshold. Cheap talk, chosen after learning the truth, can only convey coarse information and collapses when interests diverge." },
+    { text: "The sender commits to the signal rule before learning the state, so its error rates are credible; cheap talk messages are chosen after the state is known", correct: true, feedback: "Commitment is the difference. The receiver knows the pre-committed signal rule and updates by Bayes' rule, including its false-positive rate." },
     { text: "Persuasion assumes the receiver is irrational, cheap talk does not", feedback: "Both face a rational receiver. The difference is commitment to the signal, not the receiver's rationality." },
     { text: "Cheap talk allows lying and persuasion does not", feedback: "Neither involves equilibrium lying. The distinction is timing and commitment: persuasion fixes the signal in advance." },
   ]}

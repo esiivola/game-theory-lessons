@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   // You are the matcher; the bot is a fictitious-play mismatcher tracking your history.
   let yourH = $state(1), yourT = $state(1); // bot's belief counts about you (start at 1 each)
   let wins = $state(0), losses = $state(0), rounds = $state(0);
@@ -23,7 +24,7 @@
     last = `You played ${me}, the bot played ${bot}. ${youWin ? 'Match, you win.' : 'Mismatch, bot wins.'}`;
   }
   function reset() { yourH = 1; yourT = 1; wins = 0; losses = 0; rounds = 0; last = ''; }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
   const pct = (x: number) => Math.round(x * 100) + '%';
 </script>
 
@@ -37,11 +38,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <p class="setup">Matching Pennies: you win by matching the bot. The bot learns by fictitious play, tracking how often you play Heads and fleeing your likely move.</p>
 
     <div class="play"><button class="choice" onclick={() => play('H')}>Play Heads</button><button class="choice" onclick={() => play('T')}>Play Tails</button></div>

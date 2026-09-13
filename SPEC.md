@@ -22,7 +22,7 @@ This is the source of truth for what we build and why. Build conventions live in
 
 ### Goals
 - Teach game theory from first principles to expert level, comprehensively, comparable to a full university sequence plus graduate topics, with a strong applied and behavioral track.
-- Three tiers (Basic, Intermediate, Expert) of theory, 63 core lessons across 17 units, plus a 12-case applied track (Unit 18) that connects the theory to real decisions. Each lesson is one teachable concept. Per-lesson example games and interactives are specified in [docs/LESSONS.md](docs/LESSONS.md).
+- Three tiers (Basic, Intermediate, Expert) of theory, 64 core lessons across 17 units, plus a 12-case applied track (Unit 18) that connects the theory to real decisions. Each lesson is one teachable concept. Per-lesson example games and interactives are specified in [docs/LESSONS.md](docs/LESSONS.md).
 - Every lesson is interactive: at least one playable mini-game or manipulable diagram.
 - Intuition first, then the real math. Each lesson has a correct, typeset formal section for a mathematically fluent reader, without watering it down.
 - Evidence-based teaching: prediction before instruction, concreteness fading, retrieval practice and spaced review, worked examples, misconception-driven quizzes (§3).
@@ -43,9 +43,9 @@ This is the source of truth for what we build and why. Build conventions live in
 
 - **Audience:** curious adults and students. The lead reader is mathematically fluent, so formal sections are complete and correct. A beginner can follow the game and the plain-language idea and skip the notation.
 - **Tiers:**
-  - **Basic** (L1 to L15): the shared spine. Static games, solution concepts, classic applications, sequential games. Open access, browse freely.
-  - **Intermediate** (L16 to L32): correlation and complementarities, bargaining, repeated games (including imperfect monitoring), incomplete information, auctions, signaling, adverse selection and cheap talk, information design, contract theory.
-  - **Expert** (L33 to L63): refinements and epistemics, mechanism design and implementation, cooperative theory, matching and market design, evolutionary and learning dynamics, algorithmic game theory, and a full behavioral and experimental unit.
+  - **Basic** (L1 to L16): the shared spine. Static games, solution concepts, classic applications, sequential games. Open access, browse freely.
+  - **Intermediate** (L17 to L33): correlation and complementarities, bargaining, repeated games (including imperfect monitoring), incomplete information, auctions, signaling, adverse selection and cheap talk, information design, contract theory.
+  - **Expert** (L34 to L64): refinements and epistemics, mechanism design and implementation, cooperative theory, matching and market design, evolutionary and learning dynamics, algorithmic game theory, and a full behavioral and experimental unit.
   - **Applied track** (Unit 18, A1 to A12): real-world case lessons. The single-concept cases are surfaced inline right after their theory lesson; the multi-concept ones form a capstone (see §4).
 - **Device:** mobile portrait first (design at 360 to 414px). Pleasant on desktop.
 - **Session length:** a Basic lesson is 4 to 6 minutes; Expert lessons run longer because the math is heavier. The learner can stop and resume anytime.
@@ -90,10 +90,10 @@ feedback, retry.
 
 ## 4. Course structure
 
-- **Concept map (prerequisite DAG).** Lessons form an explicit dependency graph, not a strict line. The static core (L1 to L10) is the trunk; branches hang off it: cooperative theory (needs L6), evolutionary and learning dynamics (need L8), algorithmic game theory (need L9 and L16), behavioral (needs L6, L8, L15). The DAG is the sequencing logic and the mastery-gating spec, and it is shown to the learner as a map.
+- **Concept map (prerequisite DAG).** Lessons form an explicit dependency graph, not a strict line. The static core (L1 to L11) is the trunk; branches hang off it: cooperative theory (needs L6), evolutionary and learning dynamics (need L9), algorithmic game theory (needs L10 and L17), behavioral (needs L6, L9, L16). The DAG is the sequencing logic and the mastery-gating spec, and it is shown to the learner as a map.
 - **Applied cases interleave, and also capstone (hybrid).** Single-concept applied cases (Unit 18) are surfaced inline right after their home theory lesson, so abstraction pays off immediately (penalty kicks after mixed strategies, matching markets after Gale-Shapley, deterrence after commitment). The multi-concept cases (Cuban Missile Crisis, a spectrum auction, climate) form a short capstone at the end, because real episodes combine several tools at once. This mirrors how the applied texts (Dixit and Nalebuff; Dixit, Skeath and Reiley) close each chapter with a case and how professional programs run integrative case weeks. It also protects completion rates.
-- **Reality-check callouts seed behavioral ideas early.** Do not quarantine all behavior at the end. Short one-screen "Reality check" callouts appear in the Basic and Intermediate tiers and forward-link to the Behavioral unit: the beauty contest after L8 (real first-round play is not the equilibrium), ultimatum rejection after L15 (credibility has behavioral limits), the centipede alongside L14 and L15, free-riding versus conditional cooperation inside L12, the winner's curse inside L26, and minimax-in-the-field inside L10 (a positive check: professionals really do randomise).
-- **Learning paths.** A default linear path, plus themed paths that follow branches. Examples: "market design" (L1 to L10, L24 to L26, L35 to L40, L44 to L46); "behavioral" (L6, L8, L10, L12, L15, L20, then L55 to L62, ending at L44 to L46 for the design payoff); "applied strategy" (Basic spine, then the Unit 18 cases).
+- **Reality-check callouts seed behavioral ideas early.** Do not quarantine all behavior at the end. Short one-screen "Reality check" callouts appear in the Basic and Intermediate tiers and forward-link to the Behavioral unit: the beauty contest after L2 (real first-round play is not the equilibrium), ultimatum rejection after L16 (credibility has behavioral limits), the centipede alongside L15 and L16, free-riding versus conditional cooperation inside L14, the winner's curse inside L27, and minimax-in-the-field inside L11 (a positive check: professionals really do randomise).
+- **Learning paths.** A default linear path, plus themed paths that follow branches. Examples: "market design" (L1 to L11, L25 to L27, L38 to L42, L46 to L48); "behavioral" (L6, L9, L11, L14, L16, L21, then L57 to L64, ending at L46 to L48 for the design payoff); "applied strategy" (Basic spine, then the Unit 18 cases).
 - **Retrieval checkpoints.** After every 3 to 5 lessons, a short low-stakes cumulative check drawing from prior lessons, interleaved. Practice, never a graded exam.
 - **Spaced review at tier boundaries.** A review lesson at the end of each tier re-surfaces earlier concepts on an expanding schedule.
 - **Mastery gating, advanced tiers only.** Basic is open. To unlock Expert, reach about 80 to 90% on the Intermediate tier's apply and analyse items, with unlimited retries and targeted review of any missed prerequisites.
@@ -101,7 +101,7 @@ feedback, retry.
 
 ---
 
-## 5. Curriculum (63 core lessons, 17 units, plus a 12-case applied track)
+## 5. Curriculum (64 core lessons, 17 units, plus a 12-case applied track)
 
 This section is the map: tiers, units, lessons, and numbering. The per-lesson detail (the specific
 example game with real payoff numbers, the playable interactive, a worked example, the misconceptions
@@ -111,28 +111,28 @@ to L11 (equilibrium selection belongs beside the coordination games); the overlo
 lesson split into L29 (adverse selection and screening) and L30 (cheap talk), which sets up the
 communication arc L30 (no commitment) to L31 (commitment). New lessons are flagged [new].
 
-### TIER 1, BASIC (L1 to L15)
+### TIER 1, BASIC (L1 to L16)
 - **Unit 1, Foundations.** L1 What is a game (normal form). L2 Rationality and common knowledge (the beauty contest). L3 Preferences and expected utility (vNM, Allais).
-- **Unit 2, Static solution concepts.** L4 Dominance and IESDS. L5 Rationalizability and best response. L6 Pure-strategy Nash. L7 Classic 2x2 games (the zoo: PD, stag hunt, BoS, chicken, matching pennies). L8 Mixed strategies and mixed Nash. L9 Existence of Nash (RPS witness). L10 Zero-sum and minimax.
-- **Unit 3, Applications and equilibrium selection.** L11 Schelling and focal points (moved up). L12 Cournot and Bertrand. L13 Public goods and the commons.
-- **Unit 4, Sequential games.** L14 Extensive form and backward induction (the entry game). L15 Subgame perfection and commitment (Stackelberg).
+- **Unit 2, Static solution concepts.** L4 Dominance and IESDS. L5 Rationalizability and best response. L6 Pure-strategy Nash. L7 The Prisoner's Dilemma. L8 Classic 2x2 games (stag hunt, Battle of the Sexes, chicken, matching pennies). L9 Mixed strategies and mixed Nash. L10 Existence of Nash (RPS witness). L11 Zero-sum and minimax.
+- **Unit 3, Applications and equilibrium selection.** L12 Schelling and focal points. L13 Cournot and Bertrand. L14 Public goods and the commons.
+- **Unit 4, Sequential games.** L15 Extensive form and backward induction (the entry game). L16 Subgame perfection and commitment (Stackelberg).
 
-### TIER 2, INTERMEDIATE (L16 to L32)
-- **Unit 5, Correlation and complementarities.** L16 Correlated equilibrium (traffic-light chicken). L17 [new] Supermodular games (minimum-effort coordination).
-- **Unit 6, Bargaining.** L18 Nash (axiomatic) bargaining. L19 Strategic bargaining (Rubinstein).
-- **Unit 7, Repeated games.** L20 Repeated games and discounting (grim trigger, δ >= 1/2). L21 Folk theorems. L22 [new] Repeated games with imperfect monitoring (Green-Porter). L23 Reputation (chain store).
-- **Unit 8, Incomplete information (static).** L24 Bayesian games and Bayes-Nash. L25 Auctions I (first/second price, revenue equivalence). L26 Auctions II (common values, winner's curse).
-- **Unit 9, Dynamic information and communication.** L27 Perfect Bayesian equilibrium (the gift game). L28 Signaling (Spence, beer-quiche). L29 [split] Adverse selection and screening (lemons). L30 [split] Cheap talk (Crawford-Sobel).
-- **Unit 10, Information design and contracts.** L31 Information design and Bayesian persuasion (prosecutor-judge). L32 Contract theory and moral hazard (principal-agent).
+### TIER 2, INTERMEDIATE (L17 to L33)
+- **Unit 5, Correlation and complementarities.** L17 Correlated equilibrium (traffic-light chicken). L18 Supermodular games (minimum-effort coordination).
+- **Unit 6, Bargaining.** L19 Nash (axiomatic) bargaining. L20 Strategic bargaining (Rubinstein).
+- **Unit 7, Repeated games.** L21 Repeated games and discounting (grim trigger, δ >= 1/2). L22 Folk theorems. L23 Repeated games with imperfect monitoring (Green-Porter). L24 Reputation (chain store).
+- **Unit 8, Incomplete information (static).** L25 Bayesian games and Bayes-Nash. L26 Auctions I (first/second price, revenue equivalence). L27 Auctions II (common values, winner's curse).
+- **Unit 9, Dynamic information and communication.** L28 Perfect Bayesian equilibrium (the gift game). L29 Signaling (Spence, beer-quiche). L30 Adverse selection and screening (lemons). L31 Cheap talk (Crawford-Sobel).
+- **Unit 10, Information design and contracts.** L32 Information design and Bayesian persuasion (prosecutor-judge). L33 Contract theory and moral hazard (principal-agent).
 
-### TIER 3, EXPERT (L33 to L63)
-- **Unit 11, Refinements and epistemics.** L33 Sequential equilibrium and refinements. L34 [new] Epistemic foundations (common knowledge, agreement, muddy children). L35 Global games (currency attack).
-- **Unit 12, Mechanism design and social choice.** L36 Social choice and Arrow, Gibbard-Satterthwaite. L37 Mechanism design and the revelation principle. L38 VCG mechanisms. L39 Optimal (Myerson) auctions. L40 [new] Implementation theory (features Myerson-Satterthwaite). L41 [new] Auctions III (multi-unit, combinatorial, position/GSP).
-- **Unit 13, Cooperative game theory** (one running game, seller + two buyers). L42 Coalitional games and the core. L43 Shapley value (falls outside the core here). L44 Nucleolus (Talmud rule).
-- **Unit 14, Matching and market design.** L45 Stable matching (Gale-Shapley). L46 Top trading cycles. L47 [new] Matching with contracts and design without money.
-- **Unit 15, Evolution and learning.** L48 Evolutionarily stable strategies (Hawk-Dove, p*=V/C). L49 Replicator dynamics (RPS cycling, Hawk-Dove bridge). L50 [new] Stochastic stability and conventions. L51 Learning in games (fictitious play, no-regret).
-- **Unit 16, Algorithmic game theory.** L52 Complexity of equilibria (PPAD, a shorter puzzle lesson). L53 Congestion and potential games. L54 Price of anarchy and Braess. L55 [new] Network and graphical games.
-- **Unit 17, Behavioral and experimental** (one economic-game-lab engine). L56 Limited reasoning (level-k, cognitive hierarchy). L57 Quantal response equilibrium. L58 Social preferences: fairness (ultimatum, dictator, trust, Fehr-Schmidt). L59 Reciprocity and intentions (Rabin, Charness-Rabin). L60 Cooperation and punishment (public goods). L61 Learning and adaptation (EWA). L62 Field tests and boundaries (penalty kicks, centipede). L63 Culture, context, and design (WEIRD, market design). (Optional L64, Neuroeconomics of strategic choice.)
+### TIER 3, EXPERT (L34 to L64)
+- **Unit 11, Refinements and epistemics.** L34 Sequential equilibrium and refinements. L35 Epistemic foundations (common knowledge, agreement, muddy children). L36 Global games (currency attack).
+- **Unit 12, Mechanism design and social choice.** L37 Social choice and Arrow, Gibbard-Satterthwaite. L38 Mechanism design and the revelation principle. L39 VCG mechanisms. L40 Optimal (Myerson) auctions. L41 Implementation theory (features Myerson-Satterthwaite). L42 Auctions III (position/GSP).
+- **Unit 13, Cooperative game theory** (one running game, seller + two buyers). L43 Coalitional games and the core. L44 Shapley value. L45 Nucleolus.
+- **Unit 14, Matching and market design.** L46 Stable matching (Gale-Shapley). L47 Top trading cycles. L48 School choice and design without money. Matching with contracts is introduced only as a richer extension.
+- **Unit 15, Evolution and learning.** L49 Evolutionarily stable strategies (Hawk-Dove, p*=V/C). L50 Replicator dynamics (RPS cycling, Hawk-Dove bridge). L51 Stochastic stability and conventions. L52 Learning in games (fictitious play, no-regret).
+- **Unit 16, Algorithmic game theory.** L53 Complexity of equilibria (PPAD, a shorter puzzle lesson). L54 Congestion and potential games. L55 Price of anarchy and Braess. L56 Network and graphical games.
+- **Unit 17, Behavioral and experimental** (one economic-game-lab engine). L57 Limited reasoning (level-k, cognitive hierarchy). L58 Quantal response equilibrium. L59 Social preferences: fairness (ultimatum, dictator, trust, Fehr-Schmidt). L60 Reciprocity and intentions (Rabin, Charness-Rabin). L61 Cooperation and punishment (public goods). L62 Learning and adaptation (EWA). L63 Field tests and boundaries (penalty kicks, centipede). L64 Culture, context, and design (WEIRD, market design). (Optional L65, Neuroeconomics of strategic choice.)
 
 ### 5a. Applied track (Unit 18): Game Theory in the Wild
 Twelve case lessons grounded in real episodes. Placement per §4: inline cases surface right after
@@ -142,31 +142,31 @@ Roth; Schelling; Milgrom; Ostrom; Tambe.
 
 | # | Case | Applies | Placement |
 |---|------|---------|-----------|
-| A1 | Matching markets (medical match, school choice, kidney exchange) | L45 to L47 | inline after L46 |
-| A2 | Auctions in the wild (spectrum, ad auctions) | L25, L26, L41 | inline after L26 |
-| A3 | Deterrence and brinkmanship (Cuban Missile Crisis) | L14, L15, L20 | capstone |
-| A4 | Entry deterrence in business | L15, L12 | inline after L15 |
-| A5 | Co-opetition and platforms | L7, L11 | inline after L11 |
-| A6 | The roots of cooperation (Axelrod, cartels) | L20, L21 | inline after L21 |
-| A7 | Bargaining and negotiation (strikes, BATNA) | L18, L19 | inline after L19 |
-| A8 | Mixed strategies in sport (penalty kicks, how to win) | L8, L10 | inline after L8 |
-| A9 | The commons (Ostrom, climate) | L13, L20 | inline after L13 |
-| A10 | Political economy (median voter, lobbying) | L11, L36 | capstone |
-| A11 | Contracts and the law (moral hazard, settlement) | L32, L29 | inline after L32 |
-| A12 | Security games and multi-agent AI | L8, L15, L24, L57 | capstone |
+| A1 | Matching markets (medical match, school choice, kidney exchange) | L46 to L48 | inline after L47 |
+| A2 | Auctions in the wild (spectrum, ad auctions) | L26, L27, L42 | inline after L42 |
+| A3 | Deterrence and brinkmanship (Cuban Missile Crisis) | L15, L16, L21 | capstone |
+| A4 | Entry deterrence in business | L16, L13 | inline after L16 |
+| A5 | Co-opetition and platforms | L8, L12 | inline after L12 |
+| A6 | The roots of cooperation (Axelrod, cartels) | L21, L22 | inline after L22 |
+| A7 | Bargaining and negotiation (strikes, BATNA) | L19, L20 | inline after L20 |
+| A8 | Mixed strategies in sport (penalty kicks, how to win) | L9, L11 | inline after L11 |
+| A9 | The commons (Ostrom, climate) | L14, L21 | inline after L21 |
+| A10 | Political economy (median voter, lobbying) | L12, L37 | capstone |
+| A11 | Contracts and the law (moral hazard, settlement) | L33, L30 | inline after L33 |
+| A12 | Security games and multi-agent AI | L9, L16, L25, L58 | capstone |
 
 ### 5b. Branches and learning paths
-The static core is L1 to L10. Branches attach to it and can run in parallel with the
-incomplete-information track: cooperative theory (L42+, needs L6), evolution and learning (L48+,
-needs L8), algorithmic (L52+, needs L9 and L16), behavioral (L56+, needs L6, L8, L15). Themed paths:
-"market design" (L1 to L10, L24 to L26, L37 to L41, L45 to L47, A1 to A2); "behavioral" (L6, L8, L10,
-L12, L15, L20, then L56 to L63, ending L45 to L47 for the design payoff); "applied strategy" (Basic
+The static core is L1 to L11. Branches attach to it and can run in parallel with the
+incomplete-information track: cooperative theory (L43+, needs L6), evolution and learning (L49+,
+needs L9), algorithmic (L53+, needs L10 and L17), behavioral (L57+, needs L6, L9, L16). Themed paths:
+"market design" (L1 to L11, L25 to L27, L38 to L42, L46 to L48, A1 to A2); "behavioral" (L6, L9, L11,
+L14, L16, L21, then L57 to L64, ending L46 to L48 for the design payoff); "applied strategy" (Basic
 spine, then the Unit 18 cases).
 
 ### 5c. If we ever need a leaner build
-Enrichment that can be deferred without breaking the spine: L17, L22, L34, L40, L41, L47, L50, L55,
-the optional L64, and the capstone-tagged applied cases (A3, A10, A12). Behavioral can ship as a
-first four (L56 to L59) with the rest following.
+Enrichment that can be deferred without breaking the spine: L18, L23, L35, L41, L42, L48, L51, L56,
+the optional L65, and the capstone-tagged applied cases (A3, A10, A12). Behavioral can ship as a
+first four (L57 to L60) with the rest following.
 
 ### 5d. Content conventions and reusable engines
 docs/LESSONS.md fixes two things once and reuses them, which halves build cost and helps recognition.
@@ -177,17 +177,17 @@ best-response / reaction-curve slider; a foldable game tree; a discounted repeat
 slider, swappable bot strategies); a coordination "match the crowd" widget; an auction sandbox (one
 bidding UI, swappable rules) across L25, L26, L39, L41, A2; a belief / allocation manipulator across
 L27, L31, L42 to L44; an economic game lab (ultimatum/dictator/trust/public-goods with swappable
-norms and punishment) across L58 to L63 and A9; a population sim with rare mutations across L48 to
-L50; a route-choice engine across L53 to L55. De-duplication: penalty kicks appear in L62 ("does
+norms and punishment) across L59 to L64 and A9; a population sim with rare mutations across L49 to
+L51; a route-choice engine across L54 to L56. De-duplication: penalty kicks appear in L63 ("does
 minimax hold in the field?") and A8 ("how to exploit"), which must ship as different interactives;
 the Hawk-Dove-to-replicator bridge links L48 and L49; the stag-hunt mutation sim is reused in A6 and
 A9. Caveat: A3 presents the Cuban Missile Crisis as Chicken but flags that this model is contested.
 
 ### 5e. Reality-check callouts (seed behavioral early)
 A `Callout kind="reality-check"` variant appears in Basic and Intermediate and forward-links to Unit
-17: the beauty contest (after L8), ultimatum rejection (after L15), the centipede (with L14 and L15),
-free-riding vs conditional cooperation (in L13), winner's-curse behavior (in L26), minimax in the
-field (in L10). Each is one claim, a small exhibit, and a link.
+17: the beauty contest (after L2), ultimatum rejection (after L16), the centipede (with L15 and L16),
+free-riding vs conditional cooperation (in L14), winner's-curse behavior (in L27), minimax in the
+field (in L11). Each is one claim, a small exhibit, and a link.
 
 ### 5f. References and citations
 Every lesson ends with a Sources list generated from `refs` keys in a single shared bibliography

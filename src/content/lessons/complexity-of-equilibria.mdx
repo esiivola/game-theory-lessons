@@ -129,7 +129,7 @@ Now scale up. In a finely subdivided triangle with millions of cells, the panchr
   badge="brings back: existence of Nash"
   question="How does Sperner's lemma connect to Nash's existence proof?"
   options={[
-    { text: "Both guarantee a solution by a parity/fixed-point argument that is non-constructive: it proves existence without locating the object", correct: true, feedback: "Nash's proof uses a Brouwer fixed point, which Sperner's lemma makes combinatorial. The parity guarantee gives existence but no efficient search, which is exactly why computing equilibria is PPAD-complete." },
+    { text: "Both guarantee a solution, and the associated path-following search can require exponentially many steps", correct: true, feedback: "Sperner-style path methods are constructive in the sense that they can locate a solution. PPAD-completeness says that no polynomial-time method is known for the general problem, and some natural paths are exponentially long." },
     { text: "Sperner's lemma proves equilibria do not exist", feedback: "It proves a panchromatic triangle always exists, mirroring the guarantee that equilibria exist. It is about existence, not non-existence." },
     { text: "They are unrelated results", feedback: "They are tightly linked: Sperner underlies the Brouwer fixed point behind Nash's theorem, and the shared parity structure defines PPAD." },
   ]}

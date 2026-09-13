@@ -6,6 +6,7 @@
     { exhibit?: string; caption?: string; predict?: Predict | null } = $props();
 
   let predicted = $state(predict === null);
+  let predictionLabel = $state('');
   let counts = $state<[number, number, number]>([0, 0, 0]);
   let wins = $state(0);
   let losses = $state(0);
@@ -32,7 +33,7 @@
     counts = [0, 0, 0]; wins = 0; losses = 0; ties = 0;
     last = 'Reset. Declare a mix, then the bot best-responds to its odds before your move is drawn.';
   }
-  function onPredict() { predicted = true; }
+  function onPredict(label: string) { predictionLabel = label; predicted = true; }
 </script>
 
 <div class="widget">
@@ -45,11 +46,15 @@
       <div class="q">{predict.question}</div>
       <div class="opts">
         {#each predict.options as o}
-          <button onclick={onPredict}>{o.label}</button>
+          <button onclick={() => onPredict(o.label)}>{o.label}</button>
         {/each}
       </div>
     </div>
   {:else}
+    {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
+    {#if predictionLabel && predict}
+      <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
     <div class="play">
       <button class="choice" onclick={() => play([1 / 3, 1 / 3, 1 / 3], 'an even mix')}>Mix evenly</button>
       <button class="choice" onclick={() => play([0.6, 0.2, 0.2], 'a Rock-heavy mix')}>Favor Rock</button>
