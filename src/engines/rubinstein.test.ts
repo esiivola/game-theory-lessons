@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { proposerShare, responderShare, proposerShareTwoSided, responderShareTwoSided, accepts } from './rubinstein';
+import { accepts, proposerShare, proposerShareTwoSided, responderFloorTwoSided, responderShare, responderShareTwoSided } from './rubinstein';
 
 describe('proposerShare', () => {
   it('is 1/(1+delta): the proposer keeps more when the responder is impatient', () => {
@@ -33,5 +33,9 @@ describe('accepts', () => {
     const d = 0.8;
     expect(accepts(responderShare(d), d)).toBe(true);
     expect(accepts(responderShare(d) - 0.05, d)).toBe(false);
+  });
+  it('a responder outside option binds only above the continuation value', () => {
+    expect(responderFloorTwoSided(0.9, 0.9, 0.4)).toBeCloseTo(responderShare(0.9));
+    expect(responderFloorTwoSided(0.9, 0.9, 0.6)).toBeCloseTo(0.6);
   });
 });

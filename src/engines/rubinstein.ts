@@ -21,6 +21,10 @@ export function responderShareTwoSided(d1: number, d2: number): number {
   return 1 - proposerShareTwoSided(d1, d2);
 }
 
+export function responderFloorTwoSided(d1: number, d2: number, outsideOption: number): number {
+  return Math.max(responderShareTwoSided(d1, d2), outsideOption);
+}
+
 /**
  * Whether the responder accepts an offer giving them `offerToResponder`, playing the SPE:
  * accept iff it is at least their continuation value from rejecting, delta/(1+delta).

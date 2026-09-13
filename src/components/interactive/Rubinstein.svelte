@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { proposerShareTwoSided, responderShareTwoSided } from '@/engines/rubinstein';
+  import { responderFloorTwoSided } from '@/engines/rubinstein';
 
   interface Predict { question: string; options: { key: string; label: string }[]; reveal: string; }
   let { exhibit = '', caption = '', predict = null }:
@@ -9,11 +9,12 @@
   let predictionLabel = $state('');
   let yourDelta = $state(0.8);
   let theirDelta = $state(0.8);
+  let theirOutside = $state(0);
   let myShare = $state(0.5); // what you propose to keep
   let result = $state<'none' | 'accept' | 'reject'>('none');
 
-  const spe = $derived(proposerShareTwoSided(yourDelta, theirDelta));
-  const theirFloor = $derived(responderShareTwoSided(yourDelta, theirDelta));
+  const theirFloor = $derived(responderFloorTwoSided(yourDelta, theirDelta, theirOutside));
+  const spe = $derived(1 - theirFloor);
   const pct = (n: number) => Math.round(n * 100) + '%';
   const r3 = (n: number) => Math.round(n * 1000) / 1000;
 
@@ -52,6 +53,10 @@
       <input type="range" min="0.1" max="0.95" step="0.01" bind:value={theirDelta} aria-label="Their discount factor" />
     </label>
     <label class="slider">
+      <span class="slab">Their outside option (BATNA): <b class="mono">{pct(theirOutside)}</b></span>
+      <input type="range" min="0" max="0.8" step="0.01" bind:value={theirOutside} aria-label="Responder outside option" />
+    </label>
+    <label class="slider">
       <span class="slab">You propose to keep: <b class="mono">{pct(myShare)}</b>, offering them <b class="mono">{pct(1 - myShare)}</b></span>
       <input type="range" min="0" max="1" step="0.01" bind:value={myShare} aria-label="Your proposed share" />
     </label>
@@ -68,13 +73,13 @@
         Accepted in round one. You keep <b class="mono">{pct(myShare)}</b>.
         {#if myShare < spe - 0.02}You could have kept up to {pct(spe)} and they would still have accepted: you left money on the table.{:else}That is at or below your equilibrium share of {pct(spe)}, so the deal closes at once.{/if}
       {:else if result === 'reject'}
-        Rejected. By waiting they can secure {pct(theirFloor)} of the pie, and you offered only {pct(1 - myShare)}. Delay just shrinks the pie for both of you. The most you can demand and still close is <b class="mono">{pct(spe)}</b>.
+        Rejected. Waiting or taking their BATNA secures a floor of {pct(theirFloor)}, and you offered only {pct(1 - myShare)}. The most you can demand and still close is <b class="mono">{pct(spe)}</b>.
       {:else}
-        You move first. The responder will accept anything at least as good as waiting, which is worth {pct(theirFloor)} to them. So your best credible demand is {pct(spe)}.
+        You move first. The responder compares your offer with both continued bargaining and a BATNA of {pct(theirOutside)}. Their binding floor is {pct(theirFloor)}, so your best credible demand is {pct(spe)}.
       {/if}
     </div>
 
-    <p class="note">Equilibrium: the proposer keeps (1-&delta;<sub>2</sub>)/(1-&delta;<sub>1</sub>&delta;<sub>2</sub>) = <b class="mono">{pct(spe)}</b>, agreed immediately. When patience is equal this reduces to 1/(1+&delta;).</p>
+    <p class="note">Without a binding BATNA, the proposer keeps (1-&delta;<sub>2</sub>)/(1-&delta;<sub>1</sub>&delta;<sub>2</sub>). A responder BATNA changes the deal only when it exceeds the responder's continuation value.</p>
   {/if}
 </div>
 
