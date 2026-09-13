@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { deferredAcceptance, blockingPairs } from './matching';
+import { blockingPairs, deferredAcceptance, directedCycles, longestDonorChain } from './matching';
 
 const MEN = { m1: ['w1', 'w2', 'w3'], m2: ['w2', 'w3', 'w1'], m3: ['w3', 'w1', 'w2'] };
 const WOMEN = { w1: ['m2', 'm3', 'm1'], w2: ['m3', 'm1', 'm2'], w3: ['m1', 'm2', 'm3'] };
@@ -16,6 +16,18 @@ describe('deferred acceptance (marriage)', () => {
   it('woman-proposing gives every woman her first choice (the mirror)', () => {
     const m = deferredAcceptance(['w1', 'w2', 'w3'], WOMEN, MEN);
     expect(m).toEqual({ w1: 'm2', w2: 'm3', w3: 'm1' });
+  });
+});
+
+describe('kidney exchange graph', () => {
+  const graph = { A: ['B'], B: ['A', 'C'], C: ['B'], NDD: ['C'] };
+
+  it('finds unique compatibility cycles', () => {
+    expect(directedCycles(graph, 3)).toEqual([['A', 'B'], ['B', 'C']]);
+  });
+
+  it('builds a chain from a non-directed donor without revisiting pairs', () => {
+    expect(longestDonorChain(graph, 'NDD', 3)).toEqual(['NDD', 'C', 'B', 'A']);
   });
 });
 

@@ -25,6 +25,7 @@ import SourcesList from '@/components/ui/SourcesList.astro';
 import WarmUp from '@/components/interactive/WarmUp.svelte';
 import QuizCard from '@/components/interactive/QuizCard.svelte';
 import DeferredAcceptance from '@/components/interactive/DeferredAcceptance.svelte';
+import KidneyExchange from '@/components/interactive/KidneyExchange.svelte';
 
 <div class="anchor"><span class="em">🏥</span><p>For decades the market that places new doctors in hospitals kept collapsing into chaos: exploding offers, jumped deadlines, doctors trapped by early contracts. The fix was not more rules but a better algorithm, the same deferred acceptance you have already seen.</p></div>
 
@@ -61,6 +62,10 @@ Three doctors, three hospitals with one post each. Run doctor-proposing deferred
     reveal: 'A clearinghouse. Without one, hospitals made earlier and earlier exploding offers to lock in doctors, unraveling the market. Deferred acceptance produces a stable match all at once, which is why the NRMP adopted it and it has run smoothly since.',
   }}
 />
+
+Now switch from rankings to compatibility. Find what can be exchanged when donors cannot give to their paired patients.
+
+<KidneyExchange client:visible />
 </Section>
 
 <Section id="why">

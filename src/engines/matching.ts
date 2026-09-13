@@ -3,6 +3,46 @@
 // hold by priority). Framework-free and unit-testable.
 
 export type Prefs = Record<string, string[]>;
+export type CompatibilityGraph = Record<string, string[]>;
+
+export function directedCycles(graph: CompatibilityGraph, maxLength: number): string[][] {
+  const found = new Map<string, string[]>();
+  for (const start of Object.keys(graph)) {
+    const visit = (path: string[]) => {
+      const current = path[path.length - 1];
+      for (const next of graph[current] ?? []) {
+        if (next === start && path.length >= 2) {
+          const rotations = path.map((_, i) => [...path.slice(i), ...path.slice(0, i)]);
+          const cycle = rotations.sort((a, b) => a.join('|').localeCompare(b.join('|')))[0];
+          found.set(cycle.join('|'), cycle);
+        } else if (path.length < maxLength && !path.includes(next)) {
+          visit([...path, next]);
+        }
+      }
+    };
+    visit([start]);
+  }
+  return [...found.values()].sort((a, b) => a.join('|').localeCompare(b.join('|')));
+}
+
+export function longestDonorChain(
+  graph: CompatibilityGraph,
+  donor: string,
+  maxPairs: number,
+): string[] {
+  let best = [donor];
+  const visit = (path: string[]) => {
+    if (path.length > best.length || (path.length === best.length && path.join('|') < best.join('|'))) {
+      best = path;
+    }
+    if (path.length > maxPairs) return;
+    for (const next of graph[path[path.length - 1]] ?? []) {
+      if (!path.includes(next)) visit([...path, next]);
+    }
+  };
+  visit([donor]);
+  return best;
+}
 
 /**
  * Proposer-optimal deferred acceptance. Each proposer works down its list; each receiver holds its
