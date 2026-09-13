@@ -1,5 +1,5 @@
 <script lang="ts">
-  interface WQ { q: string; options: string[]; answer: number; }
+  interface WQ { q: string; options: string[]; answer: number; explanation?: string; }
   let {
     title = 'From earlier lessons',
     sub = null,
@@ -13,13 +13,16 @@
 
   let solved = $state<number[]>(questions.map(() => -1));
   let wrong = $state<number[][]>(questions.map(() => []));
+  let feedback = $state<string[]>(questions.map(() => ''));
 
   function pick(qi: number, oi: number) {
-    if (solved[qi] !== -1) return;
+    if (solved[qi] !== -1 || wrong[qi].includes(oi)) return;
     if (oi === questions[qi].answer) {
       solved[qi] = oi;
+      feedback[qi] = questions[qi].explanation ?? `Correct: ${questions[qi].options[oi]}.`;
     } else if (!wrong[qi].includes(oi)) {
       wrong[qi] = [...wrong[qi], oi];
+      feedback[qi] = 'Not that one. Try again.';
     }
   }
 </script>
@@ -34,11 +37,14 @@
         {#each q.options as opt, oi}
           <button
             class={(solved[qi] === oi ? 'ok' : '') + (wrong[qi].includes(oi) ? 'no' : '')}
-            disabled={solved[qi] !== -1 || wrong[qi].includes(oi)}
+            aria-disabled={solved[qi] !== -1 || wrong[qi].includes(oi)}
             onclick={() => pick(qi, oi)}
           >{opt}</button>
         {/each}
       </div>
+      {#if feedback[qi]}
+        <div class="wfb" role="status" aria-live="polite" aria-atomic="true">{feedback[qi]}</div>
+      {/if}
     </div>
   {/each}
 </div>

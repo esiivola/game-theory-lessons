@@ -1,5 +1,12 @@
 # Course regression log
 
+## 2026-09-13: Answer feedback is announced and keeps focus
+
+- Symptom: quiz and warm-up results relied on visual styling, and disabling the selected button could remove the keyboard focus target.
+- Root cause: result messages had no live status semantics, and answered controls used native disabled state.
+- Fix: results use polite status regions, answer buttons stay focusable with guarded `aria-disabled` state, and light semantic text colors meet AA contrast.
+- Guard: `src/components/interactive/accessibilityContract.test.ts` checks feedback semantics, focusable answer state, and the affected contrast pairs.
+
 ## 2026-09-13: Completion derives from stored requirements
 
 - Symptom: reloading a partly completed lesson reset its visible quiz state, and solving only the quizzes in the current page session could complete the lesson without viewing every section.

@@ -27,7 +27,7 @@
   });
 
   function answer(i: number) {
-    if (solved) return;
+    if (solved || wrong.includes(i)) return;
     const o = options[i];
     if (o.correct) {
       solvedIdx = i;
@@ -52,7 +52,7 @@
   {#each options as o, i}
     <button
       class={'opt' + (solvedIdx === i ? ' correct' : '') + (wrong.includes(i) ? ' wrong' : '')}
-      disabled={solved || wrong.includes(i)}
+      aria-disabled={solved || wrong.includes(i)}
       onclick={() => answer(i)}
     >
       <span class="mk" aria-hidden="true">{#if solvedIdx === i}&#10003;{:else if wrong.includes(i)}&#10007;{/if}</span>
@@ -60,7 +60,7 @@
     </button>
   {/each}
   {#if feedback}
-    <div class={'fb ' + (good ? 'good' : 'bad')}>
+    <div class={'fb ' + (good ? 'good' : 'bad')} role="status" aria-live="polite" aria-atomic="true">
       {@html (good ? '<b>Right.</b> ' : '<b>Not that one.</b> ') + feedback}
     </div>
   {/if}
