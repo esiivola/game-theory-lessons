@@ -67,6 +67,21 @@ export const isComplete = (slug: string): boolean => load().lessons[slug]?.statu
 export const statusOf = (slug: string): LessonStatus =>
   load().lessons[slug]?.status ?? 'not-started';
 
+export const quizState = (slug: string, id: string) => load().lessons[slug]?.quizzes[id] ?? null;
+
+export function meetsCompletionRequirements(
+  slug: string,
+  sectionIds: string[],
+  quizIds: string[],
+): boolean {
+  const state = load().lessons[slug];
+  return Boolean(
+    state &&
+    sectionIds.every((id) => state.sectionsViewed.includes(id)) &&
+    quizIds.every((id) => state.quizzes[id]?.correct),
+  );
+}
+
 export function markSectionViewed(slug: string, sectionId: string): void {
   const p = load();
   const l = lesson(p, slug);
@@ -95,7 +110,18 @@ export function completeLesson(slug: string): { firstTime: boolean; xp: number }
     if (!p.daysLearned.includes(today)) p.daysLearned.push(today);
   }
   save(p);
-  return { firstTime, xp: XP_PER_LESSON };
+  return { firstTime, xp: firstTime ? XP_PER_LESSON : 0 };
+}
+
+export function tryCompleteLesson(
+  slug: string,
+  sectionIds: string[],
+  quizIds: string[],
+): { complete: boolean; firstTime: boolean; xp: number } {
+  if (!meetsCompletionRequirements(slug, sectionIds, quizIds)) {
+    return { complete: false, firstTime: false, xp: 0 };
+  }
+  return { complete: true, ...completeLesson(slug) };
 }
 
 export function getTheme(): 'system' | 'light' | 'dark' {

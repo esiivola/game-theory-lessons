@@ -1,5 +1,12 @@
 # Course regression log
 
+## 2026-09-13: Completion derives from stored requirements
+
+- Symptom: reloading a partly completed lesson reset its visible quiz state, and solving only the quizzes in the current page session could complete the lesson without viewing every section.
+- Root cause: the layout kept an in-memory set of solved quiz events instead of deriving eligibility from stored section and quiz progress.
+- Fix: quiz cards restore correct answers, and the layout completes a lesson only when stored progress contains every required section and correct quiz.
+- Guard: `src/lib/progress.test.ts` covers restored quiz state, complete requirement sets, and one-time XP awards.
+
 ## 2026-09-13: Applied cases follow their placement metadata
 
 - Symptom: every applied case appeared after the Expert tier, even when its frontmatter said `after:<slug>`.

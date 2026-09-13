@@ -33,11 +33,12 @@ const { slug, title, description, totalLessons, nextHref, nextTitle } = Astro.pr
 
 <script>
   import confetti from 'canvas-confetti';
-  import { markSectionViewed, completeLesson, isComplete } from '@/lib/progress';
+  import { markSectionViewed, isComplete, tryCompleteLesson } from '@/lib/progress';
 
   const article = document.querySelector<HTMLElement>('.lesson[data-lesson]');
   const slug = article?.dataset.lesson;
   if (article && slug) {
+    const lessonSlug = slug;
     // Track sections as they scroll into view.
     const sections = article.querySelectorAll<HTMLElement>('[data-section]');
     if ('IntersectionObserver' in window) {
@@ -46,22 +47,23 @@ const { slug, title, description, totalLessons, nextHref, nextTitle } = Astro.pr
           for (const e of entries) {
             if (e.isIntersecting) {
               const id = (e.target as HTMLElement).dataset.section;
-              if (id) markSectionViewed(slug, id);
+              if (id) markSectionViewed(lessonSlug, id);
               io.unobserve(e.target);
             }
           }
         },
-        { threshold: 0.4 }
+        { threshold: 0, rootMargin: '0px 0px -20% 0px' }
       );
       sections.forEach((s) => io.observe(s));
     } else {
-      sections.forEach((s) => s.dataset.section && markSectionViewed(slug, s.dataset.section));
+      sections.forEach((s) => s.dataset.section && markSectionViewed(lessonSlug, s.dataset.section));
     }
 
-    // Completion: all quiz cards solved.
-    const total = article.querySelectorAll('[data-quiz]').length;
-    const solved = new Set<string>();
-    let finished = isComplete(slug);
+    const sectionIds = [...sections].flatMap((section) => section.dataset.section ? [section.dataset.section] : []);
+    const quizIds = [...article.querySelectorAll<HTMLElement>('[data-quiz]')]
+      .flatMap((quiz) => quiz.dataset.quiz ? [quiz.dataset.quiz] : []);
+    let finished = isComplete(lessonSlug);
+    let reconciling = false;
 
     function reveal(celebrate: boolean) {
       const panel = document.getElementById('donePanel');
@@ -83,14 +85,18 @@ const { slug, title, description, totalLessons, nextHref, nextTitle } = Astro.pr
 
     if (finished) reveal(false);
 
-    window.addEventListener('gt:solved', (e) => {
-      const detail = (e as CustomEvent).detail;
-      if (detail?.id) solved.add(detail.id);
-      if (!finished && total > 0 && solved.size >= total) {
+    function reconcileCompletion() {
+      if (!finished && !reconciling && quizIds.length > 0) {
+        reconciling = true;
+        const result = tryCompleteLesson(lessonSlug, sectionIds, quizIds);
+        reconciling = false;
+        if (!result.complete) return;
         finished = true;
-        completeLesson(slug);
-        reveal(true);
+        reveal(result.firstTime);
       }
-    });
+    }
+
+    reconcileCompletion();
+    window.addEventListener('gt:progress', reconcileCompletion);
   }
 </script>

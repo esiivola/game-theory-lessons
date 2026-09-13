@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { recordQuiz } from '@/lib/progress';
+  import { onMount } from 'svelte';
+  import { quizState, recordQuiz } from '@/lib/progress';
 
   interface Opt { text: string; correct?: boolean; feedback: string; }
   let {
@@ -15,6 +16,15 @@
   let feedback = $state('');
   let good = $state(false);
   const solved = $derived(solvedIdx !== null);
+
+  onMount(() => {
+    if (!quizState(slug, id)?.correct) return;
+    const index = options.findIndex((option) => option.correct);
+    if (index < 0) return;
+    solvedIdx = index;
+    good = true;
+    feedback = options[index].feedback;
+  });
 
   function answer(i: number) {
     if (solved) return;
