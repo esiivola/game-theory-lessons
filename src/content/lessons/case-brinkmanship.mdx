@@ -24,7 +24,7 @@ import WorkedExample from '@/components/ui/WorkedExample.astro';
 import SourcesList from '@/components/ui/SourcesList.astro';
 import WarmUp from '@/components/interactive/WarmUp.svelte';
 import QuizCard from '@/components/interactive/QuizCard.svelte';
-import PayoffMatrix from '@/components/interactive/PayoffMatrix.svelte';
+import Brinkmanship from '@/components/interactive/Brinkmanship.svelte';
 
 <div class="anchor"><span class="em">☢️</span><p>For thirteen days in October 1962 the world sat at the edge of nuclear war. Neither the US nor the USSR wanted to fire, but neither wanted to back down. That is a game of nerve, and Schelling used it to explain how threats work when carrying them out would be insane.</p></div>
 
@@ -45,19 +45,9 @@ import PayoffMatrix from '@/components/interactive/PayoffMatrix.svelte';
 <Section id="play">
 ## Predict, then play
 
-Model the crisis as Chicken: swerve (back down) or hold firm (escalate). Mutual holding is catastrophe. Reveal the equilibria.
+The static Chicken game has two pure equilibria and a 10% symmetric mixing rate. Brinkmanship adds a prior commitment: choose how much genuine disaster risk to create, then watch the rival respond.
 
-<PayoffMatrix
-  client:visible
-  mode="nash"
-  exhibit="Exhibit 1"
-  caption="The crisis as Chicken (US, USSR)"
-  rows={[{ key: 'Sw', label: 'US backs down', tone: 'coop' }, { key: 'St', label: 'US holds firm', tone: 'def' }]}
-  cols={[{ key: 'Sw', label: 'USSR backs down', tone: 'coop' }, { key: 'St', label: 'USSR holds firm', tone: 'def' }]}
-  payoffs={{ Sw: { Sw: [0, 0], St: [-1, 1] }, St: { Sw: [1, -1], St: [-10, -10] } }}
-/>
-
-Two pure equilibria, each where one side holds and the other backs down, plus a catastrophe both must avoid. The problem is which side gets to be the one that holds.
+<Brinkmanship client:visible />
 </Section>
 
 <Section id="why">
