@@ -1,5 +1,12 @@
 # Course regression log
 
+## 2026-09-13: Prediction comparison unlocks after play
+
+- Symptom: a learner could open the prediction explanation immediately after choosing an answer, before interacting with the game.
+- Root cause: every prediction disclosure was rendered as an ordinary, immediately operable `details` element.
+- Fix: lesson pages lock prediction disclosures until the learner changes a control or uses a non-reset game action in that widget.
+- Guard: `src/components/interactive/predictionContract.test.ts` checks the shared post-prediction interaction gate.
+
 ## 2026-09-13: Answer feedback is announced and keeps focus
 
 - Symptom: quiz and warm-up results relied on visual styling, and disabling the selected button could remove the keyboard focus target.

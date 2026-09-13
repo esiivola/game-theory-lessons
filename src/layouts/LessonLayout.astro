@@ -39,6 +39,64 @@ const { slug, title, description, totalLessons, nextHref, nextTitle } = Astro.pr
   const slug = article?.dataset.lesson;
   if (article && slug) {
     const lessonSlug = slug;
+
+    function lockPredictionAnswer(details: HTMLDetailsElement) {
+      if (details.dataset.predictionBound) return;
+      details.dataset.predictionBound = 'true';
+      details.setAttribute('data-prediction-ready', 'false');
+      const summary = details.querySelector('summary');
+      if (!summary) return;
+      const readyLabel = summary.textContent ?? 'Compare with your prediction';
+      summary.textContent = 'Play once to compare';
+      summary.setAttribute('aria-disabled', 'true');
+      summary.addEventListener('click', (event) => {
+        if (details.dataset.predictionReady === 'false') event.preventDefault();
+      });
+      details.addEventListener('toggle', () => {
+        if (details.open && details.dataset.predictionReady === 'false') details.open = false;
+      });
+      details.addEventListener('gt:prediction-ready', () => {
+        details.setAttribute('data-prediction-ready', 'true');
+        summary.textContent = readyLabel;
+        summary.removeAttribute('aria-disabled');
+      });
+    }
+
+    function bindPredictionAnswers(root: ParentNode) {
+      root.querySelectorAll<HTMLDetailsElement>('.prediction-answer').forEach(lockPredictionAnswer);
+    }
+
+    function pathHasClass(event: Event, name: string) {
+      return event.composedPath().some(
+        (node) => node instanceof HTMLElement && node.classList.contains(name),
+      );
+    }
+
+    function unlockPrediction(event: Event) {
+      const target = event.target as HTMLElement | null;
+      if (!target || target.closest('.prediction-answer') || target.closest('.predict')) return;
+      if (event.type === 'click' && !target.closest('button, a, [role="button"]')) return;
+      if (event.type === 'click' && /^(reset|replay|clear|start over)/i.test(target.textContent?.trim() ?? '')) return;
+      if (pathHasClass(event, 'predict') || pathHasClass(event, 'prediction-answer')) return;
+      const widget = event.composedPath().find(
+        (node): node is HTMLElement => node instanceof HTMLElement && node.classList.contains('widget'),
+      );
+      widget?.querySelectorAll<HTMLDetailsElement>('.prediction-answer[data-prediction-ready="false"]')
+        .forEach((details) => details.dispatchEvent(new CustomEvent('gt:prediction-ready')));
+    }
+
+    bindPredictionAnswers(article);
+    new MutationObserver((records) => {
+      records.forEach((record) => record.addedNodes.forEach((node) => {
+        if (node instanceof HTMLElement) {
+          if (node.matches('.prediction-answer')) lockPredictionAnswer(node as HTMLDetailsElement);
+          bindPredictionAnswers(node);
+        }
+      }));
+    }).observe(article, { childList: true, subtree: true });
+    article.addEventListener('click', unlockPrediction);
+    article.addEventListener('input', unlockPrediction);
+
     // Track sections as they scroll into view.
     const sections = article.querySelectorAll<HTMLElement>('[data-section]');
     if ('IntersectionObserver' in window) {

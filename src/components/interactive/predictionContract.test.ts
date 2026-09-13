@@ -17,4 +17,13 @@ describe('interactive prediction contract', () => {
 
     expect(failures).toEqual([]);
   });
+
+  it('keeps comparison locked until a post-prediction action', () => {
+    const layout = readFileSync(new URL('../../layouts/LessonLayout.astro', import.meta.url), 'utf8');
+
+    expect(layout).toContain('Play once to compare');
+    expect(layout).toContain('data-prediction-ready');
+    expect(layout).toContain("closest('.prediction-answer')");
+    expect(layout).toContain("closest('.predict')");
+  });
 });
