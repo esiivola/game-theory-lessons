@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { users, profit } from './platform';
+import { ASYMMETRIC_PLATFORM, platformOutcome, users, profit } from './platform';
 
 describe('two-sided platform', () => {
   it('adoption on one side rises when the other side is cheaper (cross effects)', () => {
@@ -11,5 +11,10 @@ describe('two-sided platform', () => {
     const u = users(40, 40);
     expect(u.a).toBeGreaterThan(0);
     expect(profit(40, 40)).toBeGreaterThan(0);
+  });
+  it('a subsidy needs asymmetry to beat balanced pricing in the displayed presets', () => {
+    expect(profit(-10, 70)).toBeLessThan(profit(50, 50));
+    expect(platformOutcome(-10, 70, ASYMMETRIC_PLATFORM).profit)
+      .toBeGreaterThan(platformOutcome(50, 50, ASYMMETRIC_PLATFORM).profit);
   });
 });

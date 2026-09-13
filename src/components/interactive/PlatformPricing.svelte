@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { users, profit } from '@/engines/platform';
+  import { ASYMMETRIC_PLATFORM, platformOutcome, users, profit } from '@/engines/platform';
 
   interface Predict { question: string; options: { key: string; label: string }[]; reveal: string; }
   let { exhibit = '', caption = '', predict = null }:
@@ -9,9 +9,10 @@
   let predictionLabel = $state('');
   let pA = $state(50); // price to side A (e.g. developers)
   let pB = $state(50); // price to side B (e.g. users)
+  let model = $state<'symmetric' | 'asymmetric'>('symmetric');
 
-  const u = $derived(users(pA, pB));
-  const prof = $derived(profit(pA, pB));
+  const u = $derived(model === 'symmetric' ? users(pA, pB) : platformOutcome(pA, pB, ASYMMETRIC_PLATFORM));
+  const prof = $derived(model === 'symmetric' ? profit(pA, pB) : platformOutcome(pA, pB, ASYMMETRIC_PLATFORM).profit);
   const r0 = (x: number) => Math.round(x);
 
   function onPredict(label: string) { predictionLabel = label; predicted = true; }
@@ -35,6 +36,10 @@
     {#if predictionLabel && predict}
       <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
     {/if}
+    <div class="seg" role="group" aria-label="Platform demand model">
+      <button class={model === 'symmetric' ? 'on' : ''} onclick={() => (model = 'symmetric')}>Symmetric demand</button>
+      <button class={model === 'asymmetric' ? 'on' : ''} onclick={() => (model = 'asymmetric')}>Users pull developers</button>
+    </div>
     <p class="setup">A platform serves two sides. Each side grows when the other side is large, so pricing is not just cost-plus.</p>
 
     <label class="slider"><span class="slab">Price to side A: <b class="mono">{pA}</b></span><input type="range" min="-40" max="100" step="1" bind:value={pA} aria-label="Price to side A" /></label>
@@ -47,7 +52,8 @@
     </div>
 
     <div class="readout" aria-live="polite">
-      Cutting one side's price raises participation on both sides through the cross-side effect. In this symmetric parameterization, however, the displayed subsidy earns less than balanced pricing. A profitable subsidy requires asymmetry in demand, costs, or revenue that this simple game does not include.
+      Cutting one side's price raises participation on both sides through the cross-side effect.
+      {#if model === 'symmetric'}In the symmetric model, the displayed subsidy earns less than balanced pricing.{:else}Here side A is more price-sensitive, it attracts side B strongly, and side B brings extra revenue. Under these stated assumptions the subsidy can beat balanced pricing.{/if}
     </div>
 
     <div class="play"><button class="tinybtn" onclick={() => { pA = -10; pB = 70; }}>Test a subsidy</button><button class="tinybtn" onclick={reset}>Reset</button></div>
@@ -56,6 +62,10 @@
 
 <style>
   .setup { font-size: 13px; color: var(--ink-muted); margin: 0 0 12px; line-height: 1.5; }
+  .seg { display: flex; border: 1px solid var(--border-strong); border-radius: .55rem; overflow: hidden; margin-bottom: .75rem; }
+  .seg button { flex: 1; min-height: 2.75rem; border: 0; background: var(--surface); color: var(--ink-muted); font-weight: 600; cursor: pointer; }
+  .seg button + button { border-left: 1px solid var(--border); }
+  .seg button.on { background: var(--accent-soft); color: var(--accent); }
   .slider { display: block; margin: 2px 0 8px; }
   .slab { font-size: 12.5px; color: var(--ink-muted); display: block; margin-bottom: 6px; }
   .slab b { color: var(--ink); }
