@@ -2,12 +2,10 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '@/config/site';
+import { orderLessons } from '@/lib/lessonOrder';
 
-const tierOrder: Record<string, number> = { basic: 0, intermediate: 1, expert: 2, applied: 3 };
 const all = await getCollection('lessons');
-const lessons = all.sort(
-  (a, b) => (tierOrder[a.data.tier] - tierOrder[b.data.tier]) || a.data.order - b.data.order
-);
+const lessons = orderLessons(all);
 const total = lessons.length;
 const TIERS = [
   { id: 'basic', name: 'Basic' },
