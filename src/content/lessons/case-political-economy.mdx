@@ -25,6 +25,7 @@ import SourcesList from '@/components/ui/SourcesList.astro';
 import WarmUp from '@/components/interactive/WarmUp.svelte';
 import QuizCard from '@/components/interactive/QuizCard.svelte';
 import MedianVoter from '@/components/interactive/MedianVoter.svelte';
+import AllPayLobbying from '@/components/interactive/AllPayLobbying.svelte';
 
 <div class="anchor"><span class="em">🗳️</span><p>Two candidates start at opposite ends of the spectrum, then edge toward the center, and toward each other, until both sound almost the same. Voters complain there is no real choice. That drift is not cowardice; it is the median voter theorem, and it is a Nash equilibrium.</p></div>
 
@@ -57,6 +58,10 @@ Drag two candidates along a spectrum of seven voters. First keep everyone voting
     reveal: 'Both converge on the median. Any candidate off the median can be beaten by a rival who moves just inside them and captures the majority. Both-at-median is the only Nash equilibrium, which is why platforms often look so similar. Abstention or a third candidate can break it.',
   }}
 />
+
+Lobbying is a separate game. Choose spending against a stated rival bid and check what both sides pay.
+
+<AllPayLobbying client:visible />
 </Section>
 
 <Section id="why">
