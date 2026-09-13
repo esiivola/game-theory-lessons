@@ -25,6 +25,7 @@ import SourcesList from '@/components/ui/SourcesList.astro';
 import WarmUp from '@/components/interactive/WarmUp.svelte';
 import QuizCard from '@/components/interactive/QuizCard.svelte';
 import MoralHazard from '@/components/interactive/MoralHazard.svelte';
+import SettlementRange from '@/components/interactive/SettlementRange.svelte';
 
 <div class="anchor"><span class="em">⚖️</span><p>Pay a salesperson pure commission and you load all the risk of a bad quarter onto them; pay pure salary and they have no reason to hustle. Every contract sits somewhere between, and the same tension, incentives against risk, runs through employment, insurance, and litigation.</p></div>
 
@@ -57,6 +58,10 @@ As principal, split pay between a base the agent gets either way and a bonus for
     reveal: 'The incentive cutoff is 37.5, where the agent is indifferent. On this half-unit grid, no base and a bonus of 38 makes effort strictly better. A risk-averse agent would demand more to bear the output risk.',
   }}
 />
+
+Now switch to litigation. Set each side's belief about the plaintiff winning and see whether their acceptable settlement ranges overlap.
+
+<SettlementRange client:visible />
 </Section>
 
 <Section id="why">
