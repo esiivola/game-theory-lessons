@@ -70,6 +70,23 @@ Walk the entry game as the incumbent. First without commitment: if the entrant e
     options: [{ key: 'fight', label: 'Yes, to protect its monopoly' }, { key: 'acc', label: 'No, accommodating pays more' }],
     reveal: 'No. After entry, accommodating pays the incumbent 50 versus 20 for fighting, so it accommodates, and the entrant enters. The threat to fight is not credible, so it fails to deter. A sunk investment that raises the fight payoff can flip this.',
   }}
+  comparison={{
+    baseLabel: 'No capacity',
+    alternateLabel: 'Capacity costs 10',
+    alternateTree: {
+      kind: 'node', player: 0, label: 'Entrant',
+      branches: [
+        { label: 'Stay out', child: { kind: 'leaf', payoff: [0, 90] } },
+        { label: 'Enter', child: {
+          kind: 'node', player: 1, label: 'Incumbent',
+          branches: [
+            { label: 'Accommodate', child: { kind: 'leaf', payoff: [40, 40] } },
+            { label: 'Fight', child: { kind: 'leaf', payoff: [-10, 50] } },
+          ],
+        } },
+      ],
+    },
+  }}
 />
 </Section>
 

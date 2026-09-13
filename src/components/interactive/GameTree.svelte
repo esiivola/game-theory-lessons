@@ -2,18 +2,22 @@
   import { type Tree, type Node, value, bestBranch } from '@/engines/tree';
 
   interface Predict { question: string; options: { key: string; label: string }[]; reveal: string; }
+  interface Comparison { baseLabel: string; alternateLabel: string; alternateTree: Tree; }
   let {
     tree,
     players = ['You', 'Them'],
     exhibit = '',
     caption = '',
     predict = null,
-  }: { tree: Tree; players?: [string, string] | string[]; exhibit?: string; caption?: string; predict?: Predict | null } = $props();
+    comparison = null,
+  }: { tree: Tree; players?: [string, string] | string[]; exhibit?: string; caption?: string; predict?: Predict | null; comparison?: Comparison | null } = $props();
 
   let predicted = $state(predict === null);
   let predictionLabel = $state('');
   let path = $state<number[]>([]);
   let solved = $state(false);
+  let variant = $state<'base' | 'alternate'>('base');
+  const activeTree = $derived(comparison && variant === 'alternate' ? comparison.alternateTree : tree);
 
   // ---- layout -------------------------------------------------------------
   type PNode = { key: string; x: number; y: number; t: Tree };
@@ -43,7 +47,7 @@
     return { nodes, edges, maxDepth, rows: row };
   }
 
-  const L = $derived(layout(tree));
+  const L = $derived(layout(activeTree));
   const xStep = 112, yStep = 56, mX = 16, mY = 26;
   const W = $derived(mX * 2 + L.maxDepth * xStep + 46);
   const H = $derived(mY * 2 + (L.rows - 1) * yStep + 10);
@@ -52,7 +56,7 @@
 
   // The node the learner is currently standing at (following the chosen path).
   const cursor = $derived.by(() => {
-    let t: Tree = tree; let key = '';
+    let t: Tree = activeTree; let key = '';
     for (const b of path) {
       if (t.kind !== 'node') break;
       t = t.branches[b].child; key += b;
@@ -63,7 +67,7 @@
   // Realized backward-induction path (chain of best branches from the root).
   const inductionKeys = $derived.by(() => {
     const set = new Set<string>();
-    let t: Tree = tree; let key = '';
+    let t: Tree = activeTree; let key = '';
     while (t.kind === 'node') {
       const b = bestBranch(t);
       set.add(key + '>' + b);
@@ -74,7 +78,7 @@
 
   function isBestEdge(e: PEdge): boolean {
     // find the node for e.nodeKey
-    let t: Tree = tree;
+    let t: Tree = activeTree;
     for (const ch of e.nodeKey) { if (t.kind !== 'node') break; t = t.branches[Number(ch)].child; }
     return t.kind === 'node' && bestBranch(t) === e.branch;
   }
@@ -93,12 +97,13 @@
     return edgeSelected(e) ? 'e sel' : 'e';
   }
 
-  const outcome = $derived(value(tree));
+  const outcome = $derived(value(activeTree));
   const cursorNode = $derived(cursor.t.kind === 'node' ? (cursor.t as Node) : null);
   const cursorLeaf = $derived(cursor.t.kind === 'leaf' ? cursor.t.payoff : null);
 
   function choose(i: number) { if (!solved) path = [...path, i]; }
   function reset() { path = []; solved = false; }
+  function setVariant(next: 'base' | 'alternate') { variant = next; reset(); }
   function onPredict(label: string) { predictionLabel = label; predicted = true; }
   const fmt = (p: [number, number]) => `(${p[0]}, ${p[1]})`;
 </script>
@@ -121,6 +126,12 @@
     {#if predictionLabel}<div class="prediction-memory"><b>Your prediction:</b> {predictionLabel}</div>{/if}
     {#if predictionLabel && predict}
       <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
+    {/if}
+    {#if comparison}
+      <div class="seg" role="group" aria-label="Entry deterrence scenario">
+        <button class={variant === 'base' ? 'on' : ''} onclick={() => setVariant('base')}>{comparison.baseLabel}</button>
+        <button class={variant === 'alternate' ? 'on' : ''} onclick={() => setVariant('alternate')}>{comparison.alternateLabel}</button>
+      </div>
     {/if}
     <div class="plot-wrap">
       <svg viewBox={`0 0 ${W} ${H}`} class="tree" role="img" aria-label="Game tree; use the buttons below to walk it or solve it backward.">
@@ -180,4 +191,8 @@
   .leaf { fill: var(--surface-2); stroke: var(--border); stroke-width: 1; }
   .leaflab { font-size: 10.5px; font-weight: 700; fill: var(--ink); font-family: var(--font-mono); }
   .play { flex-wrap: wrap; align-items: center; }
+  .seg { display: flex; border: 1px solid var(--border-strong); border-radius: .55rem; overflow: hidden; margin-bottom: .8rem; }
+  .seg button { flex: 1; min-height: 2.75rem; border: 0; background: var(--surface); color: var(--ink-muted); font-weight: 600; cursor: pointer; }
+  .seg button + button { border-left: 1px solid var(--border); }
+  .seg button.on { background: var(--accent-soft); color: var(--accent); }
 </style>

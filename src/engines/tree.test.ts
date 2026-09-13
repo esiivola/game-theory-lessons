@@ -37,24 +37,24 @@ describe('bestBranch', () => {
 });
 
 describe('a credible threat flips the outcome', () => {
-  // Make fighting cheap for the incumbent: In then Fight now pays (-1, 2).
+  // Capacity costs 0.2 in every branch and makes fighting cheap after entry.
   const deterrable: Node = {
     kind: 'node', player: 0, label: 'Entrant',
     branches: [
-      { label: 'Stay out', child: leaf([0, 2]) },
+      { label: 'Stay out', child: leaf([0, 1.8]) },
       { label: 'Enter', child: {
         kind: 'node', player: 1, label: 'Incumbent',
         branches: [
-          { label: 'Accommodate', child: leaf([2, 1]) },
-          { label: 'Fight', child: leaf([-1, 2]) },
+          { label: 'Accommodate', child: leaf([2, 0.8]) },
+          { label: 'Fight', child: leaf([-1, 1.8]) },
         ],
       } },
     ],
   };
   it('now the incumbent fights and the entrant stays out', () => {
     const incumbent = deterrable.branches[1].child as Node;
-    expect(bestBranch(incumbent)).toBe(1); // Fight, since 2 > 1
+    expect(bestBranch(incumbent)).toBe(1); // Fight, since 1.8 > 0.8
     expect(bestBranch(deterrable)).toBe(0); // Stay out, since 0 > -1
-    expect(value(deterrable)).toEqual([0, 2]);
+    expect(value(deterrable)).toEqual([0, 1.8]);
   });
 });
