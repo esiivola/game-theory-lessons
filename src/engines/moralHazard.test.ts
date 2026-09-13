@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { effortChoice, agentUtility, principalProfit, minBonusForEffort } from './moralHazard';
+import { agentUtility, certaintyEquivalent, effortChoice, minBonusForEffort, principalProfit } from './moralHazard';
 
 describe('minBonusForEffort', () => {
   it('is 37.5: the spread that satisfies incentive compatibility', () => {
@@ -22,5 +22,18 @@ describe('a strict incentive contract (base 0, bonus 38)', () => {
   });
   it('leaves the agent a rent of 15.4', () => {
     expect(agentUtility(0, 38)).toBeCloseTo(15.4);
+  });
+});
+
+describe('risk-averse agent', () => {
+  it('has the risk-neutral expected payoff when risk aversion is zero', () => {
+    expect(certaintyEquivalent(0, 38, 1, 0)).toBeCloseTo(15.4);
+  });
+  it('values the same noisy contract less as risk aversion rises', () => {
+    expect(certaintyEquivalent(0, 38, 1, 0.05)).toBeLessThan(certaintyEquivalent(0, 38, 1, 0));
+  });
+  it('can stop preferring effort under the same risky bonus', () => {
+    expect(effortChoice(38, 0)).toBe(1);
+    expect(effortChoice(38, 0.05)).toBe(0);
   });
 });

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { effortChoice, agentUtility, principalProfit, minBonusForEffort } from '@/engines/moralHazard';
+  import { agentUtility, effortChoice, minimumBonusForEffort, principalProfit } from '@/engines/moralHazard';
 
   interface Predict { question: string; options: { key: string; label: string }[]; reveal: string; }
   let { exhibit = '', caption = '', predict = null }:
@@ -9,17 +9,18 @@
   let predictionLabel = $state('');
   let base = $state(0);
   let bonus = $state(20);
-  const strictBonus = 38;
+  let riskAversion = $state(0);
 
-  const effort = $derived(effortChoice(bonus));
-  const util = $derived(agentUtility(base, bonus));
-  const profit = $derived(principalProfit(base, bonus));
-  const icMet = $derived(bonus > minBonusForEffort);
+  const effort = $derived(effortChoice(bonus, riskAversion));
+  const util = $derived(agentUtility(base, bonus, riskAversion));
+  const profit = $derived(principalProfit(base, bonus, riskAversion));
+  const neededBonus = $derived(minimumBonusForEffort(riskAversion));
+  const icMet = $derived(effort === 1);
   const irMet = $derived(util >= 0);
   const r1 = (x: number) => Math.round(x * 10) / 10;
 
   function onPredict(label: string) { predictionLabel = label; predicted = true; }
-  function reset() { base = 0; bonus = 20; }
+  function reset() { base = 0; bonus = 20; riskAversion = 0; }
 </script>
 
 <div class="widget">
@@ -49,6 +50,10 @@
       <span class="slab">Bonus for high output: <b class="mono">{r1(bonus)}</b></span>
       <input type="range" min="0" max="80" step="0.5" bind:value={bonus} aria-label="Bonus for high output" />
     </label>
+    <label class="slider">
+      <span class="slab">Agent risk aversion: <b class="mono">{riskAversion.toFixed(2)}</b></span>
+      <input type="range" min="0" max="0.1" step="0.01" bind:value={riskAversion} aria-label="Agent risk aversion" />
+    </label>
 
     <div class="tags">
       <span class={'tag ' + (icMet ? 'ok' : 'no')}>Effort: {effort === 1 ? 'works hard' : 'shirks'}</span>
@@ -62,15 +67,18 @@
 
     <div class="readout" aria-live="polite">
       {#if !icMet}
-        The bonus is too small to motivate effort (it needs to reach {minBonusForEffort}). The agent shirks, high output is unlikely, and profit is only {r1(profit)}.
-      {:else if base === 0 && bonus === strictBonus}
-        This contract strictly motivates effort: base 0, bonus {strictBonus}. Profit is {r1(profit)}, above the {r1(principalProfit(0, 0))} you get by not motivating effort. At exactly {minBonusForEffort} the agent is indifferent, so this example does not assume a favourable tie-break.
+        {#if neededBonus === null}No bonus up to 80 makes high effort preferable at this risk aversion.{:else}The bonus is too small to motivate effort; the first motivating slider value is {neededBonus}.{/if}
+        The agent shirks, high output is unlikely, and profit is {r1(profit)}.
+      {:else if !irMet}
+        The bonus motivates effort, but the risky pay has certainty-equivalent value {r1(util)}. Add at least {r1(-util)} of base pay for the agent to accept.
+      {:else if riskAversion === 0 && base === 0 && bonus === 38}
+        This risk-neutral contract strictly motivates effort: base 0, bonus 38. Profit is {r1(profit)}, above the {r1(principalProfit(0, 0))} from not motivating effort. At exactly 37.5 the agent is indifferent.
       {:else}
-        Effort is motivated, but you are paying more than the smallest slider value that strictly clears the threshold. Trim toward base 0, bonus {strictBonus}.
+        Effort is motivated and the agent accepts. {#if riskAversion > 0}The certainty equivalent is below the expected wage because noisy pay imposes risk. The principal may need more fixed pay or a less noisy performance measure.{:else}The smallest slider bonus that strictly motivates is 38.{/if}
       {/if}
     </div>
 
-    <div class="play"><button class="tinybtn" onclick={() => { base = 0; bonus = strictBonus; }}>Strict incentive contract</button><button class="tinybtn" onclick={reset}>Reset</button></div>
+    <div class="play"><button class="tinybtn" disabled={neededBonus === null} onclick={() => { if (neededBonus !== null) bonus = neededBonus; }}>Smallest motivating bonus{neededBonus === null ? ' unavailable' : `: ${neededBonus}`}</button><button class="tinybtn" onclick={reset}>Reset</button></div>
   {/if}
 </div>
 
