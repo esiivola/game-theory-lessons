@@ -129,8 +129,8 @@
     {/if}
     {#if comparison}
       <div class="seg" role="group" aria-label="Entry deterrence scenario">
-        <button class={variant === 'base' ? 'on' : ''} onclick={() => setVariant('base')}>{comparison.baseLabel}</button>
-        <button class={variant === 'alternate' ? 'on' : ''} onclick={() => setVariant('alternate')}>{comparison.alternateLabel}</button>
+        <button class={variant === 'base' ? 'on' : ''} aria-pressed={variant === 'base'} onclick={() => setVariant('base')}>{comparison.baseLabel}</button>
+        <button class={variant === 'alternate' ? 'on' : ''} aria-pressed={variant === 'alternate'} onclick={() => setVariant('alternate')}>{comparison.alternateLabel}</button>
       </div>
     {/if}
     <div class="plot-wrap">

@@ -54,7 +54,7 @@
     {/if}
     <p class="setup">You have one patrol to split between two targets, worth 10 and 5. You commit to coverage probabilities first; the attacker then strikes the target that maximizes its expected value.</p>
 
-    <div class="models" aria-label="Attacker model">
+    <div class="models" role="group" aria-label="Attacker model">
       <button class="tinybtn" class:chosen={model === 'perfect'} aria-pressed={model === 'perfect'} onclick={() => (model = 'perfect')}>Perfect best response</button>
       <button class="tinybtn" class:chosen={model === 'qre'} aria-pressed={model === 'qre'} onclick={() => (model = 'qre')}>Noisy QRE attacker</button>
     </div>

@@ -37,8 +37,8 @@
       <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
     {/if}
     <div class="seg" role="group" aria-label="Platform demand model">
-      <button class={model === 'symmetric' ? 'on' : ''} onclick={() => (model = 'symmetric')}>Symmetric demand</button>
-      <button class={model === 'asymmetric' ? 'on' : ''} onclick={() => (model = 'asymmetric')}>Users pull developers</button>
+      <button class={model === 'symmetric' ? 'on' : ''} aria-pressed={model === 'symmetric'} onclick={() => (model = 'symmetric')}>Symmetric demand</button>
+      <button class={model === 'asymmetric' ? 'on' : ''} aria-pressed={model === 'asymmetric'} onclick={() => (model = 'asymmetric')}>Users pull developers</button>
     </div>
     <p class="setup">A platform serves two sides. Each side grows when the other side is large, so pricing is not just cost-plus.</p>
 

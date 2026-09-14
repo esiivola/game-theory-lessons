@@ -42,8 +42,8 @@
       <details class="prediction-answer"><summary>Compare after playing</summary><p>{predict.reveal}</p></details>
     {/if}
     <div class="seg" role="group" aria-label="Voter participation rule">
-      <button class={!abstention ? 'on' : ''} onclick={() => (abstention = false)}>Everyone votes</button>
-      <button class={abstention ? 'on' : ''} onclick={() => (abstention = true)}>Distant voters abstain</button>
+      <button class={!abstention ? 'on' : ''} aria-pressed={!abstention} onclick={() => (abstention = false)}>Everyone votes</button>
+      <button class={abstention ? 'on' : ''} aria-pressed={abstention} onclick={() => (abstention = true)}>Distant voters abstain</button>
     </div>
     <div class="plot-wrap">
       <svg viewBox={`0 0 ${W} ${H}`} class="plot" role="img" aria-label="Voters on a left-right line with two candidate positions.">

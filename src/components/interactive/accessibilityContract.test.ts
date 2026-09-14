@@ -23,6 +23,11 @@ describe('answer feedback', () => {
     expect(source).toContain('aria-live="polite"');
     expect(source).toContain('aria-disabled');
   });
+
+  it.each(['GameTree.svelte', 'MedianVoter.svelte', 'PlatformPricing.svelte'])(
+    '%s exposes the selected comparison mode',
+    (name) => expect(read(name)).toContain('aria-pressed'),
+  );
 });
 
 describe('light theme semantic text', () => {
