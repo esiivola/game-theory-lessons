@@ -23,7 +23,16 @@ test('every lesson renders at 320px without page overflow or runtime errors', as
     const response = await page.goto(`lessons/${slug}/`, { waitUntil: 'domcontentloaded' });
     expect(response?.ok(), slug).toBe(true);
     await expect(page.locator('h1').first(), slug).toBeVisible();
-    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await page.evaluate(async () => {
+      const step = Math.max(200, window.innerHeight * 0.75);
+      for (let y = 0; y <= document.documentElement.scrollHeight; y += step) {
+        window.scrollTo(0, y);
+        await new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+        );
+      }
+    });
+    await expect(page.locator('astro-island[ssr]'), `${slug} island hydration`).toHaveCount(0);
     const overflow = await page.evaluate(() => ({
       body: document.body.scrollWidth - document.body.clientWidth,
       page: document.documentElement.scrollWidth - document.documentElement.clientWidth,
