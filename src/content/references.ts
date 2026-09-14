@@ -225,6 +225,8 @@ export const REFERENCES: Record<string, string> = {
     'Shavell, S. (2004). <i>Foundations of Economic Analysis of Law</i>. Harvard University Press.',
   tambe2011:
     'Tambe, M. (2011). <i>Security and Game Theory: Algorithms, Deployed Systems, Lessons Learned</i>. Cambridge University Press.',
+  shieh2012:
+    'Shieh, E., An, B., Yang, R., Tambe, M., Baldwin, C., DiRenzo, J., Maule, B., and Meyer, G. (2012). PROTECT: An application of computational game theory for the security of the ports of the United States. <i>Proceedings of the AAAI Conference on Artificial Intelligence</i>, 26(1), 2173-2179.',
 };
 
 /** Resolve a list of cite keys to citation strings, dropping unknown keys. */

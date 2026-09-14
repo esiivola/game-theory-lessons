@@ -647,7 +647,7 @@ Milgrom; Ostrom; Tambe.
 - **Interactive:** allocate coverage across two targets, then switch between a perfect best response and a noisy logit-QRE attacker. A response-precision slider changes attack probabilities, expected loss, and the best patrol mix.
 - **Worked example:** against a perfect response, equalize $(1-c_1)10=(1-c_2)5$ to get $c_1=2/3$, $c_2=1/3$, and loss about 3.33. Under QRE, $p_i=e^{\lambda a_i}/\sum_j e^{\lambda a_j}$ spreads attacks across targets, so the defender minimizes the probability-weighted loss and generally retunes coverage.
 - **Misconceptions:** always defend the highest-value target; predictable patrols are fine if frequent (surveillance makes any pattern exploitable); assume a perfectly rational attacker (QRE fits real adversaries).
-- **Source:** Tambe (2011).
+- **Source:** Tambe (2011); Shieh et al. (2012).
 
 ---
 
