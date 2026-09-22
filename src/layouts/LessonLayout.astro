@@ -97,25 +97,47 @@ const { slug, title, description, totalLessons, nextHref, nextTitle } = Astro.pr
     article.addEventListener('click', unlockPrediction);
     article.addEventListener('input', unlockPrediction);
 
-    // Track sections as they scroll into view.
-    const sections = article.querySelectorAll<HTMLElement>('[data-section]');
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver(
-        (entries) => {
-          for (const e of entries) {
-            if (e.isIntersecting) {
-              const id = (e.target as HTMLElement).dataset.section;
-              if (id) markSectionViewed(lessonSlug, id);
-              io.unobserve(e.target);
-            }
-          }
-        },
-        { threshold: 0, rootMargin: '0px 0px -20% 0px' }
-      );
-      sections.forEach((s) => io.observe(s));
-    } else {
-      sections.forEach((s) => s.dataset.section && markSectionViewed(lessonSlug, s.dataset.section));
+    // Track sections as they scroll into view. A section counts once its top edge has
+    // crossed into the top 80% of the viewport, matching the old IntersectionObserver's
+    // rootMargin. We scan geometry directly on scroll/resize (rAF-throttled) instead of
+    // relying solely on IntersectionObserver callbacks: those are dispatched async and can
+    // be coalesced by the browser, so a fast scroll (a quick flick, or a jump straight to
+    // the quiz) can skip the callback for a section the user genuinely scrolled past. That
+    // silently and permanently blocked completion, since sectionsViewed would never fill in
+    // and there was no error or recovery path. A direct geometry check on every scroll event
+    // cannot miss a section the same way, because getting from "above the viewport" to
+    // "below it" always means the section's top passed through the viewport at some point,
+    // and 'scroll' fires continuously (not batched) while that happens.
+    const sections = [...article.querySelectorAll<HTMLElement>('[data-section]')];
+    const unseen = new Set(sections);
+
+    function scanSections() {
+      if (unseen.size === 0) return;
+      for (const s of unseen) {
+        if (s.getBoundingClientRect().top < window.innerHeight * 0.8) {
+          unseen.delete(s);
+          if (s.dataset.section) markSectionViewed(lessonSlug, s.dataset.section);
+        }
+      }
+      if (unseen.size === 0) {
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', onScroll);
+      }
     }
+
+    let scanQueued = false;
+    function onScroll() {
+      if (scanQueued) return;
+      scanQueued = true;
+      requestAnimationFrame(() => {
+        scanQueued = false;
+        scanSections();
+      });
+    }
+
+    scanSections(); // catch sections already in view (short lessons, or a mid-page reload)
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
 
     const sectionIds = [...sections].flatMap((section) => section.dataset.section ? [section.dataset.section] : []);
     const quizIds = [...article.querySelectorAll<HTMLElement>('[data-quiz]')]
