@@ -99,19 +99,21 @@ const { slug, title, description, totalLessons, nextHref, nextTitle } = Astro.pr
 
     // Track sections as they scroll into view. A section counts once its top edge has
     // crossed into the top 80% of the viewport, matching the old IntersectionObserver's
-    // rootMargin. We scan geometry directly on scroll/resize (rAF-throttled) instead of
-    // relying solely on IntersectionObserver callbacks: those are dispatched async and can
-    // be coalesced by the browser, so a fast scroll (a quick flick, or a jump straight to
-    // the quiz) can skip the callback for a section the user genuinely scrolled past. That
-    // silently and permanently blocked completion, since sectionsViewed would never fill in
-    // and there was no error or recovery path. A direct geometry check on every scroll event
-    // cannot miss a section the same way, because getting from "above the viewport" to
-    // "below it" always means the section's top passed through the viewport at some point,
-    // and 'scroll' fires continuously (not batched) while that happens.
+    // rootMargin. This used to run off IntersectionObserver, then off a 'scroll' listener;
+    // both are event-driven, and both turned out to be able to miss a section the user had
+    // genuinely scrolled past, silently and permanently blocking completion with no error
+    // and no recovery path. IntersectionObserver's callback is dispatched async and can be
+    // coalesced by the browser on a fast scroll. 'scroll' itself is not guaranteed either:
+    // some mobile browsers (notably iOS Safari during an inertial flick) dispatch it sparsely
+    // rather than continuously, so a quick thumb-flick can move the page across a section
+    // between two 'scroll' events and never fire one while that section was in the 0.8 band.
+    // A plain rAF poll has no such gap: the browser must paint a frame for every visible
+    // change of scroll position, so checking geometry once per painted frame cannot skip a
+    // position the page actually rendered at, regardless of which input or browser drove it.
     const sections = [...article.querySelectorAll<HTMLElement>('[data-section]')];
     const unseen = new Set(sections);
 
-    function scanSections() {
+    function pollSections() {
       if (unseen.size === 0) return;
       for (const s of unseen) {
         if (s.getBoundingClientRect().top < window.innerHeight * 0.8) {
@@ -119,25 +121,9 @@ const { slug, title, description, totalLessons, nextHref, nextTitle } = Astro.pr
           if (s.dataset.section) markSectionViewed(lessonSlug, s.dataset.section);
         }
       }
-      if (unseen.size === 0) {
-        window.removeEventListener('scroll', onScroll);
-        window.removeEventListener('resize', onScroll);
-      }
+      if (unseen.size > 0) requestAnimationFrame(pollSections);
     }
-
-    let scanQueued = false;
-    function onScroll() {
-      if (scanQueued) return;
-      scanQueued = true;
-      requestAnimationFrame(() => {
-        scanQueued = false;
-        scanSections();
-      });
-    }
-
-    scanSections(); // catch sections already in view (short lessons, or a mid-page reload)
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    pollSections();
 
     const sectionIds = [...sections].flatMap((section) => section.dataset.section ? [section.dataset.section] : []);
     const quizIds = [...article.querySelectorAll<HTMLElement>('[data-quiz]')]
