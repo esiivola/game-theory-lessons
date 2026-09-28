@@ -103,7 +103,7 @@ Now scale up. In a finely subdivided triangle with millions of cells, the panchr
   badge="apply"
   question="Nash's theorem says an equilibrium exists. What does PPAD-completeness add?"
   options={[
-    { text: "That finding one is likely computationally hard, even though existence is guaranteed", correct: true, feedback: "Existence and efficient computation are separate. PPAD-completeness is strong evidence that no polynomial-time algorithm finds a Nash equilibrium of a general game, despite the guarantee that one is there." },
+    { text: "Finding an equilibrium can be computationally hard", correct: true, feedback: "Existence and efficient computation are separate. PPAD-completeness is strong evidence that no polynomial-time algorithm finds a Nash equilibrium of a general game, despite the guarantee that one is there." },
     { text: "That the equilibrium might not exist", feedback: "Existence is never in doubt; Nash proved it. The hardness is about locating the equilibrium, not whether it exists." },
     { text: "That the equilibrium is unique", feedback: "Complexity says nothing about uniqueness. It concerns how hard the guaranteed solution is to compute." },
   ]}
@@ -116,7 +116,7 @@ Now scale up. In a finely subdivided triangle with millions of cells, the panchr
   badge="analyse"
   question="Why is finding a two-player zero-sum equilibrium easy while general games are hard?"
   options={[
-    { text: "Zero-sum equilibria are the solution of a linear program; general Nash equilibria are PPAD-complete", correct: true, feedback: "Minimax in zero-sum games reduces to linear programming, which is efficient. Non-zero-sum games lose that structure and inherit the PPAD hardness of fixed-point search." },
+    { text: "Zero-sum is linear programming; general Nash is PPAD-complete", correct: true, feedback: "Minimax in zero-sum games reduces to linear programming, which is efficient. Non-zero-sum games lose that structure and inherit the PPAD hardness of fixed-point search." },
     { text: "Zero-sum games have no equilibrium to find", feedback: "They do have equilibria (the minimax mixes). Those are just efficiently computable, unlike general Nash equilibria." },
     { text: "General games have no equilibrium", feedback: "General finite games always have an equilibrium; it is finding it that is hard, not its existence." },
   ]}
@@ -129,7 +129,7 @@ Now scale up. In a finely subdivided triangle with millions of cells, the panchr
   badge="brings back: existence of Nash"
   question="How does Sperner's lemma connect to Nash's existence proof?"
   options={[
-    { text: "Both guarantee a solution, and the associated path-following search can require exponentially many steps", correct: true, feedback: "Sperner-style path methods are constructive in the sense that they can locate a solution. PPAD-completeness says that no polynomial-time method is known for the general problem, and some natural paths are exponentially long." },
+    { text: "Both are guaranteed, but finding them can take exponential time", correct: true, feedback: "Sperner-style path methods are constructive in the sense that they can locate a solution. PPAD-completeness says that no polynomial-time method is known for the general problem, and some natural paths are exponentially long." },
     { text: "Sperner's lemma proves equilibria do not exist", feedback: "It proves a panchromatic triangle always exists, mirroring the guarantee that equilibria exist. It is about existence, not non-existence." },
     { text: "They are unrelated results", feedback: "They are tightly linked: Sperner underlies the Brouwer fixed point behind Nash's theorem, and the shared parity structure defines PPAD." },
   ]}

@@ -34,7 +34,7 @@ import MinEffort from '@/components/interactive/MinEffort.svelte';
 <WarmUp
   client:visible
   questions={[
-    { q: "A game can have several Nash equilibria that are...", options: ["Always equally good", "Ranked differently for the players", "Impossible to reach"], answer: 1 },
+    { q: "A finite game has no stable pure-strategy outcome. What can still exist?", options: ["Only a dominant strategy", "A mixed-strategy equilibrium", "A payoff-maximizing referee"], answer: 1 },
     { q: "A focal point helps players pick an equilibrium using...", options: ["Higher payoffs", "Something salient outside the payoffs", "Randomization"], answer: 1 },
   ]}
 />
@@ -118,7 +118,7 @@ Because that best response increases with what others do, the equilibria line up
   badge="analyse"
   question="All-7 pays everyone 1.3 and all-1 pays 0.7. Both are equilibria. Why might a group end up at all-1?"
   options={[
-    { text: "Fear that someone will play low makes low the safe choice, and that fear is self-fulfilling", correct: true, feedback: "With complements, if you expect a low minimum you should play low, which produces the low minimum. Strategic uncertainty, not the payoffs, selects the bad equilibrium." },
+    { text: "Low expected effort makes low effort a best response", correct: true, feedback: "With complements, if you expect a low minimum you should play low, which produces the low minimum. Strategic uncertainty, not the payoffs, selects the bad equilibrium." },
     { text: "Because all-1 pays more", feedback: "It pays less (0.7 versus 1.3). The group can still land there because it is the safe response to doubt about others." },
     { text: "Because all-7 is not actually an equilibrium", feedback: "All-7 is an equilibrium: if everyone plays 7, no one gains by deviating. The problem is reaching it, not its stability." },
   ]}
@@ -131,7 +131,7 @@ Because that best response increases with what others do, the equilibria line up
   badge="brings back: focal points"
   question="Both all-7 and all-1 are equilibria with identical structure. What could tip a group toward the good one?"
   options={[
-    { text: "A shared focal cue, like a leader announcing everyone will play 7, that aligns expectations", correct: true, feedback: "As with focal points, the payoffs alone do not select the equilibrium. A salient signal that coordinates beliefs, so each trusts the others to play high, can move the group to all-7." },
+    { text: "A public cue that aligns expectations on effort 7", correct: true, feedback: "As with focal points, the payoffs alone do not select the equilibrium. A salient signal that coordinates beliefs, so each trusts the others to play high, can move the group to all-7." },
     { text: "Nothing, the outcome is purely random", feedback: "It is not random. Which equilibrium prevails depends on beliefs about others, which a focal cue or leadership can shape." },
     { text: "Lowering the payoff to all-7", feedback: "That would make the good equilibrium less attractive, not help reach it. Coordination on beliefs is what tips the group up." },
   ]}

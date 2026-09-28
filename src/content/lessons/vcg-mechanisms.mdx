@@ -109,9 +109,9 @@ $B$'s VCG payment is the externality it imposes. Remove $B$: the others ($A$ and
   badge="apply"
   question="In VCG, what does a winner actually pay?"
   options={[
-    { text: "The externality it imposes: the welfare others lose because it participated", correct: true, feedback: "The payment is others' best welfare without you, minus their welfare in the allocation VCG chooses. Your report can change that allocation, but truthful reporting still maximizes your payoff." },
-    { text: "Its own bid", feedback: "Paying your own bid invites shading. VCG charges the externality instead, then chooses the allocation maximizing reported value." },
-    { text: "The average of all bids", feedback: "There is no averaging. Each winner pays the specific welfare loss it causes the others." },
+    { text: "The harm its participation causes other players", correct: true, feedback: "The payment is others' best welfare without you, minus their welfare in the allocation VCG chooses. Your report can change that allocation, but truthful reporting still maximizes your payoff." },
+    { text: "The second-highest bid in every VCG allocation", feedback: "That formula holds for one item. With multiple goods or outcomes, VCG charges the externality on others, which need not be a single runner-up bid." },
+    { text: "Its own value minus its next-best personal option", feedback: "VCG measures the welfare loss imposed on other players, not the winner's private opportunity cost." },
   ]}
 />
 
@@ -122,7 +122,7 @@ $B$'s VCG payment is the externality it imposes. Remove $B$: the others ($A$ and
   badge="analyse"
   question="Why is truthful bidding a weakly dominant strategy under VCG?"
   options={[
-    { text: "With others' reports fixed, truthful reporting makes VCG choose the allocation that maximizes your true value plus others' reported value", correct: true, feedback: "The absence welfare in your VCG payment is fixed once others report. Your payoff is therefore true value plus others' reported welfare in the chosen allocation, minus that fixed amount. Reporting truthfully makes VCG maximize it, though a different report can tie." },
+    { text: "Truthful reports maximize your value plus others' reported values", correct: true, feedback: "The absence welfare in your VCG payment is fixed once others report. Your payoff is therefore true value plus others' reported welfare in the chosen allocation, minus that fixed amount. Reporting truthfully makes VCG maximize it, though a different report can tie." },
     { text: "Because the designer rewards honesty with a discount", feedback: "There is no honesty bonus. Truthfulness follows from how externality pricing makes your payoff track total welfare evaluated using your true value." },
     { text: "Because all bidders are assumed truthful", feedback: "Weakly dominant truthfulness holds whatever others do; it is not an assumption but a consequence of externality pricing." },
   ]}
@@ -135,7 +135,7 @@ $B$'s VCG payment is the externality it imposes. Remove $B$: the others ($A$ and
   badge="brings back: auctions"
   question="How does the single-item second-price auction fit into VCG?"
   options={[
-    { text: "It is VCG with one good: the winner's externality is the value of the runner-up it displaced, so it pays the second-highest bid", correct: true, feedback: "With one item, the welfare others lose from the winner's presence is exactly the highest losing value, the runner-up. So the VCG charge is the second price, and truthful bidding is dominant, just as in Vickrey's auction." },
+    { text: "The winner pays the displaced runner-up's value", correct: true, feedback: "With one item, the welfare others lose from the winner's presence is exactly the highest losing value, the runner-up. So the VCG charge is the second price, and truthful bidding is dominant, just as in Vickrey's auction." },
     { text: "They are unrelated mechanisms", feedback: "They are the same idea: the second-price auction is the one-good case of VCG externality pricing." },
     { text: "The second-price auction charges the winner's own bid", feedback: "It charges the second-highest bid, which is the externality the winner imposes. That is precisely the VCG rule for one item." },
   ]}

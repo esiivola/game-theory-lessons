@@ -130,7 +130,7 @@ Both recommendations are self-enforcing, so the device is a correlated equilibri
   badge="apply"
   question="The mediator averages (5,5), above the mixed Nash 4.67. Where does the extra payoff come from?"
   options={[
-    { text: "The signal never recommends the crash cell, and it correlates the two players so they avoid it together", correct: true, feedback: "Independent mixing occasionally puts both on Straight. The device rules that out by correlating the recommendations, capturing value no independent play can." },
+    { text: "The signal coordinates players away from the crash cell", correct: true, feedback: "Independent mixing occasionally puts both on Straight. The device rules that out by correlating the recommendations, capturing value no independent play can." },
     { text: "The mediator forces players to cooperate", feedback: "Nothing is forced. Players obey only because, given the recommendation, obeying is their best reply. The gain comes from correlation, not compulsion." },
     { text: "The payoffs are higher than in the original game", feedback: "The payoffs are unchanged. The device only changes the distribution over the same cells, avoiding the crash." },
   ]}
@@ -143,7 +143,7 @@ Both recommendations are self-enforcing, so the device is a correlated equilibri
   badge="analyse"
   question="You are told Swerve. Why is obeying rational rather than grabbing Straight for the higher 7?"
   options={[
-    { text: "Given the Swerve recommendation, the opponent is only half likely to swerve, so deviating averages 3.5 versus obeying's 4", correct: true, feedback: "The recommendation is informative. Told Swerve, the opponent Swerves or goes Straight with equal chance, so gambling on Straight risks the crash and pays less on average than obeying." },
+    { text: "Obeying pays 4; deviating averages 3.5", correct: true, feedback: "The recommendation is informative. Told Swerve, the opponent Swerves or goes Straight with equal chance, so gambling on Straight risks the crash and pays less on average than obeying." },
     { text: "Because the mediator penalizes disobedience", feedback: "There is no penalty. Obeying is simply the higher-expected-payoff move given what the recommendation implies about the opponent." },
     { text: "Because Straight is never the better move in Chicken", feedback: "Straight is better when you know the opponent swerves, which is exactly why you take it when told Straight. Told Swerve, the odds do not favour it." },
   ]}
@@ -156,7 +156,7 @@ Both recommendations are self-enforcing, so the device is a correlated equilibri
   badge="brings back: mixed strategies"
   question="How does a correlated equilibrium relate to the mixed-strategy Nash equilibria you already know?"
   options={[
-    { text: "Every Nash equilibrium is a correlated equilibrium, while correlation can produce payoff distributions independent mixing cannot", correct: true, feedback: "Independent Nash play is a special case of correlated equilibrium. Informative recommendations can avoid the crash and improve on the symmetric mixed equilibrium without Pareto-dominating both pure equilibria." },
+    { text: "Every Nash equilibrium is correlated, but not conversely", correct: true, feedback: "Independent Nash play is a special case of correlated equilibrium. Informative recommendations can avoid the crash and improve on the symmetric mixed equilibrium without Pareto-dominating both pure equilibria." },
     { text: "They are the same thing under a different name", feedback: "They are not. A correlated equilibrium can achieve payoffs, like (5,5) here, that no Nash equilibrium of the game reaches." },
     { text: "A correlated equilibrium is always worse than the best Nash equilibrium", feedback: "The reverse can hold: here the device averages 5 per player, above the 4.67 of the mixed Nash and better on average than the lopsided pure equilibria." },
   ]}

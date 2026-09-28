@@ -107,7 +107,7 @@ Now GSP under truthful bids: slot 1's price is the next bid, $B = 6$, times slot
   badge="apply"
   question="Under GSP with truthful bids (values 10, 6, 4), why does the top advertiser end up paying more than under VCG?"
   options={[
-    { text: "GSP charges the next bid (6) over all 100 clicks, 600, while VCG charges the externality, 440", correct: true, feedback: "GSP's price for a slot is the bid just below, times the slot's clicks. That comes to 600 for slot 1, above the 440 externality VCG charges, and steep enough that A would rather shade into slot 2 (480 beats 400), so truthful bidding is not a GSP equilibrium." },
+    { text: "GSP charges 600; VCG charges 440", correct: true, feedback: "GSP's price for a slot is the bid just below, times the slot's clicks. That comes to 600 for slot 1, above the 440 externality VCG charges, and steep enough that A would rather shade into slot 2 (480 beats 400), so truthful bidding is not a GSP equilibrium." },
     { text: "GSP charges the advertiser's own bid", feedback: "It charges the next bid down, not the winner's own. Still, that comes to 600 here, more than VCG's 440." },
     { text: "They pay the same under both rules with truthful bids", feedback: "Not with truthful bids: GSP gives 600, VCG 440. Under the standard model, they coincide at GSP's lowest locally envy-free equilibrium, where bids are shaded." },
   ]}
@@ -120,7 +120,7 @@ Now GSP under truthful bids: slot 1's price is the next bid, $B = 6$, times slot
   badge="analyse"
   question="Is bidding your true per-click value a dominant strategy under GSP with multiple slots?"
   options={[
-    { text: "No: with several slots a bidder can do better by shading into a cheaper lower slot", correct: true, feedback: "GSP is truthful only for a single slot (where it is the second-price auction). With several slots the top slot's price takes no account of what the lower slots cost, so when a lower slot keeps enough traffic, shading into it pays and truth-telling is not even an equilibrium, let alone dominant." },
+    { text: "No, shading can make a cheaper lower slot more attractive", correct: true, feedback: "GSP is truthful only for a single slot (where it is the second-price auction). With several slots the top slot's price takes no account of what the lower slots cost, so when a lower slot keeps enough traffic, shading into it pays and truth-telling is not even an equilibrium, let alone dominant." },
     { text: "Yes, GSP is always truthful", feedback: "GSP is truthful only in the single-slot case. With multiple slots it is not, which is the whole point of this lesson." },
     { text: "Only if there are more slots than bidders", feedback: "The number of slots versus bidders is not what restores truthfulness. GSP is non-truthful with multiple slots regardless." },
   ]}

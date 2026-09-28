@@ -1,5 +1,19 @@
 # Course regression log
 
+## 2026-09-28: End quizzes alone complete a lesson
+
+- Symptom: learners answered the end questions correctly but could remain stuck because a section view event was missed.
+- Root cause: completion also required every section to have been recorded as viewed, and the concept map displayed prerequisite locks despite lessons being directly accessible.
+- Fix: correct answers to every end quiz complete the lesson; the concept map presents prerequisite arrows as suggested paths.
+- Guard: `src/lib/progress.test.ts` checks completion with no section views and one-time XP awards.
+
+## 2026-09-28: Answer order and wording no longer give away quiz answers
+
+- Symptom: 221 of 225 end questions put the correct option first; 134 of 145 review questions put it second. Correct options often contained a full explanation while distractors were much shorter.
+- Root cause: authored order was displayed unchanged, and answer text carried reasoning that belonged in feedback.
+- Fix: both question components use a stable per-question shuffle. Long correct options were shortened, weak distractors were rewritten around plausible errors, and repetitive Nash review prompts were diversified.
+- Guard: `src/lib/quizOptions.test.ts` checks stable ordering, answer preservation, and varied correct positions.
+
 ## 2026-09-13: Prediction comparison unlocks after play
 
 - Symptom: a learner could open the prediction explanation immediately after choosing an answer, before interacting with the game.

@@ -101,7 +101,7 @@ But suppose the crowd is mostly level-1 and level-2, with a few level-0 and leve
   badge="apply"
   question="A level-2 reasoner in the beauty contest guesses about what?"
   options={[
-    { text: "22, best-responding to level-1 players who guess 33", correct: true, feedback: "Level-2 assumes others are level-1 (guessing 33) and plays two-thirds of that, about 22. Each level is one two-thirds step below the one it responds to." },
+    { text: "About 22", correct: true, feedback: "Level-2 assumes others are level-1 (guessing 33) and plays two-thirds of that, about 22. Each level is one two-thirds step below the one it responds to." },
     { text: "0, the equilibrium", feedback: "That is the infinite-reasoning limit, not level-2. A level-2 player stops after two steps, guessing about 22." },
     { text: "50, the random average", feedback: "50 is level-0 (non-strategic) play. Level-2 has reasoned two steps down to about 22." },
   ]}
@@ -114,7 +114,7 @@ But suppose the crowd is mostly level-1 and level-2, with a few level-0 and leve
   badge="analyse"
   question="Why does the Nash prediction of 0 fail in practice?"
   options={[
-    { text: "It assumes unbounded reasoning by everyone, but real crowds stop after one or two steps, so the average stays well above 0", correct: true, feedback: "Zero is the fixed point of infinite iteration. Since most players reason shallowly, the actual average is far higher, and two-thirds of it, around 20, wins. The equilibrium both mispredicts and loses." },
+    { text: "It assumes deeper reasoning than most players use", correct: true, feedback: "Zero is the fixed point of infinite iteration. Since most players reason shallowly, the actual average is far higher, and two-thirds of it, around 20, wins. The equilibrium both mispredicts and loses." },
     { text: "Because 0 is not actually the Nash equilibrium", feedback: "0 is the Nash equilibrium. The point is that it fails empirically because reasoning is bounded, not that the equilibrium is miscomputed." },
     { text: "Because players cannot compute two-thirds", feedback: "They can do the arithmetic; they just do not iterate it to infinity. Bounded depth, not inability, is the issue." },
   ]}
@@ -127,7 +127,7 @@ But suppose the crowd is mostly level-1 and level-2, with a few level-0 and leve
   badge="brings back: common knowledge"
   question="How does level-k relate to common knowledge of rationality?"
   options={[
-    { text: "It relaxes it: instead of infinite mutual knowledge of rationality, each level assumes others reason one step less", correct: true, feedback: "Common knowledge of rationality drives the guess to 0. Level-k replaces that infinite tower with finite depths, which is why predicted (and actual) play stops well short of the equilibrium." },
+    { text: "Players model others as reasoning one step less", correct: true, feedback: "Common knowledge of rationality drives the guess to 0. Level-k replaces that infinite tower with finite depths, which is why predicted (and actual) play stops well short of the equilibrium." },
     { text: "It assumes even deeper common knowledge", feedback: "The opposite: it assumes shallower reasoning than full common knowledge, which is what matches behaviour." },
     { text: "It ignores what others do entirely", feedback: "Each level explicitly best-responds to a belief about others' depth. It is strategic, just boundedly so." },
   ]}

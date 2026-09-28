@@ -34,7 +34,7 @@ import CoreExplorer from '@/components/interactive/CoreExplorer.svelte';
 <WarmUp
   client:visible
   questions={[
-    { q: "A Nash equilibrium is stable against deviations by...", options: ["Coalitions", "Single players", "The referee"], answer: 1 },
+    { q: "In bargaining, your disagreement payoff is what you get if...", options: ["You make the first offer", "No agreement is reached", "Both accept the same split"], answer: 1 },
     { q: "The value a coalition can guarantee itself is given by its...", options: ["Shapley value", "Characteristic function", "Nash equilibrium"], answer: 1 },
   ]}
 />
@@ -103,7 +103,7 @@ From $x_s + x_1 \ge 100$ and the total being $100$, we get $x_2 \le 0$. The sing
   badge="apply"
   question="Why does the allocation (80, 10, 10) fail to be in the core?"
   options={[
-    { text: "The seller and one buyer can secure 100 but are offered only 90, so they block it", correct: true, feedback: "The coalition {seller, buyer 1} is worth 100 but receives 80 + 10 = 90 here, so it can break away and do better. That blocking means the allocation is outside the core." },
+    { text: "A seller-buyer pair can get 100 but receives only 90", correct: true, feedback: "The coalition {seller, buyer 1} is worth 100 but receives 80 + 10 = 90 here, so it can break away and do better. That blocking means the allocation is outside the core." },
     { text: "It is not efficient", feedback: "It is efficient: 80 + 10 + 10 = 100. The problem is that a coalition can block it, not the total." },
     { text: "The two buyers together are worth 20", feedback: "The two buyers alone are worth 0, not 20. The binding objection comes from a seller-plus-buyer coalition." },
   ]}
@@ -116,7 +116,7 @@ From $x_s + x_1 \ge 100$ and the total being $100$, we get $x_2 \le 0$. The sing
   badge="analyse"
   question="Why does the entire surplus go to the seller?"
   options={[
-    { text: "The buyers are substitutes, so they compete, and the seller can always deal with whichever buyer is offered less", correct: true, feedback: "Scarcity on the seller side plus competition on the buyer side is decisive. Any positive buyer share is undercut by a seller-plus-other-buyer coalition, forcing buyer shares to zero." },
+    { text: "Substitutable buyers compete for the one seller", correct: true, feedback: "Scarcity on the seller side plus competition on the buyer side is decisive. Any positive buyer share is undercut by a seller-plus-other-buyer coalition, forcing buyer shares to zero." },
     { text: "Because the seller moves first", feedback: "There is no move order here; it is a cooperative game. The seller's advantage comes from being the scarce, indispensable party." },
     { text: "Because the buyers dislike each other", feedback: "No animosity is needed. Pure competition between substitute buyers hands the surplus to the seller." },
   ]}
@@ -129,7 +129,7 @@ From $x_s + x_1 \ge 100$ and the total being $100$, we get $x_2 \le 0$. The sing
   badge="brings back: nash equilibrium"
   question="How does core stability differ from Nash-equilibrium stability?"
   options={[
-    { text: "The core resists deviations by any coalition; Nash equilibrium only resists deviations by single players", correct: true, feedback: "Nash equilibrium asks that no individual gains by moving alone. The core is stronger in this respect: no group, of any size, can break away and do better for all its members." },
+    { text: "The core blocks coalition deviations; Nash blocks unilateral ones", correct: true, feedback: "Nash equilibrium asks that no individual gains by moving alone. The core is stronger in this respect: no group, of any size, can break away and do better for all its members." },
     { text: "They are the same stability concept", feedback: "They differ: the core protects against coalitional deviations, Nash equilibrium only against unilateral ones." },
     { text: "The core only considers single-player deviations", feedback: "The reverse: the core considers every coalition, which is exactly what makes it demanding (and sometimes empty)." },
   ]}

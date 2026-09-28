@@ -108,7 +108,7 @@ On the legal side, take the numbers above. The plaintiff's trial value is $50\te
   badge="apply"
   question="Why is making the agent bear all the risk (pure pay-for-output) usually a mistake?"
   options={[
-    { text: "Output is noisy, so a risk-averse agent demands a large premium to bear luck they cannot control, making full-risk contracts expensive", correct: true, feedback: "High-powered incentives over-punish the agent for bad luck. The optimal contract shares risk: enough slope to motivate, not so much that you overpay a risk-averse agent for noise." },
+    { text: "Noisy output makes full risk costly for the agent", correct: true, feedback: "High-powered incentives over-punish the agent for bad luck. The optimal contract shares risk: enough slope to motivate, not so much that you overpay a risk-averse agent for noise." },
     { text: "Because agents never respond to incentives", feedback: "Agents do respond, which is why some slope is optimal. The problem is that all-risk contracts overpay for noise, not that incentives fail." },
     { text: "Because pay should never depend on output", feedback: "Pay should depend on informative signals of effort, including output. The point is balance, not zero incentive." },
   ]}
@@ -121,7 +121,7 @@ On the legal side, take the numbers above. The plaintiff's trial value is $50\te
   badge="analyse"
   question="Plaintiff wins 100k with probability 0.6; each side's trial cost is 10k. Why do they settle?"
   options={[
-    { text: "The plaintiff accepts anything above 50k and the defendant pays up to 70k, so any settlement in [50k, 70k] beats trial for both", correct: true, feedback: "Plaintiff trial value = 60k expected minus 10k cost = 50k; defendant expected loss = 60k + 10k = 70k. The overlapping range is the 20k in saved trial costs, so rational parties settle." },
+    { text: "Both prefer a settlement between 50k and 70k", correct: true, feedback: "Plaintiff trial value = 60k expected minus 10k cost = 50k; defendant expected loss = 60k + 10k = 70k. The overlapping range is the 20k in saved trial costs, so rational parties settle." },
     { text: "Because settlement is legally required", feedback: "It is not required; they settle because both do better than at trial. The overlapping acceptable ranges create a surplus from saved costs." },
     { text: "Because the plaintiff is certain to win", feedback: "The plaintiff wins only with probability 0.6. Settlement happens because the acceptable ranges overlap, not because of certainty." },
   ]}
@@ -134,7 +134,7 @@ On the legal side, take the numbers above. The plaintiff's trial value is $50\te
   badge="brings back: asymmetric information"
   question="Given that settlement usually beats trial, why do some cases still go to court?"
   options={[
-    { text: "When each side is too optimistic about winning, or holds private information, their acceptable ranges stop overlapping", correct: true, feedback: "If the plaintiff expects to win 0.9 and the defendant only 0.3, the plaintiff demands more than the defendant will pay and the ranges miss. Divergent estimates or asymmetric information, not irrationality, drive cases to trial." },
+    { text: "Private beliefs or information can erase the settlement range", correct: true, feedback: "If the plaintiff expects to win 0.9 and the defendant only 0.3, the plaintiff demands more than the defendant will pay and the ranges miss. Divergent estimates or asymmetric information, not irrationality, drive cases to trial." },
     { text: "Because rational parties always litigate", feedback: "Rational parties usually settle; trials are the exception, arising when beliefs diverge or information is asymmetric enough that the ranges do not overlap." },
     { text: "Because trial costs are always zero", feedback: "Trial costs are positive, which is exactly what creates the settlement surplus. Cases go to trial despite those costs when the ranges fail to overlap." },
   ]}

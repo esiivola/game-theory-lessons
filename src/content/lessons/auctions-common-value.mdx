@@ -115,9 +115,9 @@ That second estimate needs the model. A prior over $V$, a distribution of signal
   badge="apply"
   question="Your signal of a common value is unbiased. Why is bidding it a mistake?"
   options={[
-    { text: "Because you win mainly when your signal is the highest, and the highest signal overstates the value", correct: true, feedback: "Winning is correlated with over-optimism. Conditional on winning, your signal is above the true value on average, so bidding it means overpaying. That is the winner's curse." },
-    { text: "Because signals are always too low", feedback: "Signals are unbiased before conditioning. The problem appears only once you condition on the event that you won." },
-    { text: "Because the seller sees your signal", feedback: "The seller does not see it, and that is not the issue. The curse comes from the correlation between winning and having the highest signal." },
+    { text: "Winning selects bidders with overly high signals", correct: true, feedback: "Winning is correlated with over-optimism. Conditional on winning, your signal is above the true value on average, so bidding it means overpaying. That is the winner's curse." },
+    { text: "Your signal is biased upward before the auction starts", feedback: "The signal is unbiased before bidding. The upward bias appears after conditioning on winning, which selects unusually high signals." },
+    { text: "The average of all bidders' signals must be below your own", feedback: "That need not hold before the auction. Winning is the key event: it tends to mean your signal was unusually optimistic." },
   ]}
 />
 
@@ -141,7 +141,7 @@ That second estimate needs the model. A prior over $V$, a distribution of signal
   badge="brings back: auctions"
   question="How does optimal bidding here differ from the private-value second-price auction you saw before?"
   options={[
-    { text: "With private values, bidding your value is dominant; with a common value, bid from the value conditional on winning", correct: true, feedback: "The private-value logic (bid your value, since it does not affect the price you pay) breaks when winning itself carries information about the value. Common values require conditioning on winning." },
+    { text: "Private-value second-price bids are truthful; common-value bids must account for winning", correct: true, feedback: "The private-value logic (bid your value, since it does not affect the price you pay) breaks when winning itself carries information about the value. Common values require conditioning on winning." },
     { text: "Both cases call for bidding your signal or value truthfully", feedback: "Only the private-value second-price auction rewards truthful bidding. A common value makes winning informative, so a raw signal is not enough." },
     { text: "Common-value auctions have no equilibrium", feedback: "They do have equilibria. In a standard symmetric first-price model, the bid is the expected value conditional on the marginal event of winning." },
   ]}

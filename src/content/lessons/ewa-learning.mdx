@@ -101,9 +101,9 @@ In this fixed-payoff example, the reinforcement learner may take many rounds to 
   badge="apply"
   question="What does the imagination parameter delta = 0 correspond to?"
   options={[
-    { text: "Pure reinforcement learning: only the action actually played takes in a payoff", correct: true, feedback: "With delta = 0 the foregone actions get zero weight on their payoffs, so you learn only from what you experienced. That is exactly reinforcement learning: an unsampled action's attraction fades with age, but it never gets news about its own payoff." },
-    { text: "Fictitious play", feedback: "Fictitious play is the other extreme, delta = 1 with phi = rho, where every action is updated by its would-be payoff." },
-    { text: "Random choice", feedback: "Delta = 0 still learns from played actions; it is not random. It is reinforcement learning, the slow-but-real extreme." },
+    { text: "Pure reinforcement learning", correct: true, feedback: "With delta = 0 the foregone actions get zero weight on their payoffs, so you learn only from what you experienced. That is exactly reinforcement learning: an unsampled action's attraction fades with age, but it never gets news about its own payoff." },
+    { text: "Belief learning from every foregone payoff", feedback: "Updating unplayed actions from their foregone payoffs is the high-delta end, not delta zero." },
+    { text: "No learning, since unplayed actions are ignored", feedback: "Played actions still update from experienced payoffs. Ignoring foregone payoffs gives reinforcement learning, not no learning." },
   ]}
 />
 
@@ -114,9 +114,9 @@ In this fixed-payoff example, the reinforcement learner may take many rounds to 
   badge="analyse"
   question="Why does a belief learner (high delta) adapt faster than a reinforcement learner?"
   options={[
-    { text: "It updates every action by the payoff it would have earned, so it learns about options it did not choose", correct: true, feedback: "Weighing foregone payoffs means the learner compares all actions each round, correcting course immediately, whereas reinforcement must sample an action to learn about it." },
-    { text: "It ignores the past entirely", feedback: "It still uses memory (phi). What speeds it up is learning from counterfactual payoffs, not discarding history." },
-    { text: "It always plays randomly to explore", feedback: "It does not rely on random exploration; it learns from foregone payoffs directly, which is why it needs less trial and error." },
+    { text: "It learns from payoffs for actions it did not take", correct: true, feedback: "Weighing foregone payoffs means the learner compares all actions each round, correcting course immediately, whereas reinforcement must sample an action to learn about it." },
+    { text: "It puts more weight only on the most recent played payoff", feedback: "Memory has its own parameter. High delta adds information from unplayed actions, rather than merely changing recency weights." },
+    { text: "It samples every action more often to observe its payoff", feedback: "It can update foregone actions without sampling them, which is precisely why it can adapt faster." },
   ]}
 />
 
@@ -127,7 +127,7 @@ In this fixed-payoff example, the reinforcement learner may take many rounds to 
   badge="brings back: learning in games"
   question="How does EWA relate to the fictitious play from the learning lesson?"
   options={[
-    { text: "Fictitious play is the special case delta = 1, phi = rho; EWA generalizes it with tunable memory and imagination", correct: true, feedback: "Fictitious play best-responds to the empirical frequency, which EWA reproduces at delta = 1 with matched memory decay. Lowering delta blends in reinforcement, giving a family that fits real learning better than either extreme alone." },
+    { text: "Fictitious play is an EWA special case", correct: true, feedback: "Fictitious play best-responds to the empirical frequency, which EWA reproduces at delta = 1 with matched memory decay. Lowering delta blends in reinforcement, giving a family that fits real learning better than either extreme alone." },
     { text: "They are unrelated models", feedback: "They are tightly linked: fictitious play is one corner of EWA's parameter space." },
     { text: "EWA cannot represent fictitious play", feedback: "It can: set delta = 1 and phi = rho and EWA becomes belief learning / fictitious play." },
   ]}

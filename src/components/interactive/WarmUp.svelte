@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { shuffleOptions } from '@/lib/quizOptions';
   interface WQ { q: string; options: string[]; answer: number; explanation?: string; }
   let {
     title = 'From earlier lessons',
@@ -14,12 +15,15 @@
   let solved = $state<number[]>(questions.map(() => -1));
   let wrong = $state<number[][]>(questions.map(() => []));
   let feedback = $state<string[]>(questions.map(() => ''));
+  const orderedQuestions = $derived(questions.map((q) => shuffleOptions(
+    q.options.map((text, index) => ({ text, correct: index === q.answer })), q.q,
+  )));
 
   function pick(qi: number, oi: number) {
     if (solved[qi] !== -1 || wrong[qi].includes(oi)) return;
-    if (oi === questions[qi].answer) {
+    if (orderedQuestions[qi][oi].correct) {
       solved[qi] = oi;
-      feedback[qi] = questions[qi].explanation ?? `Correct: ${questions[qi].options[oi]}.`;
+      feedback[qi] = questions[qi].explanation ?? `Correct: ${orderedQuestions[qi][oi].text}.`;
     } else if (!wrong[qi].includes(oi)) {
       wrong[qi] = [...wrong[qi], oi];
       feedback[qi] = 'Not that one. Try again.';
@@ -34,12 +38,12 @@
     <div class="wq">
       <p>{q.q}</p>
       <div class="wopts">
-        {#each q.options as opt, oi}
+        {#each orderedQuestions[qi] as opt, oi}
           <button
             class={(solved[qi] === oi ? 'ok' : '') + (wrong[qi].includes(oi) ? 'no' : '')}
             aria-disabled={solved[qi] !== -1 || wrong[qi].includes(oi)}
             onclick={() => pick(qi, oi)}
-          >{opt}</button>
+          >{opt.text}</button>
         {/each}
       </div>
       {#if feedback[qi]}

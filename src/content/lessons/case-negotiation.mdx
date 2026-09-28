@@ -103,7 +103,7 @@ At equal $\delta=0.9$, the responder already receives about $0.474$, so a BATNA 
   badge="apply"
   question="Two negotiators alternate offers with delta = 0.9. Roughly how does the pie split, and why?"
   options={[
-    { text: "About 0.526 to the proposer, 0.474 to the responder; the small edge comes from moving first and shrinks as patience rises", correct: true, feedback: "The proposer gets 1/(1+delta) and the responder delta/(1+delta). At delta=0.9 that is 0.526 vs 0.474, and as delta approaches 1 both approach 0.5." },
+    { text: "About 0.526 to the proposer and 0.474 to the responder", correct: true, feedback: "The proposer gets 1/(1+delta) and the responder delta/(1+delta). At delta=0.9 that is 0.526 vs 0.474, and as delta approaches 1 both approach 0.5." },
     { text: "The proposer takes almost everything because they move first", feedback: "The first-mover advantage is small (0.526 vs 0.474 here) and vanishes as both sides get patient. It is not a landslide." },
     { text: "Exactly 50/50 regardless of patience", feedback: "It is 50/50 only in the limit as delta goes to 1. With delta=0.9 the proposer gets a slight edge." },
   ]}
@@ -116,7 +116,7 @@ At equal $\delta=0.9$, the responder already receives about $0.474$, so a BATNA 
   badge="analyse"
   question="Why does improving your BATNA get you a better deal even if talks succeed?"
   options={[
-    { text: "No one accepts less than their outside option, so a better BATNA raises the floor and shifts the equilibrium split toward you", correct: true, feedback: "The outside option truncates the bargaining range. A stronger alternative means you can credibly refuse worse offers, so the settlement moves your way even though you never actually walk." },
+    { text: "It raises the minimum deal you would accept", correct: true, feedback: "The outside option truncates the bargaining range. A stronger alternative means you can credibly refuse worse offers, so the settlement moves your way even though you never actually walk." },
     { text: "It does not matter unless talks actually fail", feedback: "The BATNA shapes the deal you get even when talks succeed, because it sets the minimum you will accept and everyone bargains against it." },
     { text: "A better BATNA only helps the other side", feedback: "It helps you: it raises your reservation value, so the equilibrium split shifts in your favour, not the other side's." },
   ]}
@@ -129,7 +129,7 @@ At equal $\delta=0.9$, the responder already receives about $0.474$, so a BATNA 
   badge="brings back: bargaining"
   question="If rational bargainers settle immediately, why do real strikes and lockouts happen?"
   options={[
-    { text: "Asymmetric information: each side is unsure of the other's true reservation value, and a costly delay is how that gets tested", correct: true, feedback: "With full information the parties would agree in round one. Strikes arise mostly from private information about what the other side can bear, so a costly standoff signals resolve, not irrationality." },
+    { text: "Private reservation values make delay an information test", correct: true, feedback: "With full information the parties would agree in round one. Strikes arise mostly from private information about what the other side can bear, so a costly standoff signals resolve, not irrationality." },
     { text: "Because bargaining is fundamentally irrational", feedback: "The theory shows rational players settle at once under symmetric information. Strikes come from information asymmetry, not from irrationality." },
     { text: "Because the first mover always refuses to negotiate", feedback: "The first mover proposes and both settle in equilibrium. Delay comes from uncertainty about the other's limits, not first-mover behaviour." },
   ]}

@@ -103,7 +103,7 @@ Follow the arrows: $1 \to 3 \to 2 \to 1$ closes into a cycle; agent 4 points int
   badge="apply"
   question="Agent 4 points at agent 3, but agent 3 is in the cycle 1-3-2. What happens to agent 4 in round 1?"
   options={[
-    { text: "Nothing yet: agent 4 points into the cycle but is not on it, so it waits for a later round", correct: true, feedback: "Only agents whose pointing forms a closed loop trade in a round. Agent 4 is a tail leading into the cycle, so it stays and re-points once the cycle members leave." },
+    { text: "Agent 4 waits; it points to the cycle but is outside it", correct: true, feedback: "Only agents whose pointing forms a closed loop trade in a round. Agent 4 is a tail leading into the cycle, so it stays and re-points once the cycle members leave." },
     { text: "Agent 4 also trades and gets h3", feedback: "h3 goes to agent 1 in the cycle. Agent 4 is not part of any cycle this round, so it does not trade yet." },
     { text: "Agent 4 is removed with no house", feedback: "No agent leaves empty-handed. Agent 4 simply waits and ends up with h4 in round 2." },
   ]}
@@ -116,7 +116,7 @@ Follow the arrows: $1 \to 3 \to 2 \to 1$ closes into a cycle; agent 4 points int
   badge="analyse"
   question="Why is top trading cycles strategy-proof?"
   options={[
-    { text: "Your pointing only ever completes a cycle that includes you, so misreporting cannot get you a better object than truthful pointing would", correct: true, feedback: "You obtain an object exactly when you sit on a trading cycle, and pointing to your true favourite gives you the best available such object. Lying can only delay or worsen your outcome, never improve it." },
+    { text: "Misreporting cannot get a participant a better object", correct: true, feedback: "You obtain an object exactly when you sit on a trading cycle, and pointing to your true favourite gives you the best available such object. Lying can only delay or worsen your outcome, never improve it." },
     { text: "Because there is no money to manipulate", feedback: "Absence of money does not by itself prevent gaming. Strategy-proofness here comes from the cycle structure, which makes honest pointing optimal." },
     { text: "Because everyone gets their first choice", feedback: "Not everyone does (agent 4 does not). Strategy-proofness holds despite that: no misreport improves your assignment." },
   ]}
@@ -129,7 +129,7 @@ Follow the arrows: $1 \to 3 \to 2 \to 1$ closes into a cycle; agent 4 points int
   badge="brings back: the core"
   question="How does the TTC outcome relate to the core of the housing market?"
   options={[
-    { text: "It is the unique core allocation: no coalition can re-trade its own houses to make all its members better off", correct: true, feedback: "TTC lands exactly on the core, which for the housing market is a single allocation. Any group that tried to break away and swap among themselves could do no better than what TTC already gave them." },
+    { text: "The unique core allocation", correct: true, feedback: "TTC lands exactly on the core, which for the housing market is a single allocation. Any group that tried to break away and swap among themselves could do no better than what TTC already gave them." },
     { text: "It is one of many core allocations", feedback: "For the housing market the core is a single point, and TTC finds it. It is not one of several." },
     { text: "It lies outside the core, like the Shapley value can", feedback: "Unlike the Shapley value in non-convex games, the TTC allocation is always in the core, in fact it is the core." },
   ]}

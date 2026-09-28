@@ -103,7 +103,7 @@ Under the standard model, a lowest locally envy-free equilibrium assigns slots e
   badge="apply"
   question="A friend says GSP is just a second-price auction, so bid your value. What is wrong?"
   options={[
-    { text: "With multiple slots GSP is not truthful; a cheaper lower slot can be worth more than the top one", correct: true, feedback: "GSP equals the second-price auction only for a single slot. With several slots, shading under the bid above you can buy a cheaper slot that nets more, so truthful bidding is not an equilibrium. In the standard model, a lowest locally envy-free equilibrium has VCG prices." },
+    { text: "GSP is not truthful with multiple slots", correct: true, feedback: "GSP equals the second-price auction only for a single slot. With several slots, shading under the bid above you can buy a cheaper slot that nets more, so truthful bidding is not an equilibrium. In the standard model, a lowest locally envy-free equilibrium has VCG prices." },
     { text: "Nothing, GSP is always truthful", feedback: "It is truthful only in the single-slot case. Multiple slots break truthfulness, which is the whole subtlety of ad auctions." },
     { text: "GSP charges your own bid, so never bid high", feedback: "GSP charges the next bid down, not your own. Still, it is not truthful with multiple slots, so shading can help." },
   ]}
@@ -116,7 +116,7 @@ Under the standard model, a lowest locally envy-free equilibrium assigns slots e
   badge="analyse"
   question="What is the exposure problem in a spectrum auction?"
   options={[
-    { text: "When licenses are complements, bidding on a subset risks winning only a useless fragment at a high price", correct: true, feedback: "If a firm needs several licenses together but wins only some, it is exposed to paying for pieces worth little alone. Package bidding lets firms bid on bundles to avoid this." },
+    { text: "A bidder can win a costly, useless fragment", correct: true, feedback: "If a firm needs several licenses together but wins only some, it is exposed to paying for pieces worth little alone. Package bidding lets firms bid on bundles to avoid this." },
     { text: "That bidders' identities become public", feedback: "Exposure here is about winning an incomplete, low-value package, not privacy. It arises when goods are complements." },
     { text: "That the auction reveals the reserve price", feedback: "It concerns complementary goods and partial wins, not reserve disclosure. Package bidding is the standard remedy." },
   ]}

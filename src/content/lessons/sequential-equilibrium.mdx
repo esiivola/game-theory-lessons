@@ -107,7 +107,7 @@ Now $(T,L)$. Given Left trembling to Right with probability $\varepsilon$, Top p
   badge="apply"
   question="Why does (Bottom, Right) fail once trembles are allowed?"
   options={[
-    { text: "Bottom is weakly dominated by Top, so any chance the opponent plays Left makes Top strictly better", correct: true, feedback: "Under Right the two actions tie, but Top also pays 1 against Left while Bottom pays 0. A positive tremble to Left breaks the tie in Top's favour, so Bottom is abandoned." },
+    { text: "Bottom is weakly dominated by Top", correct: true, feedback: "Under Right the two actions tie, but Top also pays 1 against Left while Bottom pays 0. A positive tremble to Left breaks the tie in Top's favour, so Bottom is abandoned." },
     { text: "Because (Bottom, Right) is not a Nash equilibrium", feedback: "It is a Nash equilibrium (weakly). The point is that it fails the stronger trembling-hand test, not that it fails Nash." },
     { text: "Because trembles change the payoffs of the game", feedback: "Payoffs are unchanged. Trembles only put positive probability on every action, which tests weakly dominated moves." },
   ]}
@@ -120,9 +120,9 @@ Now $(T,L)$. Given Left trembling to Right with probability $\varepsilon$, Top p
   badge="analyse"
   question="Which ordering of solution concepts is correct, from most permissive to most selective?"
   options={[
-    { text: "Nash contains subgame-perfect contains sequential contains trembling-hand perfect", correct: true, feedback: "Each refinement is a subset of the previous: they impose more, so they keep fewer equilibria. Nash is the loosest, trembling-hand (and proper) the tightest." },
-    { text: "Trembling-hand perfect contains Nash", feedback: "The reverse: trembling-hand perfection is more selective, a subset of Nash, not a superset." },
-    { text: "Subgame-perfect contains Nash", feedback: "Nash contains subgame-perfect, not the other way around. Subgame perfection rules out some Nash equilibria." },
+    { text: "Nash, subgame-perfect, sequential, trembling-hand perfect", correct: true, feedback: "Each refinement is a subset of the previous: they impose more, so they keep fewer equilibria. Nash is the loosest, trembling-hand (and proper) the tightest." },
+    { text: "Nash, sequential, subgame-perfect, trembling-hand perfect", feedback: "Sequential equilibrium is more selective than subgame perfection because it also constrains beliefs and play at information sets." },
+    { text: "Subgame-perfect, Nash, sequential, trembling-hand perfect", feedback: "Nash comes first. Subgame perfection rules out some Nash equilibria, so it cannot be more permissive." },
   ]}
 />
 
@@ -133,7 +133,7 @@ Now $(T,L)$. Given Left trembling to Right with probability $\varepsilon$, Top p
   badge="brings back: subgame perfection"
   question="Why is subgame perfection not enough to rule out (Bottom, Right) here?"
   options={[
-    { text: "This simultaneous game has no proper subgames beyond the whole game, so subgame perfection cannot bite; trembling-hand perfection tests the weak equilibrium directly", correct: true, feedback: "Subgame perfection adds nothing in this one-shot simultaneous game. A trembling-hand perturbation puts positive probability on Left and makes Top strictly better, removing the weak equilibrium." },
+    { text: "The game has no proper subgames beyond itself", correct: true, feedback: "Subgame perfection adds nothing in this one-shot simultaneous game. A trembling-hand perturbation puts positive probability on Left and makes Top strictly better, removing the weak equilibrium." },
     { text: "Subgame perfection already rules it out", feedback: "It does not: with no proper subgame to check, subgame perfection coincides with Nash here and keeps (Bottom, Right)." },
     { text: "Because subgame perfection ignores payoffs", feedback: "It uses payoffs, but only within proper subgames. Here there are none beyond the whole game, so it has no extra grip." },
   ]}

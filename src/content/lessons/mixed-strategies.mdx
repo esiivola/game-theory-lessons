@@ -35,7 +35,7 @@ import MixedStrategy from '@/components/interactive/MixedStrategy.svelte';
 <WarmUp
   client:visible
   questions={[
-    { q: "At a Nash equilibrium, each player's move is a best reply to...", options: ["Their own payoff", "The other players' moves", "The average payoff"], answer: 1 },
+    { q: "The other player chooses Left. To find your best reply in a payoff table, compare...", options: ["Their payoffs across both columns", "Your payoffs down the Left column", "The sum of both players' payoffs"], answer: 1 },
     { q: "A best response is the move that...", options: ["Pays the most against a given opponent choice", "Always pays the most", "The opponent least expects"], answer: 0 },
   ]}
 />
@@ -169,7 +169,7 @@ Equilibrium says mix to a precise fraction. Real people do not. In first plays o
   badge="brings back: dominance"
   question="Before mixing, you should strip out any strictly dominated move. Why does that never remove part of a mixed equilibrium?"
   options={[
-    { text: "Because a strictly dominated move earns less against every opponent choice, so it earns less against any mix too, and a best response never puts weight on it", correct: true, feedback: "A move that loses against every pure choice also loses against every blend of them, so it can carry no probability in a best response. Deleting it first is always safe." },
+    { text: "A strictly dominated action is never a best reply to any mix", correct: true, feedback: "A move that loses against every pure choice also loses against every blend of them, so it can carry no probability in a best response. Deleting it first is always safe." },
     { text: "Because dominated moves are the ones you mix over", feedback: "The opposite. Dominated moves are exactly the ones a mixed best response gives zero weight." },
     { text: "Because mixing changes which move is dominated", feedback: "Strict dominance is fixed by the payoffs; mixing does not change it. A strictly dominated move stays out of every best response." },
   ]}

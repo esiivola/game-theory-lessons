@@ -35,7 +35,7 @@ import GameZoo from '@/components/interactive/GameZoo.svelte';
   client:visible
   questions={[
     { q: "In the Prisoner's Dilemma, both players defect because defecting is...", options: ["A focal point", "A dominant strategy", "Random"], answer: 1 },
-    { q: "A pure Nash equilibrium is a cell where...", options: ["Both get their maximum", "Neither gains by moving alone", "Payoffs are equal"], answer: 1 },
+    { q: "Both prisoners would gain if they cooperated together. What does that show about mutual defection?", options: ["Either can gain by switching alone", "It is Pareto inefficient", "It cannot be a stable outcome"], answer: 1 },
   ]}
 />
 </Section>
@@ -107,7 +107,7 @@ Three lessons hide in this list. Not every dilemma is a Prisoner's Dilemma: Stag
   badge="apply"
   question="Stag Hunt has two pure Nash equilibria, all-Stag and all-Hare. Why might a group land on all-Hare, the worse one?"
   options={[
-    { text: "Hare is safe: it pays 3 whatever the partner does, while Stag risks 0 if the partner chooses Hare", correct: true, feedback: "All-Stag pays more but requires confidence in the partner. With these payoffs, Hare also has the larger basin of attraction and is risk-dominant." },
+    { text: "Hare pays 3 regardless of the partner's choice", correct: true, feedback: "All-Stag pays more but requires confidence in the partner. With these payoffs, Hare also has the larger basin of attraction and is risk-dominant." },
     { text: "All-Hare pays more than all-Stag", feedback: "It pays less (3 versus 4). The group can still land there because Hare is the safer choice under doubt." },
     { text: "All-Stag is not actually an equilibrium", feedback: "It is: if both hunt Stag, neither gains by switching. The difficulty is coordinating on it, not its stability." },
   ]}
@@ -120,7 +120,7 @@ Three lessons hide in this list. Not every dilemma is a Prisoner's Dilemma: Stag
   badge="analyse"
   question="Both Battle of the Sexes and Chicken have two pure Nash equilibria. How do they differ?"
   options={[
-    { text: "In Battle of the Sexes the equilibria are matching cells the players rank oppositely; in Chicken they are mismatched cells where each wants to do the opposite", correct: true, feedback: "Battle of the Sexes is coordination with conflict (both want to be together, but disagree where). Chicken is anti-coordination: the equilibria are off-diagonal, and mutual aggression is the disaster both avoid." },
+    { text: "Battle of the Sexes rewards matching; Chicken rewards mismatching", correct: true, feedback: "Battle of the Sexes is coordination with conflict (both want to be together, but disagree where). Chicken is anti-coordination: the equilibria are off-diagonal, and mutual aggression is the disaster both avoid." },
     { text: "They are the same game with different names", feedback: "They differ structurally: Battle of the Sexes has diagonal equilibria, Chicken off-diagonal ones, which changes how players approach them." },
     { text: "Chicken has a dominant strategy and Battle of the Sexes does not", feedback: "Neither has a dominant strategy; both have two pure equilibria. The difference is where those equilibria sit." },
   ]}

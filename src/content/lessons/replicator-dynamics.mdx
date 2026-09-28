@@ -34,7 +34,7 @@ import Replicator from '@/components/interactive/Replicator.svelte';
 <WarmUp
   client:visible
   questions={[
-    { q: "Rock-Paper-Scissors has a unique Nash equilibrium at...", options: ["All Rock", "1/3 on each move", "No equilibrium"], answer: 1 },
+    { q: "A Rock-Paper-Scissors opponent always throws Rock. Which move exploits that pattern?", options: ["Rock", "Paper", "Scissors"], answer: 1 },
     { q: "An evolutionarily stable strategy resists invasion by...", options: ["The referee", "Rare mutants", "The majority"], answer: 1 },
   ]}
 />
@@ -116,7 +116,7 @@ Paper is above the average, so its share grows; Rock and Scissors shrink. But as
   badge="analyse"
   question="Penalizing ties (a negative tie payoff) changes the RPS dynamics how?"
   options={[
-    { text: "It makes matching the crowd costly, so the population spirals inward to the stable even mix", correct: true, feedback: "A tie penalty punishes playing like others, favouring diversity. The neutral orbits become an inward spiral, and the interior equilibrium turns asymptotically stable." },
+    { text: "It makes the population spiral inward to the even mix", correct: true, feedback: "A tie penalty punishes playing like others, favouring diversity. The neutral orbits become an inward spiral, and the interior equilibrium turns asymptotically stable." },
     { text: "It makes the population spiral outward to the edges", feedback: "That is what rewarding ties does. Penalizing ties pulls the population inward, toward the center." },
     { text: "It has no effect on the dynamics", feedback: "Even a small tie payoff changes the stability of the center: negative stabilizes it, positive destabilizes it." },
   ]}
@@ -129,9 +129,9 @@ Paper is above the average, so its share grows; Rock and Scissors shrink. But as
   badge="brings back: ESS"
   question="How do replicator dynamics connect to evolutionarily stable strategies?"
   options={[
-    { text: "An ESS is asymptotically stable under the standard replicator dynamics, as the Hawk-Dove mix illustrates", correct: true, feedback: "The valid general direction is from ESS to local asymptotic stability under the standard conditions. The converse can fail, so not every attracting rest point should automatically be labelled an ESS." },
-    { text: "They are unrelated", feedback: "They are two views of the same thing: ESS is the resting condition, replicator dynamics the process that reaches it." },
-    { text: "Replicator dynamics never reach an ESS", feedback: "They do in games like Hawk-Dove, converging to the ESS mix. RPS is the special zero-sum case where they cycle instead." },
+    { text: "An ESS is locally attracting under standard replicator dynamics", correct: true, feedback: "An ESS is locally asymptotically stable under the standard conditions. The converse can fail, so not every attracting rest point is an ESS." },
+    { text: "Every locally attracting state must be an ESS", feedback: "The implication need not run backward: replicator dynamics can attract states that fail the stronger invasion test for ESS." },
+    { text: "An ESS is stable only under best-response revision", feedback: "ESS can also be locally attracting under replicator dynamics, which track growth of better-performing strategies." },
   ]}
 />
 </Section>

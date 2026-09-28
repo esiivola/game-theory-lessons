@@ -35,7 +35,7 @@ import ReactionCurve from '@/components/interactive/ReactionCurve.svelte';
   client:visible
   questions={[
     { q: "A best response is the move that pays the most...", options: ["Overall", "Given what the other player does", "In the long run"], answer: 1 },
-    { q: "At a Nash equilibrium, each firm's choice is...", options: ["A best response to the other's choice", "The largest possible output", "Equal to the other's cost"], answer: 0 },
+    { q: "A firm changes its output while its rival holds output fixed. Which kind of change is this?", options: ["A joint deviation", "A unilateral deviation", "A change in market demand"], answer: 1 },
   ]}
 />
 </Section>
@@ -116,7 +116,7 @@ Firm 1 maximizes $(120 - q_1 - q_2) q_1$. Differentiate in $q_1$ and set to zero
   badge="apply"
   question="At the Cournot equilibrium each firm makes 40, for a total of 80. A monopolist would make 60. What does the comparison show?"
   options={[
-    { text: "The duopoly overproduces relative to monopoly, which lowers the price and their combined profit", correct: true, feedback: "Each firm expands to capture share, so together they exceed the monopoly output. Price falls to 40 and combined profit (3200) is below the monopoly 3600." },
+    { text: "Duopoly output exceeds monopoly output, reducing joint profit", correct: true, feedback: "Each firm expands to capture share, so together they exceed the monopoly output. Price falls to 40 and combined profit (3200) is below the monopoly 3600." },
     { text: "Two firms behave just like a monopoly", feedback: "They produce 80, well above the monopoly 60. Rivalry pushes output up and price down." },
     { text: "The duopoly restricts output below monopoly", feedback: "The opposite: 80 exceeds 60. Neither firm internalizes the harm its output does to the other's price." },
   ]}
@@ -142,7 +142,7 @@ Firm 1 maximizes $(120 - q_1 - q_2) q_1$. Differentiate in $q_1$ and set to zero
   badge="brings back: best response"
   question="A firm's reaction curve slopes downward: the more the rival produces, the less it makes. Why?"
   options={[
-    { text: "Because the rival's extra output lowers the price, so the best-responding firm scales back to avoid flooding the market", correct: true, feedback: "The reaction curve is the best-response function. More rival output means a lower price, which makes a large own quantity less attractive, so the best reply shrinks." },
+    { text: "A rival's extra output lowers your best-response quantity", correct: true, feedback: "The reaction curve is the best-response function. More rival output means a lower price, which makes a large own quantity less attractive, so the best reply shrinks." },
     { text: "Because firms always match each other's output", feedback: "They do not match; they best-respond. When the rival makes more, the best reply is to make less, not the same." },
     { text: "Because higher rival output raises the firm's costs", feedback: "Costs are unchanged. What changes is the price the firm can get, which falls as total output rises." },
   ]}

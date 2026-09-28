@@ -34,7 +34,7 @@ import GameTree from '@/components/interactive/GameTree.svelte';
 <WarmUp
   client:visible
   questions={[
-    { q: "A Nash equilibrium is a profile where no player can gain by...", options: ["Cooperating", "Deviating alone", "Waiting"], answer: 1 },
+    { q: "In Battle of the Sexes, both choose Opera. If one changes to Football alone, what do they lose?", options: ["Their preferred venue", "Coordination", "The ability to choose again"], answer: 1 },
     { q: "A best response is a move that is optimal...", options: ["Given the others' choices", "In every game", "Only when moving first"], answer: 0 },
   ]}
 />
@@ -142,7 +142,7 @@ Solve the incumbent's node: $\text{Accommodate} = 1 > \text{Fight} = 0$, so repl
   badge="analyse"
   question="The incumbent announces it will fight any entrant. Should a rational entrant believe it?"
   options={[
-    { text: "No, because once entry happens, fighting is worse for the incumbent, so the threat would not be carried out", correct: true, feedback: "A threat is credible only if the threatener would actually prefer to execute it when the moment comes. Here it would not, so the announcement is empty and the entrant enters." },
+    { text: "No, fighting pays less than accommodating after entry", correct: true, feedback: "A threat is credible only if the threatener would actually prefer to execute it when the moment comes. Here it would not, so the announcement is empty and the entrant enters." },
     { text: "Yes, an announced intention is binding", feedback: "Words do not bind. Backward induction asks what the incumbent would truly do at its node, and there fighting loses. The threat is not credible." },
     { text: "Yes, because fighting deters entry", feedback: "Deterrence would help the incumbent only if the entrant believed it, and a rational entrant sees the incumbent would not follow through. So it does not deter." },
   ]}
@@ -155,7 +155,7 @@ Solve the incumbent's node: $\text{Accommodate} = 1 > \text{Fight} = 0$, so repl
   badge="brings back: nash equilibrium"
   question="The normal form of this game has a Nash equilibrium where the entrant stays out and the incumbent would fight. Why is backward induction stricter?"
   options={[
-    { text: "Because it requires the incumbent's move to be optimal at its own node, ruling out the non-credible fight", correct: true, feedback: "Stay-out-and-fight is a Nash equilibrium in the normal form, but the fight is never tested there. Backward induction checks every decision node and discards the threat, keeping only enter-and-accommodate." },
+    { text: "It tests whether fighting is optimal after entry", correct: true, feedback: "Stay-out-and-fight is a Nash equilibrium in the normal form, but the fight is never tested there. Backward induction checks every decision node and discards the threat, keeping only enter-and-accommodate." },
     { text: "Because backward induction ignores Nash equilibria", feedback: "It does not ignore them; it selects among them. The backward-induction outcome is a Nash equilibrium, just not the one built on an empty threat." },
     { text: "Because the normal form has no Nash equilibrium", feedback: "It has two pure Nash equilibria, plus mixed equilibria created by the incumbent's indifference after Stay out. Backward induction selects strategies that remain optimal at every decision node." },
   ]}

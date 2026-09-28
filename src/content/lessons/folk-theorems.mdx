@@ -107,7 +107,7 @@ The lesson is sobering. Repetition does not pick out cooperation; it makes predi
   badge="apply"
   question="Can the payoff (0.5, 0.5) be sustained as an equilibrium of the repeated PD?"
   options={[
-    { text: "No, both players are below the minmax of 1, which each can guarantee by defecting forever", correct: true, feedback: "The individually rational bound is the floor. Since a player can secure 1 alone, no equilibrium can hold them at 0.5, no matter how patient." },
+    { text: "No, both fall below the payoff each can guarantee", correct: true, feedback: "The individually rational bound is the floor. Since a player can secure 1 alone, no equilibrium can hold them at 0.5, no matter how patient." },
     { text: "Yes, any payoff can be sustained with enough patience", feedback: "Only feasible payoffs above the minmax qualify. Points below a player's guaranteed value, like 0.5 here, are ruled out." },
     { text: "Yes, because it is symmetric", feedback: "Symmetry does not help. Both coordinates are below the minmax of 1, so the point is unsupportable." },
   ]}
@@ -120,7 +120,7 @@ The lesson is sobering. Repetition does not pick out cooperation; it makes predi
   badge="analyse"
   question="A colleague says the folk theorem proves that repetition produces cooperation. What is wrong with that?"
   options={[
-    { text: "It shows almost any feasible payoff above the minmax is an equilibrium, so it explains too much to single out cooperation", correct: true, feedback: "The theorem populates the whole individually rational region with equilibria, cooperative and not. It is a statement about what is possible, not a prediction that cooperation occurs." },
+    { text: "It permits many outcomes, so it does not select cooperation", correct: true, feedback: "The theorem populates the whole individually rational region with equilibria, cooperative and not. It is a statement about what is possible, not a prediction that cooperation occurs." },
     { text: "Nothing, the folk theorem does guarantee cooperation", feedback: "It does not. Mutual cooperation is one of a continuum of equilibrium payoffs, including many uncooperative ones." },
     { text: "The folk theorem only applies to finite games", feedback: "It is a result about infinitely repeated (or long-horizon) games. Its content is the breadth of equilibria, not a cooperation guarantee." },
   ]}
@@ -133,7 +133,7 @@ The lesson is sobering. Repetition does not pick out cooperation; it makes predi
   badge="brings back: repeated games"
   question="What role does patience (delta near 1) play in the folk theorem?"
   options={[
-    { text: "It makes future punishment loom large enough to deter any one-time deviation, so the target profile holds", correct: true, feedback: "As in the discounting lesson, a high delta means the stream of future losses from punishment outweighs the immediate gain from cheating. That is what sustains the wide set of equilibria." },
+    { text: "Future punishment outweighs the one-time gain from deviation", correct: true, feedback: "As in the discounting lesson, a high delta means the stream of future losses from punishment outweighs the immediate gain from cheating. That is what sustains the wide set of equilibria." },
     { text: "It shrinks the set of equilibria to just cooperation", feedback: "Higher patience enlarges the supportable set toward the whole IR region, it does not shrink it to cooperation." },
     { text: "It removes the need for any punishment threat", feedback: "The threat is exactly what patience makes bite. Without a credible punishment, deviations would pay." },
   ]}

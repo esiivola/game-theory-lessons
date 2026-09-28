@@ -116,9 +116,9 @@ Check the single-buyer case directly: posting price $p$ sells with probability $
   badge="analyse"
   question="Why is the revenue-maximizing auction not the same as the efficient one?"
   options={[
-    { text: "The reserve means the item sometimes goes unsold even when a bidder values it positively, sacrificing efficiency for a higher price", correct: true, feedback: "Efficiency would sell to the highest-value bidder always. The optimal auction withholds the item when all values are below the reserve, accepting no-sales to keep expected revenue up." },
-    { text: "They are the same thing", feedback: "They differ: the reserve creates occasional no-sales that an efficient mechanism would avoid. Revenue maximization is not efficiency." },
-    { text: "Because the efficient auction has no winner", feedback: "The efficient auction does have a winner (the highest value). The difference is the reserve, which the optimal auction adds and the efficient one does not." },
+    { text: "The reserve can leave a valued item unsold", correct: true, feedback: "Efficiency would sell to the highest-value bidder always. The optimal auction withholds the item when all values are below the reserve, accepting no-sales to keep expected revenue up." },
+    { text: "A reserve raises the payment but never changes who gets the item", feedback: "When every bid is below the reserve, there is no sale. The allocation changes as well as the payment." },
+    { text: "Efficiency uses the seller's revenue reserve as a no-sale cutoff", feedback: "The revenue reserve can exceed the seller's value. Selling below that reserve can still be efficient even when withholding raises expected revenue." },
   ]}
 />
 
@@ -129,7 +129,7 @@ Check the single-buyer case directly: posting price $p$ sells with probability $
   badge="brings back: revelation principle"
   question="How does the revelation principle underpin Myerson's result?"
   options={[
-    { text: "It lets the designer search only over truthful direct mechanisms, so revenue maximization reduces to choosing an allocation and payments over reported values", correct: true, feedback: "Because any outcome is achievable by a truthful direct mechanism, Myerson optimizes over those, expresses revenue as expected virtual value, and reads off the second-price-with-reserve form. The revelation principle is what makes the search tractable." },
+    { text: "It reduces the search to truthful direct mechanisms", correct: true, feedback: "Because any outcome is achievable by a truthful direct mechanism, Myerson optimizes over those, expresses revenue as expected virtual value, and reads off the second-price-with-reserve form. The revelation principle is what makes the search tractable." },
     { text: "It proves the first-price auction is optimal", feedback: "The optimal auction is second-price with a reserve, not first-price. The revelation principle is a tool for finding it, not a claim about first-price." },
     { text: "It removes bidders' private information", feedback: "Private information remains; the principle just makes honesty optimal, which lets the designer optimize over reports." },
   ]}

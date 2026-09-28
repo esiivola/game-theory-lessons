@@ -108,7 +108,7 @@ Now let voters abstain if the nearest candidate is too far from them. A candidat
   badge="apply"
   question="Why do two candidates on a single left-right spectrum both end up at the median voter?"
   options={[
-    { text: "Any candidate off the median can be beaten by a rival who moves just inside them and captures the majority, so both-at-median is the only Nash equilibrium", correct: true, feedback: "Off-median positions are always beatable by moving closer to the center. The only position with no profitable deviation is the median itself, for both candidates." },
+    { text: "An off-center candidate can be beaten from nearer the median", correct: true, feedback: "Off-median positions are always beatable by moving closer to the center. The only position with no profitable deviation is the median itself, for both candidates." },
     { text: "Because candidates sincerely hold centrist views", feedback: "The model assumes they chase votes, not sincerity. Convergence is a strategic best response, not a statement of belief." },
     { text: "Because voters force them to the center by law", feedback: "No law is needed. The incentive to capture the pivotal median voter drives convergence on its own." },
   ]}
@@ -121,7 +121,7 @@ Now let voters abstain if the nearest candidate is too far from them. A candidat
   badge="analyse"
   question="Name one condition under which median-voter convergence breaks down."
   options={[
-    { text: "Extremist abstention, three or more candidates, or a multi-dimensional policy space", correct: true, feedback: "Each breaks the theorem: abstention punishes centrism, a third candidate can leapfrog, and in multiple dimensions a median generally does not exist. The clean result holds only in the one-dimensional two-candidate case." },
+    { text: "Abstention, more candidates, or multiple policy dimensions", correct: true, feedback: "Each breaks the theorem: abstention punishes centrism, a third candidate can leapfrog, and in multiple dimensions a median generally does not exist. The clean result holds only in the one-dimensional two-candidate case." },
     { text: "When both candidates want to win", feedback: "Wanting to win is exactly what drives convergence in the base model. The breakdowns come from abstention, extra candidates, or extra dimensions." },
     { text: "When voters have single-peaked preferences", feedback: "Single-peaked preferences on one dimension are the condition that makes convergence hold, not break." },
   ]}
@@ -134,7 +134,7 @@ Now let voters abstain if the nearest candidate is too far from them. A candidat
   badge="brings back: auctions"
   question="Why is lobbying modeled as an all-pay auction, and what follows?"
   options={[
-    { text: "Contestants spend to win influence but forfeit the spending whether they win or lose, so competition can dissipate much of the prize's value", correct: true, feedback: "In an all-pay contest losers do not get refunds, so equilibrium expenditure can dissipate much of the prize. Rational ignorance is a separate model, not a consequence of the all-pay rule." },
+    { text: "All contestants spend, but only one wins", correct: true, feedback: "In an all-pay contest losers do not get refunds, so equilibrium expenditure can dissipate much of the prize. Rational ignorance is a separate model, not a consequence of the all-pay rule." },
     { text: "Because only the winner pays, like a normal auction", feedback: "That is the point of contrast: lobbying is all-pay, so losers also pay. That is why so many resources can be dissipated." },
     { text: "Because lobbying always buys votes directly", feedback: "It is modeled as spending on influence in a contest, not direct vote-buying, and the all-pay structure is what makes it wasteful." },
   ]}

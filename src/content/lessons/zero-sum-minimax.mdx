@@ -147,7 +147,7 @@ Minimax mixing sounds like a blackboard ideal, too demanding for anyone under pr
   badge="recognise"
   question="What does it mean for a game to be zero-sum?"
   options={[
-    { text: "The payoffs in each cell sum to a constant, so one player's gain is the other's loss", correct: true, feedback: "Constant-sum is the general form; a fixed total to divide. It does not mean both players get zero." },
+    { text: "Each cell's payoffs sum to the same constant", correct: true, feedback: "Constant-sum is the general form; a fixed total to divide. It does not mean both players get zero." },
     { text: "Both players always end up with zero", feedback: "The name misleads. It means the payoffs sum to a constant across cells, not that each player scores zero." },
     { text: "Neither player can affect the outcome", feedback: "Players very much affect the outcome. Zero-sum only says gains and losses offset." },
   ]}
@@ -173,7 +173,7 @@ Minimax mixing sounds like a blackboard ideal, too demanding for anyone under pr
   badge="brings back: mixed strategies"
   question="Why is minimax play in a zero-sum game not merely defensive pessimism?"
   options={[
-    { text: "Because the maximin mix and the minimax mix coincide, so the safe mix is also the equilibrium", correct: true, feedback: "Von Neumann's theorem makes the floor you guarantee equal to the ceiling the opponent can impose. Playing safe and playing the equilibrium are the same thing here." },
+    { text: "Maximin and minimax coincide", correct: true, feedback: "Von Neumann's theorem makes the floor you guarantee equal to the ceiling the opponent can impose. Playing safe and playing the equilibrium are the same thing here." },
     { text: "Because the opponent is assumed to play badly", feedback: "It assumes the opposite: the guarantee holds even against a perfect opponent. That is what makes it strong, not pessimistic." },
     { text: "Because zero-sum games have no equilibrium", feedback: "They do have one. The minimax mixes are exactly a Nash equilibrium of the game." },
   ]}

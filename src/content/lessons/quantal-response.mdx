@@ -34,7 +34,7 @@ import QRE from '@/components/interactive/QRE.svelte';
 <WarmUp
   client:visible
   questions={[
-    { q: "At a Nash equilibrium, each player chooses a...", options: ["Random action", "Best response", "Dominated action"], answer: 1 },
+    { q: "Against either opponent move, A pays 3 and B pays 2. Which action maximizes expected payoff against any mix?", options: ["B, because it is less predictable", "A, because it pays more in both cases", "Either, because the opponent mixes"], answer: 1 },
     { q: "Level-k models relax the assumption about players' depth of...", options: ["Payoffs", "Reasoning", "Memory"], answer: 1 },
   ]}
 />
@@ -113,9 +113,9 @@ Equilibrium requires your resulting probability to equal the probability used in
   badge="apply"
   question="In a logit QRE, what does the rationality parameter lambda control?"
   options={[
-    { text: "How sharply choice favours the better action: 0 is uniform, large lambda approaches best response", correct: true, feedback: "Lambda is the precision of choice. At 0 payoffs are ignored (50/50); as it grows, better actions are chosen more, converging on Nash best response in the limit." },
-    { text: "The number of players", feedback: "It is a per-player precision parameter, not a count of players. It governs how payoff-sensitive choices are." },
-    { text: "The payoffs of the game", feedback: "Payoffs are given by the game; lambda controls how sensitively players respond to those payoffs." },
+    { text: "How strongly choices react to payoff differences", correct: true, feedback: "Lambda is the precision of choice. At 0 payoffs are ignored (50/50); as it grows, better actions are chosen more, converging on Nash best response in the limit." },
+    { text: "How quickly players update beliefs after each round", feedback: "Lambda describes the payoff sensitivity of a choice, not a learning rate across rounds." },
+    { text: "How unequal the underlying game payoffs are", feedback: "The game sets its payoffs. Lambda changes how strongly choice probabilities react to a given payoff gap." },
   ]}
 />
 
@@ -126,9 +126,9 @@ Equilibrium requires your resulting probability to equal the probability used in
   badge="analyse"
   question="Why is QRE still an equilibrium concept and not just random play?"
   options={[
-    { text: "Choice probabilities are noisy but must be mutually consistent: each player's distribution is a best noisy-response to the others'", correct: true, feedback: "QRE keeps the equilibrium fixed-point requirement. The noise is structured by payoffs, and beliefs about others' probabilities are correct, so it is an equilibrium, just a smoothed one." },
-    { text: "Because players ignore payoffs", feedback: "They do not: better actions are chosen more often. Payoff-sensitivity plus consistent beliefs is what makes it an equilibrium." },
-    { text: "Because it always coincides with Nash", feedback: "It coincides with Nash only in the high-lambda limit. At moderate lambda it differs, which is its whole value." },
+    { text: "The noisy choice probabilities must be mutually consistent", correct: true, feedback: "QRE keeps the equilibrium fixed-point requirement. The noise is structured by payoffs, and beliefs about others' probabilities are correct, so it is an equilibrium, just a smoothed one." },
+    { text: "Because players learn from observed past action frequencies", feedback: "QRE is a fixed point of current choice probabilities, not a learning rule based on past rounds." },
+    { text: "Because each player first chooses a pure best response", feedback: "At finite lambda, players put positive weight on worse actions too. Equilibrium comes from consistent noisy responses, not pure best responses." },
   ]}
 />
 
@@ -139,9 +139,9 @@ Equilibrium requires your resulting probability to equal the probability used in
   badge="brings back: mixed strategies"
   question="How does a QRE mix differ from a mixed Nash equilibrium?"
   options={[
-    { text: "A mixed Nash puts weight only on best responses (indifference); QRE puts more weight on better actions but positive weight on worse ones too", correct: true, feedback: "Mixed Nash requires indifference among the actions played. QRE smooths this: the better action gets more probability but the worse action is not excluded, and only as lambda grows does it approach the Nash mix." },
-    { text: "They are identical for all lambda", feedback: "They match only as lambda approaches infinity. At finite lambda, QRE assigns positive probability to worse actions, unlike a mixed Nash." },
-    { text: "QRE never randomizes", feedback: "QRE is inherently probabilistic: it assigns a probability to every action, concentrating on the best only in the limit." },
+    { text: "Mixed Nash excludes worse actions; QRE gives them some weight", correct: true, feedback: "Mixed Nash requires indifference among the actions played. QRE smooths this: the better action gets more probability but the worse action is not excluded, and only as lambda grows does it approach the Nash mix." },
+    { text: "QRE assigns equal weight to every action at every lambda", feedback: "Equal weighting occurs at lambda zero. For positive lambda, higher-payoff actions receive more weight." },
+    { text: "QRE excludes lower-payoff actions entirely", feedback: "At finite lambda, QRE gives every action positive probability. Mixed Nash excludes actions that are not best responses." },
   ]}
 />
 </Section>

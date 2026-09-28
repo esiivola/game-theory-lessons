@@ -34,7 +34,7 @@ import Bargaining from '@/components/interactive/Bargaining.svelte';
 <WarmUp
   client:visible
   questions={[
-    { q: "A Nash equilibrium is a profile where no player gains by...", options: ["Cooperating", "Deviating alone", "Waiting"], answer: 1 },
+    { q: "A risk-neutral player can take 40 for sure or a 50% chance of 100 and otherwise 0. Which has higher expected payoff?", options: ["The sure 40", "The lottery", "They are equal"], answer: 1 },
     { q: "A shared signal that beats the mixed Nash equilibrium of Chicken for both players is a...", options: ["Focal point", "Correlated equilibrium", "Dominant strategy"], answer: 1 },
   ]}
 />
@@ -128,7 +128,7 @@ Now let your outside option be $d_1 = 0.2$ (theirs still 0). Maximize $(x - 0.2)
   badge="analyse"
   question="The Nash bargaining solution is called axiomatic. What does that mean here?"
   options={[
-    { text: "It is defined by properties a fair split should satisfy, not by a model of how bargaining actually proceeds", correct: true, feedback: "Nash derived the split from axioms (efficiency, symmetry, invariance, independence of irrelevant alternatives) rather than from a game of offers and counteroffers. That strategic account comes next." },
+    { text: "It defines the split by fairness properties, not bargaining steps", correct: true, feedback: "Nash derived the split from axioms (efficiency, symmetry, invariance, independence of irrelevant alternatives) rather than from a game of offers and counteroffers. That strategic account comes next." },
     { text: "It assumes players behave irrationally", feedback: "It assumes nothing about behaviour; it characterises a split by axioms. Rationality is not the issue." },
     { text: "It only works when the split is 50/50", feedback: "It handles asymmetric outside options too, giving splits away from 50/50. Axiomatic refers to how it is derived." },
   ]}
@@ -141,7 +141,7 @@ Now let your outside option be $d_1 = 0.2$ (theirs still 0). Maximize $(x - 0.2)
   badge="brings back: nash equilibrium"
   question="How does the disagreement point here play a role like a benchmark you have seen before?"
   options={[
-    { text: "It is the payoff each party receives if agreement fails, so an individually rational agreement gives each at least that much", correct: true, feedback: "The disagreement point is the specified outcome after failed talks. It is not automatically a best-response, maximin, or security payoff, though a model may choose such a fallback." },
+    { text: "Each party's payoff if agreement fails", correct: true, feedback: "The disagreement point is the specified outcome after failed talks. It is not automatically a best-response, maximin, or security payoff, though a model may choose such a fallback." },
     { text: "It is the highest payoff either party could get", feedback: "It is the floor from walking away, not a ceiling. The solution divides the surplus above these floors." },
     { text: "It is irrelevant once the parties start bargaining", feedback: "It is central: the split x* = (1 + d1 - d2)/2 depends directly on the disagreement point." },
   ]}

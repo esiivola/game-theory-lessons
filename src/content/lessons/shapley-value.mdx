@@ -107,7 +107,7 @@ Average: $(0 + 0 + 100 + 100 + 100 + 100)/6 = 400/6 = 200/3 \approx 66.7$. The t
   badge="apply"
   question="Why is the seller's Shapley value 200/3 rather than 100?"
   options={[
-    { text: "In two of the six join orders the seller arrives first and adds nothing, so its average contribution is 400/6", correct: true, feedback: "The seller adds 100 only when a buyer is already present, which is four of six orders. Averaging in the two zero-contribution orders pulls the value down to 200/3 ≈ 66.7." },
+    { text: "The seller adds nothing in two of six join orders", correct: true, feedback: "The seller adds 100 only when a buyer is already present, which is four of six orders. Averaging in the two zero-contribution orders pulls the value down to 200/3 ≈ 66.7." },
     { text: "Because the seller splits its value equally with the buyers", feedback: "It is not an equal split; it is an average of marginal contributions. The seller keeps the largest share, 200/3, but not all 100." },
     { text: "Because the core says so", feedback: "The core says (100,0,0). The Shapley value is a different rule and gives 200/3, showing the two concepts disagree here." },
   ]}
@@ -120,7 +120,7 @@ Average: $(0 + 0 + 100 + 100 + 100 + 100)/6 = 400/6 = 200/3 \approx 66.7$. The t
   badge="analyse"
   question="The Shapley value here is (66.7, 16.7, 16.7). What does it mean that this is outside the core?"
   options={[
-    { text: "A coalition (seller plus one buyer, worth 100) is offered only 83.3, so it could block this fair division", correct: true, feedback: "The seller and one buyer can secure 100 alone but are handed <span class='mono'>200/3 + 50/3 = 250/3 &asymp; 83.3</span>, so they break away. Fairness and stability part ways here because the game is not convex, which is exactly when the Shapley value can fall outside the core." },
+    { text: "The seller-buyer pair gets 83.3 but can secure 100", correct: true, feedback: "The seller and one buyer can secure 100 alone but are handed <span class='mono'>200/3 + 50/3 = 250/3 &asymp; 83.3</span>, so they break away. Fairness and stability part ways here because the game is not convex, which is exactly when the Shapley value can fall outside the core." },
     { text: "It means the Shapley value was computed incorrectly", feedback: "It is correct; it simply is not a core allocation. In non-convex games the Shapley value can lie outside the core." },
     { text: "It means the core is empty", feedback: "The core here is the single point (100,0,0), not empty. The Shapley value just differs from it." },
   ]}
@@ -133,7 +133,7 @@ Average: $(0 + 0 + 100 + 100 + 100 + 100)/6 = 400/6 = 200/3 \approx 66.7$. The t
   badge="brings back: the core"
   question="When would the Shapley value be guaranteed to lie inside the core?"
   options={[
-    { text: "When the game is convex, so every player's marginal contribution weakly increases as the coalition they join grows", correct: true, feedback: "Convexity is increasing marginal contribution: for S contained in T and player i outside T, v(S∪{i})-v(S) is no greater than v(T∪{i})-v(T). In such games the Shapley value lies in the core." },
+    { text: "When the game is convex", correct: true, feedback: "Convexity is increasing marginal contribution: for S contained in T and player i outside T, v(S∪{i})-v(S) is no greater than v(T∪{i})-v(T). In such games the Shapley value lies in the core." },
     { text: "Always; the Shapley value is a core allocation by definition", feedback: "Not always: as here, it can fall outside the core. Only convexity guarantees it lands inside." },
     { text: "Only when the core is empty", feedback: "If the core is empty the Shapley value cannot be in it at all. It is guaranteed inside precisely when the game is convex, which implies a nonempty core." },
   ]}

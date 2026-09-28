@@ -103,7 +103,7 @@ The only frequency it cannot exploit is $0.5$: at an even, patternless mix, its 
   badge="apply"
   question="Against a fictitious-play bot in Matching Pennies, what is your best long-run strategy?"
   options={[
-    { text: "Mix evenly and without a pattern, since any bias is detected and punished", correct: true, feedback: "The bot tracks your frequencies and best-responds, so a lean loses. Only an even, patternless mix is unexploitable, which is exactly the mixed equilibrium." },
+    { text: "Mix evenly without a predictable pattern", correct: true, feedback: "The bot tracks your frequencies and best-responds, so a lean loses. Only an even, patternless mix is unexploitable, which is exactly the mixed equilibrium." },
     { text: "Always play whichever move won last", feedback: "That is a detectable pattern the bot can anticipate. Predictability is what it punishes; you need a genuine even mix." },
     { text: "Favour Heads to confuse it", feedback: "Favouring either side gives the bot a profitable response. Balance, not bias, is what holds it off." },
   ]}
@@ -116,9 +116,9 @@ The only frequency it cannot exploit is $0.5$: at an even, patternless mix, its 
   badge="analyse"
   question="Does fictitious play converge to Nash equilibrium in every game?"
   options={[
-    { text: "No: it converges in zero-sum and potential games, but can cycle in others", correct: true, feedback: "Convergence is guaranteed for those two classes (Matching Pennies is zero-sum, so it converges here), but fictitious play can fail to converge in general games." },
-    { text: "Yes, always", feedback: "It is not universal. It converges in zero-sum and potential games, but can cycle elsewhere." },
-    { text: "No, it never converges", feedback: "It does converge in important classes, including the zero-sum Matching Pennies of this lesson." },
+    { text: "No, it can cycle in some games", correct: true, feedback: "Convergence is guaranteed for those two classes (Matching Pennies is zero-sum, so it converges here), but fictitious play can fail to converge in general games." },
+    { text: "Yes, because empirical frequencies must eventually settle", feedback: "Empirical frequencies need not settle in every game. Fictitious play can cycle outside classes with a convergence result." },
+    { text: "No, it even fails in every zero-sum game", feedback: "Zero-sum games are a convergence class. The failure occurs in other games, so the answer is not universal in either direction." },
   ]}
 />
 
@@ -129,7 +129,7 @@ The only frequency it cannot exploit is $0.5$: at an even, patternless mix, its 
   badge="brings back: mixed strategies"
   question="What is striking about the equilibrium the learners reach?"
   options={[
-    { text: "They play the mixed equilibrium on average without ever solving the indifference condition for it", correct: true, feedback: "The mixed equilibrium normally comes from setting the opponent indifferent, a deliberate calculation. Here adaptive players reach the same 50/50 mix purely by responding to the past, no equilibrium reasoning required." },
+    { text: "Play can average to equilibrium without solving for it", correct: true, feedback: "The mixed equilibrium normally comes from setting the opponent indifferent, a deliberate calculation. Here adaptive players reach the same 50/50 mix purely by responding to the past, no equilibrium reasoning required." },
     { text: "They reach a pure-strategy equilibrium", feedback: "Matching Pennies has no pure equilibrium. The learners converge to the mixed one, on average." },
     { text: "They never reach any equilibrium", feedback: "Their time-averaged play converges to the mixed equilibrium; that is the whole point of the learning result." },
   ]}

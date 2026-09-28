@@ -126,7 +126,7 @@ summary: "Why two rational players both betray, and both lose."
 tags: ["dilemma", "cooperation"]
 estMinutes: 6
 mvp: true
-prereqs: ["dominance", "pure-nash"]        # slugs; drives the concept map + gating
+prereqs: ["dominance", "pure-nash"]        # slugs; shows suggested paths on the concept map
 concepts: ["prisoners-dilemma", "dominance"] # concept ids for adaptive scaffolding + interleaving
 anchorImage: "/images/gas-stations.svg"
 refs: ["axelrod1984", "flood1958", "nash1950", "osborne1994"]   # keys in references.ts
@@ -174,14 +174,15 @@ A profile $s^*$ is a Nash equilibrium if $u_i(s_i^*,s_{-i}^*) \ge u_i(s_i,s_{-i}
 
 **Rules when adding a lesson**
 - `slug` is permanent, it is the progress key. Renaming it orphans learner progress.
-- Set `tier`, `unit`, `order`, `prereqs`, and `concepts` correctly. `prereqs` and `concepts` drive the concept map, mastery gating, adaptive scaffolding, and interleaved retrieval.
+- Set `tier`, `unit`, `order`, `prereqs`, and `concepts` correctly. `prereqs` and `concepts` drive the concept map, adaptive scaffolding, and interleaved retrieval.
 - Give each scrollable section a stable `sectionId` (used for section-viewed tracking and completion).
 - **Order matters:** prediction commits before any explanation; the concrete game comes before notation (concreteness fading); the quiz ends with an item that interleaves an earlier concept.
 - Write a correct formal section: define the objects, state the claim, give a short derivation. Use `$...$` inline and `$$...$$` for display. Keep display math from overflowing (rewrite or wrap in `overflow-x:auto`).
 - 2 to 4 quizzes on a Bloom ladder (recognise, apply, analyse), each with a stable `id`, a correct answer, and explanatory feedback for every wrong option (each distractor maps to a specific misconception you correct).
+- Keep answer options comparable in length and specificity. Put the derivation in feedback, not the correct option. Use plausible distractors based on the lesson's likely mistakes, and vary warm-up concepts across lessons.
 - List sources via `refs` (keys in `references.ts`); the SourcesList and the global References page render from those keys.
 - Keep prose short and in the §5a voice. The interaction and the math carry the idea. One new mechanic only. No em dashes.
-- The lesson map reads the collection via `tier`, `unit`, and `order`; the concept map reads `prereqs`.
+- The lesson map reads the collection via `tier`, `unit`, and `order`; the concept map reads `prereqs` as suggested paths, not gates.
 - **Applied cases** (`kind: "case"`, Unit 18) apply existing theory to a real episode with real cases and empirical evidence. Set `placement` so an "after:<slug>" case is surfaced inline right after its theory lesson, and a "capstone" case runs in the closing sequence (SPEC §4, §5a). Behavioral lessons (Unit 17) are Expert tier and carry the actual models (level-k, QRE logit, Fehr-Schmidt utility, EWA); get the models right, they are the point.
 - **Reality-check callouts:** seed short `Callout kind="reality-check"` asides in Basic and Intermediate that forward-link to the Behavioral unit (SPEC §5e). One claim, a small exhibit, a link. Do not derail the core lesson.
 
@@ -232,7 +233,7 @@ A profile $s^*$ is a Nash equilibrium if $u_i(s_i^*,s_{-i}^*) \ge u_i(s_i,s_{-i}
 
 ## 10. Progress and storage API
 
-- `progress.ts` owns key `gt.progress.v1`, wraps all access in `try/catch`, parses with a schema-default fallback, and exposes typed methods (`markSectionViewed(slug, sectionId)`, `recordQuiz(slug, id, correct)`, `isLessonComplete(slug)`, `getProgress()`, `exportJSON()`, `reset()`). Completion equals all sections viewed and all quizzes answered correctly, then set `completedAt`, award XP, add today to `daysLearned`, fire the celebration.
+- `progress.ts` owns key `gt.progress.v1`, wraps all access in `try/catch`, parses with a schema-default fallback, and exposes typed methods (`markSectionViewed(slug, sectionId)`, `recordQuiz(slug, id, correct)`, `isLessonComplete(slug)`, `getProgress()`, `exportJSON()`, `reset()`). Completion requires correct answers to all end quizzes, regardless of section views or prior lessons; then set `completedAt`, award XP, add today to `daysLearned`, and fire the celebration.
 - Bump the version key and write a migration if the schema changes; never silently break saved data.
 - Settings must offer Export and Reset, and state that data stays on the device.
 

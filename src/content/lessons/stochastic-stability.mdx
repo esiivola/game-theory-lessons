@@ -103,7 +103,7 @@ The larger basin belongs to Hare, so Hare is risk-dominant. In the KMR noisy dyn
   badge="apply"
   question="In the Stag Hunt, why is all-Hare stochastically stable even though all-Stag pays more?"
   options={[
-    { text: "Hare has the larger basin, so rare mutations escape Stag easily but escape Hare only very rarely", correct: true, feedback: "In the KMR model, Stag is optimal only for beliefs above 3/4, a small basin. Noise tips the population out of Stag far more readily than out of Hare, so the long run is spent at Hare." },
+    { text: "Hare's larger basin makes it harder to escape", correct: true, feedback: "In the KMR model, Stag is optimal only for beliefs above 3/4, a small basin. Noise tips the population out of Stag far more readily than out of Hare, so the long run is spent at Hare." },
     { text: "Because Hare pays more than Stag", feedback: "Hare pays less (3 versus 4). It wins the long run because of its larger basin, not a higher payoff." },
     { text: "Because all-Stag is not an equilibrium", feedback: "All-Stag is a strict equilibrium. It just has a small basin, making it fragile to noise." },
   ]}
@@ -116,7 +116,7 @@ The larger basin belongs to Hare, so Hare is risk-dominant. In the KMR noisy dyn
   badge="analyse"
   question="What happens if you lower the mutation rate toward zero?"
   options={[
-    { text: "The same convention (Hare) still wins; only the time spent before drifting back lengthens", correct: true, feedback: "In this model, stochastic stability is defined in the low-noise limit. Reducing mistakes does not switch the winner; it just makes transitions rarer, so the population sits at Hare even longer." },
+    { text: "Hare still wins, but returning to it takes longer", correct: true, feedback: "In this model, stochastic stability is defined in the low-noise limit. Reducing mistakes does not switch the winner; it just makes transitions rarer, so the population sits at Hare even longer." },
     { text: "The population switches to all-Stag", feedback: "Lower noise does not favour the payoff-dominant equilibrium. Hare remains stochastically stable; the dynamics just slow down." },
     { text: "The population starts cycling between the two", feedback: "It does not cycle; it spends almost all its time at Hare, with ever-rarer excursions as noise falls." },
   ]}
@@ -129,7 +129,7 @@ The larger basin belongs to Hare, so Hare is risk-dominant. In the KMR noisy dyn
   badge="brings back: classic 2x2 games"
   question="How does this refine the Stag Hunt's two equilibria from the earlier zoo lesson?"
   options={[
-    { text: "The zoo showed both all-Stag and all-Hare are equilibria; the KMR model selects Hare as the long-run convention", correct: true, feedback: "Equilibrium analysis left the choice open between the payoff-dominant and risk-dominant outcomes. Adding KMR's noisy dynamics breaks the tie in favour of the risk-dominant one, Hare." },
+    { text: "Both are equilibria, but Hare is the long-run convention", correct: true, feedback: "Equilibrium analysis left the choice open between the payoff-dominant and risk-dominant outcomes. Adding KMR's noisy dynamics breaks the tie in favour of the risk-dominant one, Hare." },
     { text: "It shows the Stag Hunt has only one equilibrium after all", feedback: "It still has two equilibria. Stochastic stability does not remove one; it predicts which the population lingers at over time." },
     { text: "It shows all-Stag always wins", feedback: "The opposite: the risk-dominant all-Hare wins the long run, despite all-Stag paying more." },
   ]}

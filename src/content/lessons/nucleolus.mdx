@@ -103,7 +103,7 @@ Minimizing that maximum, subject to $x_1 + x_2 + x_3 = 1$, forces the shares equ
   badge="apply"
   question="In the majority game, why is the equal split the nucleolus?"
   options={[
-    { text: "Each pair's complaint equals the excluded player's share, so minimizing the largest complaint means equalizing shares", correct: true, feedback: "A pair could take the whole 1, so its excess is what it does not get, the third player's share. Making the biggest such share as small as possible gives (1/3, 1/3, 1/3)." },
+    { text: "Equal shares minimize the largest coalition complaint", correct: true, feedback: "A pair could take the whole 1, so its excess is what it does not get, the third player's share. Making the biggest such share as small as possible gives (1/3, 1/3, 1/3)." },
     { text: "Because the core says so", feedback: "The core is empty here, so it selects nothing. The nucleolus is precisely the tool for that case, and it gives the equal split." },
     { text: "Because equal splits are always the nucleolus", feedback: "Only in symmetric games. In asymmetric ones, like the Talmud estate, the nucleolus is unequal." },
   ]}
@@ -129,9 +129,9 @@ Minimizing that maximum, subject to $x_1 + x_2 + x_3 = 1$, forces the shares equ
   badge="brings back: Shapley value"
   question="The nucleolus and the Shapley value both gave (1/3,1/3,1/3) here. Do they always agree?"
   options={[
-    { text: "No: symmetry forces agreement in this particular game, but the two rules can differ in other games", correct: true, feedback: "Here every player is interchangeable, so both rules give one third. In general the nucleolus minimizes complaints while the Shapley value averages marginal contributions, and neither rule determines the other." },
-    { text: "Yes, they are always identical", feedback: "They are distinct solution concepts. Agreement here is due to symmetry, not a general rule." },
-    { text: "No, they never agree", feedback: "They can agree, as this symmetric game shows. They just are not guaranteed to in general." },
+    { text: "No, symmetry makes them agree in this game", correct: true, feedback: "Here every player is interchangeable, so both rules give one third. In general the nucleolus minimizes complaints while the Shapley value averages marginal contributions, and neither rule determines the other." },
+    { text: "Yes, because symmetry and efficiency define both rules", feedback: "Symmetry determines their answer in this game, but not in asymmetric games. Their general definitions differ." },
+    { text: "No, because a Shapley allocation cannot minimize complaints", feedback: "It can minimize complaints in some games, including this one. The rules can agree without being identical in general." },
   ]}
 />
 </Section>

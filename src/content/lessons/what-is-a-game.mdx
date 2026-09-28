@@ -98,12 +98,12 @@ Now compare a whole row against the other, holding their choice fixed. Suppose t
   slug="what-is-a-game"
   id="q2"
   badge="concept"
-  question="Which of these is NOT part of describing a game?"
+  question="What information must the payoff table specify to describe this game?"
   options={[
-    { text: "The players", feedback: "Players are one of the three ingredients." },
-    { text: "The strategies each can choose", feedback: "Strategies are one of the three ingredients." },
-    { text: "A neutral referee", correct: true, feedback: "There is no referee. A game is just players, strategies, and payoffs." },
-    { text: "The payoffs", feedback: "Payoffs are one of the three ingredients." },
+    { text: "Each shop's average profit across all opening times", feedback: "Averages hide which combination of choices produced each payoff. The table needs a payoff for every pair of choices." },
+    { text: "Each shop's strategies and the payoffs for every pair", correct: true, feedback: "The table lists what each shop can choose and what both earn for every combination of choices." },
+    { text: "Only the payoffs when both shops choose the same time", feedback: "That omits the early/late combinations, which are essential for comparing responses to the other shop's choice." },
+    { text: "The strategy each shop prefers before seeing the other", feedback: "A preferred move depends on the other shop's choice. A normal-form table lists all possible choices and payoffs first." },
   ]}
 />
 </Section>

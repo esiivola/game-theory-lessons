@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { quizState, recordQuiz } from '@/lib/progress';
+  import { shuffleOptions } from '@/lib/quizOptions';
 
   interface Opt { text: string; correct?: boolean; feedback: string; }
   let {
@@ -16,19 +17,20 @@
   let feedback = $state('');
   let good = $state(false);
   const solved = $derived(solvedIdx !== null);
+  const orderedOptions = $derived(shuffleOptions(options, `${slug}:${id}`));
 
   onMount(() => {
     if (!quizState(slug, id)?.correct) return;
-    const index = options.findIndex((option) => option.correct);
+    const index = orderedOptions.findIndex((option) => option.correct);
     if (index < 0) return;
     solvedIdx = index;
     good = true;
-    feedback = options[index].feedback;
+    feedback = orderedOptions[index].feedback;
   });
 
   function answer(i: number) {
     if (solved || wrong.includes(i)) return;
-    const o = options[i];
+    const o = orderedOptions[i];
     if (o.correct) {
       solvedIdx = i;
       good = true;
@@ -49,7 +51,7 @@
     <span class="step">Check yourself{#if badge}<span class="badge">{badge}</span>{/if}</span>
   </div>
   <div class="q">{@html question}</div>
-  {#each options as o, i}
+  {#each orderedOptions as o, i}
     <button
       class={'opt' + (solvedIdx === i ? ' correct' : '') + (wrong.includes(i) ? ' wrong' : '')}
       aria-disabled={solved || wrong.includes(i)}

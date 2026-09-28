@@ -112,7 +112,7 @@ Now imagine no clearinghouse. A hospital that fears losing a top doctor makes an
   badge="apply"
   question="Why did the unregulated medical market unravel into ever-earlier offers?"
   options={[
-    { text: "Without a stable clearinghouse, blocking pairs formed private deals, so hospitals rushed to lock in doctors before rivals", correct: true, feedback: "Instability creates an incentive to jump ahead: any pair who prefer each other defect, so offers move earlier and earlier. A stable matching, computed centrally, removes that incentive." },
+    { text: "Hospitals made early private offers to preempt rivals", correct: true, feedback: "Instability creates an incentive to jump ahead: any pair who prefer each other defect, so offers move earlier and earlier. A stable matching, computed centrally, removes that incentive." },
     { text: "There were too few doctors", feedback: "Supply was not the problem; instability was. Deferred acceptance fixed the unraveling without changing the number of doctors." },
     { text: "Doctors were not smart enough to choose", feedback: "The issue was market structure, not doctor competence. A stable clearinghouse solved it." },
   ]}
@@ -125,7 +125,7 @@ Now imagine no clearinghouse. A hospital that fears losing a top doctor makes an
   badge="analyse"
   question="Why did Boston switch to a strategy-proof deferred-acceptance mechanism?"
   options={[
-    { text: "So families could rank schools honestly without being penalized, as the old mechanism punished truthful ranking", correct: true, feedback: "The old Boston mechanism rewarded gaming your list, hurting naive families. Deferred acceptance makes honest ranking a dominant strategy for students, which is fairer and simpler." },
+    { text: "Families could rank schools honestly without a penalty", correct: true, feedback: "The old Boston mechanism rewarded gaming your list, hurting naive families. Deferred acceptance makes honest ranking a dominant strategy for students, which is fairer and simpler." },
     { text: "To maximize total student happiness above all", feedback: "DA prioritizes stability and strategy-proofness, not raw efficiency (TTC does that). The switch was about honest ranking and stability." },
     { text: "Because it guarantees everyone their first choice", feedback: "No mechanism can do that under scarcity. DA guarantees stability and safe honest reporting, not universal first choices." },
   ]}
@@ -138,7 +138,7 @@ Now imagine no clearinghouse. A hospital that fears losing a top doctor makes an
   badge="brings back: top trading cycles"
   question="How is kidney exchange related to, but different from, top trading cycles?"
   options={[
-    { text: "Both use directed cycles, but kidney exchange builds a medical compatibility graph and can also use chains started by non-directed donors", correct: true, feedback: "The shared idea is cycle finding. Kidney exchange is not literally TTC: its edges represent compatibility, and non-directed donors can create chains rather than closed ownership cycles." },
+    { text: "Both use cycles; kidney exchange adds compatibility and chains", correct: true, feedback: "The shared idea is cycle finding. Kidney exchange is not literally TTC: its edges represent compatibility, and non-directed donors can create chains rather than closed ownership cycles." },
     { text: "It is a simple first-come waiting list", feedback: "It is not a waiting list; it actively finds cycles and chains of compatible swaps, which is the TTC idea applied to organs." },
     { text: "It uses deferred acceptance, not cycles", feedback: "Kidney exchange uses compatibility cycles and chains, not deferred acceptance. The graph structure coordinates donors here." },
   ]}

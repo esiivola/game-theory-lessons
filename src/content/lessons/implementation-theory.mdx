@@ -120,9 +120,9 @@ Now the surplus. First-best trades whenever $v_b \ge v_s$, giving expected gains
   badge="analyse"
   question="What exactly does the Myerson-Satterthwaite theorem rule out?"
   options={[
-    { text: "With overlapping independent values, a mechanism that is ex-post efficient, Bayesian incentive compatible, interim individually rational, and budget balanced", correct: true, feedback: "The theorem rules out that exact conjunction under its distributional assumptions. It does not claim that every arbitrary subset of three properties is feasible." },
-    { text: "Any trade at all between privately informed parties", feedback: "Trade still happens, just not every efficient one. The theorem is about the impossibility of getting all four properties, not about blocking trade entirely." },
-    { text: "The existence of gains from trade", feedback: "Gains from trade exist whenever the buyer values the good above the seller's cost. The theorem says not all such gains can be realized." },
+    { text: "Ex-post efficiency, incentive compatibility, interim participation, and budget balance together", correct: true, feedback: "The theorem rules out that exact conjunction under its distributional assumptions. It does not claim that every arbitrary subset of three properties is feasible." },
+    { text: "Efficiency and truthful reporting, even with outside subsidies", feedback: "Allowing outside subsidies drops budget balance. The theorem rules out all four stated properties together, not this smaller combination." },
+    { text: "Voluntary participation and budget balance, even with no trade", feedback: "A no-trade mechanism can satisfy those two conditions. The impossibility appears when efficiency and incentive compatibility are required too." },
   ]}
 />
 
@@ -133,7 +133,7 @@ Now the surplus. First-best trades whenever $v_b \ge v_s$, giving expected gains
   badge="brings back: nash bargaining"
   question="How does this square with the Nash bargaining solution, which always splits the surplus efficiently?"
   options={[
-    { text: "Nash bargaining assumes the parties know the surplus; Myerson-Satterthwaite adds private information, which is what makes full efficiency impossible", correct: true, feedback: "The axiomatic Nash solution presumes a known frontier. Once each side privately knows its own value and must be given incentives to reveal it, efficiency can no longer be guaranteed. Information, not bargaining skill, is the obstacle." },
+    { text: "Nash bargaining assumes known surplus; private values change the problem", correct: true, feedback: "The axiomatic Nash solution presumes a known frontier. Once each side privately knows its own value and must be given incentives to reveal it, efficiency can no longer be guaranteed. Information, not bargaining skill, is the obstacle." },
     { text: "Nash bargaining is simply wrong", feedback: "It is not wrong; it solves a different problem, one with known values. Adding private information is what introduces the impossibility." },
     { text: "They describe the same setting and contradict each other", feedback: "They differ in a key assumption: Nash bargaining has complete information about the surplus, Myerson-Satterthwaite has two-sided private information." },
   ]}

@@ -126,7 +126,7 @@ Under independent private values, any auction that (in equilibrium) always gives
   badge="analyse"
   question="First-price bidders shade below their values, yet the seller earns the same as under second-price. How can that be?"
   options={[
-    { text: "Both formats allocate to the highest value and give the lowest type zero surplus, so the payment identity gives the same expected revenue", correct: true, feedback: "Those are the key revenue-equivalence conditions under independent private values and risk neutrality. The theorem concerns expectations over repeated value draws, not equality in every realized auction." },
+    { text: "The formats have the same expected revenue under the stated assumptions", correct: true, feedback: "Those are the key revenue-equivalence conditions under independent private values and risk neutrality. The theorem concerns expectations over repeated value draws, not equality in every realized auction." },
     { text: "First-price auctions actually raise more, the claim is a myth", feedback: "Under independent private values they raise the same in equilibrium. That is the content of the revenue equivalence theorem." },
     { text: "Because bidders bid their values in both formats", feedback: "They do not: first-price bidders shade to (n-1)/n of value. Revenue still ties, which is the surprising part." },
   ]}
@@ -139,7 +139,7 @@ Under independent private values, any auction that (in equilibrium) always gives
   badge="brings back: bayes-nash"
   question="Why is the first-price shading rule b(v) = (n-1)/n times v a Bayes-Nash equilibrium?"
   options={[
-    { text: "Each bidder best-responds to the distribution of rivals' values, and shading to (n-1)/n balances a higher margin against a lower chance of winning", correct: true, feedback: "Take the rivals as using the same rule. A bid of <span class='mono'>b</span> then wins with probability proportional to <span class='mono'>b^(n-1)</span>, so your expected surplus is <span class='mono'>(v - b) * b^(n-1)</span> up to a constant. Setting its derivative to zero gives <span class='mono'>(n-1)(v - b) = b</span>, so <span class='mono'>b = (n-1)v/n</span>. The rule is its own best reply, which is what Bayes-Nash means." },
+    { text: "Shading balances bid margin against chance of winning", correct: true, feedback: "Take the rivals as using the same rule. A bid of <span class='mono'>b</span> then wins with probability proportional to <span class='mono'>b^(n-1)</span>, so your expected surplus is <span class='mono'>(v - b) * b^(n-1)</span> up to a constant. Setting its derivative to zero gives <span class='mono'>(n-1)(v - b) = b</span>, so <span class='mono'>b = (n-1)v/n</span>. The rule is its own best reply, which is what Bayes-Nash means." },
     { text: "Because bidding your value is dominant in first-price auctions too", feedback: "It is not: bidding your value would leave zero surplus. First-price bidding requires shading, tuned to the number of rivals." },
     { text: "Because the seller sets the shading rule", feedback: "The seller does not choose bidders' strategies. The shading emerges as each bidder's best response to the others under incomplete information." },
   ]}

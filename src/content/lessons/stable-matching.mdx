@@ -105,7 +105,7 @@ Now hunt for a blocking pair. Take $w_1$, who got $m_1$ (her least favourite) an
   badge="apply"
   question="Under man-proposing deferred acceptance in this game, what do the women get?"
   options={[
-    { text: "Their least-preferred partners, though the matching is still stable", correct: true, feedback: "The proposing side (men) gets its best stable outcome, so the receiving side (women) gets its worst. It is stable because every man has his top choice and will not form a blocking pair." },
+    { text: "Their least-preferred stable partners", correct: true, feedback: "The proposing side (men) gets its best stable outcome, so the receiving side (women) gets its worst. It is stable because every man has his top choice and will not form a blocking pair." },
     { text: "Their first choices", feedback: "That happens under woman-proposing. When men propose, the women end up with their worst stable partners." },
     { text: "An unstable matching", feedback: "Deferred acceptance always produces a stable matching. The women simply do poorly within the set of stable matchings." },
   ]}
@@ -118,7 +118,7 @@ Now hunt for a blocking pair. Take $w_1$, who got $m_1$ (her least favourite) an
   badge="analyse"
   question="Both man-proposing and woman-proposing give stable matchings, and they differ. What does that tell you?"
   options={[
-    { text: "Stability does not uniquely determine the matching; who proposes selects among the stable ones", correct: true, feedback: "There can be several stable matchings. Deferred acceptance picks the one best for the proposing side, so the choice of proposer is a real lever, not a formality." },
+    { text: "Stability alone does not select one matching", correct: true, feedback: "There can be several stable matchings. Deferred acceptance picks the one best for the proposing side, so the choice of proposer is a real lever, not a formality." },
     { text: "One of the two matchings must be unstable", feedback: "Both are stable. The point is exactly that multiple stable matchings exist and the proposing side gets its favourite." },
     { text: "The algorithm is broken", feedback: "It works correctly; it just reveals that stability alone leaves room, filled by whichever side proposes." },
   ]}
@@ -131,7 +131,7 @@ Now hunt for a blocking pair. Take $w_1$, who got $m_1$ (her least favourite) an
   badge="brings back: dominant strategy"
   question="For the proposing side, deferred acceptance is strategy-proof. What does that mean here?"
   options={[
-    { text: "No proposer can get a better partner by submitting a false preference list; truthful ranking is a dominant strategy", correct: true, feedback: "Proposer-optimality comes with strategy-proofness for that side: reporting your true ranking is a best response whatever others do. The receiving side, by contrast, can sometimes gain by misreporting." },
+    { text: "A proposer cannot benefit from misreporting preferences", correct: true, feedback: "Proposer-optimality comes with strategy-proofness for that side: reporting your true ranking is a best response whatever others do. The receiving side, by contrast, can sometimes gain by misreporting." },
     { text: "Both sides can always improve by lying", feedback: "The proposing side cannot gain by lying; truthful reporting is dominant for them. Only the receiving side is sometimes manipulable." },
     { text: "The matching is unaffected by preferences", feedback: "Preferences drive the whole outcome. Strategy-proofness means honest preferences are optimal to report, not that they do not matter." },
   ]}

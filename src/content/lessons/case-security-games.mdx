@@ -111,7 +111,7 @@ Now equalize. Cover the $10$ with probability $c_1$ and the $5$ with $c_2 = 1 - 
   badge="apply"
   question="With one patrol unit and targets worth 10 and 5, why not just always guard the target worth 10?"
   options={[
-    { text: "The attacker then hits the unguarded 5 for a certain loss of 5, worse than the 3.33 expected loss from randomizing", correct: true, feedback: "A deterministic guard leaves a known soft spot. Covering the 10 with probability 2/3 and the 5 with 1/3 equalizes the attacker's options and cuts expected loss to about 3.33 < 5." },
+    { text: "The attacker switches to the unguarded 5, causing a loss of 5", correct: true, feedback: "A deterministic guard leaves a known soft spot. Covering the 10 with probability 2/3 and the 5 with 1/3 equalizes the attacker's options and cuts expected loss to about 3.33 < 5." },
     { text: "Because the target worth 10 is never really attacked", feedback: "It can be attacked; the issue is that always guarding it hands the attacker the 5 for free. Randomizing removes any guaranteed soft spot." },
     { text: "Because guarding is free, so guard everything", feedback: "Resources are limited (one unit here), which is exactly why you must randomize coverage rather than cover everything." },
   ]}
@@ -124,7 +124,7 @@ Now equalize. Cover the $10$ with probability $c_1$ and the $5$ with $c_2 = 1 - 
   badge="analyse"
   question="What coverage minimizes the defender's worst-case loss with targets 10 and 5?"
   options={[
-    { text: "Cover the 10 with probability 2/3 and the 5 with 1/3, equalizing the attacker's payoff at about 3.33", correct: true, feedback: "Set (1 - c1)*10 = (1 - c2)*5 with c1 + c2 = 1, giving c1 = 2/3, c2 = 1/3. The attacker is indifferent, so there is no weak point, and expected loss is 10/3 ≈ 3.33." },
+    { text: "Cover the 10 with probability 2/3 and the 5 with 1/3", correct: true, feedback: "Set (1 - c1)*10 = (1 - c2)*5 with c1 + c2 = 1, giving c1 = 2/3, c2 = 1/3. The attacker is indifferent, so there is no weak point, and expected loss is 10/3 ≈ 3.33." },
     { text: "Cover both equally at 1/2 each", feedback: "Equal coverage leaves the valuable target too exposed. Equalizing the attacker's payoff requires 2/3 on the 10 and 1/3 on the 5." },
     { text: "Cover the 5 more, since it is easier to defend", feedback: "The valuable target needs more coverage, not less. The equalizing mix is 2/3 on the 10 and 1/3 on the 5." },
   ]}
@@ -137,7 +137,7 @@ Now equalize. Cover the $10$ with probability $c_1$ and the $5$ with $c_2 = 1 - 
   badge="brings back: quantal response"
   question="Why do fielded systems like PROTECT model the attacker with quantal response (QRE) rather than perfect rationality?"
   options={[
-    { text: "Real attackers are noisy, not perfectly optimal, so a QRE model fits their behaviour better and retunes the optimal coverage", correct: true, feedback: "Assuming a perfectly rational attacker can misfit real adversaries. QRE spreads attack probability by payoff and better matches observed behaviour, so the deployed coverage is computed against a noisy attacker." },
+    { text: "Noisy attacker choice makes QRE coverage more suitable", correct: true, feedback: "Assuming a perfectly rational attacker can misfit real adversaries. QRE spreads attack probability by payoff and better matches observed behaviour, so the deployed coverage is computed against a noisy attacker." },
     { text: "Because QRE assumes the attacker is perfectly rational", feedback: "QRE is precisely a model of a noisy, boundedly rational attacker, which is why it fits real adversaries better than perfect rationality." },
     { text: "Because randomization is unnecessary against real attackers", feedback: "Randomization is still essential; QRE only changes how the coverage is tuned to a noisy attacker, not whether to randomize." },
   ]}

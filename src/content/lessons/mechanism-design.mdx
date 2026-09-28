@@ -107,7 +107,7 @@ Now build the direct mechanism: ask each bidder for a number, award the item to 
   badge="apply"
   question="The direct mechanism charges a reporter of value v the payment v squared over two. Where does that number come from?"
   options={[
-    { text: "It is the interim expected payment the bidder made in the first-price auction: win probability v times bid v/2", correct: true, feedback: "The direct mechanism simply reproduces the payments of the original equilibrium. Since the first-price bidder paid v/2 with probability v, the direct charge is v^2/2, keeping the outcome identical." },
+    { text: "Win probability v times equilibrium bid v/2", correct: true, feedback: "The direct mechanism simply reproduces the payments of the original equilibrium. Since the first-price bidder paid v/2 with probability v, the direct charge is v^2/2, keeping the outcome identical." },
     { text: "It is the bidder's full value", feedback: "Bidders never pay their full value in expectation here; they keep surplus. The direct payment matches the first-price auction's v^2/2." },
     { text: "It is chosen to maximise the bidder's surplus", feedback: "It is chosen to replicate the first-price outcome, not to maximise the bidder's surplus. The point is equivalence." },
   ]}
@@ -120,7 +120,7 @@ Now build the direct mechanism: ask each bidder for a number, award the item to 
   badge="analyse"
   question="What does the revelation principle let a designer ignore?"
   options={[
-    { text: "All the indirect mechanisms: any outcome they achieve is matched by a truthful direct one", correct: true, feedback: "Because every equilibrium outcome is reproducible by an incentive-compatible direct mechanism, the designer can search only over those without missing anything achievable." },
+    { text: "Any indirect outcome has a truthful direct counterpart", correct: true, feedback: "Because every equilibrium outcome is reproducible by an incentive-compatible direct mechanism, the designer can search only over those without missing anything achievable." },
     { text: "The bidders' private information", feedback: "Private information is central and remains. The principle says honesty can be made optimal despite it, not that it disappears." },
     { text: "Incentive and participation constraints", feedback: "Those constraints are exactly what a direct mechanism must satisfy. The principle narrows the search to mechanisms meeting them, it does not remove them." },
   ]}
@@ -133,7 +133,7 @@ Now build the direct mechanism: ask each bidder for a number, award the item to 
   badge="brings back: bayes-nash"
   question="In what sense is truthful reporting in the direct mechanism a Bayes-Nash equilibrium?"
   options={[
-    { text: "Each type best-responds to the distribution of others' types by reporting truthfully, because any misreport gives the outcome of a type it did not prefer", correct: true, feedback: "The direct mechanism is built so that reporting your true value is optimal given others report truthfully and given the type distribution, which is exactly a Bayes-Nash equilibrium in the reporting game." },
+    { text: "Truthful reporting best responds to the types others may have", correct: true, feedback: "The direct mechanism is built so that reporting your true value is optimal given others report truthfully and given the type distribution, which is exactly a Bayes-Nash equilibrium in the reporting game." },
     { text: "Because reporting is a dominant strategy in every mechanism", feedback: "Truthfulness here is a Bayes-Nash equilibrium, not necessarily dominant. Dominant-strategy truthfulness is a stronger property some mechanisms (like VCG) achieve." },
     { text: "Because the designer forbids lying", feedback: "Lying is allowed; it simply is not profitable. The mechanism makes truth-telling a best response, which is why it is an equilibrium." },
   ]}

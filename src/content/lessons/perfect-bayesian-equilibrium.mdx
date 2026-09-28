@@ -116,7 +116,7 @@ Consider both types giving. On the path Bayes sets $b = p$, the prior. If $p \ge
   badge="analyse"
   question="At p = 0.4, pooling on Not is the equilibrium. What role do off-path beliefs play?"
   options={[
-    { text: "A gift is off the path, so its belief is free, and setting it to Enemy makes a deviating gift get rejected, which keeps Not optimal", correct: true, feedback: "Bayes says nothing about actions that never occur, so the off-path belief is a modelling choice. Choosing an Enemy belief there makes deviation unprofitable, sustaining pooling on Not." },
+    { text: "An off-path gift can be assigned an Enemy belief", correct: true, feedback: "Bayes says nothing about actions that never occur, so the off-path belief is a modelling choice. Choosing an Enemy belief there makes deviation unprofitable, sustaining pooling on Not." },
     { text: "Off-path beliefs are irrelevant to whether the profile is a PBE", feedback: "They are essential: the actions off-path beliefs induce must make deviations unprofitable. Here they are what deter a deviating gift." },
     { text: "Off-path beliefs must also come from Bayes' rule", feedback: "Bayes cannot condition on a zero-probability event, so off-path beliefs are unrestricted, though the actions they induce must still be optimal." },
   ]}
@@ -129,7 +129,7 @@ Consider both types giving. On the path Bayes sets $b = p$, the prior. If $p \ge
   badge="brings back: subgame perfection"
   question="Why do we need PBE rather than just subgame perfection for the Gift game?"
   options={[
-    { text: "The receiver cannot tell the type, so there is no proper subgame at their move; PBE adds beliefs to restore sequential rationality there", correct: true, feedback: "Subgame perfection bites only at proper subgames, and the receiver's information set (a gift from an unknown type) does not start one. PBE supplies a belief at that set so we can still require optimal play." },
+    { text: "The receiver's move is not a proper subgame; beliefs matter", correct: true, feedback: "Subgame perfection bites only at proper subgames, and the receiver's information set (a gift from an unknown type) does not start one. PBE supplies a belief at that set so we can still require optimal play." },
     { text: "Subgame perfection already handles it identically", feedback: "It does not: with hidden types there is no proper subgame at the receiver's move, so subgame perfection has no grip there. PBE fills the gap with beliefs." },
     { text: "Because the Gift game has no Nash equilibrium", feedback: "It has equilibria; the issue is refining them with beliefs at information sets, which is what PBE does." },
   ]}

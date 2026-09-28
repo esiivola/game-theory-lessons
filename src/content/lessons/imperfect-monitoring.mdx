@@ -117,7 +117,7 @@ Now use trigger-and-forgive with $T = 4$. The cooperative fraction is $1/(1 + 0.
   badge="apply"
   question="Under noisy monitoring, why does grim trigger destroy a cooperative relationship?"
   options={[
-    { text: "A false-alarm bad signal is eventually certain, and grim trigger reacts by defecting forever", correct: true, feedback: "Noise guarantees a bad signal will eventually appear even with no cheating. Grim trigger treats it as betrayal and ends cooperation permanently, wiping out all future value." },
+    { text: "False alarms eventually end cooperation under grim trigger", correct: true, feedback: "Noise guarantees a bad signal will eventually appear even with no cheating. Grim trigger treats it as betrayal and ends cooperation permanently, wiping out all future value." },
     { text: "Because players stop being patient", feedback: "Patience is unchanged. The problem is that permanent punishment is triggered by an inevitable false alarm." },
     { text: "Because the signal is always wrong", feedback: "The signal is only sometimes wrong. Even a small false-alarm rate is enough to doom grim trigger, since one bad draw ends everything." },
   ]}
@@ -130,7 +130,7 @@ Now use trigger-and-forgive with $T = 4$. The cooperative fraction is $1/(1 + 0.
   badge="analyse"
   question="You observe a price war between two firms. What can you conclude about whether someone cheated?"
   options={[
-    { text: "Not much: under imperfect monitoring, wars occur on the equilibrium path even when both firms cooperated", correct: true, feedback: "In the Green-Porter model punishment phases are triggered by low prices, which noise can cause on its own. A war is consistent with honest cooperation plus bad luck." },
+    { text: "A price war can follow a false alarm, without cheating", correct: true, feedback: "In the Green-Porter model punishment phases are triggered by low prices, which noise can cause on its own. A war is consistent with honest cooperation plus bad luck." },
     { text: "Someone definitely defected", feedback: "Not necessarily. The whole point is that noise sets off wars that no defection caused. Observing a war is not evidence of cheating." },
     { text: "The firms are not in equilibrium", feedback: "Recurring wars are part of the equilibrium here, not a sign it has broken down." },
   ]}
@@ -143,7 +143,7 @@ Now use trigger-and-forgive with $T = 4$. The cooperative fraction is $1/(1 + 0.
   badge="brings back: repeated games"
   question="Compared with the perfect-monitoring case, why must punishments happen on the equilibrium path here?"
   options={[
-    { text: "Because punishment can only be conditioned on the noisy signal, so to deter cheating at all it must sometimes fire when no one cheated", correct: true, feedback: "With perfect monitoring you punish only observed defections, which never occur in equilibrium. With only a noisy signal, deterrence requires punishing bad signals, and those arrive by chance, so wars occur even on the cooperative path." },
+    { text: "Noisy signals sometimes trigger punishment without cheating", correct: true, feedback: "With perfect monitoring you punish only observed defections, which never occur in equilibrium. With only a noisy signal, deterrence requires punishing bad signals, and those arrive by chance, so wars occur even on the cooperative path." },
     { text: "Because players enjoy punishing each other", feedback: "Punishment is costly to both; no one enjoys it. It happens because it must be tied to the only thing observed, the noisy signal." },
     { text: "Because the discount factor is too low", feedback: "The issue is not patience but observability. Even patient players must punish noisy signals, so on-path wars are unavoidable." },
   ]}
