@@ -71,13 +71,13 @@ export const quizState = (slug: string, id: string) => load().lessons[slug]?.qui
 
 export function meetsCompletionRequirements(
   slug: string,
-  sectionIds: string[],
+  _sectionIds: string[],
   quizIds: string[],
 ): boolean {
   const state = load().lessons[slug];
   return Boolean(
     state &&
-    sectionIds.every((id) => state.sectionsViewed.includes(id)) &&
+    quizIds.length > 0 &&
     quizIds.every((id) => state.quizzes[id]?.correct),
   );
 }

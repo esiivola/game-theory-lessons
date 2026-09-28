@@ -91,6 +91,32 @@ test('completed lesson and quiz answers survive reload', async ({ page }) => {
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('gt.progress.v1') ?? '{}').xp)).toBe(30);
 });
 
+test('correct end answers complete a lesson without section or prerequisite progress', async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem('gt.progress.v1', JSON.stringify({
+      version: 1,
+      lessons: {
+        dominance: {
+          status: 'in-progress',
+          sectionsViewed: [],
+          quizzes: Object.fromEntries(['q1', 'q2', 'q3'].map((id) => [id, { answered: true, correct: true }])),
+          completedAt: null,
+        },
+      },
+      xp: 0,
+      daysLearned: [],
+      settings: { theme: 'system' },
+    }));
+  });
+  await page.goto('lessons/dominance/');
+  await expect(page.locator('#donePanel')).toBeVisible();
+  const progress = await page.evaluate(() => JSON.parse(localStorage.getItem('gt.progress.v1') ?? '{}'));
+  expect(progress.lessons.dominance.status).toBe('complete');
+  expect(progress.lessons['expected-utility']).toBeUndefined();
+  expect(progress.lessons.dominance.sectionsViewed).not.toContain('quiz');
+  expect(progress.xp).toBe(30);
+});
+
 test('map and progress use the same learner sequence', async ({ page }) => {
   await page.goto('');
   const mapLinks = await page.locator('.node-row .lrow').evaluateAll((links) =>

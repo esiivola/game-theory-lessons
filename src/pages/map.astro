@@ -104,14 +104,13 @@ const keyGroups = TIERS.map((t) => ({ name: t.name, items: lessons.filter((l) =>
   <section class="map-hero">
     <div class="eyebrow">The dependency graph</div>
     <h1>Concept map</h1>
-    <p>How the lessons build on each other. An arrow means the lower lesson leans on the one above it. Finish a lesson and it fills in; once its prerequisites are done, the next one opens.</p>
+    <p>How the lessons build on each other. An arrow shows a suggested learning path. Every lesson is open, and finishing one fills in its circle.</p>
   </section>
 
   <div class="cmap-legend">
     <span class="lg done"><i></i>Done</span>
     <span class="lg next"><i></i>Start next</span>
     <span class="lg open"><i></i>Open</span>
-    <span class="lg locked"><i></i>Locked</span>
   </div>
 
   <p class="cmap-hint">Each circle is a lesson, numbered as in the list below. Arrows point from a prerequisite to the lesson that builds on it. Tap a circle to open it, or scroll the graph sideways to follow a track.</p>
@@ -130,7 +129,6 @@ const keyGroups = TIERS.map((t) => ({ name: t.name, items: lessons.filter((l) =>
           data-slug={n.id}
           data-order={n.order}
           data-seq={globalIndex.get(n.id)}
-          data-prereqs={n.prereqs.join(',')}
         >
           <title>{n.title}</title>
           <circle cx={n.x} cy={n.y} r={R} class="disc" />
@@ -161,7 +159,6 @@ const keyGroups = TIERS.map((t) => ({ name: t.name, items: lessons.filter((l) =>
   .lg i { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--border-strong); background: var(--surface); }
   .lg.done i { background: var(--accent); border-color: var(--accent); }
   .lg.next i { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-  .lg.locked i { opacity: .4; }
 
   .cmap-hint { font-size: 12.5px; line-height: 1.5; color: var(--ink-muted); margin: 6px 0 0; }
   .cmap-wrap { border: 1px solid var(--border); border-radius: 12px; padding: 10px; background: var(--surface); margin: 10px 0 4px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -175,8 +172,6 @@ const keyGroups = TIERS.map((t) => ({ name: t.name, items: lessons.filter((l) =>
   .cnode.complete .num { fill: var(--bg); }
   .cnode.next .disc { stroke: var(--accent); stroke-width: 2.5; }
   .cnode.next .num { fill: var(--accent); }
-  .cnode.locked { opacity: .42; }
-  .cnode.locked .disc { stroke-dasharray: 3 2.5; }
   /* Highlight the edges into and out of the hovered lesson. */
   .edge.lit { opacity: .9; stroke: var(--accent); stroke-width: 1.6; }
 
@@ -199,22 +194,17 @@ const keyGroups = TIERS.map((t) => ({ name: t.name, items: lessons.filter((l) =>
     const done = (slug: string) => p.lessons[slug]?.status === 'complete';
 
     const nodes = Array.from(document.querySelectorAll<SVGGElement>('.cnode[data-slug]'));
-    // "Start next" is the earliest lesson in curriculum order (data-seq) that is
-    // unlocked and not yet done, independent of where it sits in the graph.
+    // "Start next" is the earliest unfinished lesson in curriculum order.
     let next: SVGGElement | null = null;
     let nextSeq = Infinity;
     for (const n of nodes) {
       const slug = n.dataset.slug as string;
-      const prereqs = (n.dataset.prereqs || '').split(',').filter(Boolean);
-      n.classList.remove('complete', 'next', 'locked', 'open');
+      n.classList.remove('complete', 'next', 'open');
       if (done(slug)) {
         n.classList.add('complete');
         continue;
       }
-      if (!prereqs.every((pr) => done(pr))) {
-        n.classList.add('locked');
-        continue;
-      }
+      n.classList.add('open');
       const seq = Number(n.dataset.seq);
       if (seq < nextSeq) {
         nextSeq = seq;

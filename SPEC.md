@@ -28,7 +28,7 @@ This is the source of truth for what we build and why. Build conventions live in
 - Evidence-based teaching: prediction before instruction, concreteness fading, retrieval practice and spaced review, worked examples, misconception-driven quizzes (§3).
 - Prose that reads like an expert wrote it (§11). Cite sources per lesson and in a shared bibliography.
 - Neat, minimal, editorial design in a management-consulting register, matched to the developer's own site (esiivola.github.io). Simplicity is a feature.
-- Easy navigation: a lesson map and a concept map that show structure and suggested order while letting the learner move freely within an unlocked tier.
+- Easy navigation: a lesson map and a concept map that show structure and suggested order while letting the learner open any lesson.
 - Progress persists in the browser and shows in navigation. Fully static, fast on mobile (Lighthouse 95+), privacy-friendly.
 
 ### Non-goals (for now)
@@ -90,13 +90,13 @@ feedback, retry.
 
 ## 4. Course structure
 
-- **Concept map (prerequisite DAG).** Lessons form an explicit dependency graph, not a strict line. The static core (L1 to L11) is the trunk; branches hang off it: cooperative theory (needs L6), evolutionary and learning dynamics (need L9), algorithmic game theory (needs L10 and L17), behavioral (needs L6, L9, L16). The DAG is the sequencing logic and the mastery-gating spec, and it is shown to the learner as a map.
+- **Concept map (prerequisite DAG).** Lessons form an explicit dependency graph, not a strict line. The static core (L1 to L11) is the trunk; branches hang off it: cooperative theory (needs L6), evolutionary and learning dynamics (need L9), algorithmic game theory (needs L10 and L17), behavioral (needs L6, L9, L16). The DAG suggests a learning sequence without restricting access, and it is shown to the learner as a map.
 - **Applied cases interleave, and also capstone (hybrid).** Single-concept applied cases (Unit 18) are surfaced inline right after their home theory lesson, so abstraction pays off immediately (penalty kicks after mixed strategies, matching markets after Gale-Shapley, deterrence after commitment). The multi-concept cases (Cuban Missile Crisis, a spectrum auction, climate) form a short capstone at the end, because real episodes combine several tools at once. This mirrors how the applied texts (Dixit and Nalebuff; Dixit, Skeath and Reiley) close each chapter with a case and how professional programs run integrative case weeks. It also protects completion rates.
 - **Reality-check callouts seed behavioral ideas early.** Do not quarantine all behavior at the end. Short one-screen "Reality check" callouts appear in the Basic and Intermediate tiers and forward-link to the Behavioral unit: the beauty contest after L2 (real first-round play is not the equilibrium), ultimatum rejection after L16 (credibility has behavioral limits), the centipede alongside L15 and L16, free-riding versus conditional cooperation inside L14, the winner's curse inside L27, and minimax-in-the-field inside L11 (a positive check: professionals really do randomise).
 - **Learning paths.** A default linear path, plus themed paths that follow branches. Examples: "market design" (L1 to L11, L25 to L27, L38 to L42, L46 to L48); "behavioral" (L6, L9, L11, L14, L16, L21, then L57 to L64, ending at L46 to L48 for the design payoff); "applied strategy" (Basic spine, then the Unit 18 cases).
 - **Retrieval checkpoints.** After every 3 to 5 lessons, a short low-stakes cumulative check drawing from prior lessons, interleaved. Practice, never a graded exam.
 - **Spaced review at tier boundaries.** A review lesson at the end of each tier re-surfaces earlier concepts on an expanding schedule.
-- **Mastery gating, advanced tiers only.** Basic is open. To unlock Expert, reach about 80 to 90% on the Intermediate tier's apply and analyse items, with unlimited retries and targeted review of any missed prerequisites.
+- **Mastery feedback, advanced tiers.** Track performance on Intermediate apply and analyse items, with unlimited retries and targeted review of missed concepts. This guides study without locking lessons.
 - **Adaptive scaffolding.** Track per-concept success. After N correct, stop showing the worked example and go problem-first. Expert lessons default to problem-first with solutions on demand.
 
 ---
@@ -200,8 +200,8 @@ bibliography holds a primary-source-plus-textbook citation for each. Style: auth
 ## 6. Navigation and information architecture
 
 - **Bottom tab bar (mobile), 4 items or fewer:** Learn (the lesson map), Map (the concept graph), Progress, About (with References). Bottom nav beats a hamburger for thumb reach.
-- **Learn = a vertical scrolling lesson map** grouped into tiers and units, with the applied cases shown inline at their placement points. Node states: completed (accent + check), in-progress (partial ring), recommended next ("Start here"), available, and for Expert only, locked with an unlock hint.
-- **Map = the concept graph** (prerequisite DAG) with locked, available, in-progress, and mastered nodes, so learners see structure and pick order within an unlocked tier.
+- **Learn = a vertical scrolling lesson map** grouped into tiers and units, with the applied cases shown inline at their placement points. Node states: completed (accent + check), in-progress (partial ring), recommended next ("Start here"), and available.
+- **Map = the concept graph** (prerequisite DAG) with available, in-progress, and mastered nodes, so learners see structure and choose their order.
 - **Within a lesson:** slim sticky progress, a back-to-map affordance, a "skip to the problems" control, and "next up" on completion.
 - **Deep-linkable:** every lesson is its own URL (`/lessons/<slug>`); refresh and share work.
 
@@ -212,8 +212,8 @@ bibliography holds a primary-source-plus-textbook citation for each. Style: auth
 Level: progress rings, completion checks, light XP, and a gentle "days learned" count. No streaks,
 no leaderboards.
 
-- **Completion rule:** all sections viewed and all quiz questions answered correctly (unlimited retries). On completion: confetti, toast, node flips to the accent colour, XP awarded, "recommended next" advanced, persisted immediately.
-- **Mastery, Expert unlock:** computed from Intermediate apply/analyse items (about 80 to 90%). Retakes allowed; missed prerequisites surfaced for review.
+- **Completion rule:** all end quiz questions answered correctly (unlimited retries). Section views and prior lesson completion are not required. On completion: confetti, toast, node flips to the accent colour, XP awarded, "recommended next" advanced, persisted immediately.
+- **Mastery feedback:** computed from Intermediate apply/analyse items. Retakes allowed; missed concepts surfaced for review without locking lessons.
 - **Adaptive scaffolding** reads per-concept success counts (§3.1.7).
 - **Persistence:** `localStorage`, namespaced and versioned, defensive `try/catch`, schema-default fallback, export and reset in Settings, data never leaves the device. One module owns all access.
 
@@ -400,7 +400,7 @@ revised lesson template, references, and the writing voice.
 3. **M2, Maps and progress:** lesson map with node states and soft locks and inline cases; a first concept-map view; Progress tab (rings, XP, days-learned, per-tier); Settings (theme, reduce-motion, scaffold, export/reset); References page.
 4. **M3, MVP lessons and mini-games:** author L1, L4, L6, L7 plus trimmed L20 plus case A8, in the template and voice; build PayoffMatrix, DominanceSweep, NashFinder, RepeatedPD plus a small tournament, and PenaltyShootout.
 5. **M4, Polish and a11y/perf:** dark mode, reduced-motion, keyboard, Lighthouse to targets, copy edit (zero em dashes, no AI tells), og image and metadata. Ship.
-6. **Post-MVP:** fill out Basic, then Intermediate, then Expert (the Behavioral unit is a priority within Expert given its applied value), then the applied cases and capstone, then retrieval checkpoints, spaced-review lessons, and mastery gating.
+6. **Post-MVP:** fill out Basic, then Intermediate, then Expert (the Behavioral unit is a priority within Expert given its applied value), then the applied cases and capstone, then retrieval checkpoints and spaced-review lessons.
 
 **Definition of done for a lesson:** follows the §3.2 template; at least one interactive that is
 keyboard-operable and reduced-motion-aware; a correct, typeset formal section; a warm-up and an

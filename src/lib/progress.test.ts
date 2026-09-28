@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   isComplete,
   load,
-  markSectionViewed,
   meetsCompletionRequirements,
   quizState,
   recordQuiz,
@@ -32,13 +31,11 @@ describe('lesson completion', () => {
     expect(quizState('lesson', 'q1')).toEqual({ answered: true, correct: true });
   });
 
-  it('requires every section and quiz', () => {
-    markSectionViewed('lesson', 'play');
+  it('requires every quiz but no section views', () => {
     recordQuiz('lesson', 'q1', true);
 
     expect(meetsCompletionRequirements('lesson', ['play', 'math'], ['q1', 'q2'])).toBe(false);
 
-    markSectionViewed('lesson', 'math');
     recordQuiz('lesson', 'q2', true);
 
     expect(meetsCompletionRequirements('lesson', ['play', 'math'], ['q1', 'q2'])).toBe(true);
@@ -52,7 +49,6 @@ describe('lesson completion', () => {
     });
     expect(isComplete('lesson')).toBe(false);
 
-    markSectionViewed('lesson', 'play');
     recordQuiz('lesson', 'q1', true);
 
     expect(tryCompleteLesson('lesson', ['play'], ['q1'])).toEqual({
