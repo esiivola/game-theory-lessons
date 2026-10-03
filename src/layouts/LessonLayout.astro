@@ -152,7 +152,7 @@ const { slug, title, description, totalLessons, nextHref, nextTitle } = Astro.pr
     if (finished) reveal(false);
 
     function reconcileCompletion() {
-      if (!finished && !reconciling && quizIds.length > 0) {
+      if (!finished && !reconciling) {
         reconciling = true;
         const result = tryCompleteLesson(lessonSlug, sectionIds, quizIds);
         reconciling = false;

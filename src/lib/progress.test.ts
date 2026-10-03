@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   isComplete,
   load,
+  markSectionViewed,
   meetsCompletionRequirements,
   quizState,
   recordQuiz,
@@ -39,6 +40,22 @@ describe('lesson completion', () => {
     recordQuiz('lesson', 'q2', true);
 
     expect(meetsCompletionRequirements('lesson', ['play', 'math'], ['q1', 'q2'])).toBe(true);
+  });
+
+  it('finishes a lesson with no quiz once every section has been reached', () => {
+    markSectionViewed('lesson', 'play');
+
+    expect(meetsCompletionRequirements('lesson', ['play', 'math'], [])).toBe(false);
+
+    markSectionViewed('lesson', 'math');
+
+    expect(meetsCompletionRequirements('lesson', ['play', 'math'], [])).toBe(true);
+  });
+
+  it('never completes a page that has neither quizzes nor sections', () => {
+    recordQuiz('lesson', 'other', true);
+
+    expect(meetsCompletionRequirements('lesson', [], [])).toBe(false);
   });
 
   it('awards completion only once and never before eligibility', () => {

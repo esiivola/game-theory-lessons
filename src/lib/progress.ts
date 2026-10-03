@@ -71,15 +71,15 @@ export const quizState = (slug: string, id: string) => load().lessons[slug]?.qui
 
 export function meetsCompletionRequirements(
   slug: string,
-  _sectionIds: string[],
+  sectionIds: string[],
   quizIds: string[],
 ): boolean {
   const state = load().lessons[slug];
-  return Boolean(
-    state &&
-    quizIds.length > 0 &&
-    quizIds.every((id) => state.quizzes[id]?.correct),
-  );
+  if (!state) return false;
+  // Normal case: the end quizzes decide, and section views are ignored.
+  if (quizIds.length > 0) return quizIds.every((id) => state.quizzes[id]?.correct);
+  // A lesson with no quiz has nothing to answer, so reaching its last section finishes it.
+  return sectionIds.length > 0 && sectionIds.every((id) => state.sectionsViewed.includes(id));
 }
 
 export function markSectionViewed(slug: string, sectionId: string): void {

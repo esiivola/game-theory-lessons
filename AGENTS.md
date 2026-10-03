@@ -233,7 +233,7 @@ A profile $s^*$ is a Nash equilibrium if $u_i(s_i^*,s_{-i}^*) \ge u_i(s_i,s_{-i}
 
 ## 10. Progress and storage API
 
-- `progress.ts` owns key `gt.progress.v1`, wraps all access in `try/catch`, parses with a schema-default fallback, and exposes typed methods (`markSectionViewed(slug, sectionId)`, `recordQuiz(slug, id, correct)`, `isLessonComplete(slug)`, `getProgress()`, `exportJSON()`, `reset()`). Completion requires correct answers to all end quizzes, regardless of section views or prior lessons; then set `completedAt`, award XP, add today to `daysLearned`, and fire the celebration.
+- `progress.ts` owns key `gt.progress.v1`, wraps all access in `try/catch`, parses with a schema-default fallback, and exposes typed methods (`markSectionViewed(slug, sectionId)`, `recordQuiz(slug, id, correct)`, `isLessonComplete(slug)`, `getProgress()`, `exportJSON()`, `reset()`). Completion requires correct answers to all end quizzes, regardless of section views or prior lessons (a lesson with no quiz completes once every section has been reached); then set `completedAt`, award XP, add today to `daysLearned`, and fire the celebration.
 - Bump the version key and write a migration if the schema changes; never silently break saved data.
 - Settings must offer Export and Reset, and state that data stays on the device.
 
