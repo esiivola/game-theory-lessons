@@ -25,6 +25,29 @@ beforeEach(() => {
   vi.stubGlobal('window', { dispatchEvent: vi.fn() });
 });
 
+describe('when storage is unusable', () => {
+  it('still completes a lesson from the in-page copy', () => {
+    vi.stubGlobal('localStorage', {
+      getItem: () => null,
+      setItem: () => { throw new Error('QuotaExceededError'); },
+      removeItem: () => {},
+    });
+
+    recordQuiz('blocked', 'q1', true);
+    recordQuiz('blocked', 'q2', true);
+
+    expect(tryCompleteLesson('blocked', [], ['q1', 'q2']).complete).toBe(true);
+  });
+
+  it('still completes when writes are accepted but dropped', () => {
+    vi.stubGlobal('localStorage', { getItem: () => null, setItem: () => {}, removeItem: () => {} });
+
+    recordQuiz('dropped', 'q1', true);
+
+    expect(tryCompleteLesson('dropped', [], ['q1']).complete).toBe(true);
+  });
+});
+
 describe('lesson completion', () => {
   it('restores a correct quiz from stored progress', () => {
     recordQuiz('lesson', 'q1', true);

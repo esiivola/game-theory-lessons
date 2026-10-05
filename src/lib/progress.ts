@@ -29,6 +29,13 @@ const base = (): Progress => ({
   settings: { theme: 'system' },
 });
 
+// Copy of the last state saved in this page session. Safari private mode, blocked site data and
+// full storage make localStorage throw or silently drop writes. Without this copy every read
+// would come back empty, so a quiz answered correctly was forgotten at once and the lesson could
+// never complete. The copy is only read after a write has failed, so storage stays authoritative whenever it works.
+let memory: Progress | null = null;
+let storageFailed = false;
+
 export function load(): Progress {
   try {
     const raw = localStorage.getItem(KEY);
@@ -37,16 +44,20 @@ export function load(): Progress {
       if (parsed && parsed.version === 1) return { ...base(), ...parsed };
     }
   } catch {
-    /* storage blocked or corrupt: fall through to defaults */
+    /* storage blocked or corrupt: fall through to the in-page copy */
   }
-  return base();
+  return storageFailed && memory ? structuredClone(memory) : base();
 }
 
 function save(p: Progress): void {
+  memory = structuredClone(p);
   try {
-    localStorage.setItem(KEY, JSON.stringify(p));
+    const json = JSON.stringify(p);
+    localStorage.setItem(KEY, json);
+    // Some browsers accept the write and drop it, so confirm it can be read back.
+    storageFailed = localStorage.getItem(KEY) !== json;
   } catch {
-    /* ignore write failures */
+    storageFailed = true;
   }
   try {
     window.dispatchEvent(new CustomEvent('gt:progress'));
@@ -139,6 +150,8 @@ export function exportJSON(): string {
 }
 
 export function reset(): void {
+  memory = null;
+  storageFailed = false;
   try {
     localStorage.removeItem(KEY);
   } catch {
