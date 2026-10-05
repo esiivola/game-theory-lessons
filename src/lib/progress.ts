@@ -49,6 +49,14 @@ export function load(): Progress {
   return storageFailed && memory ? structuredClone(memory) : base();
 }
 
+function reportStorageProblem(reason: string): void {
+  try {
+    window.dispatchEvent(new CustomEvent('gt:storage-error', { detail: { reason } }));
+  } catch {
+    /* no window */
+  }
+}
+
 function save(p: Progress): void {
   memory = structuredClone(p);
   try {
@@ -56,8 +64,10 @@ function save(p: Progress): void {
     localStorage.setItem(KEY, json);
     // Some browsers accept the write and drop it, so confirm it can be read back.
     storageFailed = localStorage.getItem(KEY) !== json;
-  } catch {
+    if (storageFailed) reportStorageProblem('write was dropped');
+  } catch (e) {
     storageFailed = true;
+    reportStorageProblem(e instanceof Error ? e.name : 'write failed');
   }
   try {
     window.dispatchEvent(new CustomEvent('gt:progress'));

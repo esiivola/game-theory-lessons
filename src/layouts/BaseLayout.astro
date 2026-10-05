@@ -97,6 +97,19 @@ const ogType = variant === 'lesson' ? 'article' : 'website';
       }
       renderProg();
       window.addEventListener('gt:progress', renderProg);
+      // Progress shows on the map and progress pages only if the browser keeps it. When it
+      // refuses the write, say so, so the reader is not left guessing why nothing counts.
+      window.addEventListener('gt:storage-error', (e) => {
+        const reason = (e as CustomEvent).detail?.reason ?? 'unknown';
+        // Wait out the "Lesson complete" toast, which uses the same element.
+        setTimeout(() => {
+        const t = document.getElementById('toast');
+        if (!t) return;
+        t.textContent = 'This browser would not save your progress (' + reason + '). Try a normal, non-private tab or free up site data.';
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 9000);
+        }, 3000);
+      });
     </script>
   </body>
 </html>
