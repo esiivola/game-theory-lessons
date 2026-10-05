@@ -48,6 +48,20 @@ describe('when storage is unusable', () => {
   });
 });
 
+describe('odd saved state', () => {
+  it('records a quiz even when the saved lesson has no quizzes field', () => {
+    localStorage.setItem('gt.progress.v1', JSON.stringify({
+      version: 1,
+      lessons: { odd: { status: 'in-progress', completedAt: null } },
+      xp: 0, daysLearned: [], settings: { theme: 'system' },
+    }));
+
+    recordQuiz('odd', 'q1', true);
+
+    expect(tryCompleteLesson('odd', [], ['q1']).complete).toBe(true);
+  });
+});
+
 describe('lesson completion', () => {
   it('restores a correct quiz from stored progress', () => {
     recordQuiz('lesson', 'q1', true);

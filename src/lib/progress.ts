@@ -70,7 +70,12 @@ function lesson(p: Progress, slug: string): LessonState {
   if (!p.lessons[slug]) {
     p.lessons[slug] = { status: 'not-started', sectionsViewed: [], quizzes: {}, completedAt: null };
   }
-  return p.lessons[slug];
+  const l = p.lessons[slug];
+  // Older or hand-edited saves can lack these fields. Writing into a missing one threw, and the
+  // quiz card swallows that error, so the answer showed green and was never recorded.
+  if (!l.quizzes || typeof l.quizzes !== 'object') l.quizzes = {};
+  if (!Array.isArray(l.sectionsViewed)) l.sectionsViewed = [];
+  return l;
 }
 
 export const isComplete = (slug: string): boolean => load().lessons[slug]?.status === 'complete';
@@ -87,10 +92,11 @@ export function meetsCompletionRequirements(
 ): boolean {
   const state = load().lessons[slug];
   if (!state) return false;
+  const viewed = Array.isArray(state.sectionsViewed) ? state.sectionsViewed : [];
   // Normal case: the end quizzes decide, and section views are ignored.
-  if (quizIds.length > 0) return quizIds.every((id) => state.quizzes[id]?.correct);
+  if (quizIds.length > 0) return quizIds.every((id) => state.quizzes?.[id]?.correct);
   // A lesson with no quiz has nothing to answer, so reaching its last section finishes it.
-  return sectionIds.length > 0 && sectionIds.every((id) => state.sectionsViewed.includes(id));
+  return sectionIds.length > 0 && sectionIds.every((id) => viewed.includes(id));
 }
 
 export function markSectionViewed(slug: string, sectionId: string): void {

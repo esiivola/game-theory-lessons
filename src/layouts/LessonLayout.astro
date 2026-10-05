@@ -33,7 +33,7 @@ const { slug, title, description, totalLessons, nextHref, nextTitle } = Astro.pr
 
 <script>
   import confetti from 'canvas-confetti';
-  import { markSectionViewed, isComplete, tryCompleteLesson } from '@/lib/progress';
+  import { markSectionViewed, isComplete, tryCompleteLesson, completeLesson } from '@/lib/progress';
 
   const article = document.querySelector<HTMLElement>('.lesson[data-lesson]');
   const slug = article?.dataset.lesson;
@@ -162,7 +162,19 @@ const { slug, title, description, totalLessons, nextHref, nextTitle } = Astro.pr
       }
     }
 
+    // If every quiz on the page shows as solved but the saved state could not confirm it (storage
+    // in an unexpected shape, or a write that never landed), trust what the reader just did.
+    function finishFromPage() {
+      if (finished || quizIds.length === 0) return;
+      const cards = [...article!.querySelectorAll<HTMLElement>('[data-quiz]')];
+      if (!cards.every((card) => card.dataset.solved === 'true')) return;
+      const result = completeLesson(lessonSlug);
+      finished = true;
+      reveal(result.firstTime);
+    }
+
     reconcileCompletion();
     window.addEventListener('gt:progress', reconcileCompletion);
+    window.addEventListener('gt:solved', () => setTimeout(() => { reconcileCompletion(); finishFromPage(); }, 0));
   }
 </script>
