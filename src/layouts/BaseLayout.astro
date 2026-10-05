@@ -105,9 +105,11 @@ const ogType = variant === 'lesson' ? 'article' : 'website';
         setTimeout(() => {
         const t = document.getElementById('toast');
         if (!t) return;
-        t.textContent = 'This browser would not save your progress (' + reason + '). Try a normal, non-private tab or free up site data.';
+        const others = (e as CustomEvent).detail?.others;
+        t.textContent = 'This browser would not save your progress (' + reason + ').' +
+          (others ? ' Largest other data on this address: ' + others + '.' : ' Try a normal tab or free up site data.');
         t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 9000);
+        setTimeout(() => t.classList.remove('show'), 14000);
         }, 3000);
       });
     </script>

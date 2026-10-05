@@ -49,9 +49,25 @@ export function load(): Progress {
   return storageFailed && memory ? structuredClone(memory) : base();
 }
 
+// Every site on one address (here esiivola.github.io) shares a single storage allowance, so the
+// thing filling it is often another page. Name the largest other entries so it can be found.
+function largestOtherEntries(): string {
+  try {
+    const rows: [string, number][] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && !k.startsWith('gt.')) rows.push([k, (localStorage.getItem(k) ?? '').length]);
+    }
+    rows.sort((a, b) => b[1] - a[1]);
+    return rows.slice(0, 3).map(([k, n]) => `${k.slice(0, 24)} ${Math.round(n / 1024)}KB`).join(', ');
+  } catch {
+    return '';
+  }
+}
+
 function reportStorageProblem(reason: string): void {
   try {
-    window.dispatchEvent(new CustomEvent('gt:storage-error', { detail: { reason } }));
+    window.dispatchEvent(new CustomEvent('gt:storage-error', { detail: { reason, others: largestOtherEntries() } }));
   } catch {
     /* no window */
   }
@@ -130,6 +146,9 @@ export function completeLesson(slug: string): { firstTime: boolean; xp: number }
   const l = lesson(p, slug);
   const firstTime = l.status !== 'complete';
   l.status = 'complete';
+  // Completion no longer needs the section list, and every byte counts when the browser's shared
+  // allowance for this address is nearly full, so drop it once the lesson is done.
+  l.sectionsViewed = [];
   if (firstTime) {
     l.completedAt = new Date().toISOString().slice(0, 10);
     p.xp += XP_PER_LESSON;
